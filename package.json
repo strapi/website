@@ -15,6 +15,7 @@
     "format:check": "prettier --check --cache --ignore-unknown \"**/(*.{md,css,scss}|*.package.json)\"",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "pnpm run setup:apps",
+    "turbo": "turbo dev lint:fix",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "prepare": "husky",

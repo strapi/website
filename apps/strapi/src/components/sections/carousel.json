@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_sections_carousels",
+  "info": {
+    "displayName": "Carousel",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "images": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.image-with-link"
+    },
+    "radius": {
+      "type": "enumeration",
+      "enum": ["sm", "md", "lg", "xl", "full"]
+    }
+  }
+}

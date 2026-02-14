@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_sections_animated_logo_rows",
+  "info": {
+    "displayName": "AnimatedLogoRow",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "logos": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.basic-image"
+    }
+  }
+}

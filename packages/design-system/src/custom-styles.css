@@ -1,0 +1,35 @@
+.typo-h1 {
+  @apply mb-2 text-6xl;
+}
+
+.typo-h2 {
+  @apply mb-1.5 text-5xl;
+}
+
+.typo-h3 {
+  @apply mb-1 text-4xl;
+}
+
+.typo-h4 {
+  @apply mb-1 text-3xl;
+}
+
+.typo-h5 {
+  @apply mb-1 text-2xl;
+}
+
+.typo-h6 {
+  @apply mb-1 text-xl;
+}
+
+.typo-p-medium {
+  @apply mb-0.5 text-sm;
+}
+
+.typo-p-large {
+  @apply mb-0.5 text-lg;
+}
+
+.typo-p-small {
+  @apply mb-0.5 text-xs;
+}

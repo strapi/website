@@ -1,0 +1,30 @@
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-type: "direct"
+    # Skip regular update PRs, do only security updates
+    # https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#open-pull-requests-limit-
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "npm"
+    directory: "/apps/ui"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-type: "direct"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "npm"
+    directory: "/apps/strapi"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-type: "direct"
+    open-pull-requests-limit: 0

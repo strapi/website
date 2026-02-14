@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import "@repo/design-system/theme.css";
+
+@plugin "tailwindcss-animate";
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  ul {
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+
+  ol {
+    list-style-type: decimal;
+    list-style-position: inside;
+  }
+}
+
+@utility no-scrollbar {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+@utility container {
+  margin-inline: auto;
+  padding: 2rem;
+}
+
+@layer base {
+  * {
+    @apply border-gray-300;
+  }
+  body {
+    @apply bg-gray-100 text-blue-900;
+  }
+}
+
+@keyframes scrollHorizontal {
+  to {
+    transform: translate(calc(-50% - 1.75rem));
+  }
+}
+
+.infinite-scroll-container-horizontal {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.infinite-scroll-horizontal {
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: scrollHorizontal 30s linear infinite;
+}
+
+.bg-gradient-slider {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0) 31%,
+    rgba(255, 255, 255, 0) 69.5%,
+    rgba(255, 255, 255, 0.8) 100%
+  ) !important;
+}
+
+@layer base {
+  * {
+    @apply border-gray-300 outline-purple-500/50;
+  }
+  body {
+    @apply bg-gray-100 text-gray-900;
+  }
+}

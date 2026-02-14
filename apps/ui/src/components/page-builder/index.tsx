@@ -1,6 +1,5 @@
 import type { UID } from "@repo/strapi-types"
 
-import StrapiContactForm from "@/components/page-builder/components/forms/StrapiContactForm"
 import StrapiNewsletterForm from "@/components/page-builder/components/forms/StrapiNewsletterForm"
 import StrapiAnimatedLogoRow from "@/components/page-builder/components/sections/StrapiAnimatedLogoRow"
 import StrapiCarousel from "@/components/page-builder/components/sections/StrapiCarousel"
@@ -29,7 +28,6 @@ export const PageContentComponents: Partial<
   "sections.image-with-cta-button": StrapiImageWithCTAButton,
 
   // Forms
-  "forms.contact-form": StrapiContactForm,
   "forms.newsletter-form": StrapiNewsletterForm,
 
   // Add more components here

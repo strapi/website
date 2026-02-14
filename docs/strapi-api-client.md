@@ -103,7 +103,6 @@ The proxy hides sensitive information from the client.
 ```typescript
 const ALLOWED_STRAPI_ENDPOINTS: Record<string, string[]> = {
   GET: ["api/pages", "api/footer", "api/navbar"],
-  POST: ["api/subscribers"],
 }
 ```
 

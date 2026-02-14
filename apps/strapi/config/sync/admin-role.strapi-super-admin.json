@@ -525,69 +525,6 @@
       "locale": null
     },
     {
-      "action": "plugin::content-manager.explorer.create",
-      "actionParameters": {},
-      "subject": "api::subscriber.subscriber",
-      "properties": {
-        "fields": [
-          "name",
-          "email",
-          "message"
-        ]
-      },
-      "conditions": [],
-      "documentId": "b952sc9t1n4yi81okfb2by2r",
-      "locale": null
-    },
-    {
-      "action": "plugin::content-manager.explorer.delete",
-      "actionParameters": {},
-      "subject": "api::subscriber.subscriber",
-      "properties": {},
-      "conditions": [],
-      "documentId": "bafy8d7gpmmz0jm7p83cfsqv",
-      "locale": null
-    },
-    {
-      "action": "plugin::content-manager.explorer.publish",
-      "actionParameters": {},
-      "subject": "api::subscriber.subscriber",
-      "properties": {},
-      "conditions": [],
-      "documentId": "cgd1e5827uaw7o3ggsjvm81q",
-      "locale": null
-    },
-    {
-      "action": "plugin::content-manager.explorer.read",
-      "actionParameters": {},
-      "subject": "api::subscriber.subscriber",
-      "properties": {
-        "fields": [
-          "name",
-          "email",
-          "message"
-        ]
-      },
-      "conditions": [],
-      "documentId": "d6zwodywi0cmbrjdlm5jpro8",
-      "locale": null
-    },
-    {
-      "action": "plugin::content-manager.explorer.update",
-      "actionParameters": {},
-      "subject": "api::subscriber.subscriber",
-      "properties": {
-        "fields": [
-          "name",
-          "email",
-          "message"
-        ]
-      },
-      "conditions": [],
-      "documentId": "fhpuohetqg50tp77vw27878v",
-      "locale": null
-    },
-    {
       "action": "admin::api-tokens.access",
       "actionParameters": {},
       "subject": null,

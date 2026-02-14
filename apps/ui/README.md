@@ -60,7 +60,7 @@ Name: any name
 Description: optional
 Token duration: Unlimited
 Token type: Custom
-Permissions: "Create subscriber"
+Permissions: <set permissions as needed>
 ```
 
 ### Run locally in dev mode (with hot-reloading)

@@ -12,7 +12,6 @@ The page builder enables content editors to compose pages from reusable componen
 │  │  └─ content: dynamiczone                                            │    │
 │  │       ├─ sections.hero                                              │    │
 │  │       ├─ sections.faq                                               │    │
-│  │       ├─ forms.contact-form                                         │    │
 │  │       └─ ...                                                        │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 │                                    │                                        │
@@ -28,7 +27,6 @@ The page builder enables content editors to compose pages from reusable componen
 │  │  └─ maps __component UID → React component                          │    │
 │  │       ├─ sections.hero      → StrapiHero                            │    │
 │  │       ├─ sections.faq       → StrapiFaq                             │    │
-│  │       ├─ forms.contact-form → StrapiContactForm                     │    │
 │  │       └─ ...                                                        │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -59,7 +57,6 @@ export const PageContentComponents: {
   // ...
 
   // Forms
-  "forms.contact-form": StrapiContactForm,
   "forms.newsletter-form": StrapiNewsletterForm,
   // ...
 }

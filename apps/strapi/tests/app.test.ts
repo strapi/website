@@ -20,7 +20,6 @@ describe("App Test Suite", () => {
       const contentTypes = Object.keys(strapi.contentTypes)
 
       expect(contentTypes).toContain("api::page.page")
-      expect(contentTypes).toContain("api::subscriber.subscriber")
       expect(contentTypes).toContain("api::navbar.navbar")
       expect(contentTypes).toContain("api::footer.footer")
       expect(contentTypes).toContain("api::redirect.redirect")

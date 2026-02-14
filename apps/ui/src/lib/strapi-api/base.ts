@@ -18,7 +18,6 @@ export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::page.page": "/pages",
   "api::footer.footer": "/footer",
   "api::navbar.navbar": "/navbar",
-  "api::subscriber.subscriber": "/subscribers",
 } as const
 
 export default abstract class BaseStrapiClient {

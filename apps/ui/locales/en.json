@@ -1,0 +1,145 @@
+{
+  "seo": {
+    "metaTitle": "SEO-TITLE",
+    "metaDescription": "SEO-DESCRIPTION",
+    "metaImage": "SEO-IMAGE",
+    "metaRobots": "SEO-ROBOTS",
+    "keywords": "SEO-KEYWORDS",
+    "applicationName": "SEO-APPLICATION-NAME",
+    "og": {
+      "title": "SEO-OG-TITLE",
+      "description": "SEO-OG-DESCRIPTION",
+      "url": "SEO-OG-URL",
+      "siteName": "SEO-OG-SITE-NAME",
+      "image": "SEO-OG-IMAGE"
+    },
+    "twitter": {
+      "card": "SEO-TWITTER-CARD",
+      "title": "SEO-TWITTER-TITLE",
+      "description": "SEO-TWITTER-DESCRIPTION",
+      "siteId": "SEO-TWITTER-SITE-ID",
+      "creator": "SEO-TWITTER-CREATOR",
+      "creatorId": "SEO-TWITTER-CREATOR-ID",
+      "imageUrl": "SEO-TWITTER-IMAGE-URL"
+    }
+  },
+
+  "general": {
+    "noOptionsAvailable": "No options available",
+    "search": "Search",
+    "loading": "Loading",
+    "cancel": "Cancel",
+    "close": "Close",
+    "submitForm": "Submit",
+    "saveChanges": "Save changes"
+  },
+
+  "tables": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "firstPage": "First page",
+    "rowsPerPage": "Rows per page",
+    "pageXOfY": "Page {x} of {y}",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "noData": "No data"
+  },
+
+  "comps": {
+    "fileInput": {
+      "label": "Select file",
+      "dragAndDrop": "Add file by dragging or select by clicking",
+      "validFileTypes": "File must be in {validFileTypes} format",
+      "wrongFileType": "This file type is not supported",
+      "selectedFile": "Selected file: {fileName}",
+      "removeFile": "Remove file"
+    },
+    "datePicker": {
+      "label": "Select date"
+    },
+    "dateRangePicker": {
+      "label": "Select date range"
+    },
+    "themeToggle": {
+      "label": "Toggle theme"
+    },
+    "dialog": {
+      "confirmClose": "Do you want to close the dialog? You will lose all unsaved changes."
+    }
+  },
+
+  "errors": {
+    "global": {
+      "title": "An unknown error occurred",
+      "tryAgain": "Try again",
+      "invalidContent": "This content could not be displayed",
+      "somethingWentWrong": "Something went wrong 🥺"
+    },
+
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for was not found.",
+      "solution": "Please check if you have entered the correct URL or return to the home page.",
+      "redirect": "Go to home page"
+    },
+
+    "forms": {
+      "errorsInForm": "The form contains errors",
+      "checkFormForErrors": "Please check if any values are missing"
+    },
+
+    "zodValidation": {
+      "invalid_type": "Expected type is {expected}, but received {received}",
+      "invalid_type_received_undefined": "Field is required",
+      "invalid_literal": "Invalid value, expected {expected}",
+      "invalid_union": "Invalid value",
+
+      "invalid_string": {
+        "regex": "Invalid format"
+      },
+      "too_small": {
+        "string": {
+          "exact": "String must be exactly {minimum} characters",
+          "inclusive": "String must be at least {minimum} characters",
+          "not_inclusive": "String must be more than {minimum} characters"
+        },
+        "number": {
+          "exact": "Value must be exactly {minimum}",
+          "inclusive": "Minimum value is {minimum}",
+          "not_inclusive": "Number must be greater than {minimum}"
+        }
+      },
+      "too_big": {
+        "string": {
+          "exact": "String must be exactly {maximum} characters",
+          "inclusive": "String must be at most {maximum} characters",
+          "not_inclusive": "String must be less than {maximum} characters"
+        },
+        "number": {
+          "exact": "Value must be exactly {maximum}",
+          "inclusive": "Maximum value is {maximum}",
+          "not_inclusive": "Number must be less than {maximum}"
+        }
+      },
+      "custom": {
+        "password": "Passwords do not match",
+        "passwordWithNumber": "String must contain at least 1 number",
+        "phoneNumber": "This field must contain 9 numbers"
+      }
+    }
+  },
+
+  "contactForm": {
+    "name": "First name and last name",
+    "namePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "john.doe@gmail.com",
+    "message": "Message",
+    "gdpr": "I agree to the processing of personal data",
+    "submit": "Send",
+    "success": "The form has been sent successfully.",
+    "error": "The form could not be sent. Please try again later.",
+    "gdprLink": "Read more about the processing of personal data"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_sections_faqs",
+  "info": {
+    "displayName": "Faq",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subTitle": {
+      "type": "string"
+    },
+    "accordions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.accordions"
+    }
+  }
+}

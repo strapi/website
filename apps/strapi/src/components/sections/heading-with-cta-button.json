@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_sections_heading_with_cta_buttons",
+  "info": {
+    "displayName": "HeadingWithCTAButton",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subText": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.link"
+    }
+  }
+}

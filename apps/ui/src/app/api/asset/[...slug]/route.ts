@@ -1,0 +1,50 @@
+import { NextResponse } from "next/server"
+
+import { getEnvVar } from "@/lib/env-vars"
+
+/**
+ * This route handler allows asset fetching from Strapi backend even from client-side components,
+ * that cannot know the URL of Strapi.
+ *
+ * Using AWS S3 or similar bucket will provide you with absolute path for the resource, however
+ * Strapi might be used with local storage too. This means, that URLs from assets are being fetched with relative paths.
+ *
+ * @param request fetch request
+ * @param anonymous query parameters of the request
+ */
+
+export const revalidate = false
+
+async function handler(
+  request: Request,
+  { params }: { params: Promise<{ slug: string[] }> }
+) {
+  const { slug } = await params
+  const path = Array.isArray(slug) ? slug.join("/") : slug
+
+  if (!path.startsWith("uploads/")) {
+    // allow only uploads to be fetched through this proxy
+    return NextResponse.json(
+      {
+        error: {
+          message: `Access denied: Only paths under uploads/ are allowed`,
+          name: "Forbidden",
+        },
+      },
+      { status: 403 }
+    )
+  }
+
+  const strapiUrl = getEnvVar("STRAPI_URL", true)
+  const url = `${strapiUrl!}/${path}`
+  const clonedRequest = request.clone()
+
+  const { url: _, ...rest } = clonedRequest
+  const response = await fetch(url, {
+    ...rest,
+  })
+
+  return response
+}
+
+export { handler as GET }

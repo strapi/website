@@ -1,0 +1,74 @@
+{
+  "documentId": "e9yxyd25atehcwzfk9xywzoi",
+  "name": "Authenticated",
+  "description": "Default role given to authenticated user.",
+  "type": "authenticated",
+  "locale": null,
+  "permissions": [
+    {
+      "documentId": "e6pnwu5erim3ass1hd0nwo37",
+      "action": "api::footer.footer.find",
+      "locale": null
+    },
+    {
+      "documentId": "yami5zx7d5f18cts8kzv1x8f",
+      "action": "api::navbar.navbar.find",
+      "locale": null
+    },
+    {
+      "documentId": "iptpk1lzyv6m6vtaztx93eqg",
+      "action": "api::page.page.find",
+      "locale": null
+    },
+    {
+      "documentId": "yvkhrt1ntnqfq9l0gejo5ble",
+      "action": "api::page.page.findOne",
+      "locale": null
+    },
+    {
+      "documentId": "tuve7gz5cl4myckd9p473fjk",
+      "action": "plugin::upload.content-api.upload",
+      "locale": null
+    },
+    {
+      "documentId": "kgxypb8bh6q2prf3iuq7myhx",
+      "action": "plugin::users-permissions.auth.forgotPassword",
+      "locale": null
+    },
+    {
+      "documentId": "cloi0j4k1qnnmm762tzc3yss",
+      "action": "plugin::users-permissions.auth.changePassword",
+      "locale": null
+    },
+    {
+      "documentId": "gz3kc7vxnoxjhzsk5mcadb5l",
+      "action": "plugin::users-permissions.auth.resetPassword",
+      "locale": null
+    },
+    {
+      "documentId": "o6pl22rqfjs3v7ixwdwrt00r",
+      "action": "plugin::users-permissions.role.find",
+      "locale": null
+    },
+    {
+      "documentId": "ezakm5ipe64c8sa8g4tx99kq",
+      "action": "plugin::users-permissions.role.findOne",
+      "locale": null
+    },
+    {
+      "documentId": "pg1uy8zn44i1gx7vlci24usl",
+      "action": "plugin::users-permissions.user.find",
+      "locale": null
+    },
+    {
+      "documentId": "ky47jh6yk0ksjmizdtmcyvxr",
+      "action": "plugin::users-permissions.user.findOne",
+      "locale": null
+    },
+    {
+      "documentId": "hyop3l6l85ok6ar1na7mp2xd",
+      "action": "plugin::users-permissions.user.me",
+      "locale": null
+    }
+  ]
+}

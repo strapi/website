@@ -1,4 +1,13 @@
-import cronTasks from "../../cron-tasks"
+const cronTasks = {
+  sayHelloJob: {
+    task: ({ strapi }) => {
+      console.warn("A beautiful start to the week!")
+    },
+    options: {
+      rule: "0 0 1 * * 1",
+    },
+  },
+}
 
 export default ({ env }) => ({
   proxy: true,

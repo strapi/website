@@ -2,6 +2,10 @@
 
 Monorepo starter with Strapi v5 CMS and Next.js 16 frontend. Uses pnpm workspaces with Turborepo.
 
+## Core instructions
+
+- Save any screenshots or tmp files to tmp/
+
 ## Workspaces
 
 | Path                     | Description                                                  |
@@ -43,6 +47,41 @@ This updates `@repo/strapi-types`. Forgetting causes silent type mismatches betw
 - [Pages Hierarchy](docs/pages-hierarchy.md) — URL structure and redirects
 - [Strapi Schemas](docs/strapi-schemas.md) — Schema attributes, localization, lifecycle hooks
 - [Strapi Types](docs/strapi-types-usage.md) — Type utilities and usage patterns
+
+## Running Services
+
+**Never launch dev servers (`pnpm dev`, `strapi develop`, `next dev`) in the background.** These spawn long-running processes that are hard to kill from within the agent.
+
+**Never kill or restart running services.** Do not use `kill`, `pkill`, or any signal to terminate dev servers. Schema changes require a Strapi restart — ask the user to do it manually.
+
+Before any skill that needs a running server:
+
+1. Check if the port is already in use: `lsof -ti:PORT` (Strapi: `1337`, Next.js: `3000`).
+2. If the port is active, assume the server is running — do not start another instance.
+3. If the port is free and the skill needs it, ask the user to start the server themselves in a separate terminal. Wait for confirmation before proceeding.
+
+## Strapi Data Safety
+
+### Dynamic zone writes — merge, never replace
+
+Strapi PUT requests **replace** the entire field value. Always GET first, append, then PUT.
+
+```
+// WRONG — wipes existing content
+PUT { "data": { "content": [{ "__component": "sections.new", ... }] } }
+
+// RIGHT — preserves existing
+GET → content = [{ existing1 }, { existing2 }]
+PUT { "data": { "content": [{ existing1 }, { existing2 }, { "__component": "sections.new", ... }] } }
+```
+
+### Schema changes require server restart before writes
+
+After creating new schema files, the running Strapi server does not know about them. Writing unknown `__component` UIDs corrupts data.
+
+1. Create schema files, populate configs, registry entries.
+2. Ask the user to restart Strapi. Wait for confirmation.
+3. Only then seed content via MCP.
 
 ## Commits
 

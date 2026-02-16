@@ -2,6 +2,7 @@
 
 import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
+import { useState } from "react"
 
 import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
@@ -9,6 +10,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,6 +33,8 @@ export interface PricingCheckoutModalProps {
 
 export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
   const t = useTranslations("plans.pricingCheckoutModal")
+  const [error, setError] = useState<string | null>(null)
+  const [isNavigating, setIsNavigating] = useState(false)
   const {
     checkoutState,
     decreaseSeats,
@@ -44,6 +48,8 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
   } = usePricingCheckoutModalState({ card })
 
   const handleContinue = () => {
+    setError(null)
+
     const checkoutUrlResult = buildCheckoutUrl({
       baseUrl: process.env.NEXT_PUBLIC_CHARGEBEE_URL,
       selectedPlanItemPriceId: checkoutState.selectedPlanItemPriceId,
@@ -53,23 +59,19 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
     })
 
     if (!checkoutUrlResult.ok) {
-      if (checkoutUrlResult.reason === "missing_item_price_id") {
-        console.error(t("checkoutConfigMissingError"))
-
-        return
-      }
-
-      if (checkoutUrlResult.reason === "missing_base_url") {
-        console.error(t("checkoutBaseUrlMissingError"))
-
-        return
-      }
-
-      console.error(t("checkoutUrlInvalidError"))
+      console.error(
+        checkoutUrlResult.reason === "missing_item_price_id"
+          ? t("checkoutConfigMissingError")
+          : checkoutUrlResult.reason === "missing_base_url"
+            ? t("checkoutBaseUrlMissingError")
+            : t("checkoutUrlInvalidError")
+      )
+      setError(t("checkoutError"))
 
       return
     }
 
+    setIsNavigating(true)
     window.location.assign(checkoutUrlResult.url)
   }
 
@@ -84,12 +86,12 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent
-        showCloseButton={false}
-        className="max-h-[90vh] overflow-y-auto sm:max-w-xl"
-      >
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
         <DialogHeader className="mb-6">
           <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {t("dialogDescription")}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-6">
@@ -108,7 +110,9 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
             <div className="flex flex-row items-center justify-between">
               <div className="flex items-baseline">
                 <Typography variant="header3" fontWeight="semiBold">
-                  {formatUsd(checkoutState.planPreviewTotal)}
+                  {checkoutState.planPreviewTotal != null
+                    ? formatUsd(checkoutState.planPreviewTotal)
+                    : null}
                 </Typography>
                 <Typography variant="body2" textColor="neutral">
                   {t("billingPeriodMonthly")}
@@ -131,17 +135,21 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
                     <div className="relative">
                       <Input
                         type="text"
-                        min={checkoutState.includedSeats}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         value={seats}
+                        min={checkoutState.includedSeats}
                         onChange={(event) =>
                           setSeatsFromInput(event.target.value)
                         }
                         className="relative z-2 w-24"
+                        aria-label={t("seatCountLabel")}
                       />
                       <Typography
                         className="absolute top-1.5 right-2 z-1 select-none"
                         tag="span"
                         textColor="muted"
+                        aria-hidden="true"
                       >
                         {t("seats")}
                       </Typography>
@@ -188,6 +196,7 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
                 size="lg"
                 variant="success"
                 onCheckedChange={(checked) => setSsoSelected(Boolean(checked))}
+                aria-label={card.sso?.title ?? t("ssoToggle")}
               />
             </div>
           )}
@@ -207,6 +216,12 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
               </Typography>
             )}
           </div>
+
+          {error && (
+            <Typography variant="smallText1" className="text-red-600">
+              {error}
+            </Typography>
+          )}
         </div>
 
         <DialogFooter className="mt-6">
@@ -214,7 +229,9 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
             <DialogClose asChild>
               <Button variant="secondary">{t("cancel")}</Button>
             </DialogClose>
-            <Button onClick={handleContinue}>{t("continue")}</Button>
+            <Button onClick={handleContinue} disabled={isNavigating}>
+              {isNavigating ? t("redirecting") : t("continue")}
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>

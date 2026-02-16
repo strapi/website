@@ -3,6 +3,7 @@
 Monorepo starter with Strapi v5 CMS and Next.js 16 frontend. Uses pnpm workspaces with Turborepo.
 
 ## Core instructions
+
 - Save any screenshots or tmp files to tmp/
 
 ## Workspaces

@@ -62,31 +62,33 @@ Always confirm the identified section with the user before extracting. Include a
 Use `browser_evaluate` to extract the DOM tree of the confirmed section:
 
 ```javascript
-(element) => {
+;(element) => {
   function extractStructure(el, depth = 0, maxDepth = 10) {
-    if (depth > maxDepth) return null;
+    if (depth > maxDepth) return null
 
-    const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
-      ? el.textContent.trim() : null;
+    const text =
+      el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
+        ? el.textContent.trim()
+        : null
 
     return {
       tag: el.tagName.toLowerCase(),
       text,
       attrs: {
-        href: el.getAttribute('href'),
-        src: el.getAttribute('src'),
-        alt: el.getAttribute('alt'),
-        role: el.getAttribute('role'),
-        type: el.getAttribute('type'),
+        href: el.getAttribute("href"),
+        src: el.getAttribute("src"),
+        alt: el.getAttribute("alt"),
+        role: el.getAttribute("role"),
+        type: el.getAttribute("type"),
       },
       childCount: el.children.length,
       children: Array.from(el.children)
-        .map(c => extractStructure(c, depth + 1, maxDepth))
+        .map((c) => extractStructure(c, depth + 1, maxDepth))
         .filter(Boolean),
-    };
+    }
   }
 
-  return extractStructure(element);
+  return extractStructure(element)
 }
 ```
 
@@ -105,13 +107,15 @@ Resize browser to **1280px** width via `browser_resize({ width: 1280, height: 90
 Use `browser_evaluate` on the target section element:
 
 ```javascript
-(element) => {
+;(element) => {
   function extractStyles(el, depth = 0, maxDepth = 10) {
-    if (depth > maxDepth) return null;
-    const s = window.getComputedStyle(el);
+    if (depth > maxDepth) return null
+    const s = window.getComputedStyle(el)
 
-    const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
-      ? el.textContent.trim() : null;
+    const text =
+      el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
+        ? el.textContent.trim()
+        : null
 
     return {
       tag: el.tagName.toLowerCase(),
@@ -158,12 +162,12 @@ Use `browser_evaluate` on the target section element:
         position: s.position,
       },
       children: Array.from(el.children)
-        .map(c => extractStyles(c, depth + 1, maxDepth))
+        .map((c) => extractStyles(c, depth + 1, maxDepth))
         .filter(Boolean),
-    };
+    }
   }
 
-  return extractStyles(element);
+  return extractStyles(element)
 }
 ```
 
@@ -188,37 +192,37 @@ Map extracted computed values to Tailwind classes using the design system tokens
 
 #### Token Mapping Rules
 
-**Typography (font size → text-* class)**:
+**Typography (font size → text-\* class)**:
 
 The design system remaps the standard Tailwind text scale to match Strapi's type sizes (15px base instead of 16px). Always prefer standard Tailwind classes — the `text-strapi-*` aliases exist in the theme but are redundant.
 
-| Computed px | Token | Tailwind class |
-|---|---|---|
-| 11px (0.6875rem) | `--text-xs` | `text-xs` |
-| 13px (0.8125rem) | `--text-sm` | `text-sm` |
-| 15px (0.9375rem) | `--text-base` | `text-base` |
-| 17px (1.0625rem) | `--text-lg` | `text-lg` |
-| 19px (1.1875rem) | `--text-xl` | `text-xl` |
-| 21px (1.3125rem) | `--text-2xl` | `text-2xl` |
-| 33px (2.0625rem) | `--text-3xl` | `text-3xl` |
-| 43px (2.6875rem) | `--text-4xl` | `text-4xl` |
-| 53px (3.3125rem) | `--text-5xl` | `text-5xl` |
+| Computed px      | Token         | Tailwind class |
+| ---------------- | ------------- | -------------- |
+| 11px (0.6875rem) | `--text-xs`   | `text-xs`      |
+| 13px (0.8125rem) | `--text-sm`   | `text-sm`      |
+| 15px (0.9375rem) | `--text-base` | `text-base`    |
+| 17px (1.0625rem) | `--text-lg`   | `text-lg`      |
+| 19px (1.1875rem) | `--text-xl`   | `text-xl`      |
+| 21px (1.3125rem) | `--text-2xl`  | `text-2xl`     |
+| 33px (2.0625rem) | `--text-3xl`  | `text-3xl`     |
+| 43px (2.6875rem) | `--text-4xl`  | `text-4xl`     |
+| 53px (3.3125rem) | `--text-5xl`  | `text-5xl`     |
 
 For non-exact matches, pick the nearest standard Tailwind token. Values above 53px use `text-6xl` (60px), `text-7xl` (72px), etc.
 
-**Font weight → font-* class**:
+**Font weight → font-\* class**:
 
-| Computed | Tailwind class |
-|---|---|
-| 100 | `font-thin` |
-| 200 | `font-extralight` |
-| 300 | `font-light` |
-| 400 | `font-normal` |
-| 500 | `font-medium` |
-| 600 | `font-semibold` |
-| 700 | `font-bold` |
-| 800 | `font-extrabold` |
-| 900 | `font-black` |
+| Computed | Tailwind class    |
+| -------- | ----------------- |
+| 100      | `font-thin`       |
+| 200      | `font-extralight` |
+| 300      | `font-light`      |
+| 400      | `font-normal`     |
+| 500      | `font-medium`     |
+| 600      | `font-semibold`   |
+| 700      | `font-bold`       |
+| 800      | `font-extrabold`  |
+| 900      | `font-black`      |
 
 **Colors (RGB → design token)**:
 
@@ -230,14 +234,14 @@ Convert extracted `rgb(r, g, b)` to hex. Match against Strapi color tokens in `t
 
 Common Strapi mappings:
 
-| Hex | Token |
-|---|---|
+| Hex       | Token                         |
+| --------- | ----------------------------- |
 | `#ffffff` | `strapi-neutral-0` or `white` |
-| `#f6f6f9` | `strapi-neutral-100` |
-| `#32324d` | `strapi-neutral-800` |
-| `#212134` | `strapi-neutral-900` |
-| `#4945ff` | `strapi-blue-600` (primary) |
-| `#635cff` | `strapi-blue-500` |
+| `#f6f6f9` | `strapi-neutral-100`          |
+| `#32324d` | `strapi-neutral-800`          |
+| `#212134` | `strapi-neutral-900`          |
+| `#4945ff` | `strapi-blue-600` (primary)   |
+| `#635cff` | `strapi-blue-500`             |
 
 For `backgroundColor`, use `bg-{token}`. For `color`, use `text-{token}`.
 
@@ -248,49 +252,49 @@ If no candidate token is reasonably close, use an arbitrary value class (for exa
 Tailwind spacing: `value / 4 = multiplier` (base `--spacing: 0.25rem`).
 
 | Computed | Tailwind class |
-|---|---|
-| 0px | `0` |
-| 4px | `1` |
-| 8px | `2` |
-| 12px | `3` |
-| 16px | `4` |
-| 20px | `5` |
-| 24px | `6` |
-| 32px | `8` |
-| 40px | `10` |
-| 48px | `12` |
-| 64px | `16` |
-| 80px | `20` |
-| 96px | `24` |
+| -------- | -------------- |
+| 0px      | `0`            |
+| 4px      | `1`            |
+| 8px      | `2`            |
+| 12px     | `3`            |
+| 16px     | `4`            |
+| 20px     | `5`            |
+| 24px     | `6`            |
+| 32px     | `8`            |
+| 40px     | `10`           |
+| 48px     | `12`           |
+| 64px     | `16`           |
+| 80px     | `20`           |
+| 96px     | `24`           |
 
 For non-exact matches, use the nearest value. Apply as `p-{n}`, `m-{n}`, `gap-{n}`, `px-{n}`, `py-{n}`, etc.
 
-**Border radius → rounded-* class**:
+**Border radius → rounded-\* class**:
 
-| Computed | Token | Tailwind class |
-|---|---|---|
-| 4px | `--radius-strapi-sm` | `rounded-strapi-sm` |
-| 6px | `--radius-strapi-md` | `rounded-strapi-md` |
-| 10px | `--radius-strapi-lg` | `rounded-strapi-lg` |
-| 9999px | — | `rounded-full` |
+| Computed | Token                | Tailwind class      |
+| -------- | -------------------- | ------------------- |
+| 4px      | `--radius-strapi-sm` | `rounded-strapi-sm` |
+| 6px      | `--radius-strapi-md` | `rounded-strapi-md` |
+| 10px     | `--radius-strapi-lg` | `rounded-strapi-lg` |
+| 9999px   | —                    | `rounded-full`      |
 
 For other values, use standard Tailwind: `rounded-sm` (2px), `rounded` (4px), `rounded-md` (6px), `rounded-lg` (8px), `rounded-xl` (12px), `rounded-2xl` (16px).
 
 **Layout → flex/grid classes**:
 
-| Computed | Tailwind class |
-|---|---|
-| `display: flex` | `flex` |
-| `display: grid` | `grid` |
-| `flex-direction: column` | `flex-col` |
-| `flex-direction: row` | `flex-row` |
-| `align-items: center` | `items-center` |
-| `justify-content: center` | `justify-center` |
+| Computed                         | Tailwind class    |
+| -------------------------------- | ----------------- |
+| `display: flex`                  | `flex`            |
+| `display: grid`                  | `grid`            |
+| `flex-direction: column`         | `flex-col`        |
+| `flex-direction: row`            | `flex-row`        |
+| `align-items: center`            | `items-center`    |
+| `justify-content: center`        | `justify-center`  |
 | `justify-content: space-between` | `justify-between` |
-| `flex-wrap: wrap` | `flex-wrap` |
-| `text-align: center` | `text-center` |
-| `text-align: left` | `text-left` |
-| `overflow: hidden` | `overflow-hidden` |
+| `flex-wrap: wrap`                | `flex-wrap`       |
+| `text-align: center`             | `text-center`     |
+| `text-align: left`               | `text-left`       |
+| `overflow: hidden`               | `overflow-hidden` |
 
 #### Responsive Diffing
 
@@ -524,12 +528,17 @@ If the source section has visible hover effects (buttons, cards), extract them:
 Dismiss via `browser_evaluate`:
 
 ```javascript
-() => {
+;() => {
   // Common cookie banner selectors
-  const selectors = ['[class*="cookie"]', '[class*="consent"]', '[id*="cookie"]', '[class*="banner"]'];
-  selectors.forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => el.remove());
-  });
+  const selectors = [
+    '[class*="cookie"]',
+    '[class*="consent"]',
+    '[id*="cookie"]',
+    '[class*="banner"]',
+  ]
+  selectors.forEach((sel) => {
+    document.querySelectorAll(sel).forEach((el) => el.remove())
+  })
 }
 ```
 
@@ -538,7 +547,9 @@ Dismiss via `browser_evaluate`:
 Scroll to the section first via `browser_evaluate`:
 
 ```javascript
-(element) => { element.scrollIntoView({ behavior: 'instant' }); }
+;(element) => {
+  element.scrollIntoView({ behavior: "instant" })
+}
 ```
 
 Then wait briefly before extracting image sources.

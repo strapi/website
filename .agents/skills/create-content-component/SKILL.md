@@ -85,19 +85,19 @@ Never ask the user to choose between reuse/new by default. Use this policy autom
 
 Always prefer these existing components over creating new single-use ones:
 
-| Need | Reuse | UID |
-|---|---|---|
-| CTA button / navigation link | Link (with decorations for styling) | `utilities.link` |
-| Text-only link (no button styling) | LinkText | `utilities.link-text` |
-| Link with image (logo, icon link) | LinkImage | `utilities.link-image` |
-| Image (with alt, dimensions) | BasicImage | `utilities.basic-image` |
-| Image + link combo | ImageWithLink | `utilities.image-with-link` |
-| Button variant/size styling | LinkDecorations | `utilities.link-decorations` |
-| Titled group of links | LinksWithTitle | `utilities.links-with-title` |
-| FAQ / collapsible Q&A item | Accordions | `utilities.accordions` |
-| Simple text block | Text | `utilities.text` |
-| Tooltip content | Tooltip | `utilities.tooltip` |
-| Footer link group | FooterItem | `elements.footer-item` |
+| Need                               | Reuse                               | UID                          |
+| ---------------------------------- | ----------------------------------- | ---------------------------- |
+| CTA button / navigation link       | Link (with decorations for styling) | `utilities.link`             |
+| Text-only link (no button styling) | LinkText                            | `utilities.link-text`        |
+| Link with image (logo, icon link)  | LinkImage                           | `utilities.link-image`       |
+| Image (with alt, dimensions)       | BasicImage                          | `utilities.basic-image`      |
+| Image + link combo                 | ImageWithLink                       | `utilities.image-with-link`  |
+| Button variant/size styling        | LinkDecorations                     | `utilities.link-decorations` |
+| Titled group of links              | LinksWithTitle                      | `utilities.links-with-title` |
+| FAQ / collapsible Q&A item         | Accordions                          | `utilities.accordions`       |
+| Simple text block                  | Text                                | `utilities.text`             |
+| Tooltip content                    | Tooltip                             | `utilities.tooltip`          |
+| Footer link group                  | FooterItem                          | `elements.footer-item`       |
 
 **Rules**:
 

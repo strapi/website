@@ -1,5 +1,5 @@
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
-import { Search } from "lucide-react"
 
 import AppLink from "@/components/elementary/AppLink"
 import StrapiImageWithLink from "@/components/page-builder/components/utilities/StrapiImageWithLink"
@@ -62,7 +62,7 @@ export function DesktopNavbar({
 
       <div className="ml-auto flex items-center gap-2">
         <Button variant="ghost" size="icon" aria-label="Search">
-          <Search className="size-4" />
+          <MagnifyingGlassIcon className="size-4" weight="bold" />
         </Button>
 
         {ctaLinks?.map((link, index) => (

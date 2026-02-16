@@ -1,10 +1,10 @@
 "use client"
 
 import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "lucide-react"
+  CaretDownIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
+} from "@phosphor-icons/react/ssr"
 import * as React from "react"
 import {
   DayPicker,
@@ -145,21 +145,30 @@ function Calendar({
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
+              <CaretLeftIcon
+                className={cn("size-4", className)}
+                weight="bold"
+                {...props}
+              />
             )
           }
 
           if (orientation === "right") {
             return (
-              <ChevronRightIcon
+              <CaretRightIcon
                 className={cn("size-4", className)}
+                weight="bold"
                 {...props}
               />
             )
           }
 
           return (
-            <ChevronDownIcon className={cn("size-4", className)} {...props} />
+            <CaretDownIcon
+              className={cn("size-4", className)}
+              weight="bold"
+              {...props}
+            />
           )
         },
         DayButton: CalendarDayButton,

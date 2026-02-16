@@ -1,4 +1,4 @@
-import { CheckIcon, CrossIcon } from "lucide-react"
+import { CheckIcon, XIcon } from "@phosphor-icons/react/ssr"
 
 import { removeThisWhenYouNeedMe } from "@/lib/general-helpers"
 
@@ -7,7 +7,7 @@ export function AdornmentSuccess() {
 
   return (
     <span>
-      <CheckIcon height="1.5rem" width="1.5rem" />
+      <CheckIcon size="1.5rem" weight="bold" />
     </span>
   )
 }
@@ -17,7 +17,7 @@ export function AdornmentError() {
 
   return (
     <span>
-      <CrossIcon height="1.5rem" width="1.5rem" />
+      <XIcon size="1.5rem" weight="bold" />
     </span>
   )
 }

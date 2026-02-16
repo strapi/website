@@ -1,7 +1,7 @@
 "use client"
 
+import { XIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
-import { X } from "lucide-react"
 import { useState } from "react"
 
 import StrapiLink from "@/components/page-builder/components/utilities/StrapiLink"
@@ -47,7 +47,7 @@ export function NavbarAnnouncementBar({
         className="absolute right-3 rounded-sm p-0.5 text-white/70 transition-colors hover:text-white"
         aria-label="Dismiss announcement"
       >
-        <X className="size-4" />
+        <XIcon className="size-4" weight="bold" />
       </button>
     </div>
   )

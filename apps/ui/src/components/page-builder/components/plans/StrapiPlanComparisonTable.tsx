@@ -1,4 +1,4 @@
-import { CheckIcon, InfoIcon } from "@phosphor-icons/react/dist/ssr"
+import { CheckIcon, InfoIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
 import { Fragment } from "react"

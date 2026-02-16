@@ -247,16 +247,16 @@ Include:
 
 Use these patterns only as initial candidates. Schema validation decides final mapping.
 
-| Source pattern | Local component |
-|---------------|----------------|
-| Hero section with heading + CTA | `sections.hero` |
-| FAQ / accordion section | `sections.faq` |
-| Image carousel / slider | `sections.carousel` |
-| Logo row / partner logos | `sections.animated-logo-row` |
-| Pricing cards with plans | `plans.plan-pricing-cards` |
-| Feature comparison table | `plans.plan-comparison-table` |
-| Newsletter signup form | `forms.newsletter-form` |
-| Contact form | `forms.contact-form` |
-| Heading with CTA button | `sections.heading-with-cta-button` |
-| Image with CTA button | `sections.image-with-cta-button` |
-| Horizontal image gallery | `sections.horizontal-images` |
+| Source pattern                  | Local component                    |
+| ------------------------------- | ---------------------------------- |
+| Hero section with heading + CTA | `sections.hero`                    |
+| FAQ / accordion section         | `sections.faq`                     |
+| Image carousel / slider         | `sections.carousel`                |
+| Logo row / partner logos        | `sections.animated-logo-row`       |
+| Pricing cards with plans        | `plans.plan-pricing-cards`         |
+| Feature comparison table        | `plans.plan-comparison-table`      |
+| Newsletter signup form          | `forms.newsletter-form`            |
+| Contact form                    | `forms.contact-form`               |
+| Heading with CTA button         | `sections.heading-with-cta-button` |
+| Image with CTA button           | `sections.image-with-cta-button`   |
+| Horizontal image gallery        | `sections.horizontal-images`       |

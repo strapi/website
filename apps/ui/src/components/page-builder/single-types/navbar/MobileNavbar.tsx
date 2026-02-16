@@ -1,7 +1,7 @@
 "use client"
 
+import { ListIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
-import { Menu, Search, X } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 
@@ -57,7 +57,7 @@ export function MobileNavbar({
 
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" aria-label="Search">
-            <Search className="size-4" />
+            <MagnifyingGlassIcon className="size-4" weight="bold" />
           </Button>
 
           <Button
@@ -66,7 +66,11 @@ export function MobileNavbar({
             aria-label={isOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            {isOpen ? (
+              <XIcon className="size-5" weight="bold" />
+            ) : (
+              <ListIcon className="size-5" weight="bold" />
+            )}
           </Button>
         </div>
       </div>

@@ -1,8 +1,7 @@
 "use client"
 
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
+import { XIcon, WarningIcon } from "@phosphor-icons/react/ssr"
 import * as Sentry from "@sentry/nextjs"
-import { XIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { ErrorBoundary as ErrorBoundaryComp } from "react-error-boundary"
@@ -40,7 +39,7 @@ function ErrorBoundaryFallback({
 
   return (
     <Alert variant="destructive" className="relative">
-      <ExclamationTriangleIcon className="s-4" />
+      <WarningIcon className="s-4" weight="bold" />
       <AlertTitle>{customErrorTitle ?? t("invalidContent")}</AlertTitle>
       <AlertDescription>
         {(showErrorMessage || isDev) && (
@@ -69,6 +68,7 @@ function ErrorBoundaryFallback({
       <span className="absolute top-2 right-2 block">
         <XIcon
           className="size-4 cursor-pointer"
+          weight="bold"
           onClick={() => setHidden(true)}
         />
       </span>

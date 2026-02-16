@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_plans_pricing_switchers",
+  "info": {
+    "displayName": "PricingSwitcher",
+    "icon": "filter"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "monthlyTitle": {
+      "type": "string"
+    },
+    "monthlySubtitle": {
+      "type": "string"
+    },
+    "yearlyTitle": {
+      "type": "string"
+    },
+    "yearlySubtitle": {
+      "type": "string"
+    },
+    "showYearlyToggle": {
+      "type": "boolean",
+      "default": true
+    },
+    "isYearlyDefault": {
+      "type": "boolean",
+      "default": false
+    },
+    "planTypesSwitcher": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

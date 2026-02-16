@@ -29,7 +29,7 @@ export default function PageList({
       <div className="flex flex-col gap-6">
         {pages?.map((page) => (
           <div key={page.id}>
-            <Typography variant="large">{page.title}</Typography>
+            <Typography variant="header1">{page.title}</Typography>
             <AppLink
               href={page.fullPath ?? ""}
               openInNewTab

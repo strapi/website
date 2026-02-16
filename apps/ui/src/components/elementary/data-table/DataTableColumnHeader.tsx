@@ -1,12 +1,12 @@
 "use client"
 
 import {
+  ArrowsDownUpIcon,
   ArrowDownIcon,
   ArrowUpIcon,
-  CaretSortIcon,
-} from "@radix-ui/react-icons"
+  CaretUpDownIcon,
+} from "@phosphor-icons/react/ssr"
 import type { Column } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
@@ -48,7 +48,7 @@ export function DataTableColumnHeader<TData, TValue>({
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         <span>{title}</span>
-        <ArrowUpDown className="ml-2 size-4" />
+        <ArrowsDownUpIcon className="ml-2 size-4" weight="bold" />
       </Button>
     )
   }
@@ -68,7 +68,7 @@ export function DataTableColumnHeader<TData, TValue>({
             ) : column.getIsSorted() === "asc" ? (
               <ArrowUpIcon className="ml-2 size-4" />
             ) : (
-              <CaretSortIcon className="ml-2 size-4" />
+              <CaretUpDownIcon className="ml-2 size-4" />
             )}
           </Button>
         </DropdownMenuTrigger>

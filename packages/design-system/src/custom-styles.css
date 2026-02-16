@@ -1,35 +1,39 @@
-.typo-h1 {
-  @apply mb-2 text-6xl;
+.typo-header-1 {
+  @apply text-strapi-header-1;
 }
 
-.typo-h2 {
-  @apply mb-1.5 text-5xl;
+.typo-header-2 {
+  @apply text-strapi-header-2;
 }
 
-.typo-h3 {
-  @apply mb-1 text-4xl;
+.typo-header-3 {
+  @apply text-strapi-header-3;
 }
 
-.typo-h4 {
-  @apply mb-1 text-3xl;
+.typo-subtitle-1 {
+  @apply text-strapi-subtitle-1;
 }
 
-.typo-h5 {
-  @apply mb-1 text-2xl;
+.typo-subtitle-2 {
+  @apply text-strapi-subtitle-2;
 }
 
-.typo-h6 {
-  @apply mb-1 text-xl;
+.typo-body-1 {
+  @apply text-strapi-body-1;
 }
 
-.typo-p-medium {
-  @apply mb-0.5 text-sm;
+.typo-body-2 {
+  @apply text-strapi-body-2;
 }
 
-.typo-p-large {
-  @apply mb-0.5 text-lg;
+.typo-small-1 {
+  @apply text-strapi-small-1;
 }
 
-.typo-p-small {
-  @apply mb-0.5 text-xs;
+.typo-small-2 {
+  @apply text-strapi-small-2;
+}
+
+.typo-label {
+  @apply text-strapi-small-1 font-semibold tracking-[0.5px] uppercase;
 }

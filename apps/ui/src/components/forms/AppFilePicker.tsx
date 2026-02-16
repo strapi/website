@@ -1,7 +1,6 @@
 "use client"
 
-import { Cross1Icon } from "@radix-ui/react-icons"
-import { PaperclipIcon } from "lucide-react"
+import { PaperclipIcon, XIcon } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
@@ -122,7 +121,8 @@ export function AppFilePicker({
             <div>
               <div className="flex w-full items-center justify-between gap-5">
                 <span className="flex items-center gap-1">
-                  <PaperclipIcon size={16} /> {selectedFile.name}
+                  <PaperclipIcon size={16} weight="regular" />{" "}
+                  {selectedFile.name}
                 </span>
                 <Tooltip
                   contentProps={{ side: "left" }}
@@ -136,7 +136,7 @@ export function AppFilePicker({
                       removeSelectedFile()
                     }}
                   >
-                    <Cross1Icon />
+                    <XIcon weight="bold" />
                   </button>
                 </Tooltip>
               </div>

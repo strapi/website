@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_utilities_tooltips",
+  "info": {
+    "displayName": "Tooltip",
+    "icon": "message"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "richtext"
+    }
+  },
+  "config": {}
+}

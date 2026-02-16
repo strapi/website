@@ -1,5 +1,5 @@
+import { CheckIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
-import { Check } from "lucide-react"
 
 import { Container } from "@/components/elementary/Container"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
@@ -40,7 +40,7 @@ export function StrapiHero({
             component?.steps?.length > 0 &&
             component.steps.map((step) => (
               <div key={step.id} className="flex items-center gap-1 py-2">
-                <Check className="text-primary-500" />
+                <CheckIcon className="text-primary-500" weight="bold" />
                 <Typography>{step.text}</Typography>
               </div>
             ))}

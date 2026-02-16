@@ -69,7 +69,9 @@
         "sections.carousel",
         "sections.animated-logo-row",
         "forms.newsletter-form",
-        "forms.contact-form"
+        "forms.contact-form",
+        "plans.plan-pricing-cards",
+        "plans.plan-comparison-table"
       ]
     },
     "children": {

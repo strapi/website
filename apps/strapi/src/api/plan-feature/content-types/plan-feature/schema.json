@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plan_features",
+  "info": {
+    "singularName": "plan-feature",
+    "pluralName": "plan-features",
+    "displayName": "Plan-Feature"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "tooltip": {
+      "type": "component",
+      "component": "utilities.tooltip",
+      "repeatable": false
+    },
+    "category": {
+      "type": "enumeration",
+      "required": true,
+      "default": "general",
+      "enum": [
+        "general",
+        "cloud",
+        "terms-and-services",
+        "usage"
+      ]
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}

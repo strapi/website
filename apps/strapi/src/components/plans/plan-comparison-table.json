@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_plans_plan_comparison_tables",
+  "info": {
+    "displayName": "PlanComparisonTable",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "plans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::plan.plan"
+    },
+    "footnote": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

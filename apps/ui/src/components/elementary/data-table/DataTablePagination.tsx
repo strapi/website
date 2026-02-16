@@ -1,11 +1,11 @@
 "use client"
 
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from "@radix-ui/react-icons"
+  CaretDoubleLeftIcon,
+  CaretDoubleRightIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
+} from "@phosphor-icons/react/ssr"
 import type { Table } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
 
@@ -94,7 +94,7 @@ export function DataTablePagination<TData>({ table, simple }: Props<TData>) {
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">{t("firstPage")}</span>
-            <DoubleArrowLeftIcon className="size-4" />
+            <CaretDoubleLeftIcon className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -103,7 +103,7 @@ export function DataTablePagination<TData>({ table, simple }: Props<TData>) {
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">{t("previousPage")}</span>
-            <ChevronLeftIcon className="size-4" />
+            <CaretLeftIcon className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -112,7 +112,7 @@ export function DataTablePagination<TData>({ table, simple }: Props<TData>) {
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">{t("nextPage")}</span>
-            <ChevronRightIcon className="size-4" />
+            <CaretRightIcon className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -121,7 +121,7 @@ export function DataTablePagination<TData>({ table, simple }: Props<TData>) {
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">{t("lastPage")}</span>
-            <DoubleArrowRightIcon className="size-4" />
+            <CaretDoubleRightIcon className="size-4" />
           </Button>
         </div>
       </div>

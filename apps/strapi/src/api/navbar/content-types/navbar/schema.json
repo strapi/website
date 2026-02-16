@@ -16,16 +16,6 @@
     }
   },
   "attributes": {
-    "links": {
-      "type": "component",
-      "repeatable": true,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "utilities.link"
-    },
     "logoImage": {
       "type": "component",
       "repeatable": false,
@@ -35,6 +25,36 @@
         }
       },
       "component": "utilities.image-with-link"
+    },
+    "announcementBar": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "navbar.announcement-bar"
+    },
+    "navItems": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "navbar.nav-item"
+    },
+    "ctaLinks": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "utilities.link"
     }
   }
 }

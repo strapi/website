@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_navbar_nav_sections",
+  "info": {
+    "displayName": "NavSection"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["list", "grid"],
+      "default": "list"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "navbar.nav-link"
+    }
+  }
+}

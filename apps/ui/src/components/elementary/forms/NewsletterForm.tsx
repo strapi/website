@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { MoveRight } from "lucide-react"
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
@@ -44,7 +44,7 @@ export function NewsletterForm() {
             form={newsletterForm}
             aria-label="Submit form"
           >
-            <MoveRight className="size-4" />
+            <ArrowRightIcon className="size-4" weight="bold" />
           </Button>
         </div>
       </AppForm>

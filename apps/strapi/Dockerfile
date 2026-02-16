@@ -9,7 +9,7 @@
 ARG APP=strapi
 ARG WORKSPACE=@repo/strapi
 
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
 
@@ -29,7 +29,7 @@ FROM base AS prepare
 ARG WORKSPACE
 
 # Install turbo globally to prune below
-RUN pnpm add -g turbo@2.7.3
+RUN pnpm add -g turbo@2.8.9
 
 COPY . .
 
@@ -42,7 +42,7 @@ FROM base AS builder
 ARG APP
 
 # Install turbo globally to use during build below
-RUN pnpm add -g turbo@2.7.3
+RUN pnpm add -g turbo@2.8.9
 # Install node-gyp globally to build native addons
 RUN pnpm add -g node-gyp
 
@@ -73,7 +73,7 @@ RUN turbo run build
 RUN pnpm prune --prod
 
 # ---
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 
 RUN apk add --no-cache vips-dev
 

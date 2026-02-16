@@ -314,7 +314,15 @@ Optional when broader changes are made:
 pnpm lint
 ```
 
-### 8. Return structured result
+### 8. Server restart notice
+
+If new schema files were created or the page dynamic zone was modified, remind the caller (user or parent skill):
+
+> "New Strapi schemas were created. The running server must be restarted before any content can be written via MCP. Please restart Strapi and confirm."
+
+**Never proceed to MCP write operations (seeding content, updating pages) until the user confirms the server has been restarted.** Writing unknown `__component` UIDs corrupts dynamic zone data.
+
+### 9. Return structured result
 
 Always finish with:
 

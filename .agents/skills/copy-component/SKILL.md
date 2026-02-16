@@ -396,6 +396,14 @@ After delegation, verify outputs exist and are coherent:
 - `apps/ui/src/components/page-builder/index.tsx` registration (page-level only)
 - Fresh `@repo/strapi-types` generation after schema changes
 
+**CRITICAL — Server restart handoff**: If new schema files were created or the page dynamic zone was modified, the running Strapi server does not know about the new component UIDs. **Do not proceed to content seeding.** Instead:
+
+1. Tell the user: "New Strapi schemas were created. Please restart the Strapi server to pick up the changes, then confirm."
+2. Wait for user confirmation before any MCP write operations.
+3. Only after confirmation, proceed with React component generation and optional seeding.
+
+Sending a PUT/POST with an unregistered `__component` UID can corrupt the dynamic zone or silently drop data.
+
 ### Step 9: Generate React component
 
 Create the React component at the path established in Step 8 (schema scaffolding skipped React via `skip_react_component: true`). Use extracted Tailwind classes for a real implementation. Follow patterns from existing components:
@@ -485,6 +493,12 @@ Always finish with:
   "manual_steps_needed": []
 }
 ```
+
+### Step 14: Offer content seeding
+
+After reporting the structured result, ask the user if they want to seed the newly created component with content extracted from the source page using the `/seed-content` skill. Include the source URL and component name in the prompt so the user has context.
+
+If the user accepts, invoke `/seed-content` with the source URL, target component UID, and any content already extracted in Step 2.
 
 ## Hover and Interactive States
 

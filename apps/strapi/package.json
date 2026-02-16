@@ -5,7 +5,7 @@
   "license": "MIT",
   "types": "./types",
   "scripts": {
-    "prebuild": "[ -n \"$STRAPI_CI\" ] && cd ../.. && pnpm exec turbo run build --filter=@repo/strapi^... || true",
+    "prebuild": "[ -n \"$TURBO_HASH\" ] || (cd ../.. && pnpm exec turbo run build --filter=@repo/strapi^...)",
     "build": "strapi build",
     "config:dump": "strapi configuration:dump -f dump.json",
     "config:restore": "strapi configuration:restore -f dump.json",

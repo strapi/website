@@ -18,17 +18,21 @@ Before starting, verify:
 
 ### 1. Check if Strapi is running
 
+First check if port 1337 is already in use:
+
+```bash
+lsof -ti:1337
+```
+
+If a process is listening, verify Strapi responds:
+
 ```bash
 curl -s -o /dev/null -w "%{http_code}" http://localhost:1337/api/health
 ```
 
 - If **200**: Strapi is running, proceed.
 - If health check fails, optionally check `http://localhost:1337/admin` as a secondary signal.
-- If still failing or connection is refused: tell user to start Strapi first:
-  ```bash
-  pnpm dev
-  ```
-  Wait for user confirmation before proceeding.
+- If no process on port 1337 or connection refused: ask the user to start Strapi in a separate terminal and wait for confirmation. **Never run `pnpm dev` in the background.**
 
 ### 2. Check if already configured
 

@@ -5,11 +5,11 @@ import { Typography } from "@/components/typography"
 import { PricingFeature } from "./PricingFeatures"
 import { StrapiLink } from "../../utilities/StrapiLink"
 
-export interface PricingExtraBox {
+export interface PricingExtraBoxProps {
   data?: Data.Component<"plans.plan-pricing-extra-box"> | null
 }
 
-export function PricingExtraBox({ data }: PricingExtraBox) {
+export function PricingExtraBox({ data }: PricingExtraBoxProps) {
   const { title, description, link, features } = data ?? {}
 
   if (!title) {

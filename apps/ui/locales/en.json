@@ -47,6 +47,16 @@
       "monthly": "Monthly",
       "yearly": "Yearly"
     },
+    "pricingCard": {
+      "billedYearly": "billed yearly"
+    },
+    "pricingCardSso": {
+      "addon": "Add-on"
+    },
+    "comparisonTable": {
+      "included": "Included",
+      "notIncluded": "Not included"
+    },
     "pricingCheckoutModal": {
       "buyNow": "Buy now",
       "title": "Add seats to your plan",
@@ -61,7 +71,12 @@
       "increaseSeatCountAria": "Increase seat count",
       "checkoutConfigMissingError": "Missing checkout configuration for pricing modal.",
       "checkoutBaseUrlMissingError": "Missing NEXT_PUBLIC_CHARGEBEE_URL environment variable.",
-      "checkoutUrlInvalidError": "Invalid checkout URL."
+      "checkoutUrlInvalidError": "Invalid checkout URL.",
+      "dialogDescription": "Configure your plan seats and add-ons before checkout",
+      "ssoToggle": "Toggle SSO add-on",
+      "seatCountLabel": "Number of seats",
+      "checkoutError": "Unable to proceed to checkout. Please try again.",
+      "redirecting": "Redirecting..."
     }
   },
 

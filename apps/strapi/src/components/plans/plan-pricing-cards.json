@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_plans_plan_pricing_cards",
+  "info": {
+    "displayName": "PlanPricingCards",
+    "icon": "shoppingCart"
+  },
+  "options": {},
+  "attributes": {
+    "switcher": {
+      "type": "component",
+      "component": "plans.pricing-switcher",
+      "repeatable": false
+    },
+    "cards": {
+      "type": "component",
+      "component": "plans.plan-pricing-card-item",
+      "repeatable": true
+    },
+    "extraBox": {
+      "type": "component",
+      "component": "plans.plan-pricing-extra-box",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

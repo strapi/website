@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "strapi-local": {
+      "command": "npx",
+      "args": ["-y", "@bschauer/strapi-mcp-server@2.6.0"]
+    }
+  }
+}

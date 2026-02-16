@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_plans_plan_pricing_card_item_features",
+  "info": {
+    "displayName": "PlanPricingCardItemFeature",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "tooltip": {
+      "type": "richtext"
+    },
+    "badge": {
+      "type": "string"
+    },
+    "badgeStyle": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "purple",
+        "muted",
+        "secondary",
+        "destructive",
+        "outline",
+        "ghost",
+        "link"
+      ]
+    }
+  },
+  "config": {}
+}

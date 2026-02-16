@@ -1,7 +1,5 @@
 import type { Data } from "@repo/strapi-types"
 
-import { removeThisWhenYouNeedMe } from "@/lib/general-helpers"
-
 import { type BasicImageProps, StrapiBasicImage } from "./StrapiBasicImage"
 import { type StrapiLinkProps, StrapiLink } from "./StrapiLink"
 
@@ -19,8 +17,6 @@ export function StrapiImageWithLink({
   imageProps,
   linkProps,
 }: Props) {
-  removeThisWhenYouNeedMe("StrapiImageWithLink")
-
   return (
     <StrapiLink component={component?.link} {...linkProps}>
       <StrapiBasicImage component={component?.image} {...imageProps} />

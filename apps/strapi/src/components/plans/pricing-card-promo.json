@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_plans_pricing_card_promos",
+  "info": {
+    "displayName": "PricingCardPromo",
+    "icon": "quote"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

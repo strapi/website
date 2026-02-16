@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_plans_plan_feature_values",
+  "info": {
+    "displayName": "PlanFeatureValue",
+    "icon": "layer"
+  },
+  "options": {},
+  "attributes": {
+    "feature": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::plan-feature.plan-feature"
+    },
+    "value": {
+      "type": "string"
+    },
+    "mobileValue": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

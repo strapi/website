@@ -13,7 +13,7 @@
     "links": {
       "type": "component",
       "repeatable": true,
-      "component": "utilities.link"
+      "component": "utilities.link-text"
     }
   }
 }

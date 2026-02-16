@@ -11,7 +11,7 @@ ARG WORKSPACE=@repo/ui
 
 # The reason is that Debian (slim image) uses glibc that has faster runtime performance.
 # https://edu.chainguard.dev/chainguard/chainguard-images/about/images-compiled-programs/glibc-vs-musl/#high-level-differences-between-glibc-and-musl
-FROM node:22-slim AS base
+FROM node:24-slim AS base
 
 # Install pnpm globally
 ENV PNPM_HOME="/pnpm"
@@ -26,7 +26,7 @@ FROM base AS prepare
 ARG WORKSPACE
 
 # Install turbo globally to prune below
-RUN pnpm add -g turbo@2.7.3
+RUN pnpm add -g turbo@2.8.9
 
 COPY . .
 
@@ -45,7 +45,7 @@ RUN turbo prune ${WORKSPACE} --docker
 FROM base AS builder
 
 # Install turbo globally to use during build below
-RUN pnpm add -g turbo@2.7.3
+RUN pnpm add -g turbo@2.8.9
 
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
@@ -81,7 +81,7 @@ ENV STRAPI_REST_READONLY_API_KEY=${STRAPI_REST_READONLY_API_KEY}
 RUN turbo run build
 
 # ---
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 ARG APP
 
 # Don't run production as root for security reasons

@@ -1,7 +1,7 @@
 "use client"
 
+import { CalendarBlankIcon } from "@phosphor-icons/react/ssr"
 import dayjs from "dayjs"
-import { Calendar as CalendarIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
@@ -35,7 +35,7 @@ export function DatePicker({
             !date && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 size-4" />
+          <CalendarBlankIcon className="mr-2 size-4" weight="regular" />
           {date ? dayjs(date).format("LL") : <span>{t("label")}</span>}
         </Button>
       </PopoverTrigger>

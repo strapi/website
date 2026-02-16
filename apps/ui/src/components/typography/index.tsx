@@ -2,14 +2,15 @@ import type React from "react"
 
 import { cn } from "@/lib/styles"
 
-export const textColorVariants = {
+const textColorVariants = {
   black: "text-black",
   white: "text-white",
-  // more variants will be added here
+  primary: "text-strapi-blue-800",
+  neutral: "text-strapi-neutral-700",
+  muted: "text-strapi-neutral-600",
 }
-export type TextColor = keyof typeof textColorVariants
 
-export const fontWeightVariants = {
+const fontWeightVariants = {
   black: "font-black",
   extraBold: "font-extrabold",
   bold: "font-bold",
@@ -20,34 +21,48 @@ export const fontWeightVariants = {
   extraLight: "font-extraLight",
   thin: "font-thin",
 }
-export type FontWeight = keyof typeof fontWeightVariants
 
-export const variantStyles = {
-  heading1: "typo-h1",
-  heading2: "typo-h2",
-  heading3: "typo-h3",
-  heading4: "typo-h4",
-  heading5: "typo-h5",
-  heading6: "typo-h6",
-  small: "typo-p-small",
-  medium: "typo-p-medium",
-  large: "typo-p-large",
+const variantStyles = {
+  header1: "typo-header-1",
+  header2: "typo-header-2",
+  header3: "typo-header-3",
+  subtitle1: "typo-subtitle-1",
+  subtitle2: "typo-subtitle-2",
+  body1: "typo-body-1",
+  body2: "typo-body-2",
+  smallText1: "typo-small-1",
+  smallText2: "typo-small-2",
+  label: "typo-label",
 }
-export type Variant = keyof typeof variantStyles
 
-export const defaultStyles: Record<TypographyTag, Variant> = {
-  h1: "heading1",
-  h2: "heading2",
-  h3: "heading3",
-  h4: "heading4",
-  h5: "heading5",
-  h6: "heading6",
-  p: "medium",
-  blockquote: "medium",
-  ol: "medium",
-  ul: "medium",
+const defaultFontWeights: Record<Variant, FontWeight> = {
+  header1: "bold",
+  header2: "bold",
+  header3: "bold",
+  subtitle1: "normal",
+  subtitle2: "normal",
+  body1: "normal",
+  body2: "normal",
+  smallText1: "normal",
+  smallText2: "normal",
+  label: "bold",
 }
-export type TypographyTag =
+
+const defaultStyles: Record<TypographyTag, Variant> = {
+  h1: "header1",
+  h2: "header2",
+  h3: "header3",
+  h4: "subtitle1",
+  h5: "subtitle2",
+  h6: "subtitle2",
+  p: "body1",
+  span: "body2",
+  label: "label",
+}
+
+type Variant = keyof typeof variantStyles
+type TextColor = keyof typeof textColorVariants
+type TypographyTag =
   | "h1"
   | "h2"
   | "h3"
@@ -55,9 +70,9 @@ export type TypographyTag =
   | "h5"
   | "h6"
   | "p"
-  | "ol"
-  | "ul"
-  | "blockquote"
+  | "span"
+  | "label"
+type FontWeight = keyof typeof fontWeightVariants
 
 interface TypographyProps {
   children: React.ReactNode
@@ -65,6 +80,7 @@ interface TypographyProps {
   variant?: Variant
   textColor?: TextColor
   fontWeight?: FontWeight
+  uppercase?: boolean
   tag?: TypographyTag
   id?: string
 }
@@ -73,17 +89,17 @@ export function Typography({
   children,
   className,
   variant,
-  textColor = "black",
-  fontWeight = "normal",
+  textColor = "primary",
+  uppercase,
+  fontWeight,
   tag: Tag = "p",
   id,
 }: TypographyProps) {
-  const selectedVariant = variant
-    ? variantStyles[variant]
-    : variantStyles[defaultStyles[Tag]]
-
+  const resolvedVariant = variant ?? defaultStyles[Tag]
+  const selectedVariant = variantStyles[resolvedVariant]
   const selectedTextColor = textColorVariants[textColor]
-  const selectedFontWeight = fontWeightVariants[fontWeight]
+  const resolvedWeight = fontWeight ?? defaultFontWeights[resolvedVariant]
+  const selectedFontWeight = fontWeightVariants[resolvedWeight]
 
   return (
     <Tag
@@ -92,6 +108,7 @@ export function Typography({
         selectedVariant,
         selectedTextColor,
         selectedFontWeight,
+        uppercase && "uppercase",
         className
       )}
     >

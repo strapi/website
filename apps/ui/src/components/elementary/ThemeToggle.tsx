@@ -1,6 +1,6 @@
 "use client"
 
-import { Moon, SunMedium } from "lucide-react"
+import { MoonIcon, SunIcon } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 
@@ -19,8 +19,14 @@ export function ThemeToggle() {
       size="sm"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
-      <SunMedium className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-      <Moon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+      <SunIcon
+        className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
+        weight="fill"
+      />
+      <MoonIcon
+        className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
+        weight="fill"
+      />
       <span className="sr-only">{t("comps.themeToggle.label")}</span>
     </Button>
   )

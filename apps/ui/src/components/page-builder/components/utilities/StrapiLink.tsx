@@ -3,7 +3,6 @@ import type React from "react"
 
 import AppLink from "@/components/elementary/AppLink"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import { removeThisWhenYouNeedMe } from "@/lib/general-helpers"
 
 export interface StrapiLinkProps {
   readonly component: Data.Component<"utilities.link"> | undefined | null
@@ -12,7 +11,7 @@ export interface StrapiLinkProps {
   readonly hideWhenMissing?: boolean
 }
 
-const getStrapiLinkHref = (
+export const getStrapiLinkHref = (
   component?: Data.Component<"utilities.link"> | null
 ) => {
   // Add more when needed
@@ -33,8 +32,6 @@ export function StrapiLink({
   className,
   hideWhenMissing,
 }: StrapiLinkProps) {
-  removeThisWhenYouNeedMe("StrapiLink")
-
   if (component == null && hideWhenMissing) {
     return null
   }

@@ -1,7 +1,7 @@
 "use client"
 
+import { CalendarBlankIcon } from "@phosphor-icons/react/ssr"
 import dayjs from "dayjs"
-import { Calendar as CalendarIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useMemo } from "react"
 import type { DateRange } from "react-day-picker"
@@ -58,7 +58,7 @@ export function DateRangePicker({ className, date, setDate }: Props) {
               !date && "text-muted-foreground"
             )}
           >
-            <CalendarIcon className="mr-2 size-4" />
+            <CalendarBlankIcon className="mr-2 size-4" weight="regular" />
             {selectedDate}
           </Button>
         </PopoverTrigger>

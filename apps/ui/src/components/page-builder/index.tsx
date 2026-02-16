@@ -1,6 +1,8 @@
 import type { UID } from "@repo/strapi-types"
 
 import StrapiNewsletterForm from "@/components/page-builder/components/forms/StrapiNewsletterForm"
+import StrapiPlanComparisonTable from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
+import StrapiPlanPricingCards from "@/components/page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards"
 import StrapiAnimatedLogoRow from "@/components/page-builder/components/sections/StrapiAnimatedLogoRow"
 import StrapiCarousel from "@/components/page-builder/components/sections/StrapiCarousel"
 import StrapiFaq from "@/components/page-builder/components/sections/StrapiFaq"
@@ -31,4 +33,6 @@ export const PageContentComponents: Partial<
   "forms.newsletter-form": StrapiNewsletterForm,
 
   // Add more components here
+  "plans.plan-comparison-table": StrapiPlanComparisonTable,
+  "plans.plan-pricing-cards": StrapiPlanPricingCards,
 }

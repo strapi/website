@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_plans_pricing_card_checkout_modals",
+  "info": {
+    "displayName": "PricingCardCheckoutModal",
+    "icon": "shoppingCart"
+  },
+  "options": {},
+  "attributes": {
+    "planMonthlyPrice": {
+      "type": "string"
+    },
+    "planMonthlyItemPriceId": {
+      "type": "string"
+    },
+    "includedSeats": {
+      "type": "integer",
+      "default": 1
+    },
+    "additionalSeatMonthlyPrice": {
+      "type": "string"
+    },
+    "additionalSeatMonthlyItemPriceId": {
+      "type": "string"
+    },
+    "ssoMonthlyPrice": {
+      "type": "string"
+    },
+    "ssoMonthlyPricePerSeat": {
+      "type": "string"
+    },
+    "ssoMonthlyItemPriceId": {
+      "type": "string"
+    },
+    "ssoDefaultSelected": {
+      "type": "boolean",
+      "default": false
+    },
+    "ssoDescription": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

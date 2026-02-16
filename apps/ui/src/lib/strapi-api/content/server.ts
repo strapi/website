@@ -111,8 +111,64 @@ export async function fetchNavbar(locale: Locale) {
     return await PublicStrapiClient.fetchOne("api::navbar.navbar", undefined, {
       locale,
       populate: {
-        links: true,
-        logoImage: { populate: { image: true, link: true } },
+        logoImage: {
+          populate: {
+            image: {
+              populate: { media: true },
+            },
+            link: true,
+          },
+        },
+        announcementBar: {
+          populate: {
+            link: {
+              populate: {
+                page: true,
+                decorations: {
+                  populate: { leftIcon: true, rightIcon: true },
+                },
+              },
+            },
+          },
+        },
+        navItems: {
+          populate: {
+            directLink: {
+              populate: {
+                page: true,
+                decorations: {
+                  populate: { leftIcon: true, rightIcon: true },
+                },
+              },
+            },
+            sections: {
+              populate: {
+                items: {
+                  populate: {
+                    icon: true,
+                    link: { populate: { page: true } },
+                  },
+                },
+              },
+            },
+            bottomLinks: {
+              populate: {
+                page: true,
+                decorations: {
+                  populate: { leftIcon: true, rightIcon: true },
+                },
+              },
+            },
+          },
+        },
+        ctaLinks: {
+          populate: {
+            page: true,
+            decorations: {
+              populate: { leftIcon: true, rightIcon: true },
+            },
+          },
+        },
       },
     })
   } catch (e: unknown) {
@@ -133,9 +189,27 @@ export async function fetchFooter(locale: Locale) {
     return await PublicStrapiClient.fetchOne("api::footer.footer", undefined, {
       locale,
       populate: {
-        sections: { populate: { links: true } },
-        logoImage: { populate: { image: true, link: true } },
-        links: true,
+        sections: { populate: { links: { populate: { page: true } } } },
+        logoImage: {
+          populate: {
+            image: {
+              populate: {
+                media: true,
+              },
+            },
+            page: true,
+          },
+        },
+        links: { populate: { page: true } },
+        socials: {
+          populate: {
+            socials: {
+              populate: {
+                image: { populate: { media: true } },
+              },
+            },
+          },
+        },
       },
     })
   } catch (e: unknown) {

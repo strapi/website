@@ -19,7 +19,7 @@ export function StrapiAnimatedLogoRow({
   return (
     <section className="w-full py-10">
       <div className="flex flex-col items-center gap-[30px]">
-        <Typography tag="h3" variant="heading4" fontWeight="normal">
+        <Typography tag="h3" variant="header1">
           {component.text}
         </Typography>
 

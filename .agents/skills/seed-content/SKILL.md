@@ -35,6 +35,25 @@ Ask the user for:
 - If data cannot be mapped safely, skip that fragment and report it.
 - Always show a preview and wait for explicit user approval before writing.
 
+### Dynamic zone merge rule (CRITICAL)
+
+Strapi PUT requests **replace** the entire field value. Sending `"content": [{ new }]` will **delete all existing components** on that page.
+
+**Always GET the page with full `content` populate first, then append new components to the existing array before PUT.**
+
+```
+// WRONG — wipes existing content
+PUT { "data": { "content": [{ "__component": "sections.new", ... }] } }
+
+// RIGHT — preserves existing
+GET → content = [{ existing1 }, { existing2 }]
+PUT { "data": { "content": [{ existing1 }, { existing2 }, { "__component": "sections.new", ... }] } }
+```
+
+### Schema registration rule (CRITICAL)
+
+Never write a `__component` UID to Strapi that the running server hasn't registered. After creating new schema files, ask the user to restart Strapi and wait for confirmation before any MCP write operations.
+
 ## Steps
 
 ### Step 1: Verify MCP setup
@@ -46,11 +65,11 @@ Call `strapi_list_servers()`:
 
 ### Step 2: Verify local Strapi availability
 
-Verify the local Strapi server responds:
+Check if port 1337 is in use (`lsof -ti:1337`), then verify Strapi responds:
 
 - Prefer `GET /api/health` and expect `200`.
 - If unavailable, fall back to checking `http://localhost:1337/admin`.
-- If Strapi is not running, ask user to start it before continuing.
+- If Strapi is not running, ask the user to start it in a separate terminal and wait for confirmation. **Never launch dev servers in the background.**
 
 ### Step 3: Fetch source page content
 

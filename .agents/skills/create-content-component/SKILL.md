@@ -7,30 +7,107 @@ description: "Creates a new page builder content component for both Strapi and t
 
 Add a new page builder (component) to both Strapi and the Next.js frontend.
 
-## Input Validation
+## Execution Mode (Default: Autonomous)
 
-Before proceeding, validate inputs:
+Complete the workflow end-to-end without waiting for user input unless the user explicitly asks for interactive mode.
 
-- **Name**: must be kebab-case, lowercase only (e.g. `pricing-table`). Reject PascalCase/camelCase like `MyComponent` or `pricingTable` — ask user to correct.
-- **Category**: must be lowercase, no spaces (e.g. `sections`, `forms`). Reject invalid formats.
+Rules:
 
-If invalid format provided, ask user to correct before proceeding.
+- Derive missing inputs automatically.
+- Normalize malformed inputs automatically.
+- Use deterministic conflict resolution (reuse, additive extend, or suffix) instead of asking.
+- Never delete fields, rename fields, or change existing field types on existing components.
 
-## Inputs
+## Inputs (Optional)
 
-Ask the user for:
+Preferred inputs:
 
 - **Name**: kebab-case component name (e.g. `testimonials`, `pricing-table`)
-- **Category**: one of `sections`, `forms`, `utilities`, `seo-utilities`, `elements` (default: `sections`), or any custom category.
+- **Category**: one of `sections`, `forms`, `plans`, `utilities`, `seo-utilities`, `elements`, `footer`, `navbar` (default: `sections`), or any custom category.
 - **Attributes**: what fields the component needs (e.g. title, description, image, items list)
+- **Reuse intent** (optional): which existing utility components should be reused (only relevant when invoked by `/copy-component`)
+
+If any are missing, resolve automatically:
+
+1. **Name derivation**:
+   - Use provided `name` when available.
+   - Else derive from source context (for example section heading) and convert to kebab-case.
+   - Fallback: `copied-section`.
+2. **Category inference**:
+   - If layout is a page section, default `sections`.
+   - If primarily form inputs/actions, use `forms`.
+   - If generic shared primitive, use `utilities`.
+   - If uncertain, default `sections`.
+3. **Attribute derivation**:
+   - Use caller-provided attribute spec when available.
+   - Else derive from known patterns (`title`, `subTitle`, `description`, `links`, `image`, repeatable items).
+
+## Input Normalization
+
+Normalize instead of rejecting:
+
+- **Name**: convert PascalCase/camelCase/spaces/underscores to kebab-case lowercase.
+- **Category**: lowercase, trim spaces, replace spaces/underscores with hyphen.
+- If normalized value is empty, apply fallback defaults.
 
 ### Custom Category Handling
 
 If category doesn't exist in `apps/strapi/src/components/`, create the folder first before creating the component schema.
 
-## Duplication prevention
+## Duplication and Reuse Prevention
 
-Before proceeding, first check if the component or similar one already exists in Strapi or the Next.js frontend. If so, ask user if they want to proceed, or go with a different name.
+Before proceeding:
+
+1. **Check for existing component**: search `apps/strapi/src/components/` for exact UID and similar components.
+2. **Check for reusable utilities**: before creating new sub-components or nested structures, scan existing components (especially `utilities/` and `elements/`) to find reusable building blocks.
+
+### Deterministic Duplicate Policy
+
+For intended UID `{category}.{name}`:
+
+- If all applicable artifacts already exist:
+  - schema file
+  - React file
+  - dynamic zone entry (page-level only)
+  - page-builder registry mapping (page-level only)
+  - Reuse existing component.
+  - If required attributes are missing, extend additively only (add new fields; no destructive edits).
+- If only some artifacts exist:
+  - Repair missing artifacts only; do not duplicate existing ones.
+- If UID exists but schema is materially incompatible with requested purpose:
+  - Create a new name with numeric suffix (`{name}-v2`, `-v3`, ...).
+- If UID does not exist:
+  - Create all required artifacts.
+
+Never ask the user to choose between reuse/new by default. Use this policy automatically.
+
+### Reusable Components Reference
+
+Always prefer these existing components over creating new single-use ones:
+
+| Need | Reuse | UID |
+|---|---|---|
+| CTA button / navigation link | Link (with decorations for styling) | `utilities.link` |
+| Text-only link (no button styling) | LinkText | `utilities.link-text` |
+| Link with image (logo, icon link) | LinkImage | `utilities.link-image` |
+| Image (with alt, dimensions) | BasicImage | `utilities.basic-image` |
+| Image + link combo | ImageWithLink | `utilities.image-with-link` |
+| Button variant/size styling | LinkDecorations | `utilities.link-decorations` |
+| Titled group of links | LinksWithTitle | `utilities.links-with-title` |
+| FAQ / collapsible Q&A item | Accordions | `utilities.accordions` |
+| Simple text block | Text | `utilities.text` |
+| Tooltip content | Tooltip | `utilities.tooltip` |
+| Footer link group | FooterItem | `elements.footer-item` |
+
+**Rules**:
+
+- **Links**: Always use `utilities.link` (has page relation, external URL, decorations for button styling). Never create a new "button" or "cta" component.
+- **Images**: Always use `utilities.basic-image` or `utilities.image-with-link`. Never create a new "photo" or "icon" component for the same structure.
+- **Repeatable items with just text**: Use `utilities.text` as a repeatable component. Don't create a new "step" or "bullet" component if it's just a text field.
+- **Accordion/FAQ items**: Use `utilities.accordions`. Don't create a new "faq-item" component.
+- **Only create new sub-components** when the structure genuinely doesn't match any existing utility (e.g. a pricing card item with plan relation, price, features — that's unique enough).
+
+When in doubt, reuse existing utility components by default.
 
 ## Naming Convention
 
@@ -42,11 +119,56 @@ Given category `sections` and name `testimonials`:
 - React component: `StrapiTestimonials` (prefix `Strapi` + PascalCase of name)
 - React file: `apps/ui/src/components/page-builder/components/sections/StrapiTestimonials.tsx`
 
+## Caller Contract (Used by `/copy-component`)
+
+This skill must accept non-interactive handoff data and execute directly.
+
+Expected handoff fields:
+
+- `operation_mode`: should be `autonomous`
+- `name`
+- `category`
+- `attributes` (normalized field spec)
+- `reuse_constraints`
+- `duplicate_policy`
+- `skip_react_component` (optional): when `true`, skip React component creation (Step 5) — the calling skill creates its own implementation
+
+If these are provided, do not prompt for extra confirmation; proceed with deterministic execution.
+
 ## Steps
 
-### 1. Create Strapi component schema
+### 1. Resolve identity and run duplicate checks
 
-Create `apps/strapi/src/components/{category}/{name}.json`:
+Compute:
+
+- UID: `{category}.{name}`
+- Schema path: `apps/strapi/src/components/{category}/{name}.json`
+- React path: `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCaseName}.tsx`
+
+Run these checks:
+
+- **A. Schema file exists**
+- **B. UID already in** `apps/strapi/src/api/page/content-types/page/schema.json` `attributes.content.components` (**page-level only**)
+- **C. React component file exists**
+- **D. Registry mapping exists in** `apps/ui/src/components/page-builder/index.tsx` (**page-level only**)
+
+Use this page-level rule:
+
+- page-level: sections/forms/plans (and categories already present in page dynamic zone)
+- utility-level: utilities/elements/seo-utilities unless explicitly top-level
+
+Decision matrix:
+
+- all **applicable** checks true: reuse existing; only apply additive updates if attributes are missing.
+- mixed applicable true/false: repair missing artifacts only.
+- no applicable checks true: create new component artifacts.
+- naming conflict with incompatible existing shape: create next suffix (`{name}-v2`, `-v3`, ...).
+
+### 2. Create or extend Strapi component schema
+
+Target file: `apps/strapi/src/components/{category}/{name}.json`.
+
+- If missing, create:
 
 ```json
 {
@@ -56,54 +178,55 @@ Create `apps/strapi/src/components/{category}/{name}.json`:
     "description": ""
   },
   "options": {},
-  "attributes": {
-    "title": {
-      "type": "string",
-      "required": true
-    }
-  }
+  "attributes": {}
 }
 ```
 
-Populate `attributes` based on user requirements. Common attribute patterns:
+- If existing, merge additively:
+  - add missing attributes
+  - keep existing attribute types/options
+  - never delete or rename existing attributes
+  - never change existing attribute types
 
-- Text: `{ "type": "string" }` or `{ "type": "text" }` (multiline) or `{ "type": "richtext" }`
-- Required: add `"required": true`
-- Nested component: `{ "type": "component", "repeatable": false, "component": "utilities.link" }`
-- Repeatable component: `{ "type": "component", "repeatable": true, "component": "utilities.basic-image" }`
-- Media: use a component like `utilities.image-with-link` or `utilities.basic-image`
+Common attribute patterns:
+
+- Text: `{ "type": "string" }`, `{ "type": "text" }`, `{ "type": "richtext" }`
+- Required field: add `"required": true`
+- Nested utility: `{ "type": "component", "repeatable": false, "component": "utilities.link" }`
+- Repeatable utility: `{ "type": "component", "repeatable": true, "component": "utilities.basic-image" }`
 - Enum: `{ "type": "enumeration", "enum": ["option1", "option2"] }`
 - Boolean: `{ "type": "boolean", "default": false }`
 
-**Additional attribute options** (add as needed):
+### 3. Register UID in page dynamic zone when component is page-level
 
-- `description`: admin UI hint (e.g. `"description": "Displayed below the section title"`)
-- `default`: default value (e.g. `"default": "Click here"`)
-- `minLength`/`maxLength`: string length constraints (e.g. `"minLength": 3, "maxLength": 100`)
-- `min`/`max`: number constraints
-- `private`: hide from API response (e.g. `"private": true`)
+Edit `apps/strapi/src/api/page/content-types/page/schema.json`:
 
-Reference the strapi documentation for more information on component schemas: https://docs.strapi.io/cms/backend-customization/models#model-schema
+Determine whether this component should be page-level:
 
-### 2. Register in page dynamic zone
+- **Page-level (register):** sections/forms/plans (and any category already used in page `content` dynamic zone).
+- **Utility-level (skip):** utilities/elements/seo-utilities unless explicitly requested as top-level.
 
-Edit `apps/strapi/src/api/page/content-types/page/schema.json`.
+If page-level:
 
-Add the new UID to the `attributes.content.components` array:
+- Ensure `{category}.{name}` appears exactly once in `attributes.content.components`.
+- If already present, do not add duplicate entries.
 
-```json
-"content": {
-  "type": "dynamiczone",
-  "components": [
-    ...existing,
-    "{category}.{name}"
-  ]
-}
-```
+If utility-level:
 
-### 3. Add population rules
+- Do not add to page `content` dynamic zone.
 
-Add files to `apps/strapi/src/populateDynamicZone` folder.
+### 4. Add or update populate config
+
+Create/merge `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`.
+
+> **Utility components** (`utilities.*`, `elements.*`) don't need their own populate entry unless they contain nested relations. Only dynamic-zone-level components (sections, forms, plans) need entries here. Parent populate configs import utility populates directly.
+
+- Keep this file even for simple components so middleware can include the UID.
+- Use `export default true` when there are no nested relations/components.
+- For nested content, export a `populate` object and reuse existing populate configs where possible.
+- Adjust import paths relative to the current category folder (`../utilities/*` from sections/forms/plans, `./*` from utilities).
+
+Example:
 
 ```typescript
 import basicImagePopulate from "../utilities/basic-image"
@@ -113,25 +236,21 @@ export default {
   populate: {
     links: linkPopulate,
     image: basicImagePopulate,
-    steps: true,
   },
 }
 ```
 
-- Use `true` if the component has no nested relations/components
-- Use `{ populate: { fieldName: true } }` for simple nested components
-- Use `{ populate: { fieldName: { populate: { media: true } } } }` for deeply nested media
-- Match the pattern of existing entries — only populate relations and components, not scalar fields
-- When component has different component inside in Strapi, always import its population config and reuse it.
+### 5. Create or update React component
 
-### 4. Create React component
+> **Skip condition**: If caller passed `skip_react_component: true`, skip this step entirely. The calling skill will create its own React implementation.
 
-Create `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCaseName}.tsx`:
+Target file: `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCaseName}.tsx`.
+
+Create a compilable baseline that renders real data fields (no hardcoded placeholder text and no `removeThisWhenYouNeedMe` call):
 
 ```tsx
 import { Data } from "@repo/strapi-types"
 
-import { removeThisWhenYouNeedMe } from "@/lib/general-helpers"
 import { Container } from "@/components/elementary/Container"
 
 export function Strapi{PascalCaseName}({
@@ -139,13 +258,12 @@ export function Strapi{PascalCaseName}({
 }: {
   readonly component: Data.Component<"{category}.{name}">
 }) {
-  removeThisWhenYouNeedMe("Strapi{PascalCaseName}")
-
   return (
     <section>
       <Container className="py-8">
-        <h2 className="mb-4 text-3xl font-bold">{component.title}</h2>
-        {/* TODO: Implement component UI */}
+        {"title" in component && component.title ? (
+          <h2 className="mb-4 text-3xl font-bold">{component.title}</h2>
+        ) : null}
       </Container>
     </section>
   )
@@ -156,40 +274,62 @@ Strapi{PascalCaseName}.displayName = "Strapi{PascalCaseName}"
 export default Strapi{PascalCaseName}
 ```
 
-Key patterns:
+Rules:
 
-- Named export + default export
-- Props typed with `Data.Component<"{category}.{name}">` from `@repo/strapi-types`
-- `removeThisWhenYouNeedMe` call — starter template placeholder, keep it for new components
-- `displayName` set explicitly
-- Wrap content in `<Container>` from `@/components/elementary/Container`, if it's not a root level component, or not explicit "container" component wrapping other components.
-- Follow the repository Code Style Guide
+- Named export + default export.
+- Type props with `Data.Component<"{category}.{name}">`.
+- Use conditionals for optional fields.
+- Keep file compiling with current generated types.
 
-### 5. Register in PageContentComponents
+### 6. Register in `PageContentComponents` when page-level
 
 Edit `apps/ui/src/components/page-builder/index.tsx`:
 
-1. Add import at top (alphabetical within category group):
+If component is page-level (same rule as Step 3):
 
-```typescript
-import Strapi{PascalCaseName} from "@/components/page-builder/components/{category}/Strapi{PascalCaseName}"
-```
-
-2. Add mapping entry in `PageContentComponents` under the matching category comment:
+1. Ensure import exists (add if missing, keep category group ordering).
+2. Ensure mapping exists exactly once:
 
 ```typescript
 "{category}.{name}": Strapi{PascalCaseName},
 ```
 
-### 6. Generate types
+If component is utility-level:
+
+- Do not add a `PageContentComponents` mapping.
+- Keep the component available for reuse by other page-level components.
+
+### 7. Generate types and run quality gates
 
 Run:
 
 ```bash
 cd apps/strapi && pnpm generate:types
+cd apps/ui && pnpm typecheck
 ```
 
-This updates `@repo/strapi-types` so the React component gets proper typing for `Data.Component<"{category}.{name}">`.
+Optional when broader changes are made:
+
+```bash
+pnpm lint
+```
+
+### 8. Return structured result
+
+Always finish with:
+
+```json
+{
+  "actions_taken": [],
+  "created": [],
+  "updated": [],
+  "reused": [],
+  "skipped": [],
+  "errors": [],
+  "quality_checks": [],
+  "manual_steps_needed": []
+}
+```
 
 ## Path Resilience
 

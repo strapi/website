@@ -17,7 +17,7 @@ export function PricingExtraBox({ data }: PricingExtraBox) {
   }
 
   return (
-    <aside className="rounded-strapi-lg bg-strapi-blue-100 mt-8 flex flex-col gap-0 p-8">
+    <aside className="rounded-strapi-lg bg-strapi-blue-100 mt-15 flex flex-col gap-0 p-8">
       <Typography tag="p" variant="subtitle1" fontWeight="semiBold">
         {title}
       </Typography>

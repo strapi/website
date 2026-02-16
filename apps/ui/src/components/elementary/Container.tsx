@@ -3,13 +3,10 @@ import type React from "react"
 import { cn } from "@/lib/styles"
 
 export interface ContainerProps extends React.ComponentProps<"div"> {
-  readonly children: React.ReactNode
-  readonly className?: string
   readonly hideDefaultPadding?: boolean
 }
 
 export function Container({
-  children,
   className,
   hideDefaultPadding,
   ...restProps

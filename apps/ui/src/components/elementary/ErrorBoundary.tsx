@@ -102,6 +102,7 @@ export function ErrorBoundary({
     info: { componentStack?: string | null; digest?: string | null }
   ) => {
     const digest = error.digest ?? info.digest
+
     if (digest === "NEXT_NOT_FOUND" || digest?.includes("404")) {
       throw error
     }

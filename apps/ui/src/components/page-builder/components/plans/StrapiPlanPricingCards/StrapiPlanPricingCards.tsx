@@ -1,5 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
+import { Container } from "@/components/elementary/Container"
 import { PricingCard } from "@/components/page-builder/components/plans/StrapiPlanPricingCards/PricingCard"
 import {
   PricingFeature,
@@ -52,9 +53,9 @@ export function StrapiPlanPricingCards({
     : "monthly"
 
   return (
-    <section className="strapi-container flex flex-col gap-8">
+    <Container>
       <PricingBillingProvider initialBilling={initialBilling}>
-        <PricingSwitcher className="mb-6" component={component.switcher} />
+        <PricingSwitcher className="mb-15" component={component.switcher} />
 
         <div
           className={cn(
@@ -110,7 +111,7 @@ export function StrapiPlanPricingCards({
       </PricingBillingProvider>
 
       <PricingExtraBox data={component.extraBox} />
-    </section>
+    </Container>
   )
 }
 

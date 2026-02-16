@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_plans_plan_pricing_extra_boxes",
+  "info": {
+    "displayName": "PlanPricingExtraBox",
+    "icon": "archive"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "link": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false
+    },
+    "features": {
+      "type": "component",
+      "component": "plans.plan-pricing-extra-box-features",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

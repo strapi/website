@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_plans_plan_pricing_extra_box_features",
+  "info": {
+    "displayName": "PlanPricingExtraBoxFeatures",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "tooltip": {
+      "type": "richtext"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_footer_footer_socials",
+  "info": {
+    "displayName": "FooterSocials",
+    "icon": "globe"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "socials": {
+      "type": "component",
+      "component": "utilities.link-image",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

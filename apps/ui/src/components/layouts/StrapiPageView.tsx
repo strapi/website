@@ -68,7 +68,7 @@ export default function StrapiPageView({ params, searchParams }: Props) {
 
             return (
               <ErrorBoundary key={key}>
-                <div className={cn("mb-4 md:mb-12 lg:mb-16")}>
+                <div className={cn("mb-6 md:mb-10 lg:mb-14")}>
                   <Component
                     component={comp}
                     pageParams={params}

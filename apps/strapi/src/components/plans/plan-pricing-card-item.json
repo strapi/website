@@ -1,0 +1,74 @@
+{
+  "collectionName": "components_plans_plan_pricing_card_items",
+  "info": {
+    "displayName": "PlanPricingCardItem",
+    "icon": "shoppingCart"
+  },
+  "options": {},
+  "attributes": {
+    "plan": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::plan.plan"
+    },
+    "link": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false
+    },
+    "ctaMode": {
+      "type": "enumeration",
+      "default": "link",
+      "enum": [
+        "link",
+        "modal"
+      ]
+    },
+    "checkoutModal": {
+      "type": "component",
+      "component": "plans.pricing-card-checkout-modal",
+      "repeatable": false,
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "ctaMode"
+            },
+            "modal"
+          ]
+        }
+      }
+    },
+    "highlighted": {
+      "type": "boolean",
+      "default": false
+    },
+    "starFeaturesTitle": {
+      "type": "string"
+    },
+    "starFeatures": {
+      "type": "component",
+      "component": "plans.plan-pricing-card-item-feature",
+      "repeatable": true
+    },
+    "mainFeaturesTitle": {
+      "type": "string"
+    },
+    "mainFeatures": {
+      "type": "component",
+      "component": "plans.plan-pricing-card-item-feature",
+      "repeatable": true
+    },
+    "promo": {
+      "type": "component",
+      "component": "plans.pricing-card-promo",
+      "repeatable": false
+    },
+    "sso": {
+      "type": "component",
+      "component": "plans.pricing-card-sso",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

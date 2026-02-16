@@ -9,11 +9,12 @@
   "options": {
     "draftAndPublish": false
   },
+  "pluginOptions": {},
   "attributes": {
     "jobType": {
       "type": "enumeration",
-      "enum": ["RECALCULATE_FULLPATH", "CREATE_REDIRECT"],
-      "required": true
+      "required": true,
+      "enum": ["RECALCULATE_FULLPATH", "CREATE_REDIRECT"]
     },
     "relatedDocumentId": {
       "type": "string",
@@ -34,9 +35,9 @@
     },
     "state": {
       "type": "enumeration",
-      "enum": ["pending", "completed", "failed"],
       "required": true,
-      "default": "pending"
+      "default": "pending",
+      "enum": ["pending", "completed", "failed"]
     },
     "error": {
       "type": "string"

@@ -31,7 +31,7 @@ export default function ComponentsList({
       <div className="flex flex-col gap-6">
         {components?.map((component) => (
           <div key={component}>
-            <Typography variant="large">{component}</Typography>
+            <Typography variant="header1">{component}</Typography>
 
             {show && (
               <div className="pl-4">

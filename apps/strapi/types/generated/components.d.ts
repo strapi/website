@@ -7,8 +7,20 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
     displayName: "FooterItem"
   }
   attributes: {
-    links: Schema.Attribute.Component<"utilities.link", true>
+    links: Schema.Attribute.Component<"utilities.link-text", true>
     title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface FooterFooterSocials extends Struct.ComponentSchema {
+  collectionName: "components_footer_footer_socials"
+  info: {
+    displayName: "FooterSocials"
+    icon: "globe"
+  }
+  attributes: {
+    socials: Schema.Attribute.Component<"utilities.link-image", true>
+    title: Schema.Attribute.String
   }
 }
 
@@ -33,6 +45,255 @@ export interface FormsNewsletterForm extends Struct.ComponentSchema {
     description: Schema.Attribute.Text
     gdpr: Schema.Attribute.Component<"utilities.link", false>
     title: Schema.Attribute.String
+  }
+}
+
+export interface NavbarAnnouncementBar extends Struct.ComponentSchema {
+  collectionName: "components_navbar_announcement_bars"
+  info: {
+    displayName: "AnnouncementBar"
+  }
+  attributes: {
+    badge: Schema.Attribute.String
+    isVisible: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
+    link: Schema.Attribute.Component<"utilities.link", false>
+    text: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface NavbarNavItem extends Struct.ComponentSchema {
+  collectionName: "components_navbar_nav_items"
+  info: {
+    displayName: "NavItem"
+  }
+  attributes: {
+    bottomLinks: Schema.Attribute.Component<"utilities.link", true>
+    directLink: Schema.Attribute.Component<"utilities.link", false>
+    label: Schema.Attribute.String & Schema.Attribute.Required
+    sections: Schema.Attribute.Component<"navbar.nav-section", true>
+  }
+}
+
+export interface NavbarNavLink extends Struct.ComponentSchema {
+  collectionName: "components_navbar_nav_links"
+  info: {
+    displayName: "NavLink"
+  }
+  attributes: {
+    description: Schema.Attribute.String
+    icon: Schema.Attribute.Component<"utilities.basic-image", false>
+    label: Schema.Attribute.String & Schema.Attribute.Required
+    link: Schema.Attribute.Component<"utilities.link", false> &
+      Schema.Attribute.Required
+  }
+}
+
+export interface NavbarNavSection extends Struct.ComponentSchema {
+  collectionName: "components_navbar_nav_sections"
+  info: {
+    displayName: "NavSection"
+  }
+  attributes: {
+    items: Schema.Attribute.Component<"navbar.nav-link", true>
+    layout: Schema.Attribute.Enumeration<["list", "grid"]> &
+      Schema.Attribute.DefaultTo<"list">
+    title: Schema.Attribute.String
+  }
+}
+
+export interface PlansPlanComparisonTable extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_comparison_tables"
+  info: {
+    displayName: "PlanComparisonTable"
+    icon: "bulletList"
+  }
+  attributes: {
+    footnote: Schema.Attribute.Text
+    plans: Schema.Attribute.Relation<"oneToMany", "api::plan.plan">
+  }
+}
+
+export interface PlansPlanFeatureValue extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_feature_values"
+  info: {
+    displayName: "PlanFeatureValue"
+    icon: "layer"
+  }
+  attributes: {
+    feature: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::plan-feature.plan-feature"
+    >
+    mobileValue: Schema.Attribute.String
+    value: Schema.Attribute.String
+  }
+}
+
+export interface PlansPlanPricingCardItem extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_pricing_card_items"
+  info: {
+    displayName: "PlanPricingCardItem"
+    icon: "shoppingCart"
+  }
+  attributes: {
+    checkoutModal: Schema.Attribute.Component<
+      "plans.pricing-card-checkout-modal",
+      false
+    >
+    ctaMode: Schema.Attribute.Enumeration<["link", "modal"]> &
+      Schema.Attribute.DefaultTo<"link">
+    highlighted: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    link: Schema.Attribute.Component<"utilities.link", false>
+    mainFeatures: Schema.Attribute.Component<
+      "plans.plan-pricing-card-item-feature",
+      true
+    >
+    mainFeaturesTitle: Schema.Attribute.String
+    plan: Schema.Attribute.Relation<"oneToOne", "api::plan.plan">
+    promo: Schema.Attribute.Component<"plans.pricing-card-promo", false>
+    sso: Schema.Attribute.Component<"plans.pricing-card-sso", false>
+    starFeatures: Schema.Attribute.Component<
+      "plans.plan-pricing-card-item-feature",
+      true
+    >
+    starFeaturesTitle: Schema.Attribute.String
+  }
+}
+
+export interface PlansPlanPricingCardItemFeature
+  extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_pricing_card_item_features"
+  info: {
+    displayName: "PlanPricingCardItemFeature"
+    icon: "bulletList"
+  }
+  attributes: {
+    badge: Schema.Attribute.String
+    badgeStyle: Schema.Attribute.Enumeration<
+      [
+        "default",
+        "purple",
+        "muted",
+        "secondary",
+        "destructive",
+        "outline",
+        "ghost",
+        "link",
+      ]
+    >
+    title: Schema.Attribute.String
+    tooltip: Schema.Attribute.RichText
+  }
+}
+
+export interface PlansPlanPricingCards extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_pricing_cards"
+  info: {
+    displayName: "PlanPricingCards"
+    icon: "shoppingCart"
+  }
+  attributes: {
+    cards: Schema.Attribute.Component<"plans.plan-pricing-card-item", true>
+    extraBox: Schema.Attribute.Component<"plans.plan-pricing-extra-box", false>
+    switcher: Schema.Attribute.Component<"plans.pricing-switcher", false>
+  }
+}
+
+export interface PlansPlanPricingExtraBox extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_pricing_extra_boxes"
+  info: {
+    displayName: "PlanPricingExtraBox"
+    icon: "archive"
+  }
+  attributes: {
+    description: Schema.Attribute.Text
+    features: Schema.Attribute.Component<
+      "plans.plan-pricing-extra-box-features",
+      true
+    >
+    link: Schema.Attribute.Component<"utilities.link", false>
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface PlansPlanPricingExtraBoxFeatures
+  extends Struct.ComponentSchema {
+  collectionName: "components_plans_plan_pricing_extra_box_features"
+  info: {
+    displayName: "PlanPricingExtraBoxFeatures"
+    icon: "check"
+  }
+  attributes: {
+    title: Schema.Attribute.String & Schema.Attribute.Required
+    tooltip: Schema.Attribute.RichText
+  }
+}
+
+export interface PlansPricingCardCheckoutModal extends Struct.ComponentSchema {
+  collectionName: "components_plans_pricing_card_checkout_modals"
+  info: {
+    displayName: "PricingCardCheckoutModal"
+    icon: "shoppingCart"
+  }
+  attributes: {
+    additionalSeatMonthlyItemPriceId: Schema.Attribute.String
+    additionalSeatMonthlyPrice: Schema.Attribute.String
+    includedSeats: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>
+    planMonthlyItemPriceId: Schema.Attribute.String
+    planMonthlyPrice: Schema.Attribute.String
+    ssoDefaultSelected: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>
+    ssoDescription: Schema.Attribute.String
+    ssoMonthlyItemPriceId: Schema.Attribute.String
+    ssoMonthlyPrice: Schema.Attribute.String
+    ssoMonthlyPricePerSeat: Schema.Attribute.String
+  }
+}
+
+export interface PlansPricingCardPromo extends Struct.ComponentSchema {
+  collectionName: "components_plans_pricing_card_promos"
+  info: {
+    displayName: "PricingCardPromo"
+    icon: "quote"
+  }
+  attributes: {
+    description: Schema.Attribute.Text
+    subtitle: Schema.Attribute.Text
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface PlansPricingCardSso extends Struct.ComponentSchema {
+  collectionName: "components_plans_pricing_card_ssos"
+  info: {
+    displayName: "PricingCardSSO"
+    icon: "grid"
+  }
+  attributes: {
+    description: Schema.Attribute.String
+    price: Schema.Attribute.String
+    subtext: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface PlansPricingSwitcher extends Struct.ComponentSchema {
+  collectionName: "components_plans_pricing_switchers"
+  info: {
+    displayName: "PricingSwitcher"
+    icon: "filter"
+  }
+  attributes: {
+    isYearlyDefault: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>
+    monthlySubtitle: Schema.Attribute.String
+    monthlyTitle: Schema.Attribute.String
+    planTypesSwitcher: Schema.Attribute.Component<"utilities.link", true>
+    showYearlyToggle: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>
+    title: Schema.Attribute.String & Schema.Attribute.Required
+    yearlySubtitle: Schema.Attribute.String
+    yearlyTitle: Schema.Attribute.String
   }
 }
 
@@ -308,6 +569,43 @@ export interface UtilitiesLinkDecorations extends Struct.ComponentSchema {
   }
 }
 
+export interface UtilitiesLinkImage extends Struct.ComponentSchema {
+  collectionName: "components_utilities_link_images"
+  info: {
+    displayName: "LinkImage"
+  }
+  attributes: {
+    href: Schema.Attribute.String & Schema.Attribute.Required
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    label: Schema.Attribute.String & Schema.Attribute.Required
+    newTab: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>
+    page: Schema.Attribute.Relation<"oneToOne", "api::page.page">
+    type: Schema.Attribute.Enumeration<["external", "page"]> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<"page">
+  }
+}
+
+export interface UtilitiesLinkText extends Struct.ComponentSchema {
+  collectionName: "components_utilities_link_texts"
+  info: {
+    displayName: "LinkText"
+  }
+  attributes: {
+    href: Schema.Attribute.String & Schema.Attribute.Required
+    label: Schema.Attribute.String & Schema.Attribute.Required
+    newTab: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>
+    page: Schema.Attribute.Relation<"oneToOne", "api::page.page">
+    type: Schema.Attribute.Enumeration<["external", "page"]> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<"page">
+  }
+}
+
 export interface UtilitiesLinksWithTitle extends Struct.ComponentSchema {
   collectionName: "components_utilities_links_with_titles"
   info: {
@@ -329,12 +627,39 @@ export interface UtilitiesText extends Struct.ComponentSchema {
   }
 }
 
+export interface UtilitiesTooltip extends Struct.ComponentSchema {
+  collectionName: "components_utilities_tooltips"
+  info: {
+    displayName: "Tooltip"
+    icon: "message"
+  }
+  attributes: {
+    content: Schema.Attribute.RichText
+  }
+}
+
 declare module "@strapi/strapi" {
   export module Public {
     export interface ComponentSchemas {
       "elements.footer-item": ElementsFooterItem
+      "footer.footer-socials": FooterFooterSocials
       "forms.contact-form": FormsContactForm
       "forms.newsletter-form": FormsNewsletterForm
+      "navbar.announcement-bar": NavbarAnnouncementBar
+      "navbar.nav-item": NavbarNavItem
+      "navbar.nav-link": NavbarNavLink
+      "navbar.nav-section": NavbarNavSection
+      "plans.plan-comparison-table": PlansPlanComparisonTable
+      "plans.plan-feature-value": PlansPlanFeatureValue
+      "plans.plan-pricing-card-item": PlansPlanPricingCardItem
+      "plans.plan-pricing-card-item-feature": PlansPlanPricingCardItemFeature
+      "plans.plan-pricing-cards": PlansPlanPricingCards
+      "plans.plan-pricing-extra-box": PlansPlanPricingExtraBox
+      "plans.plan-pricing-extra-box-features": PlansPlanPricingExtraBoxFeatures
+      "plans.pricing-card-checkout-modal": PlansPricingCardCheckoutModal
+      "plans.pricing-card-promo": PlansPricingCardPromo
+      "plans.pricing-card-sso": PlansPricingCardSso
+      "plans.pricing-switcher": PlansPricingSwitcher
       "sections.animated-logo-row": SectionsAnimatedLogoRow
       "sections.carousel": SectionsCarousel
       "sections.faq": SectionsFaq
@@ -351,8 +676,11 @@ declare module "@strapi/strapi" {
       "utilities.image-with-link": UtilitiesImageWithLink
       "utilities.link": UtilitiesLink
       "utilities.link-decorations": UtilitiesLinkDecorations
+      "utilities.link-image": UtilitiesLinkImage
+      "utilities.link-text": UtilitiesLinkText
       "utilities.links-with-title": UtilitiesLinksWithTitle
       "utilities.text": UtilitiesText
+      "utilities.tooltip": UtilitiesTooltip
     }
   }
 }

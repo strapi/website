@@ -31,7 +31,38 @@
     "cancel": "Cancel",
     "close": "Close",
     "submitForm": "Submit",
-    "saveChanges": "Save changes"
+    "saveChanges": "Save changes",
+    "moreInformation": "More information",
+    "bestValue": "Best value"
+  },
+
+  "plans": {
+    "planFeatureCategory": {
+      "cloud": "Cloud",
+      "general": "General",
+      "terms-and-services": "Terms & Services",
+      "usage": "Usage"
+    },
+    "pricingSwitcher": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "pricingCheckoutModal": {
+      "buyNow": "Buy now",
+      "title": "Add seats to your plan",
+      "selfHosted": "Self-hosted",
+      "billingPeriodMonthly": "/month",
+      "seats": "Seats",
+      "totalBeforeTaxes": "Total before applicable taxes",
+      "totalShownAtCheckout": "Total will be shown at checkout.",
+      "cancel": "Cancel",
+      "continue": "Continue",
+      "decreaseSeatCountAria": "Decrease seat count",
+      "increaseSeatCountAria": "Increase seat count",
+      "checkoutConfigMissingError": "Missing checkout configuration for pricing modal.",
+      "checkoutBaseUrlMissingError": "Missing NEXT_PUBLIC_CHARGEBEE_URL environment variable.",
+      "checkoutUrlInvalidError": "Invalid checkout URL."
+    }
   },
 
   "tables": {

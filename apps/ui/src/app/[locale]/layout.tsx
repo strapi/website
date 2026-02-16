@@ -16,7 +16,7 @@ import { ServerProviders } from "@/components/providers/ServerProviders"
 import TrackingScripts from "@/components/providers/TrackingScripts"
 import { Toaster } from "@/components/ui/sonner"
 import { debugStaticParams } from "@/lib/build"
-import { fontRoboto } from "@/lib/fonts"
+import { fontPoppins } from "@/lib/fonts"
 import { routing } from "@/lib/navigation"
 import { cn } from "@/lib/styles"
 
@@ -88,8 +88,8 @@ export default async function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-gray-100 font-sans antialiased",
-          fontRoboto.variable
+          "text-strapi-blue-800 min-h-screen bg-white font-sans",
+          fontPoppins.variable
         )}
       >
         <TrackingScripts />

@@ -456,7 +456,7 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    links: Schema.Attribute.Component<"utilities.link", true> &
+    links: Schema.Attribute.Component<"utilities.link-text", true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -464,7 +464,7 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
       }>
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::footer.footer">
-    logoImage: Schema.Attribute.Component<"utilities.image-with-link", false> &
+    logoImage: Schema.Attribute.Component<"utilities.link-image", false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -477,7 +477,13 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
           localized: true
         }
       }>
-    test: Schema.Attribute.RichText &
+    socials: Schema.Attribute.Component<"footer.footer-socials", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    tagline: Schema.Attribute.RichText &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -546,10 +552,19 @@ export interface ApiNavbarNavbar extends Struct.SingleTypeSchema {
     }
   }
   attributes: {
+    announcementBar: Schema.Attribute.Component<
+      "navbar.announcement-bar",
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    links: Schema.Attribute.Component<"utilities.link", true> &
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -558,6 +573,12 @@ export interface ApiNavbarNavbar extends Struct.SingleTypeSchema {
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::navbar.navbar">
     logoImage: Schema.Attribute.Component<"utilities.image-with-link", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    navItems: Schema.Attribute.Component<"navbar.nav-item", true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -605,6 +626,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.animated-logo-row",
         "forms.newsletter-form",
         "forms.contact-form",
+        "plans.plan-pricing-cards",
+        "plans.plan-comparison-table",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -649,6 +672,108 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+  }
+}
+
+export interface ApiPlanFeaturePlanFeature extends Struct.CollectionTypeSchema {
+  collectionName: "plan_features"
+  info: {
+    displayName: "Plan-Feature"
+    pluralName: "plan-features"
+    singularName: "plan-feature"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      ["general", "cloud", "terms-and-services", "usage"]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<"general">
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.Text
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::plan-feature.plan-feature"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    order: Schema.Attribute.Integer
+    publishedAt: Schema.Attribute.DateTime
+    tooltip: Schema.Attribute.Component<"utilities.tooltip", false>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
+  collectionName: "plans"
+  info: {
+    displayName: "Plan"
+    pluralName: "plans"
+    singularName: "plan"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    features: Schema.Attribute.Component<"plans.plan-feature-value", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::plan.plan">
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    price: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    publishedAt: Schema.Attribute.DateTime
+    subtext: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    type: Schema.Attribute.Enumeration<["cms", "cloud"]> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    yearlyPrice: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
   }
 }
 
@@ -1196,6 +1321,8 @@ declare module "@strapi/strapi" {
       "api::internal-job.internal-job": ApiInternalJobInternalJob
       "api::navbar.navbar": ApiNavbarNavbar
       "api::page.page": ApiPagePage
+      "api::plan-feature.plan-feature": ApiPlanFeaturePlanFeature
+      "api::plan.plan": ApiPlanPlan
       "api::redirect.redirect": ApiRedirectRedirect
       "plugin::content-releases.release": PluginContentReleasesRelease
       "plugin::content-releases.release-action": PluginContentReleasesReleaseAction

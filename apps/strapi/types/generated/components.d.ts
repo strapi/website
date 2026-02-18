@@ -297,110 +297,6 @@ export interface PlansPricingSwitcher extends Struct.ComponentSchema {
   }
 }
 
-export interface SectionsAnimatedLogoRow extends Struct.ComponentSchema {
-  collectionName: "components_sections_animated_logo_rows"
-  info: {
-    description: ""
-    displayName: "AnimatedLogoRow"
-  }
-  attributes: {
-    logos: Schema.Attribute.Component<"utilities.basic-image", true>
-    text: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
-export interface SectionsCarousel extends Struct.ComponentSchema {
-  collectionName: "components_sections_carousels"
-  info: {
-    description: ""
-    displayName: "Carousel"
-  }
-  attributes: {
-    images: Schema.Attribute.Component<"utilities.image-with-link", true>
-    radius: Schema.Attribute.Enumeration<["sm", "md", "lg", "xl", "full"]>
-  }
-}
-
-export interface SectionsFaq extends Struct.ComponentSchema {
-  collectionName: "components_sections_faqs"
-  info: {
-    description: ""
-    displayName: "Faq"
-  }
-  attributes: {
-    accordions: Schema.Attribute.Component<"utilities.accordions", true>
-    subTitle: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
-export interface SectionsHeadingWithCtaButton extends Struct.ComponentSchema {
-  collectionName: "components_sections_heading_with_cta_buttons"
-  info: {
-    description: ""
-    displayName: "HeadingWithCTAButton"
-  }
-  attributes: {
-    cta: Schema.Attribute.Component<"utilities.link", false>
-    subText: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
-export interface SectionsHero extends Struct.ComponentSchema {
-  collectionName: "components_sections_heroes"
-  info: {
-    description: ""
-    displayName: "Hero"
-  }
-  attributes: {
-    bgColor: Schema.Attribute.String &
-      Schema.Attribute.CustomField<"plugin::color-picker.color">
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    links: Schema.Attribute.Component<"utilities.link", true>
-    steps: Schema.Attribute.Component<"utilities.text", true>
-    subTitle: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
-export interface SectionsHorizontalImages extends Struct.ComponentSchema {
-  collectionName: "components_sections_horizontal_images"
-  info: {
-    description: ""
-    displayName: "HorizontalImages"
-  }
-  attributes: {
-    fixedImageHeight: Schema.Attribute.Integer
-    fixedImageWidth: Schema.Attribute.Integer
-    imageRadius: Schema.Attribute.Enumeration<["sm", "md", "lg", "xl", "full"]>
-    images: Schema.Attribute.Component<"utilities.image-with-link", true>
-    spacing: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 20
-          min: 0
-        },
-        number
-      >
-    title: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
-export interface SectionsImageWithCtaButton extends Struct.ComponentSchema {
-  collectionName: "components_sections_image_with_cta_buttons"
-  info: {
-    description: ""
-    displayName: "ImageWithCTAButton"
-  }
-  attributes: {
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    link: Schema.Attribute.Component<"utilities.link", false>
-    subText: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
 export interface SeoUtilitiesSeo extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_seos"
   info: {
@@ -482,7 +378,7 @@ export interface SeoUtilitiesSocialIcons extends Struct.ComponentSchema {
     displayName: "SocialIcons"
   }
   attributes: {
-    socials: Schema.Attribute.Component<"utilities.image-with-link", true>
+    socials: Schema.Attribute.Component<"utilities.link-image", true>
     title: Schema.Attribute.String
   }
 }
@@ -660,13 +556,6 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-promo": PlansPricingCardPromo
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
-      "sections.animated-logo-row": SectionsAnimatedLogoRow
-      "sections.carousel": SectionsCarousel
-      "sections.faq": SectionsFaq
-      "sections.heading-with-cta-button": SectionsHeadingWithCtaButton
-      "sections.hero": SectionsHero
-      "sections.horizontal-images": SectionsHorizontalImages
-      "sections.image-with-cta-button": SectionsImageWithCtaButton
       "seo-utilities.seo": SeoUtilitiesSeo
       "seo-utilities.seo-og": SeoUtilitiesSeoOg
       "seo-utilities.seo-twitter": SeoUtilitiesSeoTwitter

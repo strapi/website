@@ -1,0 +1,69 @@
+{
+  "project": "notum",
+  "branchName": "ralph/backend-feature",
+  "description": "Backend/API implementation batch",
+  "loopConfig": {
+    "maxIterationsPerStory": 3,
+    "maxStagnantIterations": 2,
+    "stopOnBlockedCheckpoint": true,
+    "orderedByPriority": true,
+    "memoryFile": "tmp/ralph-memory.jsonl",
+    "requiredChecks": [
+      "pnpm lint",
+      "cd apps/strapi && pnpm generate:types"
+    ],
+    "finalReview": {
+      "enabled": true,
+      "minScore": 8,
+      "maxPasses": 3
+    },
+    "autonomy": {
+      "noQuestions": true,
+      "assumeBestJudgment": true
+    }
+  },
+  "stories": [
+    {
+      "id": "BE-001",
+      "title": "Add endpoint filtering by locale",
+      "description": "Implement locale-aware filtering for public content endpoint",
+      "priority": 1,
+      "passes": false,
+      "notes": "",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "Endpoint accepts locale parameter",
+        "Results are filtered correctly",
+        "No regression for default locale requests",
+        "Required checks pass"
+      ],
+      "loopState": {
+        "phase": "queued",
+        "status": "pending",
+        "attempt": 0,
+        "errors": []
+      },
+      "data": {
+        "apiSurface": "GET /api/content",
+        "requestContract": {
+          "query": {
+            "locale": "string"
+          }
+        },
+        "constraints": [
+          "Maintain backward compatibility when locale is omitted"
+        ]
+      },
+      "metadata": {
+        "taskType": "backend",
+        "riskLevel": "medium",
+        "tags": [
+          "backend",
+          "api"
+        ]
+      }
+    }
+  ],
+  "generatedAt": "2026-02-18T00:00:00.000Z",
+  "status": "ready"
+}

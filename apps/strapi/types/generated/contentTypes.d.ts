@@ -572,7 +572,7 @@ export interface ApiNavbarNavbar extends Struct.SingleTypeSchema {
       }>
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::navbar.navbar">
-    logoImage: Schema.Attribute.Component<"utilities.image-with-link", false> &
+    logoImage: Schema.Attribute.Component<"utilities.link-image", false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -617,13 +617,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     children: Schema.Attribute.Relation<"oneToMany", "api::page.page">
     content: Schema.Attribute.DynamicZone<
       [
-        "sections.image-with-cta-button",
-        "sections.horizontal-images",
-        "sections.hero",
-        "sections.heading-with-cta-button",
-        "sections.faq",
-        "sections.carousel",
-        "sections.animated-logo-row",
         "forms.newsletter-form",
         "forms.contact-form",
         "plans.plan-pricing-cards",

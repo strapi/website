@@ -5,20 +5,14 @@
   "constraints": [],
   "rules": [],
   "nonGoals": [],
-  "qualityGates": [
-    "pnpm lint",
-    "cd apps/strapi && pnpm generate:types"
-  ],
+  "qualityGates": ["pnpm lint", "cd apps/strapi && pnpm generate:types"],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
+    "stopOnBlockedCheckpoint": false,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
-    "requiredChecks": [
-      "pnpm lint",
-      "cd apps/strapi && pnpm generate:types"
-    ],
+    "requiredChecks": ["pnpm lint", "cd apps/strapi && pnpm generate:types"],
     "finalReview": {
       "enabled": true,
       "minScore": 8,
@@ -65,10 +59,7 @@
       "metadata": {
         "taskType": "backend",
         "riskLevel": "medium",
-        "tags": [
-          "backend",
-          "api"
-        ]
+        "tags": ["backend", "api"]
       }
     }
   ],

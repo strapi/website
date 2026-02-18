@@ -12,12 +12,10 @@
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
+    "stopOnBlockedCheckpoint": false,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
-    "requiredChecks": [
-      "cd apps/ui && pnpm typecheck"
-    ],
+    "requiredChecks": ["cd apps/ui && pnpm typecheck"],
     "finalReview": {
       "enabled": true,
       "minScore": 8,
@@ -72,10 +70,7 @@
           "requiresWriteApproval": true,
           "requiresFinalReview": true
         },
-        "tags": [
-          "component",
-          "migration"
-        ]
+        "tags": ["component", "migration"]
       }
     }
   ],

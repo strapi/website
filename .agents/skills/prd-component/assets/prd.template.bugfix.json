@@ -5,20 +5,14 @@
   "constraints": [],
   "rules": [],
   "nonGoals": [],
-  "qualityGates": [
-    "pnpm lint",
-    "cd apps/ui && pnpm typecheck"
-  ],
+  "qualityGates": ["pnpm lint", "cd apps/ui && pnpm typecheck"],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
+    "stopOnBlockedCheckpoint": false,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
-    "requiredChecks": [
-      "pnpm lint",
-      "cd apps/ui && pnpm typecheck"
-    ],
+    "requiredChecks": ["pnpm lint", "cd apps/ui && pnpm typecheck"],
     "finalReview": {
       "enabled": true,
       "minScore": 8,
@@ -63,10 +57,7 @@
       "metadata": {
         "taskType": "bugfix",
         "severity": "high",
-        "tags": [
-          "bug",
-          "ui"
-        ]
+        "tags": ["bug", "ui"]
       }
     }
   ],

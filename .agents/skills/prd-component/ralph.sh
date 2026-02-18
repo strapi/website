@@ -2,14 +2,23 @@
 set -euo pipefail
 
 CLAUDE_PID=""
+kill_tree() {
+  local pid=$1
+  local children
+  children=$(pgrep -P "$pid" 2>/dev/null || true)
+  for child in $children; do
+    kill_tree "$child"
+  done
+  kill -TERM "$pid" 2>/dev/null || true
+  sleep 0.1
+  kill -KILL "$pid" 2>/dev/null || true
+}
 cleanup() {
   trap - INT TERM
   if [[ -n "$CLAUDE_PID" ]]; then
-    pkill -P "$CLAUDE_PID" 2>/dev/null
-    kill "$CLAUDE_PID" 2>/dev/null
+    kill_tree "$CLAUDE_PID"
+    wait "$CLAUDE_PID" 2>/dev/null || true
   fi
-  kill 0 2>/dev/null
-  wait 2>/dev/null
   exit 130
 }
 trap cleanup INT TERM
@@ -390,9 +399,9 @@ run_claude_stream() {
     if .type == "assistant" then
       .message.content[]? |
       if .type == "text" then
-        .text // empty | split("\n") | map("  \u001b[2m│\u001b[0m " + .) | join("\r\n") |
+        .text // empty | split("\n") | map("  " + .) | join("\r\n") |
         (now | localtime | strftime("%H:%M:%S")) as $ts |
-        "  \u001b[2m│\u001b[0m\r\n  \u001b[2m│ ┄┄ \($ts) ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\u001b[0m\r\n" + . + "\r\n  \u001b[2m│\u001b[0m\r\n"
+        "\r\n  \u001b[2m┄ \($ts) ┄\u001b[0m\r\n" + . + "\r\n\n"
       elif .type == "tool_use" then
         .name as $tool | .input as $in |
         if $tool == "Read" then
@@ -430,17 +439,22 @@ run_claude_stream() {
   '
   final_result='select(.type == "result").result // empty'
 
-  claude \
-    --dangerously-skip-permissions \
-    --verbose \
-    --print \
-    --output-format stream-json \
-    -p "$prompt" \
-    | grep --line-buffered '^{' \
-    | tee "$tmpfile" \
-    | jq --unbuffered -rj --arg root "$project_root" "$stream_filter" >&2 &
+  (
+    claude \
+      --dangerously-skip-permissions \
+      --verbose \
+      --print \
+      --output-format stream-json \
+      -p "$prompt" \
+      | grep --line-buffered '^{' \
+      | tee "$tmpfile" \
+      | jq --unbuffered -rj --arg root "$project_root" "$stream_filter" >&2
+  ) &
   CLAUDE_PID=$!
-  wait "$CLAUDE_PID" 2>/dev/null || true
+  if ! wait "$CLAUDE_PID" 2>/dev/null; then
+    CLAUDE_PID=""
+    return 1
+  fi
   CLAUDE_PID=""
 
   jq -r "$final_result" "$tmpfile"

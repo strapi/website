@@ -9,7 +9,7 @@ export function SectionDescription({
   className,
   ...props
 }: SectionDescriptionProps) {
-  if (!children) {
+  if (children == null) {
     return null
   }
 

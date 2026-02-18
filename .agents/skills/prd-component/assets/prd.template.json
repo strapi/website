@@ -9,7 +9,7 @@
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
+    "stopOnBlockedCheckpoint": false,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
     "requiredChecks": [],
@@ -45,9 +45,7 @@
       },
       "data": {},
       "metadata": {
-        "tags": [
-          "generic"
-        ]
+        "tags": ["generic"]
       }
     }
   ],

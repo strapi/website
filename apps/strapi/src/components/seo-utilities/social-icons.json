@@ -11,7 +11,7 @@
     "socials": {
       "type": "component",
       "repeatable": true,
-      "component": "utilities.image-with-link"
+      "component": "utilities.link-image"
     }
   }
 }

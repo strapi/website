@@ -21,7 +21,7 @@ This workflow is intentionally adaptive. Local schemas evolve, so the skill must
 Ask the user for:
 
 1. **Source URL** (required): strapi.io page to scrape, for example `https://strapi.io/pricing`.
-2. **Target component** (optional): specific component UID to seed, for example `sections.hero`. If omitted, seed all recognized sections.
+2. **Target component** (optional): specific component UID to seed, for example `forms.newsletter-form`. If omitted, seed all recognized sections.
 3. **Target page path** (optional): local page full path, for example `/pricing`. If omitted, derive from source URL path.
 4. **Locale** (required): locale to seed into, for example `en`.
 5. **Parent page fullPath** (optional): explicit parent for nested pages. If omitted, derive from target page path.
@@ -266,16 +266,9 @@ Include:
 
 Use these patterns only as initial candidates. Schema validation decides final mapping.
 
-| Source pattern                  | Local component                    |
-| ------------------------------- | ---------------------------------- |
-| Hero section with heading + CTA | `sections.hero`                    |
-| FAQ / accordion section         | `sections.faq`                     |
-| Image carousel / slider         | `sections.carousel`                |
-| Logo row / partner logos        | `sections.animated-logo-row`       |
-| Pricing cards with plans        | `plans.plan-pricing-cards`         |
-| Feature comparison table        | `plans.plan-comparison-table`      |
-| Newsletter signup form          | `forms.newsletter-form`            |
-| Contact form                    | `forms.contact-form`               |
-| Heading with CTA button         | `sections.heading-with-cta-button` |
-| Image with CTA button           | `sections.image-with-cta-button`   |
-| Horizontal image gallery        | `sections.horizontal-images`       |
+| Source pattern           | Local component               |
+| ------------------------ | ----------------------------- |
+| Pricing cards with plans | `plans.plan-pricing-cards`    |
+| Feature comparison table | `plans.plan-comparison-table` |
+| Newsletter signup form   | `forms.newsletter-form`       |
+| Contact form             | `forms.contact-form`          |

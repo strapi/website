@@ -6,10 +6,10 @@ import Image from "next/image"
 import { useState } from "react"
 
 import AppLink from "@/components/elementary/AppLink"
-import StrapiImageWithLink from "@/components/page-builder/components/utilities/StrapiImageWithLink"
 import StrapiLink, {
   getStrapiLinkHref,
 } from "@/components/page-builder/components/utilities/StrapiLink"
+import { StrapiLinkImage } from "@/components/page-builder/components/utilities/StrapiLinkImage"
 import { NavMenuLink } from "@/components/page-builder/single-types/navbar/NavMenuLink"
 import {
   Accordion,
@@ -21,10 +21,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/styles"
 
 interface MobileNavbarProps {
-  readonly logoImage:
-    | Data.Component<"utilities.image-with-link">
-    | undefined
-    | null
+  readonly logoImage: Data.Component<"utilities.link-image"> | undefined | null
   readonly navItems: Data.Component<"navbar.nav-item">[] | undefined | null
   readonly ctaLinks: Data.Component<"utilities.link">[] | undefined | null
 }
@@ -41,13 +38,9 @@ export function MobileNavbar({
       {/* Top bar */}
       <div className="flex h-16 items-center justify-between px-4">
         {logoImage ? (
-          <StrapiImageWithLink
+          <StrapiLinkImage
             component={logoImage}
-            linkProps={{ className: "flex shrink-0 items-center" }}
-            imageProps={{
-              forcedSizes: { width: 80, height: 50 },
-              hideWhenMissing: true,
-            }}
+            className="flex shrink-0 items-center"
           />
         ) : (
           <AppLink href="/" className="shrink-0 text-xl font-bold">

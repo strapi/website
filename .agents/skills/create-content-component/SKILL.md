@@ -58,8 +58,9 @@ If category doesn't exist in `apps/strapi/src/components/`, create the folder fi
 
 Before proceeding:
 
-1. **Check for existing component**: search `apps/strapi/src/components/` for exact UID and similar components.
-2. **Check for reusable utilities**: before creating new sub-components or nested structures, scan existing components (especially `utilities/` and `elements/`) to find reusable building blocks.
+0. **Registry fast-path**: Read `docs/component-registry.md` for the full inventory of existing Strapi components, React wrappers, and page builder mappings. This is faster than filesystem scanning and should be the primary lookup. Fall back to filesystem glob only if the registry file is missing or stale.
+1. **Check for existing component**: search the registry (or `apps/strapi/src/components/`) for exact UID and similar components.
+2. **Check for reusable utilities**: before creating new sub-components or nested structures, check the registry's utilities section (or scan `utilities/` and `elements/` folders) to find reusable building blocks.
 
 ### Deterministic Duplicate Policy
 
@@ -83,26 +84,12 @@ Never ask the user to choose between reuse/new by default. Use this policy autom
 
 ### Reusable Components Reference
 
-Always prefer these existing components over creating new single-use ones:
+Consult `docs/component-registry.md` for the full inventory of Strapi schemas, React wrappers, and utility components. Always prefer reusing existing utilities over creating new single-use ones.
 
-| Need                               | Reuse                               | UID                          |
-| ---------------------------------- | ----------------------------------- | ---------------------------- |
-| CTA button / navigation link       | Link (with decorations for styling) | `utilities.link`             |
-| Text-only link (no button styling) | LinkText                            | `utilities.link-text`        |
-| Link with image (logo, icon link)  | LinkImage                           | `utilities.link-image`       |
-| Image (with alt, dimensions)       | BasicImage                          | `utilities.basic-image`      |
-| Image + link combo                 | ImageWithLink                       | `utilities.image-with-link`  |
-| Button variant/size styling        | LinkDecorations                     | `utilities.link-decorations` |
-| Titled group of links              | LinksWithTitle                      | `utilities.links-with-title` |
-| FAQ / collapsible Q&A item         | Accordions                          | `utilities.accordions`       |
-| Simple text block                  | Text                                | `utilities.text`             |
-| Tooltip content                    | Tooltip                             | `utilities.tooltip`          |
-| Footer link group                  | FooterItem                          | `elements.footer-item`       |
-
-**Rules**:
+**Key rules**:
 
 - **Links**: Always use `utilities.link` (has page relation, external URL, decorations for button styling). Never create a new "button" or "cta" component.
-- **Images**: Always use `utilities.basic-image` or `utilities.image-with-link`. Never create a new "photo" or "icon" component for the same structure.
+- **Images**: Always use `utilities.basic-image` or `utilities.link-image`. Never create a new "photo" or "icon" component for the same structure.
 - **Repeatable items with just text**: Use `utilities.text` as a repeatable component. Don't create a new "step" or "bullet" component if it's just a text field.
 - **Accordion/FAQ items**: Use `utilities.accordions`. Don't create a new "faq-item" component.
 - **Only create new sub-components** when the structure genuinely doesn't match any existing utility (e.g. a pricing card item with plan relation, price, features — that's unique enough).
@@ -128,12 +115,29 @@ Expected handoff fields:
 - `operation_mode`: should be `autonomous`
 - `name`
 - `category`
+- `component_name` (optional alias for `name`)
+- `source_url`
+- `selector`
+- `prd_goal`
+- `content_constraints`
+- `reuse_mode`
+- `shadcn_mode`
+- `acceptance_profile`
 - `attributes` (normalized field spec)
 - `reuse_constraints`
 - `duplicate_policy`
+- `detected_atoms` (array)
+- `reused_atoms` (array)
+- `new_atoms` (array)
+- `requires_shadcn_install` (boolean)
+- `shadcn_components` (array)
+- `schema_changed` (boolean hint from caller; recompute before return)
+- `requires_restart` (boolean hint from caller; recompute before return)
+- `seed_payload_ready` (boolean hint from caller)
 - `skip_react_component` (optional): when `true`, skip React component creation (Step 5) — the calling skill creates its own implementation
 
 If these are provided, do not prompt for extra confirmation; proceed with deterministic execution.
+Missing optional fields should be defaulted (empty arrays / `false`) instead of prompting.
 
 ## Steps
 
@@ -322,16 +326,42 @@ If new schema files were created or the page dynamic zone was modified, remind t
 
 **Never proceed to MCP write operations (seeding content, updating pages) until the user confirms the server has been restarted.** Writing unknown `__component` UIDs corrupts dynamic zone data.
 
+Set return flags:
+
+- `schema_changed=true` when schema files were created/updated additively.
+- `requires_restart=true` when new schema files were created or page dynamic zone changed.
+- `seed_payload_ready=true` only when schema-related restart requirement is fully satisfied.
+
+### 8b. Update component registry
+
+Update `docs/component-registry.md` with newly created artifacts:
+
+1. **Strapi Components table**: Append a new row for the created Strapi schema (UID, category, display name, key attributes).
+2. **Page Builder Registry table**: If the component is page-level, append the UID → React component mapping.
+3. **Last updated timestamp**: Update the date in the header.
+
+Skip silently if `docs/component-registry.md` doesn't exist.
+
 ### 9. Return structured result
 
 Always finish with:
 
 ```json
 {
+  "intake_contract_valid": true,
+  "acceptance_profile": "balanced-default",
   "actions_taken": [],
   "created": [],
   "updated": [],
   "reused": [],
+  "detected_atoms": [],
+  "reused_atoms": [],
+  "new_atoms": [],
+  "requires_shadcn_install": false,
+  "shadcn_components": [],
+  "schema_changed": false,
+  "requires_restart": false,
+  "seed_payload_ready": false,
   "skipped": [],
   "errors": [],
   "quality_checks": [],

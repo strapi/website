@@ -2,10 +2,10 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 
 import AppLink from "@/components/elementary/AppLink"
-import StrapiImageWithLink from "@/components/page-builder/components/utilities/StrapiImageWithLink"
 import StrapiLink, {
   getStrapiLinkHref,
 } from "@/components/page-builder/components/utilities/StrapiLink"
+import { StrapiLinkImage } from "@/components/page-builder/components/utilities/StrapiLinkImage"
 import { NavMenuSection } from "@/components/page-builder/single-types/navbar/NavMenuSection"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,10 +19,7 @@ import {
 import { cn } from "@/lib/styles"
 
 interface DesktopNavbarProps {
-  readonly logoImage:
-    | Data.Component<"utilities.image-with-link">
-    | undefined
-    | null
+  readonly logoImage: Data.Component<"utilities.link-image"> | undefined | null
   readonly navItems: Data.Component<"navbar.nav-item">[] | undefined | null
   readonly ctaLinks: Data.Component<"utilities.link">[] | undefined | null
 }
@@ -35,12 +32,9 @@ export function DesktopNavbar({
   return (
     <div className="hidden h-20 w-full items-center gap-3 lg:flex">
       {logoImage && (
-        <StrapiImageWithLink
+        <StrapiLinkImage
           component={logoImage}
-          linkProps={{ className: "flex shrink-0 items-center p-0" }}
-          imageProps={{
-            hideWhenMissing: true,
-          }}
+          className="flex shrink-0 items-center p-0"
         />
       )}
 

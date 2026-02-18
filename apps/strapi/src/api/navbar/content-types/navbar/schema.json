@@ -24,7 +24,7 @@
           "localized": true
         }
       },
-      "component": "utilities.image-with-link"
+      "component": "utilities.link-image"
     },
     "announcementBar": {
       "type": "component",

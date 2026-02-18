@@ -10,8 +10,8 @@ The page builder enables content editors to compose pages from reusable componen
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │ Page (api::page.page)                                               │    │
 │  │  └─ content: dynamiczone                                            │    │
-│  │       ├─ sections.hero                                              │    │
-│  │       ├─ sections.faq                                               │    │
+│  │       ├─ forms.newsletter-form                                      │    │
+│  │       ├─ plans.plan-pricing-cards                                   │    │
 │  │       └─ ...                                                        │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 │                                    │                                        │
@@ -25,8 +25,8 @@ The page builder enables content editors to compose pages from reusable componen
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │ StrapiPage (page.tsx)                                                │    │
 │  │  └─ maps __component UID → React component                          │    │
-│  │       ├─ sections.hero      → StrapiHero                            │    │
-│  │       ├─ sections.faq       → StrapiFaq                             │    │
+│  │       ├─ forms.newsletter-form → StrapiNewsletterForm               │    │
+│  │       ├─ plans.plan-pricing-cards → StrapiPlanPricingCards           │    │
 │  │       └─ ...                                                        │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -50,14 +50,12 @@ The mapping between Strapi component UIDs and React components is defined in:
 export const PageContentComponents: {
   [K in UID.Component]?: React.ComponentType<any>
 } = {
-  // Sections
-  "sections.hero": StrapiHero,
-  "sections.faq": StrapiFaq,
-  "sections.carousel": StrapiCarousel,
-  // ...
-
   // Forms
   "forms.newsletter-form": StrapiNewsletterForm,
+
+  // Plans
+  "plans.plan-comparison-table": StrapiPlanComparisonTable,
+  "plans.plan-pricing-cards": StrapiPlanPricingCards,
   // ...
 }
 ```
@@ -66,13 +64,13 @@ Components are grouped by category (matching Strapi's component folder structure
 
 ## Naming Conventions
 
-| Element               | Pattern                                    | Example                                                                  |
-| --------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
-| Strapi UID            | `category.kebab-case`                      | `sections.hero`                                                          |
-| Strapi schema file    | `{name}.json`                              | `apps/strapi/src/components/sections/hero.json`                          |
-| Strapi collectionName | `components_{category}_{name_underscored}` | `components_sections_hero`                                               |
-| React component       | `Strapi{PascalCase}`                       | `StrapiHero`                                                             |
-| React file            | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/sections/StrapiHero.tsx` |
+| Element               | Pattern                                    | Example                                                                         |
+| --------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
+| Strapi UID            | `category.kebab-case`                      | `forms.newsletter-form`                                                         |
+| Strapi schema file    | `{name}.json`                              | `apps/strapi/src/components/forms/newsletter-form.json`                         |
+| Strapi collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`                                              |
+| React component       | `Strapi{PascalCase}`                       | `StrapiNewsletterForm`                                                          |
+| React file            | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/forms/StrapiNewsletterForm.tsx` |
 
 ## Props Typing
 
@@ -81,22 +79,21 @@ React components receive their data via a `component` prop, typed using the `Dat
 ```typescript
 import { Data } from "@repo/strapi-types"
 
-export function StrapiHero({
+export function StrapiNewsletterForm({
   component,
 }: {
-  readonly component: Data.Component<"sections.hero">
+  readonly component: Data.Component<"forms.newsletter-form">
 }) {
   return (
     <section>
-      <h1>{component.title}</h1>
-      {component.subTitle && <h2>{component.subTitle}</h2>}
+      <h2>{component.title}</h2>
       {/* ... */}
     </section>
   )
 }
 ```
 
-The generic parameter is the Strapi component UID (e.g., `"sections.hero"`). This provides full type safety for all attributes defined in the component schema.
+The generic parameter is the Strapi component UID (e.g., `"forms.newsletter-form"`). This provides full type safety for all attributes defined in the component schema.
 
 **After changing Strapi schemas, regenerate types:**
 
@@ -118,24 +115,14 @@ This schema is automatically generated by `apps/strapi/src/populateDynamicZone` 
 const pagePopulateObject = {
   content: {
     on: {
-      "sections.hero": {
+      "forms.newsletter-form": {
         populate: {
-          links: true,
-          image: { populate: { media: true } },
-          steps: true,
+          title: true,
         },
       },
-      "sections.cta": { populate: { link: true } },
-      "sections.container": {
+      "plans.plan-pricing-cards": {
         populate: {
-          content: {
-            on: {
-              // recursive population for nested dynamic zones
-              "sections.hero": {
-                /* ... */
-              },
-            },
-          },
+          plans: true,
         },
       },
       // ...

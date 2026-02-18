@@ -1,0 +1,67 @@
+{
+  "project": "notum",
+  "branchName": "ralph/bugfix-batch",
+  "description": "Bugfix batch",
+  "loopConfig": {
+    "maxIterationsPerStory": 3,
+    "maxStagnantIterations": 2,
+    "stopOnBlockedCheckpoint": true,
+    "orderedByPriority": true,
+    "memoryFile": "tmp/ralph-memory.jsonl",
+    "requiredChecks": [
+      "pnpm lint",
+      "cd apps/ui && pnpm typecheck"
+    ],
+    "finalReview": {
+      "enabled": true,
+      "minScore": 8,
+      "maxPasses": 3
+    },
+    "autonomy": {
+      "noQuestions": true,
+      "assumeBestJudgment": true
+    }
+  },
+  "stories": [
+    {
+      "id": "BUG-001",
+      "title": "Fix navbar flicker on mobile",
+      "description": "Eliminate hydration mismatch causing flicker on initial render",
+      "priority": 1,
+      "passes": false,
+      "notes": "",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "No navbar flicker on first paint",
+        "No hydration warnings in console",
+        "Typecheck and lint pass"
+      ],
+      "loopState": {
+        "phase": "queued",
+        "status": "pending",
+        "attempt": 0,
+        "errors": []
+      },
+      "data": {
+        "reproSteps": [
+          "Open homepage on mobile viewport",
+          "Observe navbar during initial load"
+        ],
+        "affectedAreas": [
+          "apps/ui/src/components/page-builder/single-types/navbar"
+        ],
+        "expectedBehavior": "Stable navbar with no flicker"
+      },
+      "metadata": {
+        "taskType": "bugfix",
+        "severity": "high",
+        "tags": [
+          "bug",
+          "ui"
+        ]
+      }
+    }
+  ],
+  "generatedAt": "2026-02-18T00:00:00.000Z",
+  "status": "ready"
+}

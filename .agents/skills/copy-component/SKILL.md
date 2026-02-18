@@ -9,12 +9,15 @@ Extract a section from strapi.io, map its structure and styles to local design s
 
 **Key principle**: Use `browser_evaluate` for exact computed style extraction — never guess CSS from screenshots. Map extracted values to design tokens deterministically, not visually.
 
+**Standardization philosophy**: The source website (strapi.io) has fragmented, inconsistent styling. The goal is NOT pixel-perfect reproduction — it's standardizing into a cohesive design system. Always snap extracted values to the nearest design token from `packages/design-system/src/theme.css`. A 1-2px difference is a source inconsistency to fix, not a feature to preserve.
+
 ## Prerequisites
 
 - Playwright MCP tools available (browser_navigate, browser_snapshot, browser_evaluate, etc.)
-- Design system tokens at `packages/design-system/src/theme.css`
+- Design system tokens at `packages/design-system/src/theme.css` — **canonical source** for all standardized values (Strapi colors, typography scale, border radii, shadcn semantic tokens). Read this file at workflow start and snap all extracted values to these tokens.
 - Existing page builder patterns in `apps/ui/src/components/page-builder/`
 - `create-content-component` skill available at `.agents/skills/create-content-component/SKILL.md`
+- Read `docs/component-registry.md` at workflow start for full component inventory (Strapi schemas, React wrappers, shadcn/ui components, page builder mappings). This avoids redundant filesystem scanning and ensures awareness of all existing assets.
 
 If Playwright browser tools are unavailable, stop and tell the user this skill cannot run reliably without computed-style extraction.
 
@@ -26,36 +29,78 @@ If Playwright browser tools are unavailable, stop and tell the user this skill c
 
 Do not duplicate full procedures from those skills in this file. Delegate to them when their scope applies, then continue this workflow.
 
-## Inputs
+## Inputs (Strict Intake Contract)
 
-Ask the user for:
+Require this run contract before execution:
 
-1. **Source URL** (required): strapi.io page URL (e.g. `https://strapi.io/pricing`)
-2. **Target section** (required): natural language description (e.g. "the hero section", "pricing cards") or CSS selector (e.g. `section.hero`, `#pricing-cards`)
-3. **Component name** (optional): kebab-case name for the component (e.g. `pricing-hero`). If omitted, derive from section content.
-4. **Category** (optional): one of `sections`, `forms`, `plans`, `elements`, `utilities`, `seo-utilities`, `footer`, `navbar`, or a custom category (default: `sections`)
+```yaml
+component_name: <kebab-case>
+source_url: <https://strapi.io/...>
+selector: <CSS selector for the exact section root>
+prd_goal: <1-3 sentence purpose and expected outcome>
+content_constraints: <explicit constraints; use "none" when empty>
+reuse_mode: <strict-reuse|balanced|pixel-first>
+shadcn_mode: <prefer-existing|allow-install|no-shadcn>
+acceptance_profile: <balanced-default>
+category: <optional; defaults to sections>
+```
 
-## Section Targeting (Adaptive Fallback)
+Validation rules:
 
-Use this priority chain to find the target section:
+- `component_name`, `source_url`, `selector`, `prd_goal`, `content_constraints` are required.
+- `reuse_mode` allowed values: `strict-reuse`, `balanced`, `pixel-first`.
+- `shadcn_mode` allowed values: `prefer-existing`, `allow-install`, `no-shadcn`.
+- `acceptance_profile` defaults to `balanced-default` when omitted.
+- `category` defaults to `sections` when omitted.
 
-1. **CSS selector** (if user provides one): Direct extraction from the selector.
-2. **Natural language** (default): Navigate to page, take accessibility snapshot, use semantic cues (headings, landmark roles, structure) to identify candidate sections.
-3. **Interactive** (fallback): If auto-detect fails, take a snapshot and ask the user directly (in chat) to pick from numbered section descriptions.
+CamelCase compatibility:
 
-Always confirm the identified section with the user before extracting. Include a brief description of what was found (heading text, approximate content) so user can verify.
+- If caller sends camelCase fields, normalize before validation:
+  - `componentName` -> `component_name`
+  - `sourceUrl` -> `source_url`
+  - `prdGoal` -> `prd_goal`
+  - `contentConstraints` -> `content_constraints`
+  - `reuseMode` -> `reuse_mode`
+  - `shadcnMode` -> `shadcn_mode`
+  - `acceptanceProfile` -> `acceptance_profile`
+
+Fail fast when invalid and do not proceed:
+
+> "Invalid copy-component intake contract. Missing/invalid fields: <fields>. Re-send using the strict contract."
+
+## Section Targeting (Selector-First)
+
+Use this priority chain:
+
+1. **Selector from contract** (required): extract directly from `selector`.
+2. **Auto-heal fallback** (only when selector fails): take accessibility snapshot and infer closest semantic section using `prd_goal`.
+3. **Interactive fallback** (only if both fail): present candidates and ask for a corrected selector.
+
+If selector fallback was required, record this in final output under `manual_steps_needed`.
 
 ## Steps
+
+### Step 0: Validate contract and registry freshness
+
+1. Validate strict intake contract fields and enums.
+2. Read `docs/component-registry.md` as primary inventory.
+3. Run drift checks against repository truth:
+   - Page-level UID mappings in `docs/component-registry.md` vs `apps/ui/src/components/page-builder/index.tsx`
+   - Strapi UID rows vs schema files in `apps/strapi/src/components/**/**/*.json`
+   - Installed shadcn list vs components present in `apps/ui/src/components/ui/`
+4. If drift is detected:
+   - Continue using filesystem as source of truth.
+   - Append `registry-refresh-required` to `manual_steps_needed`.
+   - Include concise drift summary in `errors` only when drift blocks deterministic mapping.
 
 ### Step 1: Navigate and identify target section
 
 1. Navigate to the source URL via `browser_navigate`.
 2. Wait for page load, dismiss any cookie banners or modals.
 3. Take an accessibility snapshot via `browser_snapshot`.
-4. Identify candidate sections matching the user's description.
-5. Confirm with the user directly in chat:
-   - Show 2-4 candidate sections with heading text and brief content summary.
-   - Let user pick the correct one or provide a CSS selector.
+4. Resolve target with selector from contract.
+5. If selector does not resolve, run auto-heal fallback from Section Targeting.
+6. Only if selector + auto-heal both fail, ask the user for a corrected selector.
 
 ### Step 2: Extract structure and content
 
@@ -190,6 +235,20 @@ This screenshot is for **verification only** — all CSS values come from `brows
 
 Map extracted computed values to Tailwind classes using the design system tokens from `packages/design-system/src/theme.css`. Read the theme file to get current token values first; treat the static tables below as fallback guidance.
 
+#### Visual Tolerance Rule
+
+The source site (strapi.io) has inconsistent styling — buttons with 3px vs 4px radius, text at 14px vs 15px, spacing at 13px vs 12px. These are source inconsistencies, not intentional design choices. **Always snap to the nearest design token:**
+
+- **Border radius**: snap to `4px` (strapi-sm), `6px` (strapi-md), `10px` (strapi-lg), or `9999px` (full). A source 3px, 5px, or 8px radius is not a new value — it's the nearest strapi token.
+- **Font size**: snap to the typography scale (`11/13/15/17/19/21/33/43/53px`). A source 14px is `text-base` (15px), a 16px is `text-lg` (17px).
+- **Spacing**: snap to the 4px grid (`4/8/12/16/20/24/32/40/48/64/80/96px`). A source 13px is `3` (12px), a 22px is `5` (20px) or `6` (24px).
+- **Colors**: snap to Strapi design tokens. A source `#4a46ff` is `strapi-blue-600` (`#4945ff`), not an arbitrary `[#4a46ff]`.
+- **Font weight**: snap to standard weights (`400/500/600/700`). Never use arbitrary `[450]` or `[550]`.
+
+**Never use arbitrary Tailwind values** (`text-[14px]`, `rounded-[3px]`, `gap-[13px]`) when a design token is within ±2px. Arbitrary values are only acceptable when no token is reasonably close (e.g. a decorative element at 200px radius).
+
+**Existing UI components always win**: If the source has a button that's 1px different from the shadcn `Button`, use `Button`. If a card has slightly different padding than shadcn `Card`, use `Card` with className overrides. Never create a custom component to match a minor source variation.
+
 #### Token Mapping Rules
 
 **Typography (font size → text-\* class)**:
@@ -208,7 +267,7 @@ The design system remaps the standard Tailwind text scale to match Strapi's type
 | 43px (2.6875rem) | `--text-4xl`  | `text-4xl`     |
 | 53px (3.3125rem) | `--text-5xl`  | `text-5xl`     |
 
-For non-exact matches, pick the nearest standard Tailwind token. Values above 53px use `text-6xl` (60px), `text-7xl` (72px), etc.
+For non-exact matches, snap to the nearest standard Tailwind token (see Visual Tolerance Rule). Never use arbitrary `text-[Xpx]` when a token is within ±2px. Values above 53px use `text-6xl` (60px), `text-7xl` (72px), etc.
 
 **Font weight → font-\* class**:
 
@@ -245,7 +304,7 @@ Common Strapi mappings:
 
 For `backgroundColor`, use `bg-{token}`. For `color`, use `text-{token}`.
 
-If no candidate token is reasonably close, use an arbitrary value class (for example `text-[#hex]`, `bg-[#hex]`) and report it as a follow-up tokenization candidate.
+If no candidate token is within ~5 RGB distance, use an arbitrary value class (for example `text-[#hex]`, `bg-[#hex]`) and report it as a follow-up tokenization candidate. Near-matches (1-2 hex digits off) are source inconsistencies — snap to the token.
 
 **Spacing (px → spacing scale)**:
 
@@ -267,7 +326,7 @@ Tailwind spacing: `value / 4 = multiplier` (base `--spacing: 0.25rem`).
 | 80px     | `20`           |
 | 96px     | `24`           |
 
-For non-exact matches, use the nearest value. Apply as `p-{n}`, `m-{n}`, `gap-{n}`, `px-{n}`, `py-{n}`, etc.
+For non-exact matches, snap to the nearest 4px-grid value (see Visual Tolerance Rule). Never use arbitrary `p-[13px]` when `p-3` (12px) is close enough. Apply as `p-{n}`, `m-{n}`, `gap-{n}`, `px-{n}`, `py-{n}`, etc.
 
 **Border radius → rounded-\* class**:
 
@@ -278,7 +337,7 @@ For non-exact matches, use the nearest value. Apply as `p-{n}`, `m-{n}`, `gap-{n
 | 10px     | `--radius-strapi-lg` | `rounded-strapi-lg` |
 | 9999px   | —                    | `rounded-full`      |
 
-For other values, use standard Tailwind: `rounded-sm` (2px), `rounded` (4px), `rounded-md` (6px), `rounded-lg` (8px), `rounded-xl` (12px), `rounded-2xl` (16px).
+For non-exact matches, snap to the nearest Strapi token (see Visual Tolerance Rule above). Standard Tailwind fallbacks: `rounded-sm` (2px), `rounded` (4px), `rounded-md` (6px), `rounded-lg` (8px), `rounded-xl` (12px), `rounded-2xl` (16px).
 
 **Layout → flex/grid classes**:
 
@@ -311,14 +370,125 @@ Compare desktop (Step 3) vs mobile (Step 4) styles for each element:
 - "Implement both with responsive classes"
 - "Desktop-only layout"
 
+### Step 6b: Map elements to existing components
+
+After token mapping, map extracted HTML elements to existing React components and Strapi schemas. This ensures consistency and avoids creating redundant primitives.
+
+**Typography mapping** — extracted font-size to `<Typography>` variant:
+
+The project has a `Typography` component at `@/components/typography` with `typo-*` CSS classes. Map extracted sizes to variants:
+
+| Extracted px        | Typography variant | Default tag | CSS class         |
+| ------------------- | ------------------ | ----------- | ----------------- |
+| >= 53px (3.3125rem) | `header1`          | `h1`        | `typo-header-1`   |
+| >= 43px (2.6875rem) | `header2`          | `h2`        | `typo-header-2`   |
+| >= 33px (2.0625rem) | `header3`          | `h3`        | `typo-header-3`   |
+| >= 21px (1.3125rem) | `subtitle1`        | `h4`        | `typo-subtitle-1` |
+| >= 19px (1.1875rem) | `subtitle2`        | `h5`        | `typo-subtitle-2` |
+| >= 17px (1.0625rem) | `body1`            | `p`         | `typo-body-1`     |
+| >= 15px (0.9375rem) | `body2`            | `span`      | `typo-body-2`     |
+| >= 13px (0.8125rem) | `smallText1`       | `p`         | `typo-small-1`    |
+| >= 11px (0.6875rem) | `smallText2`       | `p`         | `typo-small-2`    |
+
+The "Default tag" column shows what Typography uses when no `tag` prop is passed. **Override `tag` when the semantic meaning differs from the visual size** — e.g. a price displayed large: `<Typography tag="p" variant="header3">`, a features section title displayed small: `<Typography tag="h4" variant="body2" fontWeight="medium">`.
+
+For sizes **larger than header1** (53px): use `<Typography tag="h1" variant="header1" className="lg:text-[Xrem]">` with the exact source size as responsive override.
+
+Typography props reference:
+
+- `tag`: h1-h6, p, span, label (determines the HTML element — semantic meaning)
+- `variant`: controls visual size independently of tag (e.g. `tag="p" variant="header3"` for a price display)
+- `textColor`: black, white, primary (default), neutral, muted
+- `fontWeight`: bold (default for headers), normal (default for body), semiBold, medium, etc.
+
+Typography rules:
+
+- Use `<Typography>` for standalone text blocks (headings, paragraphs, labels, descriptions)
+- **Decouple semantics from visuals**: when the visual size doesn't match the semantic meaning, use `tag` for correct HTML semantics and `variant` for the visual style (e.g. `<Typography tag="h4" variant="body2" fontWeight="medium">` for a small section title, `<Typography tag="p" variant="header3">` for a large price display)
+- Only pass `textColor`/`fontWeight` when they differ from variant defaults
+- **Skip Typography** for: inline `<span>` fragments inside a Typography parent, single-word content inside another component's slot (badge, button label), or cases where raw Tailwind on a semantic tag is simpler and clearer
+- Spacing/layout classes go on `className`, not as separate wrapper divs
+- Import: `import { Typography } from "@/components/typography"`
+
+**Link/CTA mapping:**
+
+| Source Pattern                                   | Strapi Schema                                   | React Component     |
+| ------------------------------------------------ | ----------------------------------------------- | ------------------- |
+| `<a>` styled as button (filled bg, border, etc.) | `utilities.link` + `utilities.link-decorations` | `<StrapiLink>`      |
+| `<a>` plain text (underline on hover)            | `utilities.link-text`                           | `<StrapiLinkText>`  |
+| `<a>` wrapping an image                          | `utilities.link-image`                          | `<StrapiLinkImage>` |
+
+Button variant detection from source styles: filled background → `"default"`, outline/border only → `"outline"`, text-only/underline → `"link"`, transparent bg with hover → `"ghost"`.
+
+**Image mapping:**
+
+| Source Pattern          | Strapi Schema           | React Component      |
+| ----------------------- | ----------------------- | -------------------- |
+| `<img>` in content area | `utilities.basic-image` | `<StrapiBasicImage>` |
+| `<img>` inside `<a>`    | `utilities.link-image`  | `<StrapiLinkImage>`  |
+
+**Section wrapper rule:** Every page-level section component uses `<section>` → `<Container>` structure. Import Container from `@/components/elementary/Container`.
+
+### Step 6c: Shadcn/UI pattern matching
+
+Check `docs/component-registry.md` → "Shadcn/UI Installed" for available components. Match source UI patterns to shadcn components:
+
+| Source Pattern                         | Shadcn Component |
+| -------------------------------------- | ---------------- |
+| Collapsible panels with toggle headers | `Accordion`      |
+| Tab bar with switchable panels         | `Tabs`           |
+| Bordered box with header/body/footer   | `Card`           |
+| Horizontal scroll with arrows/dots     | `Carousel`       |
+| Data rows+columns with headers         | `Table`          |
+| Modal overlay on button click          | `Dialog`         |
+| Floating info on hover                 | `Tooltip`        |
+| Pill-shaped status indicators          | `Badge`          |
+| Binary toggle                          | `Switch`         |
+
+Policy-driven decision flow (`shadcn_mode` from intake):
+
+1. If `shadcn_mode=no-shadcn`:
+   - Do not install or introduce new shadcn components.
+   - Reuse existing local primitives/wrappers.
+2. If `shadcn_mode=prefer-existing`:
+   - Reuse installed shadcn components when available.
+   - If unavailable, prefer existing local non-shadcn primitives.
+   - Do not request installs by default.
+3. If `shadcn_mode=allow-install`:
+   - Reuse installed shadcn first.
+   - If unavailable and no equivalent local primitive exists, ask user to approve install:
+     - `cd apps/ui && pnpm dlx shadcn@latest add {name}`
+   - After install, update `docs/component-registry.md` "Shadcn/UI Installed" list.
+
+Always emit a deterministic decision summary for each matched pattern:
+
+```yaml
+shadcn_decision:
+  source_pattern: <pattern>
+  chosen_component: <shadcn_or_local_component>
+  install_needed: <true|false>
+  reason: <one-line rationale>
+```
+
+### Step 6d: Composition analysis
+
+Detect common composition patterns in the extracted structure:
+
+1. **Section header**: heading + subtitle pair at section top → render with `<Typography tag="h2">` + `<Typography tag="p">` using appropriate variants for the extracted sizes. Use consistent spacing (`mb-4` on heading, `mb-8`–`mb-12` after subtitle). Extract a reusable atom when the same pattern appears at least 2 times in the target component or when an equivalent atom already exists.
+
+2. **Card grid**: 3+ items with identical structure (image + title + text + link) → model as Strapi repeatable component. Render with `.map()` in React using a local sub-component or inline JSX. Use CSS grid (`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`).
+
+3. **Icon + text list**: multiple icon-text pairs in a column/row → model as repeatable component with `utilities.basic-image` (icon) + text field. Render with `.map()`.
+
+These rules are deterministic. Only ask the user when the structure is genuinely ambiguous (e.g., mixed card shapes that could be one or two component types).
+
 ### Step 7: Reuse audit and schema plan
 
 Before any schema edits:
 
-1. Scan existing Strapi components in `apps/strapi/src/components/**/*.json`.
-2. Scan existing React page-builder components in `apps/ui/src/components/page-builder/components/**/Strapi*.tsx`.
-3. Reuse existing utilities first (links, images, text, accordions, etc.) by following the **Reusable Components Reference** in `.agents/skills/create-content-component/SKILL.md`.
-4. Check whether a top-level equivalent already exists (hero, faq, carousel, pricing cards, forms, etc.).
+1. Use the registry and drift state from Step 0. If Step 0 detected drift, use filesystem as source of truth.
+2. Reuse existing utilities first (links, images, text, accordions, etc.) by consulting the registry and the reuse rules in `.agents/skills/create-content-component/SKILL.md`.
+3. Check whether a top-level equivalent already exists (hero, faq, carousel, pricing cards, forms, etc.).
 
 Run explicit duplicate checks for the intended UID (`{category}.{name}`):
 
@@ -344,6 +514,12 @@ If a close match exists, resolve automatically:
 - Match with missing fields: **Extend existing** additively.
 - Incompatible match: **Create new** component name/category (use suffix if needed).
 
+Apply `reuse_mode` policy:
+
+- `strict-reuse`: prefer reuse/extend and avoid new atoms/components unless blocked.
+- `balanced`: reuse by default, create new only for clearly unique structure.
+- `pixel-first`: allow localized new atoms/components when needed for fidelity.
+
 Only ask the user when they explicitly request manual choice.
 
 If a new or extended schema is needed, derive a concise attribute spec from extracted content:
@@ -351,7 +527,7 @@ If a new or extended schema is needed, derive a concise attribute spec from extr
 - Headings → `title`, `subTitle`
 - Body text → `description`
 - CTA links → `utilities.link` (repeatable as needed)
-- Images → `utilities.basic-image` or `utilities.image-with-link`
+- Images → `utilities.basic-image` or `utilities.link-image`
 - Repeated cards/items → nested repeatable component only when truly unique
 
 ### Step 8: Delegate scaffolding to `/create-content-component`
@@ -372,8 +548,24 @@ Use this handoff contract exactly:
 ```yaml
 operation_mode: autonomous
 source_skill: copy-component
+component_name: <kebab-case>
 name: <kebab-case>
 category: <category>
+source_url: <https://strapi.io/...>
+selector: <CSS selector>
+prd_goal: <goal>
+content_constraints: <constraints>
+reuse_mode: <strict-reuse|balanced|pixel-first>
+shadcn_mode: <prefer-existing|allow-install|no-shadcn>
+acceptance_profile: <balanced-default>
+detected_atoms: []
+reused_atoms: []
+new_atoms: []
+requires_shadcn_install: false
+shadcn_components: []
+schema_changed: false
+requires_restart: false
+seed_payload_ready: false
 attributes:
   - name: <fieldName>
     type: <strapi_type_or_component_ref>
@@ -390,6 +582,7 @@ duplicate_policy:
 quality_gates_required:
   - generate_strapi_types
   - ui_typecheck
+  - visual_diff_and_checklist
 ```
 
 After delegation, verify outputs exist and are coherent:
@@ -443,15 +636,22 @@ Key rules:
 - Render Strapi data dynamically (not hardcoded text)
 - Handle optional fields with conditionals (`{component.subTitle && ...}`)
 - Map over repeatable components with `key={item.id}`
-- Use existing utility components (`StrapiLink`, `StrapiBasicImage`, `Typography`) where appropriate
 - Named export + default export
 - `displayName` set explicitly
-- Wrap in `<Container>` when appropriate
 - No `removeThisWhenYouNeedMe` — this is a real implementation, not a placeholder
+
+Component usage rules (mandatory):
+
+- **Text**: Use `<Typography>` for standalone text blocks (headings, paragraphs, labels). Use `tag` for semantic meaning and `variant` for visual size — they don't have to match. Skip Typography for inline `<span>` fragments or single-word slots. Import from `@/components/typography`.
+- **Links/CTAs**: ALWAYS use `<StrapiLink>` for `utilities.link` fields, `<StrapiLinkText>` for `utilities.link-text` fields. Import from `@/components/page-builder/components/utilities/StrapiLink` and `StrapiLinkText`.
+- **Images**: ALWAYS use `<StrapiBasicImage>` for `utilities.basic-image` fields. Import from `@/components/page-builder/components/utilities/StrapiBasicImage`.
+- **Linked images**: ALWAYS use `<StrapiLinkImage>` for `utilities.link-image` fields. Import from `@/components/page-builder/components/utilities/StrapiLinkImage`.
+- **Section wrapper**: ALWAYS wrap page-level section content in `<section>` → `<Container>`. Import Container from `@/components/elementary/Container`.
+- **Shadcn components**: Use shadcn/ui components identified in Step 6c. Import from `@/components/ui/{name}`.
 
 ### Step 10: Validate registration and types
 
-Verify that `create-content-component` (Step 8) completed its Steps 4-7 successfully. Do NOT re-register or re-run type generation — only confirm the outputs exist:
+Verify that `create-content-component` (Step 8) completed its Steps 4-7 successfully. Do NOT re-register here; only confirm outputs exist before running Step 11 quality gates:
 
 1. For page-level components, confirm a single (non-duplicate) `PageContentComponents` mapping exists for the UID in `apps/ui/src/components/page-builder/index.tsx`.
 2. Confirm `@repo/strapi-types` were generated (check that the generated types file reflects the new schema).
@@ -459,13 +659,20 @@ Verify that `create-content-component` (Step 8) completed its Steps 4-7 successf
 
 ### Step 11: Quality gates
 
-Run these checks after implementation:
+Run checks based on `acceptance_profile`.
+
+For `balanced-default` (required):
 
 1. `cd apps/strapi && pnpm generate:types`
 2. `cd apps/ui && pnpm typecheck`
-3. Optional when scope is broad: `pnpm lint`
+3. Source vs local screenshot capture for the migrated section
+4. Checklist pass:
+   - standalone text blocks use `<Typography>` with `tag` for semantics and `variant` for visuals (per Step 6b rules)
+   - links/images use Strapi utility wrappers from Step 9 rules
+   - no duplicate UID or `PageContentComponents` mapping
+5. Optional when scope is broad: `pnpm lint`
 
-If a command fails, report the failing command and concise error summary.
+If any required gate fails, do not mark migration as done. Report failing command/check and include manual follow-up.
 
 ### Step 12: Verify
 
@@ -484,10 +691,21 @@ Always finish with:
 
 ```json
 {
+  "intake_contract_valid": true,
+  "acceptance_profile": "balanced-default",
+  "registry_drift_detected": false,
   "actions_taken": [],
   "created": [],
   "updated": [],
   "reused": [],
+  "detected_atoms": [],
+  "reused_atoms": [],
+  "new_atoms": [],
+  "requires_shadcn_install": false,
+  "shadcn_components": [],
+  "schema_changed": false,
+  "requires_restart": false,
+  "seed_payload_ready": false,
   "mapped": [],
   "best_effort_mapped": [],
   "skipped": [],
@@ -498,11 +716,25 @@ Always finish with:
 }
 ```
 
+### Step 13b: Update component registry
+
+Update `docs/component-registry.md` with newly created artifacts:
+
+1. **Strapi Components table**: Append a new row for the created Strapi schema (UID, category, display name, key attributes).
+2. **Page Builder Registry table**: If the component is page-level, append the UID → React component mapping.
+3. **Shadcn/UI Installed list**: If any new shadcn components were installed in Step 6c, append them to the comma-separated list.
+4. **Last updated timestamp**: Update the date in the header.
+
+Skip silently if `docs/component-registry.md` doesn't exist.
+
 ### Step 14: Offer content seeding
 
-After reporting the structured result, ask the user if they want to seed the newly created component with content extracted from the source page using the `/seed-content` skill. Include the source URL and component name in the prompt so the user has context.
+After reporting the structured result:
 
-If the user accepts, invoke `/seed-content` with the source URL, target component UID, and any content already extracted in Step 2.
+1. Only offer seeding when `seed_payload_ready=true`.
+2. If `requires_restart=true`, do not offer seeding until the user confirms Strapi restart.
+3. Ask user if they want to seed content using `/seed-content`, including source URL and component UID for context.
+4. If approved, invoke `/seed-content` with source URL, target component UID, and extracted content from Step 2.
 
 ## Hover and Interactive States
 

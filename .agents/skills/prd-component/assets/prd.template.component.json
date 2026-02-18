@@ -1,0 +1,76 @@
+{
+  "project": "notumMigration",
+  "branchName": "ralph/component-migration",
+  "description": "Component-by-component migration from strapi.io",
+  "loopConfig": {
+    "maxIterationsPerStory": 3,
+    "maxStagnantIterations": 2,
+    "stopOnBlockedCheckpoint": true,
+    "orderedByPriority": true,
+    "memoryFile": "tmp/ralph-memory.jsonl",
+    "requiredChecks": [
+      "cd apps/ui && pnpm typecheck"
+    ],
+    "finalReview": {
+      "enabled": true,
+      "minScore": 8,
+      "maxPasses": 3
+    },
+    "autonomy": {
+      "noQuestions": true,
+      "assumeBestJudgment": true
+    }
+  },
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "Migrate example section",
+      "description": "Copy one section with simplified schema and token-mapped Tailwind",
+      "priority": 1,
+      "passes": false,
+      "notes": "",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "cd apps/strapi && pnpm generate:types passes when schema changes are made",
+        "cd apps/ui && pnpm typecheck passes",
+        "Source and local section screenshots are captured and compared",
+        "Text uses Typography; links/images use Strapi utility wrappers",
+        "No duplicate UID or duplicate PageContentComponents mapping"
+      ],
+      "loopState": {
+        "phase": "queued",
+        "status": "pending",
+        "attempt": 0,
+        "errors": []
+      },
+      "data": {
+        "copyComponentInput": {
+          "component_name": "example-section",
+          "source_url": "https://strapi.io/pricing",
+          "selector": "section[data-section='example']",
+          "prd_goal": "Replicate structure and content hierarchy for this section.",
+          "content_constraints": "none",
+          "reuse_mode": "balanced",
+          "shadcn_mode": "prefer-existing",
+          "acceptance_profile": "balanced-default",
+          "category": "sections"
+        }
+      },
+      "metadata": {
+        "executionSkill": "copy-component",
+        "taskType": "componentMigration",
+        "checkpoints": {
+          "requiresRestartConfirmation": true,
+          "requiresWriteApproval": true,
+          "requiresFinalReview": true
+        },
+        "tags": [
+          "component",
+          "migration"
+        ]
+      }
+    }
+  ],
+  "generatedAt": "2026-02-18T00:00:00.000Z",
+  "status": "ready"
+}

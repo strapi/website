@@ -97,7 +97,7 @@
     {
       "id": "US-002",
       "title": "Create SectionHeading atom",
-      "status": "open",
+      "status": "completed",
       "dependsOn": [],
       "description": "As a developer, I want a SectionHeading component that renders heading text with independent semantic tag and visual text style.",
       "acceptanceCriteria": [
@@ -114,14 +114,15 @@
         "Negative case: <SectionHeading as='h2' /> with no textStyle defaults to h2 visual size",
         "pnpm typecheck and pnpm lint pass"
       ],
-      "passes": false,
+      "passes": true,
       "priority": 2,
       "loopState": {
-        "status": "pending",
-        "phase": "queued",
-        "attempt": 0,
+        "status": "completed",
+        "phase": "done",
+        "attempt": 1,
         "errors": []
-      }
+      },
+      "notes": "Used tagToTextStyle mapping so omitting textStyle defaults to a style matching the `as` tag. h4 maps to subtitle1, h5/h6 map to subtitle2."
     },
     {
       "id": "US-003",

@@ -34,6 +34,18 @@ Use this root contract:
 
 `stories[]` is canonical. Keep compatibility with legacy keys only when ingesting old PRDs.
 
+Optional root constraints (recommended):
+
+- `constraints`
+- `rules`
+- `nonGoals`
+- `qualityGates`
+- `successMetrics`
+- `goals`
+- `uiNotes`
+
+These are passed into loop prompts as a global constraints context.
+
 ## loopConfig
 
 Recommended defaults:
@@ -74,6 +86,7 @@ Each story should use:
   "id": "US-001",
   "title": "",
   "description": "",
+  "status": "open",
   "priority": 1,
   "passes": false,
   "notes": "",
@@ -116,6 +129,7 @@ A story is runnable when:
 
 - `id`, `title`, `priority`, `acceptanceCriteria` exist.
 - `loopState.status` is not `blocked`.
+- `status` (if present) is not `blocked`.
 - All stories in `dependsOn` have `passes=true` (skip, don't block, if unmet).
 - Required `data` for that story type is present.
 - If `metadata.executionSkill = "copy-component"`, `data.copyComponentInput` is present.
@@ -128,6 +142,8 @@ If invalid:
 
 ## Guardrails
 
+- **One file per session**: All features discussed in a single planning session go into **one PRD file**. Never split related work into multiple PRD files — use `dependsOn` in stories to express ordering.
+- **Append to existing PRDs**: If a PRD file already exists at the target path, read it first and **append** new stories (continuing the ID sequence). Merge top-level arrays (goals, nonGoals, rules, etc.) — do not overwrite existing entries.
 - One story should map to one coherent unit of work.
 - Keep IDs stable for retry idempotency.
 - Never hide blockers; write them to `loopState.errors` and `notes`.

@@ -2,6 +2,13 @@
   "project": "notumMigration",
   "branchName": "ralph/component-migration",
   "description": "Component-by-component migration from strapi.io",
+  "constraints": [],
+  "rules": [],
+  "nonGoals": [],
+  "qualityGates": [
+    "cd apps/strapi && pnpm generate:types (when schema changes)",
+    "cd apps/ui && pnpm typecheck"
+  ],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
@@ -26,6 +33,7 @@
       "id": "US-001",
       "title": "Migrate example section",
       "description": "Copy one section with simplified schema and token-mapped Tailwind",
+      "status": "open",
       "priority": 1,
       "passes": false,
       "notes": "",

@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "project": "Atomic Section Components",
+  "overview": "Create 4 composable React primitives (SectionLabel, SectionHeading, SectionDescription, SectionIcon) and a server-only Markdown renderer as building blocks for page-builder sections. These follow a shadcn/ui composable pattern where layout lives in the consumer, not the atom. No Strapi schema — purely frontend atoms.",
+  "goals": [
+    "Provide reusable, composable primitives for section-level content across all page-builder components",
+    "Eliminate layout coupling — each atom handles only its own rendering, consumers handle arrangement",
+    "Use existing design-system tokens (strapi-* colors, typography scale) for visual consistency",
+    "Follow shadcn/ui patterns already established in the codebase (CVA variants, data-slot, cn utility)",
+    "Provide a server-only Markdown renderer that uses typography atoms for consistent rendering"
+  ],
+  "nonGoals": [
+    "No Strapi schemas — these are React-only atoms",
+    "No layout/positioning logic inside atoms — consumers compose layout",
+    "No new Button variants — existing button.tsx already covers purple primary, blue primary, secondary blue outline, and ghost",
+    "No secondary green button variant (single-use edge case, deferred)",
+    "No page-builder section components in this scope — only the primitives",
+    "No syntax highlighting in Markdown renderer",
+    "No MDX support (no JSX in markdown)",
+    "No table or image rendering within markdown (deferred)"
+  ],
+  "successMetrics": [
+    "All 4 atoms are usable in isolation and composable together",
+    "Atoms use design-system tokens, not hardcoded colors or sizes",
+    "Markdown component is server-only — importing in a client component produces a build error",
+    "pnpm lint, pnpm typecheck, and pnpm build all pass"
+  ],
+  "openQuestions": [],
+  "stack": {
+    "framework": "Next.js 16 (App Router, React 19, Server Components)",
+    "styling": "TailwindCSS v4 + CVA for variants",
+    "designSystem": "packages/design-system (strapi-* tokens, typo-* classes)",
+    "newDependencies": "react-markdown, server-only"
+  },
+  "routes": [],
+  "uiNotes": [
+    "Section atoms live in apps/ui/src/components/elementary/",
+    "Markdown renderer lives in apps/ui/src/components/elementary/markdown/Markdown.tsx",
+    "Use CVA only where variants are needed (SectionLabel color, SectionHeading textStyle)",
+    "Use design-system tokens: strapi-purple-600, strapi-green-600 for label colors; strapi-header-1 through strapi-small-2 for heading sizes; strapi-neutral-800 for dark text",
+    "Existing .typo-label class in design-system already defines the label pattern: text-strapi-small-1 font-semibold tracking-[0.5px] uppercase",
+    "SectionIcon accepts children (flexible — can be icon component, StrapiBasicImage, next/image, or any ReactNode)",
+    "SectionDescription renders plain text/ReactNode for now — consumers can pass Markdown component output as children",
+    "Markdown renderer is server-only (imports 'server-only') to avoid shipping react-markdown to client",
+    "Markdown heading renderers use SectionHeading atom for typography consistency"
+  ],
+  "dataModel": [],
+  "importFormat": {
+    "description": "Not applicable — no data persistence",
+    "example": {}
+  },
+  "rules": [
+    "Atoms must not import from page-builder components — dependency flows one way (page-builder → elementary)",
+    "Each atom must accept className prop for consumer overrides via cn() merge",
+    "SectionHeading separates semantic tag (as prop) from visual style (textStyle prop) — e.g., an h3 tag can look like an h1",
+    "SectionDescription renders children as ReactNode — no markdown parsing inside the atom itself",
+    "SectionIcon uses children pattern — no direct image rendering, consumers pass their own image component",
+    "Markdown component is server-only — use `import 'server-only'` at the top",
+    "Markdown links: external URLs get target='_blank' rel='noopener noreferrer'"
+  ],
+  "qualityGates": [
+    "pnpm lint",
+    "pnpm typecheck",
+    "pnpm build"
+  ],
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "Create SectionLabel atom",
+      "status": "completed",
+      "dependsOn": [],
+      "description": "As a developer, I want a SectionLabel component that renders small colored uppercase text used as a category label above headings (e.g., 'OUR VALUES', 'CAPABILITIES').",
+      "acceptanceCriteria": [
+        "File created at apps/ui/src/components/elementary/SectionLabel.tsx",
+        "Renders as a <p> element by default",
+        "Accepts `as` prop to change element (p, span)",
+        "Uses CVA with color variant: 'purple' (default) mapping to text-strapi-purple-600, 'green' mapping to text-strapi-green-600",
+        "Applies the .typo-label pattern from design-system: text-strapi-small-1, font-semibold, tracking-[0.5px], uppercase",
+        "Accepts className prop merged via cn()",
+        "Accepts children as content",
+        "Includes data-slot='section-label' attribute",
+        "Example: <SectionLabel color='purple'>Our Values</SectionLabel> renders uppercase purple text",
+        "Example: <SectionLabel color='green'>Content Teams</SectionLabel> renders uppercase green text",
+        "Negative case: passing no color prop defaults to purple",
+        "pnpm typecheck and pnpm lint pass"
+      ],
+      "passes": true,
+      "priority": 1,
+      "loopState": {
+        "status": "completed",
+        "phase": "done",
+        "attempt": 1,
+        "errors": []
+      },
+      "notes": "Used Omit<HTMLAttributes, 'color'> to avoid TS conflict with native color attribute. Reuses .typo-label utility from design-system."
+    },
+    {
+      "id": "US-002",
+      "title": "Create SectionHeading atom",
+      "status": "open",
+      "dependsOn": [],
+      "description": "As a developer, I want a SectionHeading component that renders heading text with independent semantic tag and visual text style.",
+      "acceptanceCriteria": [
+        "File created at apps/ui/src/components/elementary/SectionHeading.tsx",
+        "Accepts `as` prop for HTML tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6', defaults to 'h2'",
+        "Accepts `textStyle` prop for visual size via CVA: 'display' (text-5xl+ or largest), 'h1' (text-strapi-header-1), 'h2' (text-strapi-header-2), 'h3' (text-strapi-header-3), 'subtitle1' (text-strapi-subtitle-1), 'subtitle2' (text-strapi-subtitle-2), defaults to matching the `as` prop",
+        "Applies font-bold and text-foreground (dark blue) by default",
+        "Applies tracking-tight for display and h1 sizes",
+        "Accepts className prop merged via cn()",
+        "Accepts children as content",
+        "Includes data-slot='section-heading' attribute",
+        "Example: <SectionHeading as='h1' textStyle='display'>Build websites</SectionHeading> renders h1 tag with display-size text",
+        "Example: <SectionHeading as='h3' textStyle='h1'>Visually large h3</SectionHeading> renders h3 tag styled as h1 size",
+        "Negative case: <SectionHeading as='h2' /> with no textStyle defaults to h2 visual size",
+        "pnpm typecheck and pnpm lint pass"
+      ],
+      "passes": false,
+      "priority": 2,
+      "loopState": {
+        "status": "pending",
+        "phase": "queued",
+        "attempt": 0,
+        "errors": []
+      }
+    },
+    {
+      "id": "US-003",
+      "title": "Create SectionDescription atom",
+      "status": "open",
+      "dependsOn": [],
+      "description": "As a developer, I want a SectionDescription component that renders body text for section descriptions. Accepts ReactNode children so consumers can pass plain text or pre-rendered Markdown output.",
+      "acceptanceCriteria": [
+        "File created at apps/ui/src/components/elementary/SectionDescription.tsx",
+        "Accepts `children` as ReactNode content (plain text, or pre-rendered elements like Markdown output)",
+        "Applies text-strapi-body-1 size and text-muted-foreground color by default",
+        "Applies leading-relaxed for comfortable reading",
+        "Renders as a <div> with data-slot='section-description'",
+        "Accepts className prop merged via cn()",
+        "Example: <SectionDescription>Strapi gives developers full control.</SectionDescription> renders styled text",
+        "Negative case: no children / null renders nothing (returns null, no empty wrapper)",
+        "pnpm typecheck and pnpm lint pass"
+      ],
+      "passes": false,
+      "priority": 3,
+      "loopState": {
+        "status": "pending",
+        "phase": "queued",
+        "attempt": 0,
+        "errors": []
+      }
+    },
+    {
+      "id": "US-004",
+      "title": "Create SectionIcon atom",
+      "status": "open",
+      "dependsOn": [],
+      "description": "As a developer, I want a SectionIcon component that wraps icon/image content with consistent sizing presets.",
+      "acceptanceCriteria": [
+        "File created at apps/ui/src/components/elementary/SectionIcon.tsx",
+        "Accepts `children` as ReactNode — consumers pass their own image/icon (StrapiBasicImage, next/image, SVG, etc.)",
+        "Uses CVA with size variant: 'sm' (32px/size-8), 'md' (48px/size-12, default), 'lg' (64px/size-16)",
+        "Renders as a <div> wrapper with relative positioning and overflow-hidden",
+        "Applies [&_img]:object-contain to ensure child images scale properly within the size constraint",
+        "Accepts className prop merged via cn()",
+        "Includes data-slot='section-icon' attribute",
+        "Example: <SectionIcon size='lg'><Image src='/icon.svg' alt='' fill /></SectionIcon> renders 64px icon wrapper",
+        "Example: <SectionIcon><StrapiBasicImage component={iconData} fill /></SectionIcon> renders default 48px Strapi image wrapper",
+        "Negative case: no children renders an empty wrapper (no crash)",
+        "Negative case: size prop not provided defaults to 'md'",
+        "pnpm typecheck and pnpm lint pass"
+      ],
+      "passes": false,
+      "priority": 4,
+      "loopState": {
+        "status": "pending",
+        "phase": "queued",
+        "attempt": 0,
+        "errors": []
+      }
+    },
+    {
+      "id": "US-005",
+      "title": "Install react-markdown and server-only dependencies",
+      "status": "open",
+      "dependsOn": [],
+      "description": "As a developer, I want react-markdown and the server-only package installed so the Markdown component can parse markdown strings on the server.",
+      "acceptanceCriteria": [
+        "Run `pnpm add react-markdown server-only` in apps/ui",
+        "Both packages appear in apps/ui/package.json dependencies",
+        "pnpm install completes without errors",
+        "pnpm typecheck passes",
+        "Negative case: importing react-markdown in a .tsx file does not produce type errors"
+      ],
+      "passes": false,
+      "priority": 5,
+      "loopState": {
+        "status": "pending",
+        "phase": "queued",
+        "attempt": 0,
+        "errors": []
+      }
+    },
+    {
+      "id": "US-006",
+      "title": "Create base Markdown component with server-only enforcement",
+      "status": "open",
+      "dependsOn": [
+        "US-002",
+        "US-005"
+      ],
+      "description": "As a developer, I want a server-only Markdown component that renders markdown strings using react-markdown with custom renderers mapped to typography atoms.",
+      "acceptanceCriteria": [
+        "File created at apps/ui/src/components/elementary/markdown/Markdown.tsx",
+        "Imports 'server-only' at the top to prevent client bundling",
+        "Uses react-markdown to parse and render markdown",
+        "Accepts `children` prop as markdown string",
+        "Accepts `className` prop merged via cn() on the outer wrapper",
+        "Wraps output in a <div> with data-slot='markdown'",
+        "Returns null when children is falsy (empty string, undefined, null)",
+        "Custom heading renderers: h1-h6 map to SectionHeading with matching `as` and `textStyle` props, with appropriate bottom margin",
+        "Paragraphs: text-strapi-body-1, text-muted-foreground, leading-relaxed, margin-bottom",
+        "Bold: font-semibold text-foreground",
+        "Italic: italic style",
+        "Links: external URLs (http/https) get text-primary, underline, target='_blank', rel='noopener noreferrer'; internal links render without target='_blank'",
+        "Unordered lists: list-disc, pl-6, consistent spacing",
+        "Ordered lists: list-decimal, pl-6, consistent spacing",
+        "List items: text-strapi-body-1, text-muted-foreground",
+        "Blockquotes: border-l-4 border-strapi-purple-300, pl-4, italic, text-muted-foreground",
+        "Inline code: bg-muted, rounded, px-1.5, py-0.5, font-mono, text-sm",
+        "Code blocks: bg-muted, rounded-lg, p-4, font-mono, text-sm, overflow-x-auto (no syntax highlighting)",
+        "Example: <Markdown>{'Hello **world**'}</Markdown> renders paragraph with bold 'world'",
+        "Example: <Markdown>{'# Title\\n\\nSome text'}</Markdown> renders SectionHeading h1 + paragraph",
+        "Example: <Markdown>{'Visit [Strapi](https://strapi.io)'}</Markdown> renders link with target='_blank'",
+        "Example: <Markdown>{'- Item 1\\n- Item 2'}</Markdown> renders bulleted list",
+        "Negative case: <Markdown>{''}</Markdown> returns null",
+        "Negative case: importing Markdown in a 'use client' component causes a build error",
+        "Negative case: deeply nested lists (3+ levels) render without breaking layout",
+        "pnpm typecheck and pnpm lint pass"
+      ],
+      "passes": false,
+      "priority": 6,
+      "loopState": {
+        "status": "pending",
+        "phase": "queued",
+        "attempt": 0,
+        "errors": []
+      }
+    },
+    {
+      "id": "US-007",
+      "title": "Export all components and verify full build",
+      "status": "open",
+      "dependsOn": [
+        "US-001",
+        "US-002",
+        "US-003",
+        "US-004",
+        "US-006"
+      ],
+      "description": "As a developer, I want all atoms and the Markdown component properly exported and the full build passing.",
+      "acceptanceCriteria": [
+        "All 4 section atoms are importable: SectionLabel, SectionHeading, SectionDescription, SectionIcon",
+        "Markdown component is importable from apps/ui/src/components/elementary/markdown/Markdown",
+        "Follow existing import pattern in elementary/ (direct file imports, no barrel unless one already exists)",
+        "pnpm lint passes across the entire monorepo",
+        "pnpm typecheck passes across the entire monorepo",
+        "pnpm build completes successfully",
+        "Negative case: importing Markdown in a client component fails at build time due to server-only"
+      ],
+      "passes": false,
+      "priority": 7,
+      "loopState": {
+        "status": "pending",
+        "phase": "queued",
+        "attempt": 0,
+        "errors": []
+      }
+    }
+  ]
+}

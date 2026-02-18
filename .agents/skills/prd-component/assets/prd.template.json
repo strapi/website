@@ -2,6 +2,10 @@
   "project": "notum",
   "branchName": "ralph/work-batch",
   "description": "Generic Ralph loop work batch",
+  "constraints": [],
+  "rules": [],
+  "nonGoals": [],
+  "qualityGates": [],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
@@ -24,6 +28,7 @@
       "id": "US-001",
       "title": "Example task",
       "description": "Implement one scoped task",
+      "status": "open",
       "priority": 1,
       "passes": false,
       "notes": "",

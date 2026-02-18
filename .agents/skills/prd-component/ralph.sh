@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+CLAUDE_PID=""
 cleanup() {
-  kill -- -$$ 2>/dev/null || true
+  trap - INT TERM
+  if [[ -n "$CLAUDE_PID" ]]; then
+    pkill -P "$CLAUDE_PID" 2>/dev/null
+    kill "$CLAUDE_PID" 2>/dev/null
+  fi
+  kill 0 2>/dev/null
+  wait 2>/dev/null
   exit 130
 }
 trap cleanup INT TERM
@@ -375,31 +382,46 @@ run_claude_stream() {
   local tmpfile="$2"
 
   local stream_filter final_result
+  local project_root
+  project_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
   stream_filter='
+    def short_path: ltrimstr($root + "/");
     if .type == "assistant" then
       .message.content[]? |
       if .type == "text" then
-        .text // empty | gsub("\n"; "\r\n") | . + "\r\n\n"
+        .text // empty | split("\n") | map("  \u001b[2m│\u001b[0m " + .) | join("\r\n") |
+        (now | localtime | strftime("%H:%M:%S")) as $ts |
+        "  \u001b[2m│\u001b[0m\r\n  \u001b[2m│ ┄┄ \($ts) ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\u001b[0m\r\n" + . + "\r\n  \u001b[2m│\u001b[0m\r\n"
       elif .type == "tool_use" then
         .name as $tool | .input as $in |
         if $tool == "Read" then
-          "\u001b[2m  [read] \($in.file_path // "?")\u001b[0m\r\n"
+          "  \u001b[36m◆\u001b[0m \u001b[2mread\u001b[0m     \($in.file_path // "?" | short_path)\r\n"
         elif $tool == "Edit" then
-          "\u001b[2m  [edit] \($in.file_path // "?")\u001b[0m\r\n"
+          "  \u001b[33m◆\u001b[0m \u001b[2medit\u001b[0m     \($in.file_path // "?" | short_path)\r\n"
         elif $tool == "Write" then
-          "\u001b[2m  [write] \($in.file_path // "?")\u001b[0m\r\n"
+          "  \u001b[32m◆\u001b[0m \u001b[2mwrite\u001b[0m    \($in.file_path // "?" | short_path)\r\n"
         elif $tool == "Bash" then
-          "\u001b[2m  [bash] \($in.command // "?" | split("\n")[0] | if length > 60 then .[:60] + "..." else . end)\u001b[0m\r\n"
+          "  \u001b[35m◆\u001b[0m \u001b[2mbash\u001b[0m     \($in.command // "?" | split("\n")[0] | if length > 60 then .[:60] + "…" else . end)\r\n"
         elif $tool == "Glob" then
-          "\u001b[2m  [glob] \($in.pattern // "?")\u001b[0m\r\n"
+          "  \u001b[36m◆\u001b[0m \u001b[2mglob\u001b[0m     \($in.pattern // "?")\r\n"
         elif $tool == "Grep" then
-          "\u001b[2m  [grep] \($in.pattern // "?")\u001b[0m\r\n"
+          "  \u001b[36m◆\u001b[0m \u001b[2mgrep\u001b[0m     \($in.pattern // "?")\r\n"
         elif $tool == "Skill" then
-          "\u001b[2m  [skill] /\($in.skill // "?")\u001b[0m\r\n"
+          "  \u001b[34m◆\u001b[0m \u001b[2mskill\u001b[0m    /\($in.skill // "?")\r\n"
         elif $tool == "Task" then
-          "\u001b[2m  [agent] \($in.description // "?")\u001b[0m\r\n"
+          "  \u001b[34m◆\u001b[0m \u001b[2magent\u001b[0m    \($in.description // "?")\r\n"
+        elif $tool == "TodoWrite" then
+          "  \u001b[33m◆\u001b[0m \u001b[2mtodo\u001b[0m     \($in.todos // "?" | if type == "array" then map(.content // .id // "?") | join(", ") else tostring | if length > 60 then .[:60] + "…" else . end end)\r\n"
+        elif $tool == "WebFetch" then
+          "  \u001b[36m◆\u001b[0m \u001b[2mfetch\u001b[0m    \($in.url // "?")\r\n"
+        elif $tool == "WebSearch" then
+          "  \u001b[36m◆\u001b[0m \u001b[2msearch\u001b[0m   \($in.query // "?")\r\n"
+        elif ($tool | startswith("mcp__")) then
+          ($tool | split("__") | if length >= 3 then .[2] else .[1] // $tool end) as $short |
+          "  \u001b[2m◆ \($short)\u001b[0m\r\n"
         else
-          "\u001b[2m  [\($tool)]\u001b[0m\r\n"
+          "  \u001b[2m◆ \($tool)\u001b[0m\r\n"
         end
       else empty
       end
@@ -416,7 +438,10 @@ run_claude_stream() {
     -p "$prompt" \
     | grep --line-buffered '^{' \
     | tee "$tmpfile" \
-    | jq --unbuffered -rj "$stream_filter" >&2
+    | jq --unbuffered -rj --arg root "$project_root" "$stream_filter" >&2 &
+  CLAUDE_PID=$!
+  wait "$CLAUDE_PID" 2>/dev/null || true
+  CLAUDE_PID=""
 
   jq -r "$final_result" "$tmpfile"
 }
@@ -723,6 +748,8 @@ Global constraints context (must be respected):
 ${global_constraints}
 
 Execution rules (strict):
+
+Phase 1 — Implement:
 1. Work ONLY on target story id ${next_story_id}.
 2. Implement the story end-to-end.
 3. Enforce the global constraints context above (especially rules/nonGoals/qualityGates).
@@ -731,14 +758,31 @@ ${required_checks_rule}
 ${task_no_questions_rule}
 ${assumption_rule}
 7. If blocked by mandatory human checkpoints defined in this story (for example metadata/checkpoints), mark the story blocked in PRD with explicit reason.
-8. Update PRD state for this story:
-   - on success: passes=true, loopState.status=\"completed\", loopState.phase=\"done\"; set status=\"completed\".
-   - on blocked: loopState.status=\"blocked\" and add precise error note; set status=\"blocked\".
-9. Append one JSON line to ${MEMORY_FILE} with keys: timestamp, storyId, summary, reusableNotes, touchedFiles, blockers, assumptions.
+
+Phase 2 — Review before finishing:
+8. Launch a review sub-agent (use model: sonnet if available, otherwise use the default model) via the Task tool.
+   Pass it ALL of the following context:
+   - The complete list of files you created or modified.
+   - The story's acceptance criteria.
+   - The global constraints context (rules, nonGoals, qualityGates).
+   The sub-agent must:
+   a. Read every file that was created or modified. Diff the changes against the acceptance criteria — verify each criterion is met.
+   b. Check for regressions: ensure nothing outside this story's scope was accidentally broken or modified.
+   c. Verify global constraints (rules, nonGoals, qualityGates) are still respected.
+   d. Look for code quality issues: unused imports, leftover debug code, missing types, inconsistent naming.
+   e. Fix any issues it finds directly.
+   f. Return a summary of findings and fixes applied.
+9. If the review sub-agent reports unresolved issues, address them yourself before proceeding.
+
+Phase 3 — Finalize:
 10. Commit changes for this story.
-11. Output <promise>COMPLETE</promise> when done with this story.
-12. If all stories are complete, output <promise>ALL_DONE</promise>.
-13. If this story cannot proceed due to blockers, output <promise>BLOCKED</promise>.
+11. Update PRD state for this story:
+    - on success: passes=true, loopState.status=\"completed\", loopState.phase=\"done\"; set status=\"completed\".
+    - on blocked: loopState.status=\"blocked\" and add precise error note; set status=\"blocked\".
+12. Append one JSON line to ${MEMORY_FILE} with keys: timestamp, storyId, summary, reusableNotes, touchedFiles, blockers, assumptions.
+13. Output <promise>COMPLETE</promise> when done with this story.
+14. If all stories are complete, output <promise>ALL_DONE</promise>.
+15. If this story cannot proceed due to blockers, output <promise>BLOCKED</promise>.
 TASK_PROMPT
 )
 

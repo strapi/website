@@ -31,7 +31,7 @@ export function StrapiFaqSection({
           </SectionHeading>
 
           {component.description && (
-            <SectionDescription className="mb-2">
+            <SectionDescription className="mb-6">
               {component.description}
             </SectionDescription>
           )}
@@ -39,11 +39,7 @@ export function StrapiFaqSection({
           {component.items && component.items.length > 0 && (
             <Accordion collapsible className="mt-8" type="single">
               {component.items.map((item) => (
-                <AccordionItem
-                  key={item.id}
-                  className="border-border"
-                  value={String(item.id)}
-                >
+                <AccordionItem key={item.id} value={String(item.id)}>
                   <AccordionTrigger className="text-foreground py-5 text-lg font-semibold hover:no-underline">
                     {item.question}
                   </AccordionTrigger>

@@ -304,6 +304,38 @@ next_runnable_story_id() {
   ' "$PRD_FILE"
 }
 
+next_retryable_blocked_story_id() {
+  local max="$1"
+  jq -r --arg key "$STORY_KEY" --argjson max "$max" '
+    .[$key]
+    | map(select(
+        (.passes // false) != true
+        and ((.status // "" | ascii_downcase) | IN("done", "completed", "closed", "resolved") | not)
+        and (
+          (.status // "" | ascii_downcase) == "blocked"
+          or (.loopState.status // "") == "blocked"
+        )
+        and ((.loopState.attempt // 0) < $max)
+      ))
+    | sort_by((.priority // 999999), (.id // ""))
+    | .[0].id // empty
+  ' "$PRD_FILE"
+}
+
+reset_story_to_open() {
+  local story_id="$1"
+  json_write --arg key "$STORY_KEY" --arg id "$story_id" '
+    .[$key] |= map(
+      if .id == $id then
+        .passes = false
+        | .status = "open"
+        | .loopState.status = "pending"
+        | .loopState.phase = "queued"
+      else . end
+    )
+  '
+}
+
 story_attempt_count() {
   local story_id="$1"
   jq -r --arg key "$STORY_KEY" --arg id "$story_id" '
@@ -641,11 +673,18 @@ for ((i=1; i<=ITERATIONS; i++)); do
   next_story_id=$(next_runnable_story_id)
 
   if [[ -z "$next_story_id" ]]; then
-    if [[ -n "$top_unfinished_id" ]]; then
-      err "Top unfinished story is blocked: $top_unfinished_id"
+    retryable_id=$(next_retryable_blocked_story_id "$LOOP_MAX_PER_STORY")
+    if [[ -n "$retryable_id" ]]; then
+      warn "No runnable stories — retrying previously blocked story: $retryable_id"
+      reset_story_to_open "$retryable_id"
+      next_story_id="$retryable_id"
+    else
+      if [[ -n "$top_unfinished_id" ]]; then
+        err "Top unfinished story is blocked: $top_unfinished_id"
+      fi
+      err "No runnable stories available (all remaining may be blocked and exhausted)."
+      exit 2
     fi
-    err "No runnable stories available (all remaining may be blocked)."
-    exit 2
   fi
 
   attempts=$(story_attempt_count "$next_story_id")

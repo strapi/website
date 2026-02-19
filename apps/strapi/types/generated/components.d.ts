@@ -297,6 +297,270 @@ export interface PlansPricingSwitcher extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsBannerSlice extends Struct.ComponentSchema {
+  collectionName: "components_sections_banner_slice"
+  info: {
+    description: ""
+    displayName: "Banner Slice"
+  }
+  attributes: {
+    backgroundVariant: Schema.Attribute.Enumeration<["default", "dark"]> &
+      Schema.Attribute.DefaultTo<"default">
+    ctas: Schema.Attribute.Component<"utilities.link", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsFaqSection extends Struct.ComponentSchema {
+  collectionName: "components_sections_faq_section"
+  info: {
+    description: ""
+    displayName: "FAQ Section"
+  }
+  attributes: {
+    description: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    items: Schema.Attribute.Component<"utilities.accordions", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    sectionLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsFooterCta extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_cta"
+  info: {
+    description: ""
+    displayName: "Footer CTA"
+  }
+  attributes: {
+    codeSnippet: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    ctaCards: Schema.Attribute.Component<"sections.footer-cta-card", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    featureBadges: Schema.Attribute.Component<
+      "sections.footer-cta-badge",
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    featureLogos: Schema.Attribute.Component<"utilities.basic-image", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsFooterCtaBadge extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_cta_badge"
+  info: {
+    description: ""
+    displayName: "Footer CTA Badge"
+  }
+  attributes: {
+    icon: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    text: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsFooterCtaCard extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_cta_card"
+  info: {
+    description: ""
+    displayName: "Footer CTA Card"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    icon: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    link: Schema.Attribute.Component<"utilities.link", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsFooterMain extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_main"
+  info: {
+    description: ""
+    displayName: "Footer Main"
+  }
+  attributes: {
+    copyRight: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    links: Schema.Attribute.Component<"utilities.link-text", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    logoImage: Schema.Attribute.Component<"utilities.link-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    sections: Schema.Attribute.Component<"elements.footer-item", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    socials: Schema.Attribute.Component<"footer.footer-socials", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    tagline: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
+  collectionName: "components_sections_integrations_section"
+  info: {
+    description: ""
+    displayName: "Integrations Section"
+  }
+  attributes: {
+    heading: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsUserStoriesSection extends Struct.ComponentSchema {
+  collectionName: "components_sections_user_stories_section"
+  info: {
+    description: ""
+    displayName: "User Stories Section"
+  }
+  attributes: {
+    heading: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface SeoUtilitiesSeo extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_seos"
   info: {
@@ -556,6 +820,14 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-promo": PlansPricingCardPromo
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
+      "sections.banner-slice": SectionsBannerSlice
+      "sections.faq-section": SectionsFaqSection
+      "sections.footer-cta": SectionsFooterCta
+      "sections.footer-cta-badge": SectionsFooterCtaBadge
+      "sections.footer-cta-card": SectionsFooterCtaCard
+      "sections.footer-main": SectionsFooterMain
+      "sections.integrations-section": SectionsIntegrationsSection
+      "sections.user-stories-section": SectionsUserStoriesSection
       "seo-utilities.seo": SeoUtilitiesSeo
       "seo-utilities.seo-og": SeoUtilitiesSeoOg
       "seo-utilities.seo-twitter": SeoUtilitiesSeoTwitter

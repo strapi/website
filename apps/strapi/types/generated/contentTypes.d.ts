@@ -621,6 +621,10 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "forms.contact-form",
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
+        "sections.faq-section",
+        "sections.banner-slice",
+        "sections.integrations-section",
+        "sections.user-stories-section",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

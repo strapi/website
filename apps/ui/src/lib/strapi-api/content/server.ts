@@ -188,29 +188,7 @@ export async function fetchFooter(locale: Locale) {
   try {
     return await PublicStrapiClient.fetchOne("api::footer.footer", undefined, {
       locale,
-      populate: {
-        sections: { populate: { links: { populate: { page: true } } } },
-        logoImage: {
-          populate: {
-            image: {
-              populate: {
-                media: true,
-              },
-            },
-            page: true,
-          },
-        },
-        links: { populate: { page: true } },
-        socials: {
-          populate: {
-            socials: {
-              populate: {
-                image: { populate: { media: true } },
-              },
-            },
-          },
-        },
-      },
+      populateDynamicZone: { content: true },
     })
   } catch (e: unknown) {
     logNonBlockingError({

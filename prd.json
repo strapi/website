@@ -531,9 +531,10 @@
       "loopState": {
         "phase": "blocked",
         "status": "blocked",
-        "attempt": 2,
+        "attempt": 4,
         "errors": [
-          "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story."
+          "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
+          "Blocked (attempt 4): Strapi still not running on port 1337. lsof -ti:1337 returned empty, MCP REST call failed. User must start Strapi before content seeding can proceed."
         ]
       },
       "data": {},

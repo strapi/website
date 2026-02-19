@@ -1,10 +1,7 @@
+import linkPopulate from "../utilities/link"
+
 export default {
   populate: {
-    ctas: {
-      populate: {
-        decorations: true,
-        page: true,
-      },
-    },
+    ctas: linkPopulate,
   },
 }

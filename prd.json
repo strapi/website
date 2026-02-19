@@ -461,10 +461,10 @@
       "id": "US-009",
       "title": "Create sections.integrations-section Strapi schema + React component",
       "description": "Create a minimal Strapi component for the integrations listing section (as seen on strapi.io/integrations). Similar to user-stories-section but with the compact integration card style: logo + title + description, no top image. Filter is a dropdown/checkboxes for integration categories. Uses FilterableCardGrid with columns=3 and CardGridItem variant='integration'.",
-      "status": "blocked",
+      "status": "completed",
       "priority": 9,
-      "passes": false,
-      "notes": "Source: https://strapi.io/integrations. Filter categories from source: Frameworks & Libraries, Editor, Marketing Automation, Hosting Providers, Email, AI, Headless Commerce, Digital Asset Management, UI Libraries, Analytics, Search, Monitoring, Forms, Geospatial, Translations, Authentication, Notification. Mock 10 items. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config at apps/strapi/src/populateDynamicZone/sections/integrations-section.ts.",
+      "passes": true,
+      "notes": "Source: https://strapi.io/integrations. Filter categories from source: Frameworks & Libraries, Editor, Marketing Automation, Hosting Providers, Email, AI, Headless Commerce, Digital Asset Management, UI Libraries, Analytics, Search, Monitoring, Forms, Geospatial, Translations, Authentication, Notification. Mock 10 items. All code artifacts created and committed. Population config at apps/strapi/src/populateDynamicZone/sections/integrations-section.ts. Strapi restarted + generate:types run. typecheck clean, lint 0 errors. Review: all acceptance criteria verified, no fixes needed.",
       "dependsOn": [
         "US-001"
       ],
@@ -480,9 +480,9 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 1,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 3,
         "errors": [
           "Blocked: Strapi restart required to pick up sections.integrations-section schema. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
         ]

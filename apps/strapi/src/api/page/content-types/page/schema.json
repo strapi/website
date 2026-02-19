@@ -67,6 +67,7 @@
         "plans.plan-comparison-table",
         "sections.faq-section",
         "sections.banner-slice",
+        "sections.integrations-section",
         "sections.user-stories-section"
       ]
     },

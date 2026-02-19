@@ -498,7 +498,7 @@ ${review_constraints}
 2. If issues exist, implement fixes directly.
 3. Enforce global constraints context (especially rules/nonGoals/qualityGates).
 4. Run the required checks from PRD loopConfig.requiredChecks and story acceptance criteria.
-5. Commit fixes if any were made.
+5. Commit fixes if any were made. Do NOT push — the loop script handles pushing.
 6. Provide a score tag: <quality_score>N</quality_score> where N is 0-10.
 7. If score >= ${FINAL_REVIEW_MIN_SCORE} and no unresolved blockers remain, output <promise>REVIEW_PASS</promise>.
 8. If fixes were applied but more work remains, output <promise>REVIEW_FIX_APPLIED</promise>.
@@ -775,14 +775,15 @@ Phase 2 — Review before finishing:
 9. If the review sub-agent reports unresolved issues, address them yourself before proceeding.
 
 Phase 3 — Finalize:
-10. Commit changes for this story.
-11. Update PRD state for this story:
+10. If any Strapi schema files were created or modified, run `cd apps/strapi && pnpm generate:types` now — do not ask the user. If it fails, block the story and ask the user to restart Strapi.
+11. Commit changes for this story. Do NOT push — the loop script handles pushing.
+12. Update PRD state for this story:
     - on success: passes=true, loopState.status=\"completed\", loopState.phase=\"done\"; set status=\"completed\".
     - on blocked: loopState.status=\"blocked\" and add precise error note; set status=\"blocked\".
-12. Append one JSON line to ${MEMORY_FILE} with keys: timestamp, storyId, summary, reusableNotes, touchedFiles, blockers, assumptions.
-13. Output <promise>COMPLETE</promise> when done with this story.
-14. If all stories are complete, output <promise>ALL_DONE</promise>.
-15. If this story cannot proceed due to blockers, output <promise>BLOCKED</promise>.
+13. Append one JSON line to ${MEMORY_FILE} with keys: timestamp, storyId, summary, reusableNotes, touchedFiles, blockers, assumptions.
+14. Output <promise>COMPLETE</promise> when done with this story.
+15. If all stories are complete, output <promise>ALL_DONE</promise>.
+16. If this story cannot proceed due to blockers, output <promise>BLOCKED</promise>.
 TASK_PROMPT
 )
 
@@ -808,6 +809,7 @@ TASK_PROMPT
     ok "All stories done. Running final review."
     if run_final_review; then
       ok "All PRD tasks complete with final review pass."
+      git push 2>/dev/null && ok "Pushed to remote." || warn "Push failed — continuing."
       rm -f "${PRD_FILE}.bak"
       exit 0
     fi
@@ -819,6 +821,11 @@ TASK_PROMPT
     warn "Story blocked: $next_story_id"
   elif [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
     ok "Story complete: $next_story_id"
+    if git push 2>/dev/null; then
+      ok "Pushed to remote."
+    else
+      warn "Push failed (no remote or not configured) — continuing."
+    fi
   else
     warn "Model did not output COMPLETE/BLOCKED marker."
   fi
@@ -844,6 +851,8 @@ if (( asd_rc == 2 )); then
   exit 1
 fi
 if (( asd_rc == 0 )); then
-  run_final_review
+  if run_final_review; then
+    git push 2>/dev/null && ok "Pushed to remote." || warn "Push failed — continuing."
+  fi
   rm -f "${PRD_FILE}.bak"
 fi

@@ -30,13 +30,16 @@ See [docs/commands.md](docs/commands.md) for full command reference.
 
 ## Type Generation (Critical)
 
-After ANY Strapi schema change:
+After ANY Strapi schema change, run this immediately and autonomously — do not ask the user first:
 
 ```bash
 cd apps/strapi && pnpm generate:types
 ```
 
 This updates `@repo/strapi-types`. Forgetting causes silent type mismatches between apps.
+
+`generate:types` is a one-shot script, not a long-running server — it is safe to run at any time.
+If the command fails, block the current task and ask the user to restart Strapi, then re-run it.
 
 ## Documentation
 

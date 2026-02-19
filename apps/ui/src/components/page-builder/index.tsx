@@ -5,6 +5,7 @@ import StrapiPlanComparisonTable from "@/components/page-builder/components/plan
 import StrapiPlanPricingCards from "@/components/page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards"
 import StrapiBannerSlice from "@/components/page-builder/components/sections/StrapiBannerSlice"
 import StrapiFaqSection from "@/components/page-builder/components/sections/StrapiFaqSection"
+import StrapiIntegrationsSection from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import StrapiUserStoriesSection from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
 
 /**
@@ -26,5 +27,6 @@ export const PageContentComponents: Partial<
   // Sections
   "sections.banner-slice": StrapiBannerSlice,
   "sections.faq-section": StrapiFaqSection,
+  "sections.integrations-section": StrapiIntegrationsSection,
   "sections.user-stories-section": StrapiUserStoriesSection,
 }

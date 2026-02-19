@@ -276,10 +276,10 @@
       "id": "US-005",
       "title": "Refactor footer single-type schema to dynamic zone",
       "description": "Replace all direct attributes on the footer single-type schema with a single 'content' dynamiczone field accepting sections.footer-main and sections.footer-cta. This removes logoImage, tagline, sections, copyRight, links, socials from the schema root. Existing DB data becomes inaccessible — that is acceptable since US-007 re-seeds everything.",
-      "status": "open",
+      "status": "completed",
       "priority": 5,
-      "passes": false,
-      "notes": "WARNING: Irreversible schema change. Existing footer DB rows will lose their old field data. This is intentional — we re-seed in US-007. The i18n plugin option at the schema root should remain. After schema change, StrapiFooter.tsx will have type errors until US-006 fixes the renderer.",
+      "passes": true,
+      "notes": "WARNING: Irreversible schema change. Existing footer DB rows will lose their old field data. This is intentional — we re-seed in US-007. The i18n plugin option at the schema root should remain. After schema change, StrapiFooter.tsx will have type errors until US-006 fixes the renderer. Completed: schema replaced all old attributes with single content dynamiczone. Type errors in StrapiFooter.tsx and server.ts are expected and deferred to US-006. generate:types passed. lint 0 errors.",
       "dependsOn": [
         "US-004"
       ],
@@ -292,9 +292,9 @@
         "cd apps/ui && pnpm typecheck may fail on StrapiFooter.tsx — note this as expected and blocked on US-006"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 2,
         "errors": []
       },
       "data": {},

@@ -175,10 +175,10 @@
       "id": "US-003",
       "title": "Create sections.banner-slice Strapi schema + React component",
       "description": "Copy the banner/CTA section with two observed variants. Primary source: the 'Not sure which solution is best for you?' section on pricing-cms (simple: heading + CTA buttons). Secondary variant from delivery-hero page: has a small label above heading + description + single CTA (dark/colored background). Create ONE Strapi component with optional fields covering both. Also check other strapi.io pages for additional variants before finalizing.",
-      "status": "open",
+      "status": "completed",
       "priority": 3,
-      "passes": false,
-      "notes": "Variants seen: (1) default — light bg, heading only + multiple CTAs; (2) full — label + heading + description + CTA, sometimes with dark/purple bg. Use backgroundVariant enum. The delivery-hero bottom section ('Scale your Strapi project...') is a good example of the full variant. Some banners also appear inside cards/boxes with a decorative image — skip decorative images for now.",
+      "passes": true,
+      "notes": "Variants seen: (1) default — light bg, heading only + multiple CTAs; (2) full — label + heading + description + CTA, sometimes with dark/purple bg. Use backgroundVariant enum. The delivery-hero bottom section ('Scale your Strapi project...') is a good example of the full variant. Some banners also appear inside cards/boxes with a decorative image — skip decorative images for now. Completed: schema + React component (dark variant bg-strapi-blue-800 rounded-strapi-lg card, white text, outline CTAs with border-white), population config at apps/strapi/src/populateDynamicZone/sections/banner-slice.ts using linkPopulate pattern. PRD acceptance criteria had wrong population path (apps/ui/...) — actual project convention is apps/strapi/src/populateDynamicZone/. Uses getStrapiLinkHref+AppLink directly for per-index variant control. Review fix: corrected population config from manual decorations/page to linkPopulate import. typecheck clean, lint 0 errors.",
       "dependsOn": [],
       "acceptanceCriteria": [
         "Strapi schema created at apps/strapi/src/components/sections/banner-slice.json",
@@ -194,9 +194,9 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "implementing",
-        "status": "in_progress",
-        "attempt": 3,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 4,
         "errors": [
           "Strapi restart required: sections.banner-slice schema created but server not restarted. Run: restart Strapi, then cd apps/strapi && pnpm generate:types, then pnpm typecheck from apps/ui"
         ]
@@ -234,10 +234,10 @@
       "id": "US-004",
       "title": "Create footer sub-component Strapi schemas (footer-main, footer-cta, footer-cta-card, footer-cta-badge)",
       "description": "Create all new Strapi component schema files needed for the footer dynamic zone refactor. (1) sections/footer-main.json: mirrors ALL current footer single-type attributes (logoImage, tagline, sections, copyRight, links, socials). (2) sections/footer-cta.json: the 'Build modern websites...' CTA block seen at top of footer on most strapi.io pages. Also create helper sub-components: sections/footer-cta-badge.json (icon + text) and sections/footer-cta-card.json (icon + title + description + link). DO NOT change the footer schema itself yet — that is US-005.",
-      "status": "blocked",
+      "status": "completed",
       "priority": 4,
-      "passes": false,
-      "notes": "Visual reference for footer-cta: https://strapi.io/pricing-cms footer first div. Content: 'Build modern websites without sacrificing customization in minutes instead of days' heading, code snippet 'npx create-strapi-app@latest', badges row (Open source MIT / SOC2 / GDPR), framework logo row, then 2 CTA cards (Ready to deploy? + Explore Enterprise). Requires Strapi restart after file creation. All 4 schema files created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck.",
+      "passes": true,
+      "notes": "Visual reference for footer-cta: https://strapi.io/pricing-cms footer first div. Content: 'Build modern websites without sacrificing customization in minutes instead of days' heading, code snippet 'npx create-strapi-app@latest', badges row (Open source MIT / SOC2 / GDPR), framework logo row, then 2 CTA cards (Ready to deploy? + Explore Enterprise). Requires Strapi restart after file creation. All 4 schema files created and committed. Strapi restarted + pnpm generate:types run successfully. typecheck clean, lint 0 errors. Review confirmed all attributes match acceptance criteria exactly.",
       "dependsOn": [],
       "acceptanceCriteria": [
         "apps/strapi/src/components/sections/footer-cta-badge.json created: { icon: utilities.basic-image (optional), text: string (required) } — both i18n localized",
@@ -249,9 +249,9 @@
         "cd apps/ui && pnpm typecheck passes"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 2,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 4,
         "errors": [
           "Blocked: Strapi restart required to pick up new section schemas. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
         ]
@@ -292,9 +292,9 @@
         "cd apps/ui && pnpm typecheck may fail on StrapiFooter.tsx — note this as expected and blocked on US-006"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
+        "phase": "implementing",
+        "status": "in_progress",
+        "attempt": 2,
         "errors": []
       },
       "data": {},

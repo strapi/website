@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-02-19 (US-003)
+> Auto-updated by skills. Last updated: 2026-02-19 (US-008)
 
 ## Registry Freshness Policy
 
@@ -15,6 +15,7 @@
 | --------------------------------------- | ------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sections.banner-slice`                 | sections      | Banner Slice                | label:string (opt), heading:string (req), description:text (opt), ctas:repeatable utilities.link, backgroundVariant:enumeration(default\|dark)                                                                                                                                                    |
 | `sections.faq-section`                  | sections      | FAQ Section                 | sectionLabel:string (opt), heading:string (req), description:string (opt), items:repeatable utilities.accordions                                                                                                                                                                                  |
+| `sections.user-stories-section`         | sections      | User Stories Section        | label:string (opt), heading:string (opt)                                                                                                                                                                                                                                                          |
 | `forms.contact-form`                    | forms         | ContactForm                 | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
 | `forms.newsletter-form`                 | forms         | Newsletter                  | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
 | `seo-utilities.seo`                     | seo-utilities | Seo                         | metaTitle:string, metaDescription:string, metaImage:media, keywords:text, twitter:component, og:component, canonicalUrl:string, metaRobots:enumeration, structuredData:json                                                                                                                       |
@@ -80,10 +81,11 @@ accordion, alert, badge, button, calendar, card, carousel, checkbox, dialog, dro
 
 ## Page Builder Registry
 
-| UID                           | React Component           | Path                                                                          |
-| ----------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
-| `sections.banner-slice`       | StrapiBannerSlice         | `page-builder/components/sections/StrapiBannerSlice`                          |
-| `forms.newsletter-form`       | StrapiNewsletterForm      | `page-builder/components/forms/StrapiNewsletterForm`                          |
-| `plans.plan-comparison-table` | StrapiPlanComparisonTable | `page-builder/components/plans/StrapiPlanComparisonTable`                     |
-| `plans.plan-pricing-cards`    | StrapiPlanPricingCards    | `page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards` |
-| `sections.faq-section`        | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           |
+| UID                             | React Component           | Path                                                                          |
+| ------------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| `sections.banner-slice`         | StrapiBannerSlice         | `page-builder/components/sections/StrapiBannerSlice`                          |
+| `forms.newsletter-form`         | StrapiNewsletterForm      | `page-builder/components/forms/StrapiNewsletterForm`                          |
+| `plans.plan-comparison-table`   | StrapiPlanComparisonTable | `page-builder/components/plans/StrapiPlanComparisonTable`                     |
+| `plans.plan-pricing-cards`      | StrapiPlanPricingCards    | `page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards` |
+| `sections.faq-section`          | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           |
+| `sections.user-stories-section` | StrapiUserStoriesSection  | `page-builder/components/sections/StrapiUserStoriesSection`                   |

@@ -1,0 +1,57 @@
+{
+  "collectionName": "components_sections_footer_cta",
+  "info": {
+    "displayName": "Footer CTA",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "codeSnippet": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "featureBadges": {
+      "type": "component",
+      "component": "sections.footer-cta-badge",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "featureLogos": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ctaCards": {
+      "type": "component",
+      "component": "sections.footer-cta-card",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

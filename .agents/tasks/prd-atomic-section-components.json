@@ -127,7 +127,7 @@
     {
       "id": "US-003",
       "title": "Create SectionDescription atom",
-      "status": "open",
+      "status": "completed",
       "dependsOn": [],
       "description": "As a developer, I want a SectionDescription component that renders body text for section descriptions. Accepts ReactNode children so consumers can pass plain text or pre-rendered Markdown output.",
       "acceptanceCriteria": [
@@ -141,19 +141,20 @@
         "Negative case: no children / null renders nothing (returns null, no empty wrapper)",
         "pnpm typecheck and pnpm lint pass"
       ],
-      "passes": false,
+      "passes": true,
       "priority": 3,
       "loopState": {
-        "status": "pending",
-        "phase": "queued",
-        "attempt": 0,
+        "status": "completed",
+        "phase": "done",
+        "attempt": 2,
         "errors": []
-      }
+      },
+      "notes": "Used `children == null` guard (not `!children`) to avoid suppressing valid falsy ReactNode values like 0 or false. No CVA needed — single visual style. Used React.HTMLAttributes<HTMLDivElement> type alias."
     },
     {
       "id": "US-004",
       "title": "Create SectionIcon atom",
-      "status": "open",
+      "status": "completed",
       "dependsOn": [],
       "description": "As a developer, I want a SectionIcon component that wraps icon/image content with consistent sizing presets.",
       "acceptanceCriteria": [
@@ -170,19 +171,20 @@
         "Negative case: size prop not provided defaults to 'md'",
         "pnpm typecheck and pnpm lint pass"
       ],
-      "passes": false,
+      "passes": true,
       "priority": 4,
       "loopState": {
-        "status": "pending",
-        "phase": "queued",
-        "attempt": 0,
+        "status": "completed",
+        "phase": "done",
+        "attempt": 1,
         "errors": []
-      }
+      },
+      "notes": "Used React.HTMLAttributes<HTMLDivElement> & VariantProps pattern — children implicit via spread. CVA base includes relative, overflow-hidden, [&_img]:object-contain. size-8/12/16 map to sm/md/lg. Prettier format required after initial write."
     },
     {
       "id": "US-005",
       "title": "Install react-markdown and server-only dependencies",
-      "status": "open",
+      "status": "completed",
       "dependsOn": [],
       "description": "As a developer, I want react-markdown and the server-only package installed so the Markdown component can parse markdown strings on the server.",
       "acceptanceCriteria": [
@@ -192,19 +194,20 @@
         "pnpm typecheck passes",
         "Negative case: importing react-markdown in a .tsx file does not produce type errors"
       ],
-      "passes": false,
+      "passes": true,
       "priority": 5,
       "loopState": {
-        "status": "pending",
-        "phase": "queued",
-        "attempt": 0,
+        "status": "completed",
+        "phase": "done",
+        "attempt": 1,
         "errors": []
-      }
+      },
+      "notes": "server-only was already installed. Added react-markdown ^10.1.0. Fixed next-env.d.ts being linted by ESLint (pre-existing issue, now excluded via ignores)."
     },
     {
       "id": "US-006",
       "title": "Create base Markdown component with server-only enforcement",
-      "status": "open",
+      "status": "completed",
       "dependsOn": [
         "US-002",
         "US-005"
@@ -238,19 +241,20 @@
         "Negative case: deeply nested lists (3+ levels) render without breaking layout",
         "pnpm typecheck and pnpm lint pass"
       ],
-      "passes": false,
+      "passes": true,
       "priority": 6,
       "loopState": {
-        "status": "pending",
-        "phase": "queued",
-        "attempt": 0,
+        "status": "completed",
+        "phase": "done",
+        "attempt": 1,
         "errors": []
-      }
+      },
+      "notes": "Used single merged import `ReactMarkdown, { type Components }` to avoid import-x/no-duplicates. Used `[&_code]` Tailwind arbitrary variant on `pre` to override inline code styles (bg-transparent, p-0, rounded-none) so block code inside pre doesn't double-apply inline code styling. Server-only enforced via `import 'server-only'` at line 1. Headings delegate to SectionHeading atom with matching as+textStyle props."
     },
     {
       "id": "US-007",
       "title": "Export all components and verify full build",
-      "status": "open",
+      "status": "completed",
       "dependsOn": [
         "US-001",
         "US-002",
@@ -268,14 +272,16 @@
         "pnpm build completes successfully",
         "Negative case: importing Markdown in a client component fails at build time due to server-only"
       ],
-      "passes": false,
+      "passes": true,
       "priority": 7,
       "loopState": {
-        "status": "pending",
-        "phase": "queued",
-        "attempt": 0,
+        "status": "completed",
+        "phase": "done",
+        "attempt": 1,
         "errors": []
-      }
+      },
+      "notes": "All 5 component files were already committed from prior stories (US-001 through US-006). This story verified all quality gates pass: pnpm lint (0 errors), pnpm typecheck (clean), pnpm build (success). Registry docs updated with SectionIcon and Markdown entries. No barrel index needed — all atoms use direct file imports matching the existing elementary/ pattern.",
+      "status": "completed"
     }
   ]
 }

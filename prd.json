@@ -508,10 +508,10 @@
       "id": "US-010",
       "title": "Seed homepage content (FAQ, BannerSlice, UserStories, Integrations sections)",
       "description": "Append the four new section types to the homepage page dynamic zone in local Strapi so they are visible at http://localhost:3000 for visual review. Use GET-merge-PUT: fetch existing homepage content[], append new items, PUT the full merged array. Do not remove any existing sections.",
-      "status": "blocked",
+      "status": "completed",
       "priority": 10,
-      "passes": false,
-      "notes": "Homepage slug is '/'. Find it with: GET /api/pages?filters[slug][$eq]=/&populate=deep. Append sections at end of content[]. FAQ should have 3-4 realistic Q&A items. BannerSlice: seed one default variant and one dark variant. BLOCKED: Strapi not running on port 1337. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
+      "passes": true,
+      "notes": "Homepage slug is '/'. Find it with: GET /api/pages?filters[slug][$eq]=/&populate=deep. Append sections at end of content[]. FAQ should have 3-4 realistic Q&A items. BannerSlice: seed one default variant and one dark variant. Completed: homepage content was empty before seeding. PUT single call with all 5 sections. Verified via GET all 5 sections present. typecheck clean, lint 0 errors. All sections render at localhost:3000 with no console errors.",
       "dependsOn": [
         "US-002",
         "US-003",
@@ -529,9 +529,9 @@
         "Existing homepage sections (pricing cards, newsletter form, etc.) still render correctly"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 0,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 5,
         "errors": [
           "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
           "Blocked (attempt 4): Strapi still not running on port 1337. lsof -ti:1337 returned empty, MCP REST call failed. User must start Strapi before content seeding can proceed."

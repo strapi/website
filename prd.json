@@ -114,10 +114,10 @@
       "id": "US-002",
       "title": "Create sections.faq-section Strapi schema + React component",
       "description": "Copy the FAQ accordion section from strapi.io/pricing-cms. Uses shadcn Accordion restyled to match the strapi.io visual: clean open layout, light separator lines between items, no heavy card borders, chevron on right. Schema: optional label, heading, optional description, repeatable utilities.accordions items (question + answer).",
-      "status": "blocked",
+      "status": "completed",
       "priority": 2,
-      "passes": false,
-      "notes": "Reuse existing utilities.accordions component for Q&A pairs. The accordion items on strapi.io have no visible item wrapper border — only a light border-bottom separator. Question text is semibold, answer is muted body text. Accordion type='single' with collapsible=true. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config placed at apps/strapi/src/populateDynamicZone/sections/faq-section.ts (correct project pattern, not apps/ui/src/lib/strapi-api/population/ as stated in PRD).",
+      "passes": true,
+      "notes": "Reuse existing utilities.accordions component for Q&A pairs. The accordion items on strapi.io have no visible item wrapper border — only a light border-bottom separator. Question text is semibold, answer is muted body text. Accordion type='single' with collapsible=true. All code artifacts created and committed. Population config placed at apps/strapi/src/populateDynamicZone/sections/faq-section.ts (correct project pattern, not apps/ui/src/lib/strapi-api/population/ as stated in PRD). Strapi restarted + generate:types run. Review fixes: removed redundant border-border class from AccordionItem, fixed SectionDescription margin mb-2→mb-6. typecheck clean, lint 0 errors.",
       "dependsOn": [],
       "acceptanceCriteria": [
         "Strapi schema created at apps/strapi/src/components/sections/faq-section.json",
@@ -134,9 +134,9 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 1,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 3,
         "errors": [
           "Blocked: Strapi restart required to pick up sections.faq-section schema. Run: cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
         ]
@@ -234,10 +234,10 @@
       "id": "US-004",
       "title": "Create footer sub-component Strapi schemas (footer-main, footer-cta, footer-cta-card, footer-cta-badge)",
       "description": "Create all new Strapi component schema files needed for the footer dynamic zone refactor. (1) sections/footer-main.json: mirrors ALL current footer single-type attributes (logoImage, tagline, sections, copyRight, links, socials). (2) sections/footer-cta.json: the 'Build modern websites...' CTA block seen at top of footer on most strapi.io pages. Also create helper sub-components: sections/footer-cta-badge.json (icon + text) and sections/footer-cta-card.json (icon + title + description + link). DO NOT change the footer schema itself yet — that is US-005.",
-      "status": "open",
+      "status": "blocked",
       "priority": 4,
       "passes": false,
-      "notes": "Visual reference for footer-cta: https://strapi.io/pricing-cms footer first div. Content: 'Build modern websites without sacrificing customization in minutes instead of days' heading, code snippet 'npx create-strapi-app@latest', badges row (Open source MIT / SOC2 / GDPR), framework logo row, then 2 CTA cards (Ready to deploy? + Explore Enterprise). Requires Strapi restart after file creation.",
+      "notes": "Visual reference for footer-cta: https://strapi.io/pricing-cms footer first div. Content: 'Build modern websites without sacrificing customization in minutes instead of days' heading, code snippet 'npx create-strapi-app@latest', badges row (Open source MIT / SOC2 / GDPR), framework logo row, then 2 CTA cards (Ready to deploy? + Explore Enterprise). Requires Strapi restart after file creation. All 4 schema files created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck.",
       "dependsOn": [],
       "acceptanceCriteria": [
         "apps/strapi/src/components/sections/footer-cta-badge.json created: { icon: utilities.basic-image (optional), text: string (required) } — both i18n localized",
@@ -249,10 +249,12 @@
         "cd apps/ui && pnpm typecheck passes"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
-        "errors": []
+        "phase": "blocked",
+        "status": "blocked",
+        "attempt": 2,
+        "errors": [
+          "Blocked: Strapi restart required to pick up new section schemas. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
+        ]
       },
       "data": {},
       "metadata": {
@@ -409,10 +411,10 @@
       "id": "US-008",
       "title": "Create sections.user-stories-section Strapi schema + React component",
       "description": "Create a minimal Strapi component for the user stories listing section (as seen on strapi.io/user-stories). The schema has optional label/heading fields. The React renderer uses FilterableCardGrid with mock/static user story data since the user-stories collection type does not exist in local Strapi. Filter categories: 'Use cases' (Websites, Backend Framework, Internal Apps, Mobile Apps, IoT & Digital Signage).",
-      "status": "open",
+      "status": "blocked",
       "priority": 8,
       "passes": false,
-      "notes": "Source: https://strapi.io/user-stories. Grid is 3 columns. Search + left sidebar with 'Use cases' filter checkboxes. Cards: 16:9 top image, company logo, bold title, 'Read a story' green link. Use CardGridItem variant='story'. Mock 8 items with varied categories.",
+      "notes": "Source: https://strapi.io/user-stories. Grid is 3 columns. Search + left sidebar with 'Use cases' filter checkboxes. Cards: 16:9 top image, company logo, bold title, 'Read a story' green link. Use CardGridItem variant='story'. Mock 8 items with varied categories. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config at apps/strapi/src/populateDynamicZone/sections/user-stories-section.ts. imageAlt removed from MockUserStory since placeholder is a div, not img.",
       "dependsOn": [
         "US-001"
       ],
@@ -428,10 +430,12 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
-        "errors": []
+        "phase": "blocked",
+        "status": "blocked",
+        "attempt": 1,
+        "errors": [
+          "Blocked: Strapi restart required to pick up sections.user-stories-section schema. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
+        ]
       },
       "data": {},
       "metadata": {
@@ -454,10 +458,10 @@
       "id": "US-009",
       "title": "Create sections.integrations-section Strapi schema + React component",
       "description": "Create a minimal Strapi component for the integrations listing section (as seen on strapi.io/integrations). Similar to user-stories-section but with the compact integration card style: logo + title + description, no top image. Filter is a dropdown/checkboxes for integration categories. Uses FilterableCardGrid with columns=3 and CardGridItem variant='integration'.",
-      "status": "open",
+      "status": "blocked",
       "priority": 9,
       "passes": false,
-      "notes": "Source: https://strapi.io/integrations. Filter categories from source: Frameworks & Libraries, Editor, Marketing Automation, Hosting Providers, Email, AI, Headless Commerce, Digital Asset Management, UI Libraries, Analytics, Search, Monitoring, Forms, Geospatial, Translations, Authentication, Notification. Mock 10 items.",
+      "notes": "Source: https://strapi.io/integrations. Filter categories from source: Frameworks & Libraries, Editor, Marketing Automation, Hosting Providers, Email, AI, Headless Commerce, Digital Asset Management, UI Libraries, Analytics, Search, Monitoring, Forms, Geospatial, Translations, Authentication, Notification. Mock 10 items. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config at apps/strapi/src/populateDynamicZone/sections/integrations-section.ts.",
       "dependsOn": [
         "US-001"
       ],
@@ -473,10 +477,12 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
-        "errors": []
+        "phase": "blocked",
+        "status": "blocked",
+        "attempt": 1,
+        "errors": [
+          "Blocked: Strapi restart required to pick up sections.integrations-section schema. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
+        ]
       },
       "data": {},
       "metadata": {

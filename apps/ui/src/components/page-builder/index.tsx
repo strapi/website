@@ -3,6 +3,7 @@ import type { UID } from "@repo/strapi-types"
 import StrapiNewsletterForm from "@/components/page-builder/components/forms/StrapiNewsletterForm"
 import StrapiPlanComparisonTable from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
 import StrapiPlanPricingCards from "@/components/page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards"
+import StrapiBannerSlice from "@/components/page-builder/components/sections/StrapiBannerSlice"
 import StrapiFaqSection from "@/components/page-builder/components/sections/StrapiFaqSection"
 
 /**
@@ -22,5 +23,6 @@ export const PageContentComponents: Partial<
   "plans.plan-pricing-cards": StrapiPlanPricingCards,
 
   // Sections
+  "sections.banner-slice": StrapiBannerSlice,
   "sections.faq-section": StrapiFaqSection,
 }

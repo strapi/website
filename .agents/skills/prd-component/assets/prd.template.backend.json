@@ -9,7 +9,6 @@
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": false,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
     "requiredChecks": ["pnpm lint", "cd apps/strapi && pnpm generate:types"],

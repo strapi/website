@@ -43,6 +43,7 @@
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
+    "stopOnBlockedCheckpoint": true,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
     "requiredChecks": [
@@ -114,10 +115,10 @@
       "id": "US-002",
       "title": "Create sections.faq-section Strapi schema + React component",
       "description": "Copy the FAQ accordion section from strapi.io/pricing-cms. Uses shadcn Accordion restyled to match the strapi.io visual: clean open layout, light separator lines between items, no heavy card borders, chevron on right. Schema: optional label, heading, optional description, repeatable utilities.accordions items (question + answer).",
-      "status": "blocked",
+      "status": "open",
       "priority": 2,
       "passes": false,
-      "notes": "Reuse existing utilities.accordions component for Q&A pairs. The accordion items on strapi.io have no visible item wrapper border — only a light border-bottom separator. Question text is semibold, answer is muted body text. Accordion type='single' with collapsible=true. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config placed at apps/strapi/src/populateDynamicZone/sections/faq-section.ts (correct project pattern, not apps/ui/src/lib/strapi-api/population/ as stated in PRD).",
+      "notes": "Reuse existing utilities.accordions component for Q&A pairs. The accordion items on strapi.io have no visible item wrapper border — only a light border-bottom separator. Question text is semibold, answer is muted body text. Accordion type='single' with collapsible=true.",
       "dependsOn": [],
       "acceptanceCriteria": [
         "Strapi schema created at apps/strapi/src/components/sections/faq-section.json",
@@ -134,12 +135,10 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
+        "phase": "implementing",
+        "status": "in_progress",
         "attempt": 1,
-        "errors": [
-          "Blocked: Strapi restart required to pick up sections.faq-section schema. Run: cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
-        ]
+        "errors": []
       },
       "data": {
         "copyComponentInput": {
@@ -175,7 +174,7 @@
       "id": "US-003",
       "title": "Create sections.banner-slice Strapi schema + React component",
       "description": "Copy the banner/CTA section with two observed variants. Primary source: the 'Not sure which solution is best for you?' section on pricing-cms (simple: heading + CTA buttons). Secondary variant from delivery-hero page: has a small label above heading + description + single CTA (dark/colored background). Create ONE Strapi component with optional fields covering both. Also check other strapi.io pages for additional variants before finalizing.",
-      "status": "blocked",
+      "status": "open",
       "priority": 3,
       "passes": false,
       "notes": "Variants seen: (1) default — light bg, heading only + multiple CTAs; (2) full — label + heading + description + CTA, sometimes with dark/purple bg. Use backgroundVariant enum. The delivery-hero bottom section ('Scale your Strapi project...') is a good example of the full variant. Some banners also appear inside cards/boxes with a decorative image — skip decorative images for now.",
@@ -194,12 +193,10 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 2,
-        "errors": [
-          "Strapi restart required: sections.banner-slice schema created but server not restarted. Run: restart Strapi, then cd apps/strapi && pnpm generate:types, then pnpm typecheck from apps/ui"
-        ]
+        "phase": "queued",
+        "status": "pending",
+        "attempt": 0,
+        "errors": []
       },
       "data": {
         "copyComponentInput": {

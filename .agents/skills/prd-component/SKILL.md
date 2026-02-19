@@ -54,7 +54,6 @@ Recommended defaults:
 {
   "maxIterationsPerStory": 3,
   "maxStagnantIterations": 2,
-  "stopOnBlockedCheckpoint": false,
   "orderedByPriority": true,
   "memoryFile": "tmp/ralph-memory.jsonl",
   "autonomy": {

@@ -569,7 +569,6 @@ PRD_SCHEMA_CONTRACT="$(schema_contract)"
 
 MODE=$(json_get_raw '.loopConfig.mode // empty')
 LOOP_MAX_PER_STORY=$(json_get_raw '.loopConfig.maxIterationsPerStory // 3')
-STOP_ON_BLOCKED=$(json_get_raw '.loopConfig.stopOnBlockedCheckpoint // true')
 ORDERED_BY_PRIORITY=$(json_get_raw '.loopConfig.orderedByPriority // true')
 ENABLE_FINAL_REVIEW="${RALPH_ENABLE_FINAL_REVIEW:-$(json_get_raw '.loopConfig.finalReview.enabled // true')}"
 FINAL_REVIEW_MIN_SCORE=$(json_get_raw '.loopConfig.finalReview.minScore // 8')
@@ -610,7 +609,6 @@ if [[ -n "$MODE" ]]; then
 fi
 info "Stories key" "$STORY_KEY"
 info "Max attempts/story" "$LOOP_MAX_PER_STORY"
-info "Stop on blocked" "$STOP_ON_BLOCKED"
 info "No questions" "$NO_QUESTIONS"
 info "Assume best judgment" "$ASSUME_BEST_JUDGMENT"
 
@@ -643,12 +641,9 @@ for ((i=1; i<=ITERATIONS; i++)); do
   next_story_id=$(next_runnable_story_id)
 
   if [[ -z "$next_story_id" ]]; then
-    if [[ "$STOP_ON_BLOCKED" == "true" && -n "$top_unfinished_id" ]]; then
+    if [[ -n "$top_unfinished_id" ]]; then
       err "Top unfinished story is blocked: $top_unfinished_id"
-      warn "Stopping — stopOnBlockedCheckpoint=true"
-      exit 2
     fi
-
     err "No runnable stories available (all remaining may be blocked)."
     exit 2
   fi
@@ -658,11 +653,6 @@ for ((i=1; i<=ITERATIONS; i++)); do
     reason="Max attempts reached (${LOOP_MAX_PER_STORY})"
     warn "Blocking story $next_story_id: $reason"
     mark_story_blocked "$next_story_id" "$reason"
-
-    if [[ "$STOP_ON_BLOCKED" == "true" ]]; then
-      warn "Stopping — stopOnBlockedCheckpoint=true"
-      exit 2
-    fi
     continue
   fi
 
@@ -725,10 +715,6 @@ for ((i=1; i<=ITERATIONS; i++)); do
       reason="executionSkill=copy-component but data.copyComponentInput is missing"
       err "Blocking story $next_story_id: $reason"
       mark_story_blocked "$next_story_id" "$reason"
-      if [[ "$STOP_ON_BLOCKED" == "true" ]]; then
-        warn "Stopping — stopOnBlockedCheckpoint=true"
-        exit 2
-      fi
       continue
     fi
     execution_skill_rule=$(cat <<SKILL_RULE
@@ -805,10 +791,6 @@ TASK_PROMPT
     reason="Claude execution failed for story ${next_story_id}"
     err "$reason"
     mark_story_blocked "$next_story_id" "$reason"
-    if [[ "$STOP_ON_BLOCKED" == "true" ]]; then
-      warn "Stopping — stopOnBlockedCheckpoint=true"
-      exit 2
-    fi
     continue
   fi
   rm -f "$tmpfile"
@@ -835,10 +817,6 @@ TASK_PROMPT
 
   if [[ "$result" == *"<promise>BLOCKED</promise>"* ]]; then
     warn "Story blocked: $next_story_id"
-    if [[ "$STOP_ON_BLOCKED" == "true" ]]; then
-      warn "Stopping — stopOnBlockedCheckpoint=true"
-      exit 2
-    fi
   elif [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
     ok "Story complete: $next_story_id"
   else

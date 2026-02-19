@@ -276,10 +276,10 @@
       "id": "US-005",
       "title": "Refactor footer single-type schema to dynamic zone",
       "description": "Replace all direct attributes on the footer single-type schema with a single 'content' dynamiczone field accepting sections.footer-main and sections.footer-cta. This removes logoImage, tagline, sections, copyRight, links, socials from the schema root. Existing DB data becomes inaccessible — that is acceptable since US-007 re-seeds everything.",
-      "status": "open",
+      "status": "completed",
       "priority": 5,
-      "passes": false,
-      "notes": "WARNING: Irreversible schema change. Existing footer DB rows will lose their old field data. This is intentional — we re-seed in US-007. The i18n plugin option at the schema root should remain. After schema change, StrapiFooter.tsx will have type errors until US-006 fixes the renderer.",
+      "passes": true,
+      "notes": "WARNING: Irreversible schema change. Existing footer DB rows will lose their old field data. This is intentional — we re-seed in US-007. The i18n plugin option at the schema root should remain. After schema change, StrapiFooter.tsx will have type errors until US-006 fixes the renderer. Completed: schema replaced all old attributes with single content dynamiczone. Type errors in StrapiFooter.tsx and server.ts are expected and deferred to US-006. generate:types passed. lint 0 errors.",
       "dependsOn": [
         "US-004"
       ],
@@ -292,8 +292,8 @@
         "cd apps/ui && pnpm typecheck may fail on StrapiFooter.tsx — note this as expected and blocked on US-006"
       ],
       "loopState": {
-        "phase": "implementing",
-        "status": "in_progress",
+        "phase": "done",
+        "status": "completed",
         "attempt": 2,
         "errors": []
       },
@@ -318,10 +318,10 @@
       "id": "US-006",
       "title": "Update StrapiFooter.tsx renderer for dynamic zone (FooterMain + FooterCta sub-components)",
       "description": "Rewrite StrapiFooter.tsx to dispatch over the footer dynamic zone content array. Extract existing footer rendering logic into StrapiFooterMain.tsx. Create StrapiFooterCta.tsx for the new CTA block. Visual reference for FooterCta: https://strapi.io/pricing-cms footer top section. StrapiFooterCta is visually complex: dark gradient bg, large heading, code snippet with copy button, badges row, logos row, 2-column CTA cards.",
-      "status": "open",
+      "status": "completed",
       "priority": 6,
-      "passes": false,
-      "notes": "Copy button must use navigator.clipboard.writeText() with 2s visual feedback (icon swap or text change). Population config for footer needs updating to deeply populate the new dynamic zone structure. Check apps/ui/src/lib/strapi-api/population/ for existing footer population config and update it.",
+      "passes": true,
+      "notes": "Copy button must use navigator.clipboard.writeText() with 2s visual feedback (icon swap or text change). Population config for footer needs updating to deeply populate the new dynamic zone structure. Check apps/ui/src/lib/strapi-api/population/ for existing footer population config and update it. Completed: StrapiFooter.tsx dispatches over content[] dynamiczone. StrapiFooterMain.tsx extracts all original nav/logo/socials logic. StrapiFooterCta.tsx: dark-gradient CTA section (heading, code snippet + clipboard copy button, feature badges, feature logos, CTA cards 2-column grid). Population configs: sections/footer-main.ts (logoImage, sections.links, links, socials) + sections/footer-cta.ts (featureBadges.icon, featureLogos, ctaCards icon+link). fetchFooter updated to use populateDynamicZone: { content: true }. typecheck clean, lint 0 errors. Review fix: removed array index from Fragment key in StrapiFooterMain.tsx links.",
       "dependsOn": [
         "US-005"
       ],
@@ -339,9 +339,9 @@
         "pnpm typecheck and pnpm lint pass with no errors"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 1,
         "errors": []
       },
       "data": {
@@ -371,10 +371,10 @@
       "id": "US-007",
       "title": "Seed footer data (FooterMain + FooterCta) to local Strapi",
       "description": "Re-seed the footer single type with two dynamic zone items: sections.footer-main (replicating existing footer content: logo, tagline, nav sections, links, socials, copyright) and sections.footer-cta ('Build modern websites...' block). Use GET-check then PUT. Footer DB data was wiped in US-005 schema change so content[] will be empty.",
-      "status": "open",
+      "status": "blocked",
       "priority": 7,
       "passes": false,
-      "notes": "Footer socials to seed: GitHub, Discord, X (Twitter), LinkedIn, YouTube, Bluesky. Footer nav sections from strapi.io: Product, Solutions, Resources, Integrations, Company (each with relevant links). FooterCta CTA cards: 'Ready to deploy?' → https://cloud.strapi.io/ and 'Explore Strapi Enterprise' → https://strapi.io/enterprise. No images exist in local Strapi media library — set all icon/image fields to null.",
+      "notes": "Footer socials to seed: GitHub, Discord, X (Twitter), LinkedIn, YouTube, Bluesky. Footer nav sections from strapi.io: Product, Solutions, Resources, Integrations, Company (each with relevant links). FooterCta CTA cards: 'Ready to deploy?' → https://cloud.strapi.io/ and 'Explore Strapi Enterprise' → https://strapi.io/enterprise. No images exist in local Strapi media library — set all icon/image fields to null. BLOCKED: Strapi is not running on port 1337. User must start Strapi (`pnpm dev` or `cd apps/strapi && pnpm develop`) then re-run this story.",
       "dependsOn": [
         "US-005",
         "US-006"
@@ -386,10 +386,13 @@
         "Local site at http://localhost:3000 renders both FooterCta (top of footer area) and FooterMain (navigation + bottom bar) without console errors"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
-        "errors": []
+        "phase": "blocked",
+        "status": "blocked",
+        "attempt": 4,
+        "errors": [
+          "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
+          "Blocked (attempt 4): Strapi still not running on port 1337. lsof -ti:1337 returned empty, curl /api/health failed. User must start Strapi before content seeding can proceed."
+        ]
       },
       "data": {},
       "metadata": {
@@ -411,7 +414,7 @@
       "id": "US-008",
       "title": "Create sections.user-stories-section Strapi schema + React component",
       "description": "Create a minimal Strapi component for the user stories listing section (as seen on strapi.io/user-stories). The schema has optional label/heading fields. The React renderer uses FilterableCardGrid with mock/static user story data since the user-stories collection type does not exist in local Strapi. Filter categories: 'Use cases' (Websites, Backend Framework, Internal Apps, Mobile Apps, IoT & Digital Signage).",
-      "status": "blocked",
+      "status": "open",
       "priority": 8,
       "passes": false,
       "notes": "Source: https://strapi.io/user-stories. Grid is 3 columns. Search + left sidebar with 'Use cases' filter checkboxes. Cards: 16:9 top image, company logo, bold title, 'Read a story' green link. Use CardGridItem variant='story'. Mock 8 items with varied categories. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config at apps/strapi/src/populateDynamicZone/sections/user-stories-section.ts. imageAlt removed from MockUserStory since placeholder is a div, not img.",
@@ -430,9 +433,9 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 1,
+        "phase": "implementing",
+        "status": "in_progress",
+        "attempt": 2,
         "errors": [
           "Blocked: Strapi restart required to pick up sections.user-stories-section schema. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
         ]

@@ -371,10 +371,10 @@
       "id": "US-007",
       "title": "Seed footer data (FooterMain + FooterCta) to local Strapi",
       "description": "Re-seed the footer single type with two dynamic zone items: sections.footer-main (replicating existing footer content: logo, tagline, nav sections, links, socials, copyright) and sections.footer-cta ('Build modern websites...' block). Use GET-check then PUT. Footer DB data was wiped in US-005 schema change so content[] will be empty.",
-      "status": "open",
+      "status": "blocked",
       "priority": 7,
       "passes": false,
-      "notes": "Footer socials to seed: GitHub, Discord, X (Twitter), LinkedIn, YouTube, Bluesky. Footer nav sections from strapi.io: Product, Solutions, Resources, Integrations, Company (each with relevant links). FooterCta CTA cards: 'Ready to deploy?' → https://cloud.strapi.io/ and 'Explore Strapi Enterprise' → https://strapi.io/enterprise. No images exist in local Strapi media library — set all icon/image fields to null.",
+      "notes": "Footer socials to seed: GitHub, Discord, X (Twitter), LinkedIn, YouTube, Bluesky. Footer nav sections from strapi.io: Product, Solutions, Resources, Integrations, Company (each with relevant links). FooterCta CTA cards: 'Ready to deploy?' → https://cloud.strapi.io/ and 'Explore Strapi Enterprise' → https://strapi.io/enterprise. No images exist in local Strapi media library — set all icon/image fields to null. BLOCKED: Strapi is not running on port 1337. User must start Strapi (`pnpm dev` or `cd apps/strapi && pnpm develop`) then re-run this story.",
       "dependsOn": [
         "US-005",
         "US-006"
@@ -386,10 +386,13 @@
         "Local site at http://localhost:3000 renders both FooterCta (top of footer area) and FooterMain (navigation + bottom bar) without console errors"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
-        "errors": []
+        "phase": "blocked",
+        "status": "blocked",
+        "attempt": 4,
+        "errors": [
+          "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
+          "Blocked (attempt 4): Strapi still not running on port 1337. lsof -ti:1337 returned empty, curl /api/health failed. User must start Strapi before content seeding can proceed."
+        ]
       },
       "data": {},
       "metadata": {
@@ -411,10 +414,10 @@
       "id": "US-008",
       "title": "Create sections.user-stories-section Strapi schema + React component",
       "description": "Create a minimal Strapi component for the user stories listing section (as seen on strapi.io/user-stories). The schema has optional label/heading fields. The React renderer uses FilterableCardGrid with mock/static user story data since the user-stories collection type does not exist in local Strapi. Filter categories: 'Use cases' (Websites, Backend Framework, Internal Apps, Mobile Apps, IoT & Digital Signage).",
-      "status": "blocked",
+      "status": "completed",
       "priority": 8,
-      "passes": false,
-      "notes": "Source: https://strapi.io/user-stories. Grid is 3 columns. Search + left sidebar with 'Use cases' filter checkboxes. Cards: 16:9 top image, company logo, bold title, 'Read a story' green link. Use CardGridItem variant='story'. Mock 8 items with varied categories. All code artifacts created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck. Population config at apps/strapi/src/populateDynamicZone/sections/user-stories-section.ts. imageAlt removed from MockUserStory since placeholder is a div, not img.",
+      "passes": true,
+      "notes": "Source: https://strapi.io/user-stories. Grid is 3 columns. Search + left sidebar with 'Use cases' filter checkboxes. Cards: 16:9 top image, company logo, bold title, 'Read a story' green link. Use CardGridItem variant='story'. Mock 8 items with varied categories. All code artifacts created and committed. Population config at apps/strapi/src/populateDynamicZone/sections/user-stories-section.ts. imageAlt removed from MockUserStory since placeholder is a div, not img. Strapi restarted + generate:types run. typecheck clean, lint 0 errors. Review: all acceptance criteria verified, no fixes needed.",
       "dependsOn": [
         "US-001"
       ],
@@ -430,9 +433,9 @@
         "pnpm typecheck and pnpm lint pass"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 1,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 3,
         "errors": [
           "Blocked: Strapi restart required to pick up sections.user-stories-section schema. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
         ]

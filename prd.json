@@ -234,10 +234,10 @@
       "id": "US-004",
       "title": "Create footer sub-component Strapi schemas (footer-main, footer-cta, footer-cta-card, footer-cta-badge)",
       "description": "Create all new Strapi component schema files needed for the footer dynamic zone refactor. (1) sections/footer-main.json: mirrors ALL current footer single-type attributes (logoImage, tagline, sections, copyRight, links, socials). (2) sections/footer-cta.json: the 'Build modern websites...' CTA block seen at top of footer on most strapi.io pages. Also create helper sub-components: sections/footer-cta-badge.json (icon + text) and sections/footer-cta-card.json (icon + title + description + link). DO NOT change the footer schema itself yet — that is US-005.",
-      "status": "blocked",
+      "status": "completed",
       "priority": 4,
-      "passes": false,
-      "notes": "Visual reference for footer-cta: https://strapi.io/pricing-cms footer first div. Content: 'Build modern websites without sacrificing customization in minutes instead of days' heading, code snippet 'npx create-strapi-app@latest', badges row (Open source MIT / SOC2 / GDPR), framework logo row, then 2 CTA cards (Ready to deploy? + Explore Enterprise). Requires Strapi restart after file creation. All 4 schema files created and committed. BLOCKED: awaiting Strapi restart + cd apps/strapi && pnpm generate:types to unblock typecheck.",
+      "passes": true,
+      "notes": "Visual reference for footer-cta: https://strapi.io/pricing-cms footer first div. Content: 'Build modern websites without sacrificing customization in minutes instead of days' heading, code snippet 'npx create-strapi-app@latest', badges row (Open source MIT / SOC2 / GDPR), framework logo row, then 2 CTA cards (Ready to deploy? + Explore Enterprise). Requires Strapi restart after file creation. All 4 schema files created and committed. Strapi restarted + pnpm generate:types run successfully. typecheck clean, lint 0 errors. Review confirmed all attributes match acceptance criteria exactly.",
       "dependsOn": [],
       "acceptanceCriteria": [
         "apps/strapi/src/components/sections/footer-cta-badge.json created: { icon: utilities.basic-image (optional), text: string (required) } — both i18n localized",
@@ -249,9 +249,9 @@
         "cd apps/ui && pnpm typecheck passes"
       ],
       "loopState": {
-        "phase": "blocked",
-        "status": "blocked",
-        "attempt": 2,
+        "phase": "done",
+        "status": "completed",
+        "attempt": 4,
         "errors": [
           "Blocked: Strapi restart required to pick up new section schemas. Run: restart Strapi, then cd apps/strapi && pnpm generate:types after restart. Then re-run typecheck."
         ]

@@ -447,48 +447,15 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
     }
   }
   attributes: {
-    copyRight: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
+    content: Schema.Attribute.DynamicZone<
+      ["sections.footer-main", "sections.footer-cta"]
+    >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    links: Schema.Attribute.Component<"utilities.link-text", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::footer.footer">
-    logoImage: Schema.Attribute.Component<"utilities.link-image", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     publishedAt: Schema.Attribute.DateTime
-    sections: Schema.Attribute.Component<"elements.footer-item", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    socials: Schema.Attribute.Component<"footer.footer-socials", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    tagline: Schema.Attribute.RichText &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private

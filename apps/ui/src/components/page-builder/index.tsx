@@ -3,6 +3,7 @@ import type { UID } from "@repo/strapi-types"
 import StrapiNewsletterForm from "@/components/page-builder/components/forms/StrapiNewsletterForm"
 import StrapiPlanComparisonTable from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
 import StrapiPlanPricingCards from "@/components/page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards"
+import StrapiFaqSection from "@/components/page-builder/components/sections/StrapiFaqSection"
 
 /**
  * Mapping of Strapi Component UID to React Component
@@ -19,4 +20,7 @@ export const PageContentComponents: Partial<
   // Plans
   "plans.plan-comparison-table": StrapiPlanComparisonTable,
   "plans.plan-pricing-cards": StrapiPlanPricingCards,
+
+  // Sections
+  "sections.faq-section": StrapiFaqSection,
 }

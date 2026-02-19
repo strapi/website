@@ -508,10 +508,10 @@
       "id": "US-010",
       "title": "Seed homepage content (FAQ, BannerSlice, UserStories, Integrations sections)",
       "description": "Append the four new section types to the homepage page dynamic zone in local Strapi so they are visible at http://localhost:3000 for visual review. Use GET-merge-PUT: fetch existing homepage content[], append new items, PUT the full merged array. Do not remove any existing sections.",
-      "status": "open",
+      "status": "blocked",
       "priority": 10,
       "passes": false,
-      "notes": "Homepage slug is '/'. Find it with: GET /api/pages?filters[slug][$eq]=/&populate=deep. Append sections at end of content[]. FAQ should have 3-4 realistic Q&A items. BannerSlice: seed one default variant and one dark variant.",
+      "notes": "Homepage slug is '/'. Find it with: GET /api/pages?filters[slug][$eq]=/&populate=deep. Append sections at end of content[]. FAQ should have 3-4 realistic Q&A items. BannerSlice: seed one default variant and one dark variant. BLOCKED: Strapi not running on port 1337. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
       "dependsOn": [
         "US-002",
         "US-003",
@@ -529,10 +529,12 @@
         "Existing homepage sections (pricing cards, newsletter form, etc.) still render correctly"
       ],
       "loopState": {
-        "phase": "queued",
-        "status": "pending",
-        "attempt": 0,
-        "errors": []
+        "phase": "blocked",
+        "status": "blocked",
+        "attempt": 2,
+        "errors": [
+          "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story."
+        ]
       },
       "data": {},
       "metadata": {

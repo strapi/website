@@ -674,18 +674,6 @@ export interface UtilitiesBasicImage extends Struct.ComponentSchema {
   }
 }
 
-export interface UtilitiesImageWithLink extends Struct.ComponentSchema {
-  collectionName: "components_utilities_image_with_links"
-  info: {
-    description: ""
-    displayName: "ImageWithLink"
-  }
-  attributes: {
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    link: Schema.Attribute.Component<"utilities.link", false>
-  }
-}
-
 export interface UtilitiesLink extends Struct.ComponentSchema {
   collectionName: "components_utilities_links"
   info: {
@@ -834,7 +822,6 @@ declare module "@strapi/strapi" {
       "seo-utilities.social-icons": SeoUtilitiesSocialIcons
       "utilities.accordions": UtilitiesAccordions
       "utilities.basic-image": UtilitiesBasicImage
-      "utilities.image-with-link": UtilitiesImageWithLink
       "utilities.link": UtilitiesLink
       "utilities.link-decorations": UtilitiesLinkDecorations
       "utilities.link-image": UtilitiesLinkImage

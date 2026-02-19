@@ -101,13 +101,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": true
         },
-        "tags": [
-          "react",
-          "elementary",
-          "grid",
-          "card",
-          "shadcn"
-        ]
+        "tags": ["react", "elementary", "grid", "card", "shadcn"]
       }
     },
     {
@@ -162,13 +156,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": true
         },
-        "tags": [
-          "section",
-          "faq",
-          "accordion",
-          "shadcn",
-          "strapi-schema"
-        ]
+        "tags": ["section", "faq", "accordion", "shadcn", "strapi-schema"]
       }
     },
     {
@@ -222,12 +210,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": true
         },
-        "tags": [
-          "section",
-          "banner",
-          "cta",
-          "strapi-schema"
-        ]
+        "tags": ["section", "banner", "cta", "strapi-schema"]
       }
     },
     {
@@ -265,11 +248,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": false
         },
-        "tags": [
-          "schema",
-          "footer",
-          "strapi"
-        ]
+        "tags": ["schema", "footer", "strapi"]
       }
     },
     {
@@ -280,9 +259,7 @@
       "priority": 5,
       "passes": true,
       "notes": "WARNING: Irreversible schema change. Existing footer DB rows will lose their old field data. This is intentional — we re-seed in US-007. The i18n plugin option at the schema root should remain. After schema change, StrapiFooter.tsx will have type errors until US-006 fixes the renderer. Completed: schema replaced all old attributes with single content dynamiczone. Type errors in StrapiFooter.tsx and server.ts are expected and deferred to US-006. generate:types passed. lint 0 errors.",
-      "dependsOn": [
-        "US-004"
-      ],
+      "dependsOn": ["US-004"],
       "acceptanceCriteria": [
         "apps/strapi/src/api/footer/content-types/footer/schema.json updated: all existing attributes (logoImage, tagline, sections, copyRight, links, socials) REMOVED from attributes object",
         "Footer schema attributes now contains only: content (type: 'dynamiczone', components: ['sections.footer-main', 'sections.footer-cta'])",
@@ -306,12 +283,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": false
         },
-        "tags": [
-          "schema",
-          "footer",
-          "refactor",
-          "dynamiczone"
-        ]
+        "tags": ["schema", "footer", "refactor", "dynamiczone"]
       }
     },
     {
@@ -322,9 +294,7 @@
       "priority": 6,
       "passes": true,
       "notes": "Copy button must use navigator.clipboard.writeText() with 2s visual feedback (icon swap or text change). Population config for footer needs updating to deeply populate the new dynamic zone structure. Check apps/ui/src/lib/strapi-api/population/ for existing footer population config and update it. Completed: StrapiFooter.tsx dispatches over content[] dynamiczone. StrapiFooterMain.tsx extracts all original nav/logo/socials logic. StrapiFooterCta.tsx: dark-gradient CTA section (heading, code snippet + clipboard copy button, feature badges, feature logos, CTA cards 2-column grid). Population configs: sections/footer-main.ts (logoImage, sections.links, links, socials) + sections/footer-cta.ts (featureBadges.icon, featureLogos, ctaCards icon+link). fetchFooter updated to use populateDynamicZone: { content: true }. typecheck clean, lint 0 errors. Review fix: removed array index from Fragment key in StrapiFooterMain.tsx links.",
-      "dependsOn": [
-        "US-005"
-      ],
+      "dependsOn": ["US-005"],
       "acceptanceCriteria": [
         "StrapiFooter.tsx updated: iterates footer.content (dynamiczone array), routes 'sections.footer-main' to StrapiFooterMain, 'sections.footer-cta' to StrapiFooterCta",
         "StrapiFooterMain.tsx created at apps/ui/src/components/page-builder/single-types/footer/StrapiFooterMain.tsx with all existing footer rendering logic (logo, tagline, SOC2/GDPR badges, nav sections, bottom bar with copyright + links + socials)",
@@ -359,12 +329,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": true
         },
-        "tags": [
-          "footer",
-          "react",
-          "dynamiczone",
-          "renderer"
-        ]
+        "tags": ["footer", "react", "dynamiczone", "renderer"]
       }
     },
     {
@@ -375,10 +340,7 @@
       "priority": 7,
       "passes": false,
       "notes": "Footer socials to seed: GitHub, Discord, X (Twitter), LinkedIn, YouTube, Bluesky. Footer nav sections from strapi.io: Product, Solutions, Resources, Integrations, Company (each with relevant links). FooterCta CTA cards: 'Ready to deploy?' → https://cloud.strapi.io/ and 'Explore Strapi Enterprise' → https://strapi.io/enterprise. No images exist in local Strapi media library — set all icon/image fields to null. BLOCKED: Strapi is not running on port 1337. User must start Strapi (`pnpm dev` or `cd apps/strapi && pnpm develop`) then re-run this story.",
-      "dependsOn": [
-        "US-005",
-        "US-006"
-      ],
+      "dependsOn": ["US-005", "US-006"],
       "acceptanceCriteria": [
         "GET /api/footer?populate=deep confirms content is empty before seeding",
         "PUT /api/footer with content[0] = sections.footer-main containing: logoImage (null or media id if exists), tagline text, 5 nav section groups (Product, Solutions, Resources, Integrations, Company) each with multiple links, copyRight '© {YEAR}, Strapi', bottom links (License / Terms / Privacy), socials with title 'Join us on' and social icon links",
@@ -388,7 +350,7 @@
       "loopState": {
         "phase": "blocked",
         "status": "blocked",
-        "attempt": 4,
+        "attempt": 0,
         "errors": [
           "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
           "Blocked (attempt 4): Strapi still not running on port 1337. lsof -ti:1337 returned empty, curl /api/health failed. User must start Strapi before content seeding can proceed."
@@ -403,11 +365,7 @@
           "requiresWriteApproval": true,
           "requiresFinalReview": false
         },
-        "tags": [
-          "seed",
-          "footer",
-          "strapi-mcp"
-        ]
+        "tags": ["seed", "footer", "strapi-mcp"]
       }
     },
     {
@@ -418,9 +376,7 @@
       "priority": 8,
       "passes": true,
       "notes": "Source: https://strapi.io/user-stories. Grid is 3 columns. Search + left sidebar with 'Use cases' filter checkboxes. Cards: 16:9 top image, company logo, bold title, 'Read a story' green link. Use CardGridItem variant='story'. Mock 8 items with varied categories. All code artifacts created and committed. Population config at apps/strapi/src/populateDynamicZone/sections/user-stories-section.ts. imageAlt removed from MockUserStory since placeholder is a div, not img. Strapi restarted + generate:types run. typecheck clean, lint 0 errors. Review: all acceptance criteria verified, no fixes needed.",
-      "dependsOn": [
-        "US-001"
-      ],
+      "dependsOn": ["US-001"],
       "acceptanceCriteria": [
         "Strapi schema at apps/strapi/src/components/sections/user-stories-section.json with attributes: label (string, optional, localized), heading (string, optional, localized)",
         "React component at apps/ui/src/components/page-builder/components/sections/StrapiUserStoriesSection.tsx",
@@ -449,12 +405,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": true
         },
-        "tags": [
-          "section",
-          "user-stories",
-          "grid",
-          "strapi-schema"
-        ]
+        "tags": ["section", "user-stories", "grid", "strapi-schema"]
       }
     },
     {
@@ -465,9 +416,7 @@
       "priority": 9,
       "passes": true,
       "notes": "Source: https://strapi.io/integrations. Filter categories from source: Frameworks & Libraries, Editor, Marketing Automation, Hosting Providers, Email, AI, Headless Commerce, Digital Asset Management, UI Libraries, Analytics, Search, Monitoring, Forms, Geospatial, Translations, Authentication, Notification. Mock 10 items. All code artifacts created and committed. Population config at apps/strapi/src/populateDynamicZone/sections/integrations-section.ts. Strapi restarted + generate:types run. typecheck clean, lint 0 errors. Review: all acceptance criteria verified, no fixes needed.",
-      "dependsOn": [
-        "US-001"
-      ],
+      "dependsOn": ["US-001"],
       "acceptanceCriteria": [
         "Strapi schema at apps/strapi/src/components/sections/integrations-section.json with attributes: label (string, optional, localized), heading (string, optional, localized)",
         "React component at apps/ui/src/components/page-builder/components/sections/StrapiIntegrationsSection.tsx",
@@ -496,12 +445,7 @@
           "requiresWriteApproval": false,
           "requiresFinalReview": true
         },
-        "tags": [
-          "section",
-          "integrations",
-          "grid",
-          "strapi-schema"
-        ]
+        "tags": ["section", "integrations", "grid", "strapi-schema"]
       }
     },
     {
@@ -512,12 +456,7 @@
       "priority": 10,
       "passes": false,
       "notes": "Homepage slug is '/'. Find it with: GET /api/pages?filters[slug][$eq]=/&populate=deep. Append sections at end of content[]. FAQ should have 3-4 realistic Q&A items. BannerSlice: seed one default variant and one dark variant. BLOCKED: Strapi not running on port 1337. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
-      "dependsOn": [
-        "US-002",
-        "US-003",
-        "US-008",
-        "US-009"
-      ],
+      "dependsOn": ["US-002", "US-003", "US-008", "US-009"],
       "acceptanceCriteria": [
         "GET /api/pages?filters[slug][$eq]=/&populate=deep confirms existing homepage content[] before modification",
         "PUT appends sections.faq-section: label 'FAQ', heading 'Frequently Asked Questions', description 'Looking for answers? Here are some common questions.', 4 items with realistic Q&A",
@@ -531,7 +470,7 @@
       "loopState": {
         "phase": "blocked",
         "status": "blocked",
-        "attempt": 4,
+        "attempt": 0,
         "errors": [
           "Blocked: Strapi is not running on port 1337. Cannot seed content via MCP. User must start Strapi (pnpm dev or cd apps/strapi && pnpm develop) then re-run this story.",
           "Blocked (attempt 4): Strapi still not running on port 1337. lsof -ti:1337 returned empty, MCP REST call failed. User must start Strapi before content seeding can proceed."
@@ -546,11 +485,7 @@
           "requiresWriteApproval": true,
           "requiresFinalReview": false
         },
-        "tags": [
-          "seed",
-          "homepage",
-          "strapi-mcp"
-        ]
+        "tags": ["seed", "homepage", "strapi-mcp"]
       }
     }
   ],

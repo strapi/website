@@ -24,7 +24,7 @@ export function StrapiFooter({ locale }: { readonly locale: Locale }) {
         if (block.__component === "sections.footer-cta") {
           return (
             <StrapiFooterCta
-              key={block.id}
+              key={`${block.__component}-${block.id}`}
               component={block as Data.Component<"sections.footer-cta">}
             />
           )
@@ -33,7 +33,7 @@ export function StrapiFooter({ locale }: { readonly locale: Locale }) {
         if (block.__component === "sections.footer-main") {
           return (
             <StrapiFooterMain
-              key={block.id}
+              key={`${block.__component}-${block.id}`}
               component={block as Data.Component<"sections.footer-main">}
             />
           )

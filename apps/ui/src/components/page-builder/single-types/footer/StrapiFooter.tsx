@@ -4,8 +4,8 @@ import { use } from "react"
 
 import { fetchFooter } from "@/lib/strapi-api/content/server"
 
-import StrapiFooterCta from "./StrapiFooterCta"
-import StrapiFooterMain from "./StrapiFooterMain"
+import { StrapiFooterCta } from "./StrapiFooterCta"
+import { StrapiFooterMain } from "./StrapiFooterMain"
 
 export function StrapiFooter({ locale }: { readonly locale: Locale }) {
   const response = use(fetchFooter(locale))
@@ -15,6 +15,7 @@ export function StrapiFooter({ locale }: { readonly locale: Locale }) {
     return null
   }
 
+  // TODO this should use same ideas as the urrent pages "page"
   return (
     <footer>
       {content.map((item) => {
@@ -44,7 +45,3 @@ export function StrapiFooter({ locale }: { readonly locale: Locale }) {
     </footer>
   )
 }
-
-StrapiFooter.displayName = "StrapiFooter"
-
-export default StrapiFooter

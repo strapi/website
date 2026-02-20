@@ -108,7 +108,3 @@ export function StrapiFooterMain({
     </div>
   )
 }
-
-StrapiFooterMain.displayName = "StrapiFooterMain"
-
-export default StrapiFooterMain

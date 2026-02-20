@@ -4,6 +4,7 @@ import { StrapiBasicImage } from "@/components/page-builder/components/utilities
 import StrapiLink, {
   getStrapiLinkHref,
 } from "@/components/page-builder/components/utilities/StrapiLink"
+import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 interface NavMenuLinkProps {
@@ -17,36 +18,46 @@ export function NavMenuLink({
   compact = false,
   className,
 }: NavMenuLinkProps) {
-  if (!component) return null
+  if (!component) {
+    return null
+  }
 
   const href = getStrapiLinkHref(component.link)
-  if (!href) return null
+
+  if (!href) {
+    return null
+  }
 
   return (
     <StrapiLink
       component={component.link}
       className={cn(
-        "group/nav-link hover:bg-accent flex items-start gap-3 rounded-lg p-2.5 no-underline transition-colors",
+        "group/nav-link hover:bg-strapi-blue-100 rounded-strapi-lg flex h-auto min-w-0 flex-col items-start gap-1 px-6 py-5 whitespace-normal no-underline transition-colors hover:no-underline",
         className
       )}
     >
-      {component.icon && (
-        <div className="relative mt-0.5 size-5 shrink-0">
-          <StrapiBasicImage component={component.icon} fill />
-        </div>
-      )}
-
-      <div className="flex flex-col gap-0.5">
-        <span className="text-sm leading-tight font-medium">
-          {component.label}
-        </span>
-
-        {!compact && component.description && (
-          <span className="text-muted-foreground text-xs leading-snug">
-            {component.description}
-          </span>
+      <div className="flex items-center gap-2">
+        {component.icon && (
+          <div className="relative size-5 shrink-0">
+            <StrapiBasicImage component={component.icon} fill />
+          </div>
         )}
+
+        <Typography
+          variant="body1"
+          fontWeight="medium"
+          tag="p"
+          className="group-hover/nav-link:text-strapi-blue-500"
+        >
+          {component.link?.label}
+        </Typography>
       </div>
+
+      {!compact && component.description && (
+        <Typography variant="smallText2" textColor="neutral" tag="p">
+          {component.description}
+        </Typography>
+      )}
     </StrapiLink>
   )
 }

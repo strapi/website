@@ -83,13 +83,20 @@ detect_prd_file() {
     return
   fi
 
-  if [[ -f "prd.json" ]]; then
-    echo "prd.json"
-    return
+  # Look in .agents/tasks/ for PRD files (newest first)
+  local tasks_dir=".agents/tasks"
+  if [[ -d "$tasks_dir" ]]; then
+    local newest
+    newest=$(ls -t "$tasks_dir"/prd-*.json 2>/dev/null | head -n1)
+    if [[ -n "$newest" ]]; then
+      echo "$newest"
+      return
+    fi
   fi
 
-  if [[ -f "prd_refactor.json" ]]; then
-    echo "prd_refactor.json"
+  # Legacy fallback: repo root
+  if [[ -f "prd.json" ]]; then
+    echo "prd.json"
     return
   fi
 
@@ -576,7 +583,7 @@ ITERATIONS="$1"
 PRD_FILE="$(detect_prd_file "${2:-}")"
 
 if [[ -z "$PRD_FILE" ]]; then
-  echo "Error: No PRD file found. Provide one explicitly or create prd.json/prd_refactor.json."
+  echo "Error: No PRD file found. Provide one explicitly or create .agents/tasks/prd-<name>.json."
   exit 1
 fi
 

@@ -18,43 +18,43 @@
   "attributes": {
     "logoImage": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "utilities.link-image"
-    },
-    "announcementBar": {
-      "type": "component",
-      "repeatable": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "navbar.announcement-bar"
+      "component": "utilities.link-image",
+      "repeatable": false
     },
     "navItems": {
       "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "navbar.nav-item"
+      "component": "navbar.nav-item",
+      "repeatable": true
+    },
+    "bottomLinks": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "utilities.link",
+      "repeatable": true
     },
     "ctaLinks": {
       "type": "component",
-      "repeatable": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "utilities.link"
+      "component": "utilities.link",
+      "repeatable": true
     }
   }
 }

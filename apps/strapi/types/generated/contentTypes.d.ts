@@ -519,10 +519,7 @@ export interface ApiNavbarNavbar extends Struct.SingleTypeSchema {
     }
   }
   attributes: {
-    announcementBar: Schema.Attribute.Component<
-      "navbar.announcement-bar",
-      false
-    > &
+    bottomLinks: Schema.Attribute.Component<"utilities.link", true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -592,6 +589,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.banner-slice",
         "sections.integrations-section",
         "sections.user-stories-section",
+        "sections.how-it-works",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

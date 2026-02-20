@@ -1,0 +1,51 @@
+import type { Nullable } from "@repo/shared-data"
+import type { Data } from "@repo/strapi-types"
+
+import {
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu"
+
+import { NavMenuSection } from "./NavMenuSection"
+import { StrapiLink } from "../../components/utilities/StrapiLink"
+
+export interface DropdownNavItemProps {
+  readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
+  readonly item: Data.Component<"navbar.nav-item">
+}
+
+export function DropdownNavItem({ item, bottomLinks }: DropdownNavItemProps) {
+  if (!item?.link) {
+    return null
+  }
+
+  return (
+    <>
+      <NavigationMenuTrigger className="text-base">
+        {item.link?.label}
+      </NavigationMenuTrigger>
+
+      <NavigationMenuContent>
+        <div className="divide-strapi-neutral-200 flex divide-x">
+          {item.sections?.map((section) => (
+            <NavMenuSection key={section.id} section={section} />
+          ))}
+        </div>
+
+        {bottomLinks?.length ? (
+          <div className="border-strapi-neutral-200 border-t p-4">
+            <div className="flex items-center">
+              {bottomLinks.map((link) => (
+                <StrapiLink
+                  key={link.id}
+                  component={link}
+                  className="text-strapi-neutral-800 hover:text-strapi-blue-600 flex items-center gap-1.5 px-3 py-2 text-sm"
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </NavigationMenuContent>
+    </>
+  )
+}

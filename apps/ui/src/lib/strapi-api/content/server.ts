@@ -116,46 +116,50 @@ export async function fetchNavbar(locale: Locale) {
             image: {
               populate: { media: true },
             },
-            link: true,
-          },
-        },
-        announcementBar: {
-          populate: {
-            link: {
-              populate: {
-                page: true,
-                decorations: {
-                  populate: { leftIcon: true, rightIcon: true },
-                },
-              },
-            },
+            page: true,
           },
         },
         navItems: {
           populate: {
-            directLink: {
+            link: {
               populate: {
                 page: true,
-                decorations: {
-                  populate: { leftIcon: true, rightIcon: true },
-                },
               },
             },
             sections: {
               populate: {
                 items: {
                   populate: {
-                    icon: true,
-                    link: { populate: { page: true } },
+                    icon: {
+                      populate: {
+                        media: true,
+                      },
+                    },
+                    link: {
+                      populate: {
+                        page: true,
+                      },
+                    },
                   },
                 },
               },
             },
-            bottomLinks: {
+          },
+        },
+        bottomLinks: {
+          populate: {
+            page: true,
+            decorations: {
               populate: {
-                page: true,
-                decorations: {
-                  populate: { leftIcon: true, rightIcon: true },
+                leftIcon: {
+                  populate: {
+                    media: true,
+                  },
+                },
+                rightIcon: {
+                  populate: {
+                    media: true,
+                  },
                 },
               },
             },
@@ -165,7 +169,18 @@ export async function fetchNavbar(locale: Locale) {
           populate: {
             page: true,
             decorations: {
-              populate: { leftIcon: true, rightIcon: true },
+              populate: {
+                leftIcon: {
+                  populate: {
+                    media: true,
+                  },
+                },
+                rightIcon: {
+                  populate: {
+                    media: true,
+                  },
+                },
+              },
             },
           },
         },

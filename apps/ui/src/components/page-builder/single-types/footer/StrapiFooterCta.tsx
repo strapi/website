@@ -1,11 +1,10 @@
 "use client"
 
-import { ArrowRightIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react/ssr"
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 import { useState } from "react"
 
 import { Container } from "@/components/elementary/Container"
-import { SectionHeading } from "@/components/elementary/SectionHeading"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { getStrapiLinkHref } from "@/components/page-builder/components/utilities/StrapiLink"
 import { formatHref, isAppLink, Link } from "@/lib/navigation"
@@ -29,83 +28,76 @@ export function StrapiFooterCta({
     <div
       className="w-full"
       style={{
-        background: "linear-gradient(180deg, #1c1c4e 0%, #292875 100%)",
+        background:
+          "linear-gradient(359.75deg, #f2f4ff -63.96%, #ffffff 55.16%)",
       }}
     >
-      <Container className="py-16 lg:py-20">
-        <div className="mx-auto max-w-4xl">
-          <SectionHeading
-            as="h2"
-            textStyle="h2"
-            className="mb-8 text-center text-white"
-          >
-            {component.heading}
-          </SectionHeading>
+      <Container className="py-30">
+        <div className="flex flex-col gap-14 lg:flex-row lg:gap-20">
+          {/* Left column: heading + code snippet + feature badges + logos */}
+          <div className="flex flex-1 flex-col items-start gap-14">
+            <h2 className="text-strapi-blue-800 text-3xl font-bold">
+              {component.heading}
+            </h2>
 
-          {component.codeSnippet && (
-            <div className="bg-strapi-neutral-900 mb-8 flex items-center justify-between gap-4 rounded-lg px-6 py-4">
-              <code className="text-strapi-blue-300 font-mono text-sm">
-                {component.codeSnippet}
-              </code>
+            <div className="flex flex-col gap-6">
+              {component.codeSnippet && (
+                <div className="flex w-fit items-center rounded-lg bg-white">
+                  <pre className="text-strapi-neutral-800 py-4 pr-4 pl-6 font-mono text-base">
+                    {component.codeSnippet}
+                  </pre>
 
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="bg-strapi-purple-600 hover:bg-strapi-purple-700 flex shrink-0 items-center gap-1.5 rounded px-3 py-1.5 text-xs font-medium text-white transition-colors"
-              >
-                {copied ? (
-                  <>
-                    <CheckIcon size={13} weight="bold" />
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <CopyIcon size={13} />
-                    Copy
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-
-          {component.featureBadges && component.featureBadges.length > 0 && (
-            <div className="mb-8 flex flex-wrap justify-center gap-4">
-              {component.featureBadges.map((badge) => (
-                <div
-                  key={badge.id}
-                  className="flex items-center gap-2 text-sm text-white/80"
-                >
-                  {badge.icon && (
-                    <span className="relative size-4">
-                      <StrapiBasicImage
-                        component={badge.icon}
-                        fill
-                        className="object-contain"
-                      />
-                    </span>
-                  )}
-                  <span>{badge.text}</span>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="text-strapi-purple-500 hover:text-strapi-purple-600 pr-6 text-base font-semibold transition-colors"
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {component.featureLogos && component.featureLogos.length > 0 && (
-            <div className="mb-12 flex flex-wrap justify-center gap-6">
-              {component.featureLogos.map((logo) => (
-                <span key={logo.id} className="relative h-8 w-20">
-                  <StrapiBasicImage
-                    component={logo}
-                    fill
-                    className="object-contain opacity-70"
-                  />
-                </span>
-              ))}
+              {component.featureBadges &&
+                component.featureBadges.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-6">
+                    {component.featureBadges.map((badge) => (
+                      <div key={badge.id} className="flex items-center gap-1.5">
+                        {badge.icon && (
+                          <span className="relative size-5 shrink-0">
+                            <StrapiBasicImage
+                              component={badge.icon}
+                              fill
+                              className="object-contain"
+                            />
+                          </span>
+                        )}
+                        <span className="text-strapi-blue-800 text-base font-semibold">
+                          {badge.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
-          )}
 
+            {component.featureLogos && component.featureLogos.length > 0 && (
+              <div className="flex flex-wrap items-center gap-10">
+                {component.featureLogos.map((logo) => (
+                  <span key={logo.id} className="relative h-8 w-28">
+                    <StrapiBasicImage
+                      component={logo}
+                      fill
+                      className="object-contain"
+                    />
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right column: CTA items with vertical accent bar */}
           {component.ctaCards && component.ctaCards.length > 0 && (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="flex flex-1 flex-col gap-14">
               {component.ctaCards.map((card) => {
                 const href = getStrapiLinkHref(card.link)
                 const formattedHref = href ? formatHref(href) : undefined
@@ -113,55 +105,57 @@ export function StrapiFooterCta({
                 const linkLabel = card.link?.label ?? "Learn more"
 
                 return (
-                  <div
-                    key={card.id}
-                    className="rounded-lg bg-white/10 p-6 backdrop-blur-sm"
-                  >
-                    {card.icon && (
-                      <span className="mb-3 block size-8">
-                        <StrapiBasicImage
-                          component={card.icon}
-                          fallbackSizes={{ width: 32, height: 32 }}
-                          className="size-8 object-contain"
-                        />
-                      </span>
-                    )}
+                  <div key={card.id} className="flex gap-8">
+                    <div className="bg-strapi-neutral-200 w-1 shrink-0 self-stretch rounded-full" />
 
-                    <h3 className="mb-2 text-sm font-bold text-white">
-                      {card.title}
-                    </h3>
-
-                    {card.description && (
-                      <p className="mb-4 text-sm text-white/70">
-                        {card.description}
-                      </p>
-                    )}
-
-                    {formattedHref && (
-                      <>
-                        {isAppLink(formattedHref) ? (
-                          <Link
-                            href={formattedHref}
-                            target={newTab ? "_blank" : undefined}
-                            rel={newTab ? "noopener" : undefined}
-                            className="text-strapi-blue-300 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:text-white"
-                          >
-                            {linkLabel}
-                            <ArrowRightIcon size={14} />
-                          </Link>
-                        ) : (
-                          <a
-                            href={formattedHref}
-                            target={newTab ? "_blank" : undefined}
-                            rel={newTab ? "noopener noreferrer" : undefined}
-                            className="text-strapi-blue-300 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:text-white"
-                          >
-                            {linkLabel}
-                            <ArrowRightIcon size={14} />
-                          </a>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-start gap-3">
+                        {card.icon && (
+                          <span className="relative mt-0.5 size-6 shrink-0">
+                            <StrapiBasicImage
+                              component={card.icon}
+                              fill
+                              className="object-contain"
+                            />
+                          </span>
                         )}
-                      </>
-                    )}
+                        <p className="text-strapi-blue-800 text-2xl font-semibold">
+                          {card.title}
+                        </p>
+                      </div>
+
+                      {card.description && (
+                        <p className="text-strapi-neutral-700 mb-4 text-lg">
+                          {card.description}
+                        </p>
+                      )}
+
+                      {formattedHref && (
+                        <>
+                          {isAppLink(formattedHref) ? (
+                            <Link
+                              href={formattedHref}
+                              target={newTab ? "_blank" : undefined}
+                              rel={newTab ? "noopener" : undefined}
+                              className="text-strapi-blue-600 hover:text-strapi-blue-700 inline-flex items-center gap-1 text-base font-semibold transition-colors"
+                            >
+                              {linkLabel}
+                              <ArrowRightIcon size={16} />
+                            </Link>
+                          ) : (
+                            <a
+                              href={formattedHref}
+                              target={newTab ? "_blank" : undefined}
+                              rel={newTab ? "noopener noreferrer" : undefined}
+                              className="text-strapi-blue-600 hover:text-strapi-blue-700 inline-flex items-center gap-1 text-base font-semibold transition-colors"
+                            >
+                              {linkLabel}
+                              <ArrowRightIcon size={16} />
+                            </a>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
                 )
               })}
@@ -172,7 +166,3 @@ export function StrapiFooterCta({
     </div>
   )
 }
-
-StrapiFooterCta.displayName = "StrapiFooterCta"
-
-export default StrapiFooterCta

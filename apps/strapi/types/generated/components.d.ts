@@ -12,6 +12,36 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_how_it_works_items"
+  info: {
+    description: ""
+    displayName: "How It Works Item"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    icon: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface FooterFooterSocials extends Struct.ComponentSchema {
   collectionName: "components_footer_footer_socials"
   info: {
@@ -67,9 +97,7 @@ export interface NavbarNavItem extends Struct.ComponentSchema {
     displayName: "NavItem"
   }
   attributes: {
-    bottomLinks: Schema.Attribute.Component<"utilities.link", true>
-    directLink: Schema.Attribute.Component<"utilities.link", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    link: Schema.Attribute.Component<"utilities.link-text", false>
     sections: Schema.Attribute.Component<"navbar.nav-section", true>
   }
 }
@@ -82,9 +110,7 @@ export interface NavbarNavLink extends Struct.ComponentSchema {
   attributes: {
     description: Schema.Attribute.String
     icon: Schema.Attribute.Component<"utilities.basic-image", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
-    link: Schema.Attribute.Component<"utilities.link", false> &
-      Schema.Attribute.Required
+    link: Schema.Attribute.Component<"utilities.link-text", false>
   }
 }
 
@@ -94,9 +120,8 @@ export interface NavbarNavSection extends Struct.ComponentSchema {
     displayName: "NavSection"
   }
   attributes: {
+    columns: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>
     items: Schema.Attribute.Component<"navbar.nav-link", true>
-    layout: Schema.Attribute.Enumeration<["list", "grid"]> &
-      Schema.Attribute.DefaultTo<"list">
     title: Schema.Attribute.String
   }
 }
@@ -517,6 +542,35 @@ export interface SectionsFooterMain extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsHowItWorks extends Struct.ComponentSchema {
+  collectionName: "components_sections_how_it_works"
+  info: {
+    description: ""
+    displayName: "How It Works"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    items: Schema.Attribute.Component<"elements.how-it-works-item", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
   collectionName: "components_sections_integrations_section"
   info: {
@@ -790,6 +844,7 @@ declare module "@strapi/strapi" {
   export module Public {
     export interface ComponentSchemas {
       "elements.footer-item": ElementsFooterItem
+      "elements.how-it-works-item": ElementsHowItWorksItem
       "footer.footer-socials": FooterFooterSocials
       "forms.contact-form": FormsContactForm
       "forms.newsletter-form": FormsNewsletterForm
@@ -814,6 +869,7 @@ declare module "@strapi/strapi" {
       "sections.footer-cta-badge": SectionsFooterCtaBadge
       "sections.footer-cta-card": SectionsFooterCtaCard
       "sections.footer-main": SectionsFooterMain
+      "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection
       "sections.user-stories-section": SectionsUserStoriesSection
       "seo-utilities.seo": SeoUtilitiesSeo

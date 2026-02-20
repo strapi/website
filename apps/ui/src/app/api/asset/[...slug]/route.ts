@@ -37,14 +37,35 @@ async function handler(
 
   const strapiUrl = getEnvVar("STRAPI_URL", true)
   const url = `${strapiUrl!}/${path}`
-  const clonedRequest = request.clone()
 
-  const { url: _, ...rest } = clonedRequest
-  const response = await fetch(url, {
-    ...rest,
+  const response = await fetch(url)
+
+  /**
+   * Node fetch auto-decompresses the body but keeps the original
+   * Content-Encoding header, causing ERR_CONTENT_DECODING_FAILED in browsers.
+   * Build a clean response with only safe headers.
+   */
+  const headers = new Headers()
+  const contentType = response.headers.get("content-type")
+  const cacheControl = response.headers.get("cache-control")
+  const lastModified = response.headers.get("last-modified")
+
+  if (contentType) {
+    headers.set("content-type", contentType)
+  }
+
+  if (cacheControl) {
+    headers.set("cache-control", cacheControl)
+  }
+
+  if (lastModified) {
+    headers.set("last-modified", lastModified)
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    headers,
   })
-
-  return response
 }
 
 export { handler as GET }

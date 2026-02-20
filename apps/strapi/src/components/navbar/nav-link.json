@@ -5,23 +5,18 @@
   },
   "options": {},
   "attributes": {
-    "label": {
-      "type": "string",
-      "required": true
+    "link": {
+      "type": "component",
+      "component": "utilities.link-text",
+      "repeatable": false
     },
     "description": {
       "type": "string"
     },
     "icon": {
       "type": "component",
-      "repeatable": false,
-      "component": "utilities.basic-image"
-    },
-    "link": {
-      "type": "component",
-      "repeatable": false,
-      "required": true,
-      "component": "utilities.link"
+      "component": "utilities.basic-image",
+      "repeatable": false
     }
   }
 }

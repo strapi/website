@@ -8,15 +8,15 @@
     "title": {
       "type": "string"
     },
-    "layout": {
-      "type": "enumeration",
-      "enum": ["list", "grid"],
-      "default": "list"
+    "columns": {
+      "type": "integer",
+      "required": false,
+      "default": 1
     },
     "items": {
       "type": "component",
-      "repeatable": true,
-      "component": "navbar.nav-link"
+      "component": "navbar.nav-link",
+      "repeatable": true
     }
   }
 }

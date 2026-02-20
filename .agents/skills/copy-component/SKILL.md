@@ -427,7 +427,7 @@ Button variant detection from source styles: filled background → `"default"`, 
 | `<img>` in content area | `utilities.basic-image` | `<StrapiBasicImage>` |
 | `<img>` inside `<a>`    | `utilities.link-image`  | `<StrapiLinkImage>`  |
 
-**Section wrapper rule:** Every page-level section component uses `<section>` → `<Container>` structure. Import Container from `@/components/elementary/Container`.
+**Section wrapper rule:** Every page-level section component uses `<section>` → `<Container>` structure. Import Container from `@/components/elementary/Container`. Background color (`bg-*`) and vertical padding (`py-*`) go on `<section>` — NOT on `<Container>` — so the background spans the full viewport width. `<Container>` is never omitted and never receives `bg-*` classes.
 
 ### Step 6c: Shadcn/UI pattern matching
 
@@ -684,6 +684,32 @@ If any required gate fails, do not mark migration as done. Report failing comman
    - React component path
    - Registry entry
    - Any manual follow-up needed (icons, SVGs, animations, interactive states)
+
+### Step 12b: Review loop (up to 3 passes)
+
+After visual verification, run an iterative review loop. The reviewer has access to both the code and the screenshot comparison from Step 12.
+
+For each pass (max 3):
+
+1. Spawn a review sub-agent via the `Task` tool (use model: sonnet when available). Pass it ALL of the following:
+   - Full list of files created or modified in this workflow.
+   - The original intake contract (`component_name`, `prd_goal`, `content_constraints`, `reuse_mode`, `acceptance_profile`).
+   - The source URL and selector for reference.
+   - The screenshot comparison result from Step 12 (paths to source and local screenshots, and any visual discrepancies noted).
+
+   The sub-agent must:
+   a. Read every created/modified file in full.
+   b. Check token mapping fidelity — no arbitrary Tailwind values where a design token fits, no hardcoded colors/sizes that should use `theme.css` tokens.
+   c. Check component composition — `<Typography>` used for standalone text, `<StrapiLink>`/`<StrapiBasicImage>`/etc. used for Strapi fields, `<section>` → `<Container>` wrapper present.
+   d. Check code quality — no unused imports, no placeholder comments, no hardcoded content strings, `displayName` set, optional fields guarded with conditionals.
+   e. Check registry completeness — schema file, populate config, dynamic zone registration (page-level), `PageContentComponents` mapping, `@repo/strapi-types` is fresh.
+   f. Review the screenshot comparison — if visual discrepancies exist and can be fixed via Tailwind/token adjustments, fix them directly.
+   g. Fix any issues it finds directly.
+   h. Return a summary of what it found and what it fixed, and a `<review_status>PASS</review_status>` or `<review_status>NEEDS_WORK</review_status>` tag.
+
+2. If the sub-agent returns `NEEDS_WORK`, apply any remaining fixes it couldn't resolve, then start the next pass.
+3. If the sub-agent returns `PASS`, exit the review loop and proceed to Step 13.
+4. If 3 passes complete without `PASS`, continue to Step 13 but include unresolved issues in `manual_steps_needed`.
 
 ### Step 13: Return structured result
 

@@ -221,16 +221,23 @@ If utility-level:
 
 ### 4. Add or update populate config
 
-Create/merge `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`.
+Create `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`.
 
-> **Utility components** (`utilities.*`, `elements.*`) don't need their own populate entry unless they contain nested relations. Only dynamic-zone-level components (sections, forms, plans) need entries here. Parent populate configs import utility populates directly.
+The middleware auto-discovers this file from the filesystem — the file path maps directly to the Strapi UID (`{category}/{name}.ts` → `{category}.{name}`). No manual registration is needed.
 
-- Keep this file even for simple components so middleware can include the UID.
-- Use `export default true` when there are no nested relations/components.
-- For nested content, export a `populate` object and reuse existing populate configs where possible.
-- Adjust import paths relative to the current category folder (`../utilities/*` from sections/forms/plans, `./*` from utilities).
+**Every page-level component must have this file.** Without it the middleware silently omits nested relations from API responses.
 
-Example:
+#### Decision tree
+
+Inspect the component's Strapi schema to determine what to export:
+
+1. **No nested `component` or `relation` attributes** (only scalar fields: `string`, `text`, `boolean`, `enum`):
+
+```typescript
+export default true
+```
+
+2. **Has nested components or relations** — build a `populate` object. Import shared utility configs instead of duplicating them:
 
 ```typescript
 import basicImagePopulate from "../utilities/basic-image"
@@ -238,11 +245,47 @@ import linkPopulate from "../utilities/link"
 
 export default {
   populate: {
-    links: linkPopulate,
-    image: basicImagePopulate,
+    image: basicImagePopulate,                       // utilities.basic-image field
+    ctas: linkPopulate,                              // utilities.link field
+    items: true,                                     // repeatable with only scalar fields
+    // OR when items has its own nested relations:
+    // items: { populate: { icon: basicImagePopulate } },
   },
 }
 ```
+
+3. **Deep or complex nesting** — add the type annotation for compile-time safety:
+
+```typescript
+import type { Modules } from "@strapi/strapi"
+import basicImagePopulate from "../utilities/basic-image"
+
+export default {
+  populate: {
+    items: {
+      populate: {
+        icon: {
+          populate: { media: true },
+        },
+      },
+    },
+  },
+} as Modules.Documents.Params.Populate.NestedParams<"{category}.{name}">
+```
+
+#### Reusable utility imports
+
+Always import from shared utility files rather than repeating inline definitions:
+
+| File | Use for |
+|---|---|
+| `../utilities/basic-image` | `utilities.basic-image` (has `media`) |
+| `../utilities/link` | `utilities.link` (has `page`, `decorations`) |
+| `../utilities/link-decorations` | `utilities.link-decorations` (has `leftIcon`, `rightIcon`) |
+| `../utilities/link-image` | `utilities.link-image` (has `image`, `page`) |
+| `../utilities/link-text` | `utilities.link-text` |
+
+For utility-category components that are only ever used as nested fields (never appear directly in the page dynamic zone), the populate file is optional but recommended when you need to share the config via imports (e.g., a new `utilities.my-icon` referenced by multiple section populate files). Place it at `../utilities/my-icon.ts` and import where needed.
 
 ### 5. Create or update React component
 
@@ -284,6 +327,10 @@ Rules:
 - Type props with `Data.Component<"{category}.{name}">`.
 - Use conditionals for optional fields.
 - Keep file compiling with current generated types.
+- **Always** use `<section>` → `<Container>` two-layer structure. Never omit `<Container>`.
+- Background color (`bg-*`) goes on `<section>`, never on `<Container>` — so the background spans full viewport width.
+- Vertical padding (`py-*`) goes on `<section>`.
+- See `docs/page-builder.md` "Section Layout Pattern" for canonical examples.
 
 ### 6. Register in `PageContentComponents` when page-level
 

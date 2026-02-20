@@ -113,13 +113,7 @@ export function MobileNavbar({
                                 </span>
                               )}
 
-                              <div
-                                className={cn(
-                                  section.layout === "grid"
-                                    ? "grid grid-cols-2 gap-1"
-                                    : "flex flex-col gap-0.5"
-                                )}
-                              >
+                              <div className={cn("grid grid-cols-2 gap-1")}>
                                 {section.items?.map((navLink) => (
                                   <div
                                     key={navLink.id}

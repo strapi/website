@@ -68,7 +68,8 @@
         "sections.faq-section",
         "sections.banner-slice",
         "sections.integrations-section",
-        "sections.user-stories-section"
+        "sections.user-stories-section",
+        "sections.how-it-works"
       ]
     },
     "children": {

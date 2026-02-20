@@ -9,7 +9,7 @@ Use this skill to generate `prd.json` that works for component migration, bugfix
 
 ## Output
 
-- Primary: `prd.json` at repo root
+- Primary: `.agents/tasks/<prd-name>.json` (e.g. `.agents/tasks/prd-navbar-redesign.json`)
 - Templates:
   - `.agents/skills/prd-component/assets/prd.template.json` (generic)
   - `.agents/skills/prd-component/assets/prd.template.component.json`
@@ -141,7 +141,8 @@ If invalid:
 
 ## Guardrails
 
-- **One file per session**: All features discussed in a single planning session go into **one PRD file**. Never split related work into multiple PRD files — use `dependsOn` in stories to express ordering.
+- **One file per session**: All features discussed in a single planning session go into **one PRD file** under `.agents/tasks/`. Never split related work into multiple PRD files — use `dependsOn` in stories to express ordering.
+- **Naming convention**: Use `prd-<kebab-case-name>.json` (e.g. `prd-navbar-redesign.json`, `prd-auth-flow.json`).
 - **Append to existing PRDs**: If a PRD file already exists at the target path, read it first and **append** new stories (continuing the ID sequence). Merge top-level arrays (goals, nonGoals, rules, etc.) — do not overwrite existing entries.
 - One story should map to one coherent unit of work.
 - Keep IDs stable for retry idempotency.

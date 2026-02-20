@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-02-19 (US-008)
+> Auto-updated by skills. Last updated: 2026-02-19 (copy-component how-it-works)
 
 ## Registry Freshness Policy
 
@@ -16,6 +16,8 @@
 | `sections.banner-slice`                 | sections      | Banner Slice                | label:string (opt), heading:string (req), description:text (opt), ctas:repeatable utilities.link, backgroundVariant:enumeration(default\|dark)                                                                                                                                                    |
 | `sections.faq-section`                  | sections      | FAQ Section                 | sectionLabel:string (opt), heading:string (req), description:string (opt), items:repeatable utilities.accordions                                                                                                                                                                                  |
 | `sections.user-stories-section`         | sections      | User Stories Section        | label:string (opt), heading:string (opt)                                                                                                                                                                                                                                                          |
+| `sections.how-it-works`                 | sections      | How It Works                | heading:string (req), description:string (opt), items:repeatable elements.how-it-works-item                                                                                                                                                                                                       |
+| `elements.how-it-works-item`            | elements      | How It Works Item           | icon:utilities.basic-image (opt), title:string (req), description:string (req)                                                                                                                                                                                                                    |
 | `forms.contact-form`                    | forms         | ContactForm                 | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
 | `forms.newsletter-form`                 | forms         | Newsletter                  | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
 | `seo-utilities.seo`                     | seo-utilities | Seo                         | metaTitle:string, metaDescription:string, metaImage:media, keywords:text, twitter:component, og:component, canonicalUrl:string, metaRobots:enumeration, structuredData:json                                                                                                                       |
@@ -89,3 +91,4 @@ accordion, alert, badge, button, calendar, card, carousel, checkbox, dialog, dro
 | `plans.plan-pricing-cards`      | StrapiPlanPricingCards    | `page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards` |
 | `sections.faq-section`          | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           |
 | `sections.user-stories-section` | StrapiUserStoriesSection  | `page-builder/components/sections/StrapiUserStoriesSection`                   |
+| `sections.how-it-works`         | StrapiHowItWorks          | `page-builder/components/sections/StrapiHowItWorks`                           |

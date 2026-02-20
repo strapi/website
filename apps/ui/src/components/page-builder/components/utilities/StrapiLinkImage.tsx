@@ -50,7 +50,7 @@ export function StrapiLinkImage({
         aria-label={label ?? undefined}
         className={combinedClassName}
       >
-        <StrapiBasicImage component={component.image} fill />
+        <StrapiBasicImage component={component.image} />
       </Link>
     )
   }
@@ -63,7 +63,7 @@ export function StrapiLinkImage({
       aria-label={label ?? undefined}
       className={combinedClassName}
     >
-      <StrapiBasicImage component={component.image} fill />
+      <StrapiBasicImage component={component.image} />
     </a>
   )
 }

@@ -78,19 +78,6 @@ export interface FormsNewsletterForm extends Struct.ComponentSchema {
   }
 }
 
-export interface NavbarAnnouncementBar extends Struct.ComponentSchema {
-  collectionName: "components_navbar_announcement_bars"
-  info: {
-    displayName: "AnnouncementBar"
-  }
-  attributes: {
-    badge: Schema.Attribute.String
-    isVisible: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
-    link: Schema.Attribute.Component<"utilities.link", false>
-    text: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
 export interface NavbarNavItem extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_items"
   info: {
@@ -123,6 +110,20 @@ export interface NavbarNavSection extends Struct.ComponentSchema {
     columns: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>
     items: Schema.Attribute.Component<"navbar.nav-link", true>
     title: Schema.Attribute.String
+  }
+}
+
+export interface NavigationNavbar extends Struct.ComponentSchema {
+  collectionName: "components_navigation_navbars"
+  info: {
+    description: "Main navigation bar with logo, nav items, and CTA links"
+    displayName: "Navbar"
+  }
+  attributes: {
+    bottomLinks: Schema.Attribute.Component<"utilities.link", true>
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    logoImage: Schema.Attribute.Component<"utilities.link-image", false>
+    navItems: Schema.Attribute.Component<"navbar.nav-item", true>
   }
 }
 
@@ -848,10 +849,10 @@ declare module "@strapi/strapi" {
       "footer.footer-socials": FooterFooterSocials
       "forms.contact-form": FormsContactForm
       "forms.newsletter-form": FormsNewsletterForm
-      "navbar.announcement-bar": NavbarAnnouncementBar
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
+      "navigation.navbar": NavigationNavbar
       "plans.plan-comparison-table": PlansPlanComparisonTable
       "plans.plan-feature-value": PlansPlanFeatureValue
       "plans.plan-pricing-card-item": PlansPlanPricingCardItem

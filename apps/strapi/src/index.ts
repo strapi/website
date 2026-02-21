@@ -1,6 +1,6 @@
 import type { Core } from "@strapi/strapi"
 
-import { registerPopulatePageMiddleware } from "./documentMiddlewares/page"
+import { registerDynamicZonePopulateMiddleware } from "./documentMiddlewares/dynamic-zone"
 import { registerAdminUserSubscriber } from "./lifeCycles/adminUser"
 import { getPopulateDynamicZoneConfig } from "./populateDynamicZone"
 
@@ -27,6 +27,6 @@ export default {
     getPopulateDynamicZoneConfig()
 
     // Register Documents API middleware for dynamic zone population
-    registerPopulatePageMiddleware({ strapi })
+    registerDynamicZonePopulateMiddleware({ strapi })
   },
 }

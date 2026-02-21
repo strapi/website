@@ -104,91 +104,15 @@ export async function fetchSeo(
   }
 }
 
-// ------ Navbar fetching functions
-
-export async function fetchNavbar(locale: Locale) {
+export async function fetchHeader(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchOne("api::navbar.navbar", undefined, {
+    return await PublicStrapiClient.fetchOne("api::header.header", undefined, {
       locale,
-      populate: {
-        logoImage: {
-          populate: {
-            image: {
-              populate: { media: true },
-            },
-            page: true,
-          },
-        },
-        navItems: {
-          populate: {
-            link: {
-              populate: {
-                page: true,
-              },
-            },
-            sections: {
-              populate: {
-                items: {
-                  populate: {
-                    icon: {
-                      populate: {
-                        media: true,
-                      },
-                    },
-                    link: {
-                      populate: {
-                        page: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        bottomLinks: {
-          populate: {
-            page: true,
-            decorations: {
-              populate: {
-                leftIcon: {
-                  populate: {
-                    media: true,
-                  },
-                },
-                rightIcon: {
-                  populate: {
-                    media: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        ctaLinks: {
-          populate: {
-            page: true,
-            decorations: {
-              populate: {
-                leftIcon: {
-                  populate: {
-                    media: true,
-                  },
-                },
-                rightIcon: {
-                  populate: {
-                    media: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+      populateDynamicZone: { content: true },
     })
   } catch (e: unknown) {
     logNonBlockingError({
-      message: `Error fetching navbar for locale '${locale}'`,
+      message: `Error fetching header for locale '${locale}'`,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,
@@ -196,8 +120,6 @@ export async function fetchNavbar(locale: Locale) {
     })
   }
 }
-
-// ------ Footer fetching functions
 
 export async function fetchFooter(locale: Locale) {
   try {

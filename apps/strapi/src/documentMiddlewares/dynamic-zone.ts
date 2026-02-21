@@ -6,8 +6,7 @@ import {
   normalizeDynamicZonePopulate,
 } from "./helpers"
 
-// We're using findMany to find the pages, but this could be adjusted to findOne per your needs
-const pageActions = new Set(["findMany", "findOne", "findFirst"])
+const supportedActions = new Set(["findMany", "findOne", "findFirst"])
 
 /**
  * Strapi Documents API middleware that enables dynamic population of components inside dynamic zones via the `populateDynamicZone` request parameter.
@@ -20,9 +19,9 @@ const pageActions = new Set(["findMany", "findOne", "findFirst"])
  * This allows clients to request fully populated dynamic zone content without manually defining deep populate trees, while significantly improving performance.
  */
 
-export const registerPopulatePageMiddleware = ({ strapi }) => {
+export const registerDynamicZonePopulateMiddleware = ({ strapi }) => {
   strapi.documents.use(async (context, next) => {
-    if (!pageActions.has(context.action)) {
+    if (!supportedActions.has(context.action)) {
       return next()
     }
 

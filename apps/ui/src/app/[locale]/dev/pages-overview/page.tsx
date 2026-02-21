@@ -1,8 +1,8 @@
 import type { Locale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 
-import PageList from "@/app/[locale]/dev/pages-overview/components/PageList"
-import Typography from "@/components/typography"
+import { PageList } from "@/app/[locale]/dev/pages-overview/components/PageList"
+import { Typography } from "@/components/typography"
 import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 

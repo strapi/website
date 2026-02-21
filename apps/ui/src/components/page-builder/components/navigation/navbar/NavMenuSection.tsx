@@ -1,8 +1,9 @@
 import type { Data } from "@repo/strapi-types"
 
-import { NavMenuLink } from "@/components/page-builder/single-types/navbar/NavMenuLink"
 import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
+
+import { NavMenuLink } from "./NavMenuLink"
 
 interface NavMenuSectionProps {
   readonly section: Data.Component<"navbar.nav-section"> | undefined | null

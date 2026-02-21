@@ -25,7 +25,7 @@
     },
     "featureBadges": {
       "type": "component",
-      "component": "sections.footer-cta-badge",
+      "component": "footer.footer-cta-badge",
       "repeatable": true,
       "pluginOptions": {
         "i18n": {
@@ -45,7 +45,7 @@
     },
     "ctaCards": {
       "type": "component",
-      "component": "sections.footer-cta-card",
+      "component": "footer.footer-cta-card",
       "repeatable": true,
       "pluginOptions": {
         "i18n": {

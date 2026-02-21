@@ -3,7 +3,7 @@ import type { UID } from "@repo/strapi-types"
 import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
 import { cn } from "@/lib/styles"
 
-import { ContentComponents } from "."
+import { ContentComponents } from "./index"
 
 interface DynamicZoneItem {
   __component: string

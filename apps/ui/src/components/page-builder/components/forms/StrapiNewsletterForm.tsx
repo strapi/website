@@ -1,6 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
-import AppLink from "@/components/elementary/AppLink"
+import { AppLink } from "@/components/elementary/AppLink"
 import { Container } from "@/components/elementary/Container"
 import { NewsletterForm } from "@/components/elementary/forms/NewsletterForm"
 import { removeThisWhenYouNeedMe } from "@/lib/general-helpers"
@@ -39,7 +39,3 @@ export function StrapiNewsletterForm({
     </div>
   )
 }
-
-StrapiNewsletterForm.displayName = "StrapiNewsletterForm"
-
-export default StrapiNewsletterForm

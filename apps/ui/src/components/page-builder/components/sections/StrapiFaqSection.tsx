@@ -55,7 +55,3 @@ export function StrapiFaqSection({
     </section>
   )
 }
-
-StrapiFaqSection.displayName = "StrapiFaqSection"
-
-export default StrapiFaqSection

@@ -2,8 +2,7 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Nullable } from "@repo/shared-data"
 import type { Data } from "@repo/strapi-types"
 
-import StrapiLink from "@/components/page-builder/components/utilities/StrapiLink"
-import { StrapiLinkImage } from "@/components/page-builder/components/utilities/StrapiLinkImage"
+import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -17,7 +16,6 @@ import { DirectNavItem } from "./DirectNavItem"
 import { DropdownNavItem } from "./DropdownNavItem"
 
 interface DesktopNavbarProps {
-  readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
   readonly navItems: Nullable<Data.Component<"navbar.nav-item">[]>
   readonly ctaLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
@@ -25,7 +23,6 @@ interface DesktopNavbarProps {
 }
 
 export function DesktopNavbar({
-  logoImage,
   navItems,
   ctaLinks,
   bottomLinks,
@@ -38,13 +35,6 @@ export function DesktopNavbar({
         className
       )}
     >
-      {logoImage && (
-        <StrapiLinkImage
-          component={logoImage}
-          className="flex shrink-0 items-center p-0"
-        />
-      )}
-
       {navItems?.length ? (
         <NavigationMenu className="static max-w-none flex-initial">
           <NavigationMenuList>

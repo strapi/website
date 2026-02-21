@@ -78,7 +78,3 @@ export function AppLink({
     </a>
   )
 }
-
-AppLink.displayName = "AppLink"
-
-export default AppLink

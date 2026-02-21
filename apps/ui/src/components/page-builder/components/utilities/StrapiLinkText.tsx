@@ -72,7 +72,3 @@ export function StrapiLinkText({
     </a>
   )
 }
-
-StrapiLinkText.displayName = "StrapiLinkText"
-
-export default StrapiLinkText

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/navigation-menu"
 
 import { NavMenuSection } from "./NavMenuSection"
-import { StrapiLink } from "../../components/utilities/StrapiLink"
+import { StrapiLink } from "../../utilities/StrapiLink"
 
 export interface DropdownNavItemProps {
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>

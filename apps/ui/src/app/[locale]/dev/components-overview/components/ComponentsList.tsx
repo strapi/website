@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 
-import AppLink from "@/components/elementary/AppLink"
-import Typography from "@/components/typography"
+import { AppLink } from "@/components/elementary/AppLink"
+import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 
-export default function ComponentsList({
+export function ComponentsList({
   components,
   pages,
 }: {

@@ -1,6 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
-import StrapiLink from "@/components/page-builder/components/utilities/StrapiLink"
+import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 
 import { PricingCheckoutModal } from "./PricingCheckoutModal"
 
@@ -27,7 +27,3 @@ export function PricingCardCta({ card }: PricingCardCtaProps) {
 
   return <StrapiLink component={card.link} />
 }
-
-PricingCardCta.displayName = "PricingCardCta"
-
-export default PricingCardCta

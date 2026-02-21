@@ -18,7 +18,7 @@
   "attributes": {
     "content": {
       "type": "dynamiczone",
-      "components": ["sections.footer-main", "sections.footer-cta"]
+      "components": ["footer.footer-main", "footer.footer-cta"]
     }
   }
 }

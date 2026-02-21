@@ -1,6 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
-import AppLink from "@/components/elementary/AppLink"
+import { AppLink } from "@/components/elementary/AppLink"
 import { Container } from "@/components/elementary/Container"
 import { SectionDescription } from "@/components/elementary/SectionDescription"
 import { SectionHeading } from "@/components/elementary/SectionHeading"
@@ -88,7 +88,3 @@ export function StrapiBannerSlice({
     </section>
   )
 }
-
-StrapiBannerSlice.displayName = "StrapiBannerSlice"
-
-export default StrapiBannerSlice

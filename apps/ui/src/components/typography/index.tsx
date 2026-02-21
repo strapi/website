@@ -116,7 +116,3 @@ export function Typography({
     </Tag>
   )
 }
-
-Typography.displayName = "Typography"
-
-export default Typography

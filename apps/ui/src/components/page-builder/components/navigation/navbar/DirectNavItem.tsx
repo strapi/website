@@ -4,7 +4,7 @@ import { AppLink } from "@/components/elementary/AppLink"
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/styles"
 
-import { getStrapiLinkHref } from "../../components/utilities/StrapiLink"
+import { getStrapiLinkHref } from "../../utilities/StrapiLink"
 
 export function DirectNavItem({
   item,

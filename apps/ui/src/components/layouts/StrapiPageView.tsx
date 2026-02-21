@@ -6,7 +6,7 @@ import { use } from "react"
 
 import { Breadcrumbs } from "@/components/elementary/Breadcrumbs"
 import { Container } from "@/components/elementary/Container"
-import StrapiStructuredData from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
+import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { fetchPage } from "@/lib/strapi-api/content/server"
 import { cn } from "@/lib/styles"
@@ -19,7 +19,7 @@ interface Props {
   searchParams?: Record<string, string | string[] | undefined>
 }
 
-export default function StrapiPageView({ params, searchParams }: Props) {
+export function StrapiPageView({ params, searchParams }: Props) {
   const locale = params.locale as Locale
 
   setRequestLocale(locale)

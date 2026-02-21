@@ -1,7 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 import type React from "react"
 
-import AppLink from "@/components/elementary/AppLink"
+import { AppLink } from "@/components/elementary/AppLink"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 
 export interface StrapiLinkProps {
@@ -77,7 +77,3 @@ export function StrapiLink({
     </AppLink>
   )
 }
-
-StrapiLink.displayName = "StrapiLink"
-
-export default StrapiLink

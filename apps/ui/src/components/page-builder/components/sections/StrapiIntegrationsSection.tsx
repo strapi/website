@@ -139,7 +139,3 @@ export function StrapiIntegrationsSection({
     </section>
   )
 }
-
-StrapiIntegrationsSection.displayName = "StrapiIntegrationsSection"
-
-export default StrapiIntegrationsSection

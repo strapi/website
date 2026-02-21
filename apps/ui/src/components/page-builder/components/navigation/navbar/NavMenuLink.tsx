@@ -1,7 +1,8 @@
 import type { Data } from "@repo/strapi-types"
 
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import StrapiLink, {
+import {
+  StrapiLink,
   getStrapiLinkHref,
 } from "@/components/page-builder/components/utilities/StrapiLink"
 import { Typography } from "@/components/typography"

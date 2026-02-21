@@ -67,7 +67,3 @@ export function StrapiLinkImage({
     </a>
   )
 }
-
-StrapiLinkImage.displayName = "StrapiLinkImage"
-
-export default StrapiLinkImage

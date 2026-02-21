@@ -448,7 +448,7 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   }
   attributes: {
     content: Schema.Attribute.DynamicZone<
-      ["sections.footer-main", "sections.footer-cta"]
+      ["footer.footer-main", "footer.footer-cta"]
     >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &

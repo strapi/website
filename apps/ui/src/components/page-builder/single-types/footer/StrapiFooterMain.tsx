@@ -3,8 +3,8 @@ import Image from "next/image"
 import { Fragment } from "react"
 
 import { Container } from "@/components/elementary/Container"
-import StrapiLinkImage from "@/components/page-builder/components/utilities/StrapiLinkImage"
-import StrapiLinkText from "@/components/page-builder/components/utilities/StrapiLinkText"
+import { StrapiLinkImage } from "@/components/page-builder/components/utilities/StrapiLinkImage"
+import { StrapiLinkText } from "@/components/page-builder/components/utilities/StrapiLinkText"
 
 import gdprBadge from "./badges/gdpr.svg"
 import soc2Badge from "./badges/soc2.png"

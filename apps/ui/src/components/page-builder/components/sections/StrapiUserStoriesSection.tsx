@@ -117,7 +117,3 @@ export function StrapiUserStoriesSection({
     </section>
   )
 }
-
-StrapiUserStoriesSection.displayName = "StrapiUserStoriesSection"
-
-export default StrapiUserStoriesSection

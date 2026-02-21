@@ -72,7 +72,3 @@ export function StrapiHowItWorks({
     </section>
   )
 }
-
-StrapiHowItWorks.displayName = "StrapiHowItWorks"
-
-export default StrapiHowItWorks

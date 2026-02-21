@@ -93,7 +93,7 @@ This is a ready-to-go starter template for Strapi projects. It combines the powe
 - **API**: Typed API calls to Strapi via API clients
 - **UI library**: 20+ pre-installed components, beautifully designed by [Shadcn/ui](https://ui.shadcn.com/)
 - **UI components**: Ready to use components for common use cases (forms, images, tables, navbar and much more)
-- **TailwindCSS**: [TailwindCSS v4](https://tailwindcss.com/) setup with configuration and theme, [CVA](https://cva.style/docs), [tailwind-merge](https://www.npmjs.com/package/tailwind-merge) and [tailwindcss-animate](https://www.npmjs.com/package/tailwindcss-animate)
+- **TailwindCSS**: [TailwindCSS v4](https://tailwindcss.com/) setup with configuration and theme, [CVA](https://cva.style/docs), [tailwind-merge](https://www.npmjs.com/package/tailwind-merge)
 - **Rich text**: Built-in Strapi markdown editor for rich text content
 - **Utils**: Useful utils, hooks and helper functions included
 - **Auth providers**: Ready to plug-in providers like Google, Facebook etc.

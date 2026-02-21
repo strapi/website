@@ -2,7 +2,7 @@
 @import "@repo/design-system/theme.css";
 @import "@repo/design-system/custom-styles.css";
 
-@plugin "tailwindcss-animate";
+@import "tw-animate-css";
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -49,53 +49,6 @@
     1200px + clamp(1rem, 3vw, 2rem) + clamp(1rem, 3vw, 2rem)
   );
   padding-inline: clamp(1rem, 3vw, 2rem);
-}
-
-@utility spring-bounce {
-  --_spring-hover-scale: 1.02;
-  transform: translateZ(0);
-  transition-property:
-    color,
-    background-color,
-    border-color,
-    text-decoration-color,
-    fill,
-    stroke,
-    opacity,
-    box-shadow,
-    transform,
-    translate,
-    scale,
-    rotate,
-    filter,
-    -webkit-backdrop-filter,
-    backdrop-filter;
-  transition-duration: 700ms;
-  transition-timing-function: var(--ease-spring);
-
-  &:hover {
-    scale: var(--_spring-hover-scale);
-  }
-
-  &:active {
-    scale: 0.98;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transform: none;
-    transition: none;
-  }
-
-  &:disabled {
-    &:hover,
-    &:active {
-      scale: 1;
-    }
-  }
-}
-
-@utility spring-bounce-pop {
-  --_spring-hover-scale: 1.1;
 }
 
 @layer base {

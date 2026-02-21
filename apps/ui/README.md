@@ -24,7 +24,7 @@ This is a [Next.js v16](https://nextjs.org/docs) project.
 - @sentry/nextjs
 - dayjs
 - lodash
-- tailwindcss, cva, tailwindcss-animate
+- tailwindcss, cva, tw-animate-css
 
 ## 🚀 Get up and develop
 

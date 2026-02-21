@@ -37,3 +37,48 @@
 .typo-label {
   @apply text-strapi-small-1 font-semibold tracking-[0.5px] uppercase;
 }
+
+@utility spring-bounce {
+  --_spring-hover-scale: 1.02;
+  transform: translateZ(0);
+  transition:
+    color 250ms linear,
+    background-color 250ms linear,
+    border-color 250ms linear,
+    text-decoration-color 250ms linear,
+    fill 250ms linear,
+    stroke 250ms linear,
+    opacity 250ms linear,
+    box-shadow 250ms linear,
+    filter 250ms linear,
+    -webkit-backdrop-filter 250ms linear,
+    backdrop-filter 250ms linear,
+    transform 700ms var(--ease-spring),
+    translate 700ms var(--ease-spring),
+    scale 700ms var(--ease-spring),
+    rotate 700ms var(--ease-spring);
+
+  &:hover {
+    scale: var(--_spring-hover-scale);
+  }
+
+  &:active {
+    scale: 0.98;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition: none;
+  }
+
+  &:disabled {
+    &:hover,
+    &:active {
+      scale: 1;
+    }
+  }
+}
+
+@utility spring-bounce-pop {
+  --_spring-hover-scale: 1.1;
+}

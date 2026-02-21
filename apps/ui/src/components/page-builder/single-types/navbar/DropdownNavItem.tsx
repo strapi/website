@@ -26,7 +26,7 @@ export function DropdownNavItem({ item, bottomLinks }: DropdownNavItemProps) {
       </NavigationMenuTrigger>
 
       <NavigationMenuContent>
-        <div className="divide-strapi-neutral-200 flex divide-x">
+        <div className="divide-strapi-neutral-200 flex max-w-[calc(100vw-2rem)] divide-x">
           {item.sections?.map((section) => (
             <NavMenuSection key={section.id} section={section} />
           ))}
@@ -39,7 +39,8 @@ export function DropdownNavItem({ item, bottomLinks }: DropdownNavItemProps) {
                 <StrapiLink
                   key={link.id}
                   component={link}
-                  className="text-strapi-neutral-800 hover:text-strapi-blue-600 flex items-center gap-1.5 px-3 py-2 text-sm"
+                  className="text-strapi-neutral-800 hover:text-strapi-blue-600 flex items-center gap-1.5 px-3 py-2 text-sm font-normal"
+                  adornmentClassName="size-5"
                 />
               ))}
             </div>

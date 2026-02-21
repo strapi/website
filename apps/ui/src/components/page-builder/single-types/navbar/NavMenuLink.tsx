@@ -32,7 +32,7 @@ export function NavMenuLink({
     <StrapiLink
       component={component.link}
       className={cn(
-        "group/nav-link hover:bg-strapi-blue-100 rounded-strapi-lg flex h-auto min-w-0 flex-col items-start gap-1 px-6 py-5 whitespace-normal no-underline transition-colors hover:no-underline",
+        "group/nav-link hover:bg-strapi-blue-100 rounded-strapi-lg flex h-auto flex-col items-start gap-1 px-6 py-5 whitespace-normal no-underline hover:no-underline",
         className
       )}
     >
@@ -61,5 +61,3 @@ export function NavMenuLink({
     </StrapiLink>
   )
 }
-
-NavMenuLink.displayName = "NavMenuLink"

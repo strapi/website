@@ -5,12 +5,11 @@ import { Container } from "@/components/elementary/Container"
 import { fetchNavbar } from "@/lib/strapi-api/content/server"
 
 import { DesktopNavbar } from "./DesktopNavbar"
+import { MobileNavbar } from "./MobileNavbar"
 
 export function StrapiNavbar({ locale }: { readonly locale: Locale }) {
   const response = use(fetchNavbar(locale))
   const navbar = response?.data
-
-  console.log({ navbar })
 
   if (navbar == null) {
     return null
@@ -26,11 +25,7 @@ export function StrapiNavbar({ locale }: { readonly locale: Locale }) {
           bottomLinks={navbar.bottomLinks}
         />
 
-        {/* <MobileNavbar
-          logoImage={navbar.logoImage}
-          navItems={navbar.navItems}
-          ctaLinks={navbar.ctaLinks}
-        /> */}
+        <MobileNavbar logoImage={navbar.logoImage} navItems={navbar.navItems} />
       </Container>
     </header>
   )

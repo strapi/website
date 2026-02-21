@@ -11,7 +11,7 @@ export function DirectNavItem({
 }: {
   readonly item: Data.Component<"navbar.nav-item">
 }) {
-  const href = getStrapiLinkHref(item.directLink)
+  const href = getStrapiLinkHref(item.link)
 
   if (!href) {
     return (
@@ -22,7 +22,7 @@ export function DirectNavItem({
           "cursor-default"
         )}
       >
-        {item.label}
+        {item.link?.label}
       </span>
     )
   }
@@ -33,7 +33,7 @@ export function DirectNavItem({
       variant="ghost"
       className={cn(navigationMenuTriggerStyle(), "text-base")}
     >
-      {item.label}
+      {item.link?.label}
     </AppLink>
   )
 }

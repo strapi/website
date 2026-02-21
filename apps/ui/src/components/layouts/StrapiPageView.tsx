@@ -55,6 +55,7 @@ export default function StrapiPageView({ params, searchParams }: Props) {
             const id = comp.id
             const key = `${name}-${id}`
             const Component = PageContentComponents[name]
+
             if (Component == null) {
               console.warn(`Unknown component "${name}" with id "${id}".`)
 

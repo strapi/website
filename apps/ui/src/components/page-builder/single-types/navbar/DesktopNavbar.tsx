@@ -7,6 +7,7 @@ import { StrapiLinkImage } from "@/components/page-builder/components/utilities/
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
+  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
@@ -20,6 +21,7 @@ interface DesktopNavbarProps {
   readonly navItems: Nullable<Data.Component<"navbar.nav-item">[]>
   readonly ctaLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
+  readonly className?: string
 }
 
 export function DesktopNavbar({
@@ -27,9 +29,15 @@ export function DesktopNavbar({
   navItems,
   ctaLinks,
   bottomLinks,
+  className,
 }: DesktopNavbarProps) {
   return (
-    <div className="relative flex h-20 w-full items-center gap-3">
+    <div
+      className={cn(
+        "relative hidden h-20 w-full items-center gap-3 lg:flex",
+        className
+      )}
+    >
       {logoImage && (
         <StrapiLinkImage
           component={logoImage}
@@ -49,6 +57,7 @@ export function DesktopNavbar({
                 )}
               </NavigationMenuItem>
             ))}
+            <NavigationMenuIndicator />
           </NavigationMenuList>
         </NavigationMenu>
       ) : null}

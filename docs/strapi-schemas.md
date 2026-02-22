@@ -14,10 +14,10 @@ Pattern: `{category}.{kebab-case-name}`
 
 The UID must match exactly in:
 
-1. Schema file location
-2. Page's dynamiczone components array
-3. Document middleware population rules
-4. Frontend component registry
+1. Schema file location (`apps/strapi/src/components/{category}/{name}.json`)
+2. Dynamic zone components array (page, header, or footer schema)
+3. Populate config path (`apps/strapi/src/populateDynamicZone/{category}/{name}.ts`)
+4. Frontend `ContentComponents` registry (`apps/ui/src/components/page-builder/index.tsx`)
 
 ## Schema Attributes
 

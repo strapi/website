@@ -44,7 +44,7 @@ export function StrapiLinkText({
 
   const formattedHref = formatHref(linkHref)
   const combinedClassName = cn(
-    "underline-offset-4 transition-[text-decoration] hover:underline",
+    "underline-offset-4 transition-[text-decoration]",
     className
   )
 

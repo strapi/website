@@ -12,7 +12,7 @@ import { formatHref, isAppLink, Link } from "@/lib/navigation"
 export function StrapiFooterCta({
   component,
 }: {
-  readonly component: Data.Component<"sections.footer-cta">
+  readonly component: Data.Component<"footer.footer-cta">
 }) {
   const [copied, setCopied] = useState(false)
 

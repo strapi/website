@@ -7,26 +7,26 @@ The page builder enables content editors to compose pages from reusable componen
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                              Strapi CMS                                     │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │ Page (api::page.page)                                               │    │
-│  │  └─ content: dynamiczone                                            │    │
-│  │       ├─ forms.newsletter-form                                      │    │
-│  │       ├─ plans.plan-pricing-cards                                   │    │
-│  │       └─ ...                                                        │    │
-│  └─────────────────────────────────────────────────────────────────────┘    │
+│  ┌──────────────────────────────┐ ┌──────────────┐ ┌──────────────┐       │
+│  │ Page (api::page.page)        │ │ Header       │ │ Footer       │       │
+│  │  └─ content: dynamiczone     │ │ (single type)│ │ (single type)│       │
+│  │       ├─ sections.*          │ │  └─ content:  │ │  └─ content:  │       │
+│  │       ├─ forms.*             │ │    navigation.│ │    footer.*   │       │
+│  │       └─ plans.*             │ │    navbar     │ │               │       │
+│  └──────────────────────────────┘ └──────────────┘ └──────────────┘       │
 │                                    │                                        │
-│                          documentMiddlewares/page.ts                        │
-│                          (deep population rules)                            │
+│                          documentMiddlewares (deep population rules)        │
 └────────────────────────────────────│────────────────────────────────────────┘
                                      │ REST API
                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            Next.js Frontend                                 │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │ StrapiPage (page.tsx)                                                │    │
-│  │  └─ maps __component UID → React component                          │    │
-│  │       ├─ forms.newsletter-form → StrapiNewsletterForm               │    │
-│  │       ├─ plans.plan-pricing-cards → StrapiPlanPricingCards           │    │
+│  │ DynamicZoneRenderer                                                  │    │
+│  │  └─ maps __component UID → React component via ContentComponents    │    │
+│  │       ├─ sections.banner-slice → StrapiBannerSlice (Page)           │    │
+│  │       ├─ footer.footer-main → StrapiFooterMain (Footer)             │    │
+│  │       ├─ navigation.navbar → StrapiNavbar (Header)                  │    │
 │  │       └─ ...                                                        │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -34,10 +34,10 @@ The page builder enables content editors to compose pages from reusable componen
 
 **Data flow:**
 
-1. Editor adds components to page's `content` dynamic zone in Strapi admin
-2. Page is fetched via REST API with deep population (handled by middleware)
-3. `StrapiPage` iterates over `content` array
-4. Each item's `__component` UID is matched against `PageContentComponents` registry
+1. Editor adds components to a `content` dynamic zone in Strapi admin (page, header, or footer)
+2. Content is fetched via REST API with deep population (handled by document middleware)
+3. `DynamicZoneRenderer` iterates over the `content` array
+4. Each item's `__component` UID is matched against the `ContentComponents` registry
 5. Matching React component renders with full component data as props
 
 ## Component Registry
@@ -47,30 +47,37 @@ The mapping between Strapi component UIDs and React components is defined in:
 **`apps/ui/src/components/page-builder/index.tsx`**
 
 ```typescript
-export const PageContentComponents: {
-  [K in UID.Component]?: React.ComponentType<any>
-} = {
-  // Forms
+export const ContentComponents: Partial<
+  Record<UID.Component, React.ComponentType<any>>
+> = {
+  // Page sections/forms/plans
+  "sections.banner-slice": StrapiBannerSlice,
   "forms.newsletter-form": StrapiNewsletterForm,
-
-  // Plans
-  "plans.plan-comparison-table": StrapiPlanComparisonTable,
   "plans.plan-pricing-cards": StrapiPlanPricingCards,
-  // ...
+
+  // Footer
+  "footer.footer-main": StrapiFooterMain,
+  "footer.footer-cta": StrapiFooterCta,
+
+  // Navigation (Header)
+  "navigation.navbar": StrapiNavbar,
 }
 ```
 
-Components are grouped by category (matching Strapi's component folder structure).
+This single registry serves all three dynamic zones (page, header, footer). `DynamicZoneRenderer` uses it by default. Components are grouped by category.
 
 ## Naming Conventions
 
-| Element               | Pattern                                    | Example                                                                         |
-| --------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| Strapi UID            | `category.kebab-case`                      | `forms.newsletter-form`                                                         |
-| Strapi schema file    | `{name}.json`                              | `apps/strapi/src/components/forms/newsletter-form.json`                         |
-| Strapi collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`                                              |
-| React component       | `Strapi{PascalCase}`                       | `StrapiNewsletterForm`                                                          |
-| React file            | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/forms/StrapiNewsletterForm.tsx` |
+| Element               | Pattern                                    | Example                                                                             |
+| --------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| Strapi UID            | `category.kebab-case`                      | `forms.newsletter-form`                                                             |
+| Strapi schema file    | `{name}.json`                              | `apps/strapi/src/components/forms/newsletter-form.json`                             |
+| Strapi collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`                                                  |
+| React component       | `Strapi{PascalCase}`                       | `StrapiNewsletterForm`                                                              |
+| React file (page)     | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/forms/StrapiNewsletterForm.tsx`     |
+| React file (footer)   | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/single-types/footer/StrapiFooterMain.tsx`      |
+| React file (header)   | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/navigation/navbar/StrapiNavbar.tsx` |
+| Populate config       | `{name}.ts`                                | `apps/strapi/src/populateDynamicZone/forms/newsletter-form.ts`                      |
 
 ## Section Layout Pattern
 
@@ -80,13 +87,12 @@ Every page-level section component **must** follow this two-layer structure:
 // Always: outer section holds background + vertical padding
 //         inner Container constrains content width
 <section className="bg-strapi-neutral-100 py-16 lg:py-24">
-  <Container>
-    {/* content */}
-  </Container>
+  <Container>{/* content */}</Container>
 </section>
 ```
 
 Rules:
+
 - **`bg-*` classes always go on `<section>`**, never on `<Container>`. This ensures the background spans the full viewport width.
 - **Vertical padding (`py-*`) goes on `<section>`** so spacing is consistent regardless of content width.
 - **`<Container>` is never omitted** — it provides the `max-w-312 px-6` horizontal constraint.
@@ -147,7 +153,7 @@ Dynamic zone content requires explicit population of nested relations and compon
 
 ### How it works
 
-**`apps/strapi/src/documentMiddlewares/page.ts`** intercepts Strapi queries and, when `populateDynamicZone` is present, automatically builds the deep `populate` tree for each component in the dynamic zone.
+Document middlewares intercept Strapi queries and, when `populateDynamicZone` is present, automatically build the deep `populate` tree for each component in the dynamic zone. This works for all content types with dynamic zones (page, header, footer).
 
 The middleware reads populate configs from **`apps/strapi/src/populateDynamicZone/`**. The directory is scanned automatically — no manual registration needed. File path → UID mapping:
 
@@ -155,10 +161,12 @@ The middleware reads populate configs from **`apps/strapi/src/populateDynamicZon
 populateDynamicZone/
   sections/how-it-works.ts   →  "sections.how-it-works"
   forms/newsletter-form.ts   →  "forms.newsletter-form"
+  footer/footer-main.ts      →  "footer.footer-main"
+  navigation/navbar.ts       →  "navigation.navbar"
   utilities/link.ts          →  "utilities.link"
 ```
 
-**Every new page-level component must have a populate file** at `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`. Without it, nested relations and components are silently omitted from API responses.
+**Every dynamic-zone-level component (page, header, or footer) must have a populate file** at `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`. The directory name must match the component's Strapi category exactly. Without it, nested relations and components are silently omitted from API responses.
 
 ### Populate file patterns
 
@@ -218,13 +226,13 @@ export default {
 
 Shared populate configs live in `utilities/` and should always be imported rather than duplicated:
 
-| Import | Use for |
-|---|---|
-| `../utilities/basic-image` | `utilities.basic-image` fields (has `media` relation) |
-| `../utilities/link` | `utilities.link` fields (has `page` relation + `decorations`) |
-| `../utilities/link-decorations` | `utilities.link-decorations` (has `leftIcon`, `rightIcon`) |
-| `../utilities/link-image` | `utilities.link-image` (has `image` + `page`) |
-| `../utilities/link-text` | `utilities.link-text` |
+| Import                          | Use for                                                       |
+| ------------------------------- | ------------------------------------------------------------- |
+| `../utilities/basic-image`      | `utilities.basic-image` fields (has `media` relation)         |
+| `../utilities/link`             | `utilities.link` fields (has `page` relation + `decorations`) |
+| `../utilities/link-decorations` | `utilities.link-decorations` (has `leftIcon`, `rightIcon`)    |
+| `../utilities/link-image`       | `utilities.link-image` (has `image` + `page`)                 |
+| `../utilities/link-text`        | `utilities.link-text`                                         |
 
 ### Triggering the middleware
 
@@ -239,58 +247,44 @@ await PublicStrapiClient.fetchOneByFullPath("api::page.page", fullPath, {
 })
 ```
 
-## Page Rendering
+## Rendering
 
-The rendering logic lives inline in the `StrapiPage` component:
+All dynamic zones (page, header, footer) use the shared `DynamicZoneRenderer`:
 
-**`apps/ui/src/app/[locale]/[[...rest]]/page.tsx`**
+**`apps/ui/src/components/page-builder/DynamicZoneRenderer.tsx`**
 
 ```typescript
-export default function StrapiPage(props: PageProps<"/[locale]/[[...rest]]">) {
-  const params = use(props.params)
-  const locale = params.locale as Locale
-
-  const fullPath = ROOT_PAGE_PATH + (params.rest ?? []).join("/")
-  const response = use(fetchPage(fullPath, locale))
-  const data = response?.data
-
-  if (data?.content == null) {
-    notFound()
-  }
-
-  const { content, ...restPageData } = data
-
-  return (
-    <>
-      <StrapiStructuredData structuredData={data?.seo?.structuredData} />
-      <main>
-        {content
-          .filter((comp) => comp != null)
-          .map((comp) => {
-            const Component = PageContentComponents[comp.__component]
-
-            if (Component == null) {
-              console.warn(`Unknown component "${comp.__component}"`)
-              return <div>Component not implemented</div>
-            }
-
-            return (
-              <ErrorBoundary key={`${comp.__component}-${comp.id}`}>
-                <Component
-                  component={comp}
-                  pageParams={params}
-                  page={restPageData}
-                />
-              </ErrorBoundary>
-            )
-          })}
-      </main>
-    </>
-  )
+export function DynamicZoneRenderer({
+  content,
+  registry = ContentComponents,
+  itemClassName,
+  extraProps,
+}: DynamicZoneRendererProps) {
+  return content
+    .filter((comp) => comp != null)
+    .map((comp) => {
+      const Component = registry[comp.__component as UID.Component]
+      // renders Component or warning for unknown UIDs
+    })
 }
 ```
 
-Each component is wrapped in an `ErrorBoundary` to prevent a single component error from breaking the entire page. Components also receive `pageParams` and `page` props in addition to the `component` data.
+Each component is wrapped in an `ErrorBoundary`. Usage in the three content types:
+
+```typescript
+// Page — apps/ui/src/app/[locale]/[[...rest]]/page.tsx
+<main>
+  <DynamicZoneRenderer content={data.content} />
+</main>
+
+// Header — apps/ui/src/components/page-builder/single-types/header/StrapiHeader.tsx
+<DynamicZoneRenderer content={content} />
+
+// Footer — apps/ui/src/components/page-builder/single-types/footer/StrapiFooter.tsx
+<footer>
+  <DynamicZoneRenderer content={content} />
+</footer>
+```
 
 ## Adding New Components
 
@@ -303,10 +297,10 @@ Use the `create-content-component` skill:
 Or follow these manual steps:
 
 1. Create Strapi schema: `apps/strapi/src/components/{category}/{name}.json`
-2. Register in page dynamic zone: `apps/strapi/src/api/page/content-types/page/schema.json`
-3. Add population files: `apps/strapi/src/populateDynamicZone`
-4. Create React component: `apps/ui/src/components/page-builder/components/{category}/Strapi{Name}.tsx`
-5. Register in `PageContentComponents`: `apps/ui/src/components/page-builder/index.tsx`
+2. Register in appropriate dynamic zone schema (page, header, or footer)
+3. Add populate config: `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`
+4. Create React component (see Naming Conventions for path per dynamic zone type)
+5. Register in `ContentComponents`: `apps/ui/src/components/page-builder/index.tsx`
 6. Generate types: `cd apps/strapi && pnpm generate:types`
 
 ## Related Documentation

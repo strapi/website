@@ -1,3 +1,5 @@
+import type { Modules } from "@strapi/strapi"
+
 import basicImagePopulate from "../utilities/basic-image"
 import linkPopulate from "../utilities/link"
 
@@ -8,9 +10,7 @@ export default {
         icon: basicImagePopulate,
       },
     },
-
     featureLogos: basicImagePopulate,
-
     ctaCards: {
       populate: {
         icon: basicImagePopulate,
@@ -18,4 +18,4 @@ export default {
       },
     },
   },
-}
+} as Modules.Documents.Params.Populate.NestedParams<"footer.footer-cta">

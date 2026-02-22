@@ -5,6 +5,7 @@ import {
   NavigationMenuContent,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
+import { cn } from "@/lib/styles"
 
 import { NavMenuSection } from "./NavMenuSection"
 import { StrapiLink } from "../../utilities/StrapiLink"
@@ -12,16 +13,21 @@ import { StrapiLink } from "../../utilities/StrapiLink"
 export interface DropdownNavItemProps {
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly item: Data.Component<"navbar.nav-item">
+  readonly className?: string
 }
 
-export function DropdownNavItem({ item, bottomLinks }: DropdownNavItemProps) {
+export function DropdownNavItem({
+  item,
+  bottomLinks,
+  className,
+}: DropdownNavItemProps) {
   if (!item?.link) {
     return null
   }
 
   return (
     <>
-      <NavigationMenuTrigger className="text-base">
+      <NavigationMenuTrigger className={cn("text-base", className)}>
         {item.link?.label}
       </NavigationMenuTrigger>
 

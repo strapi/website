@@ -113,10 +113,31 @@ Guidelines:
 
 ## Component Migration Convention
 
-For component stories, use:
+For stories that copy/migrate components from strapi.io, the `/copy-component` skill **must** be used. It contains critical extraction logic (Playwright computed styles, design token mapping, responsive diffing, reuse auditing) that cannot be replicated by ad-hoc implementation.
 
-- `data.copyComponentInput` — single source of truth for `copy-component` execution params (snake_case keys: `component_name`, `source_url`, `selector`, `prd_goal`, `content_constraints`, `reuse_mode`, `shadcn_mode`, `acceptance_profile`, `category`).
-- `metadata.executionSkill = "copy-component"` (required for deterministic skill routing)
+### Required fields
+
+- `data.copyComponentInput` — single source of truth for `/copy-component` execution params (snake_case keys: `component_name`, `source_url`, `selector`, `prd_goal`, `content_constraints`, `reuse_mode`, `shadcn_mode`, `acceptance_profile`, `category`).
+- `metadata.executionSkill = "copy-component"` — **required for deterministic skill routing**. The ralph runner uses this to inject a mandatory skill invocation instruction into the executor prompt. Without it, the LLM may attempt manual implementation.
+
+### Story description guidance
+
+The story `description` must explicitly reference the skill. This is what the LLM reads first and plans around:
+
+**Good**: "Use /copy-component skill to extract, map, and generate the pricing hero section. Pass data.copyComponentInput as the intake contract."
+
+**Bad**: "Copy the pricing hero section with simplified schema and token-mapped Tailwind." (The LLM will try to do this manually.)
+
+### Acceptance criteria
+
+Always include these skill-specific criteria:
+
+- `/copy-component skill was invoked with data.copyComponentInput`
+- `Computed styles were extracted via browser_evaluate (not guessed from screenshots)`
+- `All CSS values are mapped to design tokens from packages/design-system/src/theme.css`
+- `Populate config exists at apps/strapi/src/populateDynamicZone/{category}/{name}.ts`
+
+### Other conventions
 
 Do not duplicate `copyComponentInput` fields as top-level `data.*` camelCase keys — `copyComponentInput` is the authoritative execution payload.
 

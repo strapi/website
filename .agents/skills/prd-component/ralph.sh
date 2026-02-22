@@ -764,9 +764,22 @@ for ((i=1; i<=ITERATIONS; i++)); do
       continue
     fi
     execution_skill_rule=$(cat <<SKILL_RULE
-   Execution skill requirement: use /copy-component for implementation; do not bypass with manual alternative.
-   When invoking /copy-component, pass this exact payload:
+
+MANDATORY SKILL ROUTING — READ THIS FIRST:
+   This story REQUIRES the /copy-component skill. Do NOT implement manually.
+   The skill contains critical logic you cannot replicate ad-hoc:
+   - Playwright browser_evaluate for computed style extraction
+   - Design token mapping from packages/design-system/src/theme.css
+   - Responsive diffing (desktop 1280px vs mobile 375px)
+   - Reuse audit against existing component registry
+   - Deterministic schema creation via /create-content-component delegation
+
+   STEP 1: Read .agents/skills/copy-component/SKILL.md
+   STEP 2: Invoke /copy-component with this exact intake contract:
    ${copy_component_input}
+   STEP 3: Follow the skill's output — do not override its decisions.
+
+   If the skill fails or is unavailable, mark the story as BLOCKED — do not fall back to manual implementation.
 SKILL_RULE
 )
   fi

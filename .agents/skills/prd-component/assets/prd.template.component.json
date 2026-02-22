@@ -3,7 +3,10 @@
   "branchName": "ralph/component-migration",
   "description": "Component-by-component migration from strapi.io",
   "constraints": [],
-  "rules": [],
+  "rules": [
+    "When a story has metadata.executionSkill set, you MUST invoke that skill (e.g. /copy-component) with data.copyComponentInput as the intake contract. Do NOT implement the work manually — the skill contains critical extraction logic (computed styles, design token mapping, responsive diffing) that cannot be replicated ad-hoc.",
+    "For copy-component stories: read .agents/skills/copy-component/SKILL.md first, then invoke the skill with the exact copyComponentInput payload. The skill will handle Playwright extraction, token mapping, schema creation, and React component generation."
+  ],
   "nonGoals": [],
   "qualityGates": [
     "cd apps/strapi && pnpm generate:types (when schema changes)",
@@ -29,18 +32,22 @@
     {
       "id": "US-001",
       "title": "Migrate example section",
-      "description": "Copy one section with simplified schema and token-mapped Tailwind",
+      "description": "Use /copy-component skill to extract, map, and generate this section. The skill handles Playwright-based style extraction, design token mapping, Strapi schema creation, populate config, and React component generation. Pass data.copyComponentInput as the skill's intake contract.",
       "status": "open",
       "priority": 1,
       "passes": false,
       "notes": "",
       "dependsOn": [],
       "acceptanceCriteria": [
+        "/copy-component skill was invoked with data.copyComponentInput — do NOT implement manually",
+        "Computed styles were extracted via browser_evaluate (not guessed from screenshots)",
+        "All CSS values are mapped to design tokens from packages/design-system/src/theme.css",
         "cd apps/strapi && pnpm generate:types passes when schema changes are made",
         "cd apps/ui && pnpm typecheck passes",
         "Source and local section screenshots are captured and compared",
         "Text uses Typography; links/images use Strapi utility wrappers",
-        "No duplicate UID or duplicate PageContentComponents mapping"
+        "No duplicate UID or duplicate ContentComponents mapping",
+        "Populate config exists at apps/strapi/src/populateDynamicZone/{category}/{name}.ts"
       ],
       "loopState": {
         "phase": "queued",

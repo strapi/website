@@ -1,9 +1,7 @@
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Nullable } from "@repo/shared-data"
 import type { Data } from "@repo/strapi-types"
 
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
-import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
   NavigationMenuIndicator,
@@ -14,11 +12,13 @@ import { cn } from "@/lib/styles"
 
 import { DirectNavItem } from "./DirectNavItem"
 import { DropdownNavItem } from "./DropdownNavItem"
+import { StrapiLinkImage } from "../../utilities/StrapiLinkImage"
 
-interface DesktopNavbarProps {
+interface DesktopNavbarProps extends React.ComponentProps<"div"> {
   readonly navItems: Nullable<Data.Component<"navbar.nav-item">[]>
   readonly ctaLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
+  readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
   readonly className?: string
 }
 
@@ -26,15 +26,22 @@ export function DesktopNavbar({
   navItems,
   ctaLinks,
   bottomLinks,
+  logoImage,
   className,
+  ...restProps
 }: DesktopNavbarProps) {
   return (
     <div
-      className={cn(
-        "relative hidden h-20 w-full items-center gap-3 lg:flex",
-        className
-      )}
+      className={cn("hidden items-center gap-3 lg:flex", className)}
+      {...restProps}
     >
+      {logoImage && (
+        <StrapiLinkImage
+          component={logoImage}
+          className="flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-7 [&_img]:!w-auto xl:[&_img]:!max-h-8"
+        />
+      )}
+
       {navItems?.length ? (
         <NavigationMenu className="static max-w-none flex-initial">
           <NavigationMenuList>
@@ -53,16 +60,12 @@ export function DesktopNavbar({
       ) : null}
 
       <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="icon" aria-label="Search">
-          <MagnifyingGlassIcon className="size-4" weight="bold" />
-        </Button>
-
         {ctaLinks?.map((link, index) => (
           <StrapiLink
             key={link.id ?? index}
             component={link}
             className={cn(
-              "whitespace-nowrap",
+              "whitespace-nowrap lg:h-[38px] lg:px-[18px] lg:text-sm xl:h-[42px] xl:px-6 xl:text-base",
               !link.decorations && index === 0 && "border-primary border",
               !link.decorations &&
                 index > 0 &&

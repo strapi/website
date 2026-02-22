@@ -300,16 +300,13 @@ In client React components/hooks use `useQuery` (or `useMutation`) hook from `@t
 
 ```tsx
 // src/lib/strapi-api/content/server.ts
-export async function fetchNavbar(locale: Locale) {
+export async function fetchHeader(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchOne("api::navbar.navbar", undefined, {
+    return await PublicStrapiClient.fetchOne("api::header.header", undefined, {
       locale,
-      populate: {
-        links: true,
-        logoImage: { populate: { image: true, link: true } },
-      },
+      populateDynamicZone: { content: true },
     })
-  } catch (e: any) {
+  } catch (e: unknown) {
     ...
   }
 }
@@ -370,15 +367,14 @@ Page builder landing page is rendered inside the main [dynamic route](src/app/[l
 
 Special case is the Index/Root page. By default, its `fullPath` is set to shared value `/` in the [@repo/shared-data](../../packages/shared-data/index.ts) package.
 
-Another important aspect is the mapping between Strapi components and frontend components. This is handled in the [src/components/page-builder/index.ts](src/components/page-builder/index.tsx) file. `PageContentComponents` contains a mapping between Strapi component names and their corresponding React components.
+Another important aspect is the mapping between Strapi components and frontend components. This is handled in the [src/components/page-builder/index.ts](src/components/page-builder/index.tsx) file. `ContentComponents` contains a mapping between Strapi component UIDs and their corresponding React components. This single registry serves all three dynamic zones (page, header, footer) via a shared `DynamicZoneRenderer`.
 
 > [!WARNING]
-> The mapping is not automatically generated, and it is your responsibility to keep it up to date. If you add a new page-level component in Strapi, you need to add it here as well.
+> The mapping is not automatically generated, and it is your responsibility to keep it up to date. If you add a new dynamic-zone-level component in Strapi, you need to add it here as well.
 > Currently, there is a performance issue with dynamic lazy-loading and all components are preloaded in the page builder. This is a known issue and will be fixed in the future. See [#65](https://github.com/notum-cz/strapi-next-monorepo-starter/issues/65)
 
 > [!TIP]
-> Not all Strapi components should be rendered at the page level. Some components are intended to be used as subcomponents within other components (e.g. elements, utilities).
-> Single types (e.g. Navbar, Footer) are not rendered in the page builder, but are fetched and rendered separately. They are not included in the `PageContentComponents` mapping.
+> Not all Strapi components should be rendered at the dynamic zone level. Some components are intended to be used as subcomponents within other components (e.g. elements, utilities, navbar sub-components).
 
 #### Page Builder Overview (Developer Tooling)
 

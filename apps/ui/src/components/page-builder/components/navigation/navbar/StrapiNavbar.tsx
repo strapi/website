@@ -4,7 +4,6 @@ import { Container } from "@/components/elementary/Container"
 
 import { DesktopNavbar } from "./DesktopNavbar"
 import { MobileNavbar } from "./MobileNavbar"
-import { StrapiLinkImage } from "../../utilities/StrapiLinkImage"
 
 export function StrapiNavbar({
   component,
@@ -12,23 +11,20 @@ export function StrapiNavbar({
   readonly component: Data.Component<"navigation.navbar">
 }) {
   return (
-    <nav className="sticky top-0 z-40 w-full bg-white shadow-lg/8 transition-colors duration-300">
+    <nav className="bg-background sticky top-0 z-40 flex h-16 w-full [animation:nav-shadow_linear_both] items-center [animation-range:0px_80px] [animation-timeline:scroll()] lg:h-20">
       <Container>
-        <div className="relative hidden h-20 w-full items-center gap-3 lg:flex">
-          {component.logoImage && (
-            <StrapiLinkImage
-              component={component.logoImage}
-              className="flex shrink-0 items-center p-0"
-            />
-          )}
+        <DesktopNavbar
+          navItems={component.navItems}
+          ctaLinks={component.ctaLinks}
+          bottomLinks={component.bottomLinks}
+          logoImage={component.logoImage}
+        />
 
-          <DesktopNavbar
-            navItems={component.navItems}
-            ctaLinks={component.ctaLinks}
-            bottomLinks={component.bottomLinks}
-          />
-          <MobileNavbar navItems={component.navItems} />
-        </div>
+        <MobileNavbar
+          navItems={component.navItems}
+          logoImage={component.logoImage}
+          bottomLinks={component.bottomLinks}
+        />
       </Container>
     </nav>
   )

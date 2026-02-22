@@ -6,11 +6,16 @@ import { cn } from "@/lib/styles"
 
 import { getStrapiLinkHref } from "../../utilities/StrapiLink"
 
-export function DirectNavItem({
-  item,
-}: {
+export interface DirectNavItemProps {
   readonly item: Data.Component<"navbar.nav-item">
-}) {
+  readonly className?: string
+}
+
+export function DirectNavItem({ item, className }: DirectNavItemProps) {
+  if (!item) {
+    return null
+  }
+
   const href = getStrapiLinkHref(item.link)
 
   if (!href) {
@@ -19,7 +24,8 @@ export function DirectNavItem({
         className={cn(
           navigationMenuTriggerStyle(),
           "text-base",
-          "cursor-default"
+          "cursor-default",
+          className
         )}
       >
         {item.link?.label}
@@ -31,7 +37,7 @@ export function DirectNavItem({
     <AppLink
       href={href}
       variant="ghost"
-      className={cn(navigationMenuTriggerStyle(), "text-base")}
+      className={cn(navigationMenuTriggerStyle(), "text-base", className)}
     >
       {item.link?.label}
     </AppLink>

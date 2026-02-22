@@ -21,10 +21,18 @@
 
 ## Page Builder
 
-Strapi component UIDs map to React components via a central registry.
+Strapi component UIDs map to React components via a central `ContentComponents` registry. Three content types use dynamic zones:
 
-- Strapi: Dynamic zone components in `src/components/{category}/`
-- Next.js: React components in `components/page-builder/components/{category}/`
+- **Page** (collection type): `sections`, `forms`, `plans` components
+- **Header** (single type): `navigation` components
+- **Footer** (single type): `footer` components
+
+All are rendered by a shared `DynamicZoneRenderer`.
+
+- Strapi schemas: `src/components/{category}/`
+- Populate configs: `src/populateDynamicZone/{category}/`
+- Page components: `components/page-builder/components/{category}/`
+- Footer components: `components/page-builder/single-types/footer/`
 - Registry: `components/page-builder/index.tsx`
 
 See [Page Builder](./page-builder.md) for details.

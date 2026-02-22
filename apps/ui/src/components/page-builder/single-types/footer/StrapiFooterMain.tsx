@@ -12,7 +12,7 @@ import soc2Badge from "./badges/soc2.png"
 export function StrapiFooterMain({
   component,
 }: {
-  readonly component: Data.Component<"sections.footer-main">
+  readonly component: Data.Component<"footer.footer-main">
 }) {
   const copyRight = component.copyRight?.replace?.(
     "{YEAR}",

@@ -7,17 +7,12 @@ import { NavMenuLink } from "./NavMenuLink"
 
 interface NavMenuSectionProps {
   readonly section: Data.Component<"navbar.nav-section"> | undefined | null
-  readonly compact?: boolean
   readonly className?: string
 }
 
 export const NAV_MENU_DEFAULT_COLUMNS = 1
 
-export function NavMenuSection({
-  section,
-  compact = false,
-  className,
-}: NavMenuSectionProps) {
+export function NavMenuSection({ section, className }: NavMenuSectionProps) {
   if (!section?.items?.length) {
     return null
   }
@@ -39,7 +34,7 @@ export function NavMenuSection({
         }}
       >
         {section.items.map((item) => (
-          <NavMenuLink key={item.id} component={item} compact={compact} />
+          <NavMenuLink key={item.id} component={item} />
         ))}
       </div>
     </div>

@@ -1,3 +1,5 @@
+import type { Modules } from "@strapi/strapi"
+
 import basicImagePopulate from "../utilities/basic-image"
 import linkImagePopulate from "../utilities/link-image"
 import linkTextPopulate from "../utilities/link-text"
@@ -5,15 +7,12 @@ import linkTextPopulate from "../utilities/link-text"
 export default {
   populate: {
     logoImage: linkImagePopulate,
-
     sections: {
       populate: {
         links: linkTextPopulate,
       },
     },
-
     links: linkTextPopulate,
-
     socials: {
       populate: {
         socials: {
@@ -27,4 +26,4 @@ export default {
       },
     },
   },
-}
+} as Modules.Documents.Params.Populate.NestedParams<"footer.footer-main">

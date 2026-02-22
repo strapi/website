@@ -105,6 +105,23 @@ Given category `sections` and name `testimonials`:
 - `collectionName`: `components_sections_testimonials` (format: `components_{category}_{name_underscored}`)
 - React component: `StrapiTestimonials` (prefix `Strapi` + PascalCase of name)
 - React file: `apps/ui/src/components/page-builder/components/sections/StrapiTestimonials.tsx`
+- Populate config: `apps/strapi/src/populateDynamicZone/sections/testimonials.ts`
+
+Given category `footer` and name `footer-cta`:
+
+- Strapi UID: `footer.footer-cta`
+- Strapi file: `apps/strapi/src/components/footer/footer-cta.json`
+- React component: `StrapiFooterCta`
+- React file: `apps/ui/src/components/page-builder/single-types/footer/StrapiFooterCta.tsx`
+- Populate config: `apps/strapi/src/populateDynamicZone/footer/footer-cta.ts`
+
+Given category `navigation` and name `navbar`:
+
+- Strapi UID: `navigation.navbar`
+- Strapi file: `apps/strapi/src/components/navigation/navbar.json`
+- React component: `StrapiNavbar`
+- React file: `apps/ui/src/components/page-builder/components/navigation/navbar/StrapiNavbar.tsx`
+- Populate config: `apps/strapi/src/populateDynamicZone/navigation/navbar.ts`
 
 ## Caller Contract (Used by `/copy-component`)
 
@@ -147,19 +164,25 @@ Compute:
 
 - UID: `{category}.{name}`
 - Schema path: `apps/strapi/src/components/{category}/{name}.json`
-- React path: `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCaseName}.tsx`
+- React path: see Naming Convention section for the correct path per dynamic zone type
+- Populate path: `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`
 
 Run these checks:
 
 - **A. Schema file exists**
-- **B. UID already in** `apps/strapi/src/api/page/content-types/page/schema.json` `attributes.content.components` (**page-level only**)
+- **B. UID registered in the appropriate dynamic zone** (dynamic-zone-level only — see rule below)
 - **C. React component file exists**
-- **D. Registry mapping exists in** `apps/ui/src/components/page-builder/index.tsx` (**page-level only**)
+- **D. Registry mapping exists in** `apps/ui/src/components/page-builder/index.tsx` (dynamic-zone-level only)
 
-Use this page-level rule:
+Use this dynamic-zone-level rule to determine which dynamic zone (if any) the component belongs to:
 
-- page-level: sections/forms/plans (and categories already present in page dynamic zone)
-- utility-level: utilities/elements/seo-utilities unless explicitly top-level
+| Dynamic zone | Schema file                                                   | Categories                                                                          |
+| ------------ | ------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **Page**     | `apps/strapi/src/api/page/content-types/page/schema.json`     | `sections`, `forms`, `plans`                                                        |
+| **Header**   | `apps/strapi/src/api/header/content-types/header/schema.json` | `navigation`                                                                        |
+| **Footer**   | `apps/strapi/src/api/footer/content-types/footer/schema.json` | `footer` (top-level only, not nested sub-components like `footer.footer-cta-badge`) |
+
+**Utility-level** (not registered in any dynamic zone): `utilities`, `elements`, `seo-utilities`, `navbar`
 
 Decision matrix:
 
@@ -167,6 +190,8 @@ Decision matrix:
 - mixed applicable true/false: repair missing artifacts only.
 - no applicable checks true: create new component artifacts.
 - naming conflict with incompatible existing shape: create next suffix (`{name}-v2`, `-v3`, ...).
+
+**Note**: "applicable" means checks relevant to the component's dynamic zone level. For utility-level components, checks B and D are not applicable.
 
 ### 2. Create or extend Strapi component schema
 
@@ -201,23 +226,25 @@ Common attribute patterns:
 - Enum: `{ "type": "enumeration", "enum": ["option1", "option2"] }`
 - Boolean: `{ "type": "boolean", "default": false }`
 
-### 3. Register UID in page dynamic zone when component is page-level
+### 3. Register UID in the appropriate dynamic zone
 
-Edit `apps/strapi/src/api/page/content-types/page/schema.json`:
+Determine which dynamic zone the component belongs to using the rule from Step 1:
 
-Determine whether this component should be page-level:
+| Dynamic zone | Schema file                                                   | Categories                   |
+| ------------ | ------------------------------------------------------------- | ---------------------------- |
+| **Page**     | `apps/strapi/src/api/page/content-types/page/schema.json`     | `sections`, `forms`, `plans` |
+| **Header**   | `apps/strapi/src/api/header/content-types/header/schema.json` | `navigation`                 |
+| **Footer**   | `apps/strapi/src/api/footer/content-types/footer/schema.json` | `footer` (top-level only)    |
 
-- **Page-level (register):** sections/forms/plans (and any category already used in page `content` dynamic zone).
-- **Utility-level (skip):** utilities/elements/seo-utilities unless explicitly requested as top-level.
+If the component belongs to a dynamic zone:
 
-If page-level:
-
+- Edit the corresponding schema file.
 - Ensure `{category}.{name}` appears exactly once in `attributes.content.components`.
 - If already present, do not add duplicate entries.
 
 If utility-level:
 
-- Do not add to page `content` dynamic zone.
+- Do not add to any dynamic zone.
 
 ### 4. Add or update populate config
 
@@ -225,7 +252,9 @@ Create `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`.
 
 The middleware auto-discovers this file from the filesystem — the file path maps directly to the Strapi UID (`{category}/{name}.ts` → `{category}.{name}`). No manual registration is needed.
 
-**Every page-level component must have this file.** Without it the middleware silently omits nested relations from API responses.
+**Every dynamic-zone-level component (page, header, or footer) must have this file.** Without it the middleware silently omits nested relations from API responses.
+
+**Path must match the component's Strapi category exactly** — e.g. `footer/footer-cta.ts` for UID `footer.footer-cta`, `navigation/navbar.ts` for UID `navigation.navbar`. Placing a file in the wrong directory (e.g. `sections/footer-cta.ts`) produces a wrong UID mapping at runtime.
 
 #### Decision tree
 
@@ -245,9 +274,9 @@ import linkPopulate from "../utilities/link"
 
 export default {
   populate: {
-    image: basicImagePopulate,                       // utilities.basic-image field
-    ctas: linkPopulate,                              // utilities.link field
-    items: true,                                     // repeatable with only scalar fields
+    image: basicImagePopulate, // utilities.basic-image field
+    ctas: linkPopulate, // utilities.link field
+    items: true, // repeatable with only scalar fields
     // OR when items has its own nested relations:
     // items: { populate: { icon: basicImagePopulate } },
   },
@@ -277,13 +306,13 @@ export default {
 
 Always import from shared utility files rather than repeating inline definitions:
 
-| File | Use for |
-|---|---|
-| `../utilities/basic-image` | `utilities.basic-image` (has `media`) |
-| `../utilities/link` | `utilities.link` (has `page`, `decorations`) |
+| File                            | Use for                                                    |
+| ------------------------------- | ---------------------------------------------------------- |
+| `../utilities/basic-image`      | `utilities.basic-image` (has `media`)                      |
+| `../utilities/link`             | `utilities.link` (has `page`, `decorations`)               |
 | `../utilities/link-decorations` | `utilities.link-decorations` (has `leftIcon`, `rightIcon`) |
-| `../utilities/link-image` | `utilities.link-image` (has `image`, `page`) |
-| `../utilities/link-text` | `utilities.link-text` |
+| `../utilities/link-image`       | `utilities.link-image` (has `image`, `page`)               |
+| `../utilities/link-text`        | `utilities.link-text`                                      |
 
 For utility-category components that are only ever used as nested fields (never appear directly in the page dynamic zone), the populate file is optional but recommended when you need to share the config via imports (e.g., a new `utilities.my-icon` referenced by multiple section populate files). Place it at `../utilities/my-icon.ts` and import where needed.
 
@@ -291,7 +320,11 @@ For utility-category components that are only ever used as nested fields (never 
 
 > **Skip condition**: If caller passed `skip_react_component: true`, skip this step entirely. The calling skill will create its own React implementation.
 
-Target file: `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCaseName}.tsx`.
+Target file depends on the dynamic zone type:
+
+- **Page components** (`sections`, `forms`, `plans`): `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCaseName}.tsx`
+- **Footer components**: `apps/ui/src/components/page-builder/single-types/footer/Strapi{PascalCaseName}.tsx`
+- **Navigation/Header components**: `apps/ui/src/components/page-builder/components/navigation/{name}/Strapi{PascalCaseName}.tsx`
 
 Create a compilable baseline that renders real data fields (no hardcoded placeholder text and no `removeThisWhenYouNeedMe` call):
 
@@ -332,11 +365,11 @@ Rules:
 - Vertical padding (`py-*`) goes on `<section>`.
 - See `docs/page-builder.md` "Section Layout Pattern" for canonical examples.
 
-### 6. Register in `PageContentComponents` when page-level
+### 6. Register in `ContentComponents` when component belongs to a dynamic zone
 
 Edit `apps/ui/src/components/page-builder/index.tsx`:
 
-If component is page-level (same rule as Step 3):
+If the component belongs to any dynamic zone (same rule as Step 3):
 
 1. Ensure import exists (add if missing, keep category group ordering).
 2. Ensure mapping exists exactly once:
@@ -345,10 +378,10 @@ If component is page-level (same rule as Step 3):
 "{category}.{name}": Strapi{PascalCaseName},
 ```
 
-If component is utility-level:
+If utility-level:
 
-- Do not add a `PageContentComponents` mapping.
-- Keep the component available for reuse by other page-level components.
+- Do not add a `ContentComponents` mapping.
+- Keep the component available for reuse by other components.
 
 ### 7. Generate types and run quality gates
 

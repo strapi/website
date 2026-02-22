@@ -1,3 +1,5 @@
+import type { Modules } from "@strapi/strapi"
+
 export default {
   populate: {
     page: {
@@ -5,4 +7,4 @@ export default {
       fields: ["fullPath"] as unknown as any,
     },
   },
-}
+} as Modules.Documents.Params.Populate.NestedParams<"utilities.link-text">

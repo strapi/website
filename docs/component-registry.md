@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-02-19 (copy-component how-it-works)
+> Auto-updated by skills. Last updated: 2026-02-22 (dynamic zone header/footer support)
 
 ## Registry Freshness Policy
 
@@ -8,6 +8,18 @@
 - If skill checks detect drift against repository files (`apps/strapi/src/components/**/**/*.json`, `apps/ui/src/components/page-builder/index.tsx`, `apps/ui/src/components/ui/*`), filesystem state wins.
 - When drift is detected, skills should continue with filesystem truth and report `registry-refresh-required` in `manual_steps_needed`.
 - Skills that create/update components must refresh this document before finishing.
+
+## Dynamic Zones
+
+Components are registered in one of three dynamic zones depending on their category:
+
+| Dynamic Zone | Content Type | Schema Path                                                   | Allowed Categories           |
+| ------------ | ------------ | ------------------------------------------------------------- | ---------------------------- |
+| Page         | Collection   | `apps/strapi/src/api/page/content-types/page/schema.json`     | `sections`, `forms`, `plans` |
+| Header       | Single       | `apps/strapi/src/api/header/content-types/header/schema.json` | `navigation`                 |
+| Footer       | Single       | `apps/strapi/src/api/footer/content-types/footer/schema.json` | `footer` (top-level only)    |
+
+Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) are nested-only and not registered in any dynamic zone.
 
 ## Strapi Components
 
@@ -17,6 +29,7 @@
 | `sections.faq-section`                  | sections      | FAQ Section                 | sectionLabel:string (opt), heading:string (req), description:string (opt), items:repeatable utilities.accordions                                                                                                                                                                                  |
 | `sections.user-stories-section`         | sections      | User Stories Section        | label:string (opt), heading:string (opt)                                                                                                                                                                                                                                                          |
 | `sections.how-it-works`                 | sections      | How It Works                | heading:string (req), description:string (opt), items:repeatable elements.how-it-works-item                                                                                                                                                                                                       |
+| `sections.integrations-section`         | sections      | Integrations Section        | label:string (opt), heading:string (opt)                                                                                                                                                                                                                                                          |
 | `elements.how-it-works-item`            | elements      | How It Works Item           | icon:utilities.basic-image (opt), title:string (req), description:string (req)                                                                                                                                                                                                                    |
 | `forms.contact-form`                    | forms         | ContactForm                 | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
 | `forms.newsletter-form`                 | forms         | Newsletter                  | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
@@ -34,7 +47,12 @@
 | `utilities.text`                        | utilities     | Text                        | text:string                                                                                                                                                                                                                                                                                       |
 | `utilities.tooltip`                     | utilities     | Tooltip                     | content:richtext                                                                                                                                                                                                                                                                                  |
 | `elements.footer-item`                  | elements      | FooterItem                  | title:string, links:component                                                                                                                                                                                                                                                                     |
+| `footer.footer-main`                    | footer        | Footer Main                 | logoImage:utilities.link-image, tagline:richtext, sections:repeatable elements.footer-item, copyRight:string, links:repeatable utilities.link-text, socials:footer.footer-socials                                                                                                                 |
+| `footer.footer-cta`                     | footer        | Footer CTA                  | heading:string (req), codeSnippet:string, featureBadges:repeatable footer.footer-cta-badge, featureLogos:repeatable utilities.basic-image, ctaCards:repeatable footer.footer-cta-card                                                                                                             |
+| `footer.footer-cta-badge`               | footer        | Footer CTA Badge            | icon:utilities.basic-image, text:string (req)                                                                                                                                                                                                                                                     |
+| `footer.footer-cta-card`                | footer        | Footer CTA Card             | icon:utilities.basic-image, title:string (req), description:text, link:utilities.link                                                                                                                                                                                                             |
 | `footer.footer-socials`                 | footer        | FooterSocials               | title:string, socials:component                                                                                                                                                                                                                                                                   |
+| `navigation.navbar`                     | navigation    | Navbar                      | logoImage:utilities.link-image, navItems:repeatable navbar.nav-item, bottomLinks:repeatable utilities.link, ctaLinks:repeatable utilities.link                                                                                                                                                    |
 | `navbar.announcement-bar`               | navbar        | AnnouncementBar             | badge:string, text:string, link:component, isVisible:boolean                                                                                                                                                                                                                                      |
 | `navbar.nav-item`                       | navbar        | NavItem                     | label:string, directLink:component, sections:component, bottomLinks:component                                                                                                                                                                                                                     |
 | `navbar.nav-link`                       | navbar        | NavLink                     | label:string, description:string, icon:component, link:component                                                                                                                                                                                                                                  |
@@ -81,14 +99,20 @@
 
 accordion, alert, badge, button, calendar, card, carousel, checkbox, dialog, dropdown-menu, form, input, label, navigation-menu, popover, radio-group, select, skeleton, sonner, switch, table, tabs, textarea, tooltip
 
-## Page Builder Registry
+## ContentComponents Registry
 
-| UID                             | React Component           | Path                                                                          |
-| ------------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
-| `sections.banner-slice`         | StrapiBannerSlice         | `page-builder/components/sections/StrapiBannerSlice`                          |
-| `forms.newsletter-form`         | StrapiNewsletterForm      | `page-builder/components/forms/StrapiNewsletterForm`                          |
-| `plans.plan-comparison-table`   | StrapiPlanComparisonTable | `page-builder/components/plans/StrapiPlanComparisonTable`                     |
-| `plans.plan-pricing-cards`      | StrapiPlanPricingCards    | `page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards` |
-| `sections.faq-section`          | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           |
-| `sections.user-stories-section` | StrapiUserStoriesSection  | `page-builder/components/sections/StrapiUserStoriesSection`                   |
-| `sections.how-it-works`         | StrapiHowItWorks          | `page-builder/components/sections/StrapiHowItWorks`                           |
+All dynamic zone components registered in `apps/ui/src/components/page-builder/index.tsx`. Used by `DynamicZoneRenderer` for pages, header, and footer.
+
+| UID                             | React Component           | Path                                                                          | Dynamic Zone |
+| ------------------------------- | ------------------------- | ----------------------------------------------------------------------------- | ------------ |
+| `sections.banner-slice`         | StrapiBannerSlice         | `page-builder/components/sections/StrapiBannerSlice`                          | Page         |
+| `sections.faq-section`          | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           | Page         |
+| `sections.how-it-works`         | StrapiHowItWorks          | `page-builder/components/sections/StrapiHowItWorks`                           | Page         |
+| `sections.integrations-section` | StrapiIntegrationsSection | `page-builder/components/sections/StrapiIntegrationsSection`                  | Page         |
+| `sections.user-stories-section` | StrapiUserStoriesSection  | `page-builder/components/sections/StrapiUserStoriesSection`                   | Page         |
+| `forms.newsletter-form`         | StrapiNewsletterForm      | `page-builder/components/forms/StrapiNewsletterForm`                          | Page         |
+| `plans.plan-comparison-table`   | StrapiPlanComparisonTable | `page-builder/components/plans/StrapiPlanComparisonTable`                     | Page         |
+| `plans.plan-pricing-cards`      | StrapiPlanPricingCards    | `page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards` | Page         |
+| `footer.footer-main`            | StrapiFooterMain          | `page-builder/single-types/footer/StrapiFooterMain`                           | Footer       |
+| `footer.footer-cta`             | StrapiFooterCta           | `page-builder/single-types/footer/StrapiFooterCta`                            | Footer       |
+| `navigation.navbar`             | StrapiNavbar              | `page-builder/components/navigation/navbar/StrapiNavbar`                      | Header       |

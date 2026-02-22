@@ -60,6 +60,19 @@
   }
 }
 
+@keyframes mobile-menu-open {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes nav-shadow {
+  to {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+  }
+}
+
 @keyframes scrollHorizontal {
   to {
     transform: translate(calc(-50% - 1.75rem));

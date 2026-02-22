@@ -2,9 +2,8 @@ import "server-only"
 
 import ReactMarkdown, { type Components } from "react-markdown"
 
+import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
-
-import { SectionHeading } from "../SectionHeading"
 
 type MarkdownProps = {
   children?: string | null
@@ -13,39 +12,39 @@ type MarkdownProps = {
 
 const components: Components = {
   h1: ({ children }) => (
-    <SectionHeading as="h1" textStyle="h1" className="mb-4">
+    <Typography tag="h1" textColor="foreground" className="mb-4">
       {children}
-    </SectionHeading>
+    </Typography>
   ),
 
   h2: ({ children }) => (
-    <SectionHeading as="h2" textStyle="h2" className="mb-3">
+    <Typography tag="h2" textColor="foreground" className="mb-3">
       {children}
-    </SectionHeading>
+    </Typography>
   ),
 
   h3: ({ children }) => (
-    <SectionHeading as="h3" textStyle="h3" className="mb-3">
+    <Typography tag="h3" textColor="foreground" className="mb-3">
       {children}
-    </SectionHeading>
+    </Typography>
   ),
 
   h4: ({ children }) => (
-    <SectionHeading as="h4" textStyle="subtitle1" className="mb-2">
+    <Typography tag="h4" textColor="foreground" className="mb-2">
       {children}
-    </SectionHeading>
+    </Typography>
   ),
 
   h5: ({ children }) => (
-    <SectionHeading as="h5" textStyle="subtitle2" className="mb-2">
+    <Typography tag="h5" textColor="foreground" className="mb-2">
       {children}
-    </SectionHeading>
+    </Typography>
   ),
 
   h6: ({ children }) => (
-    <SectionHeading as="h6" textStyle="subtitle2" className="mb-2">
+    <Typography tag="h6" textColor="foreground" className="mb-2">
       {children}
-    </SectionHeading>
+    </Typography>
   ),
 
   p: ({ children }) => (

@@ -3,24 +3,20 @@ import type React from "react"
 
 import { cn } from "@/lib/styles"
 
-const sectionIconVariants = cva(
+export const sectionIconVariants = cva(
   "relative overflow-hidden [&_img]:object-contain",
   {
     variants: {
-      size: {
-        sm: "size-8",
-        md: "size-12",
-        lg: "size-16",
-      },
+      size: {},
     },
-    defaultVariants: {
-      size: "md",
-    },
+    defaultVariants: {},
   }
 )
 
-export type SectionIconProps = React.HTMLAttributes<HTMLDivElement> &
-  VariantProps<typeof sectionIconVariants>
+export interface SectionIconProps
+  extends
+    React.ComponentProps<"div">,
+    VariantProps<typeof sectionIconVariants> {}
 
 export function SectionIcon({ size, className, ...props }: SectionIconProps) {
   return (
@@ -31,5 +27,3 @@ export function SectionIcon({ size, className, ...props }: SectionIconProps) {
     />
   )
 }
-
-export { sectionIconVariants }

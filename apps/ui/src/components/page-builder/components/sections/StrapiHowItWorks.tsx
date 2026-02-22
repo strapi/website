@@ -1,8 +1,11 @@
 import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
-import { SectionHeading } from "@/components/elementary/SectionHeading"
-import { SectionIcon } from "@/components/elementary/SectionIcon"
+import {
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { Typography } from "@/components/typography"
 
@@ -14,25 +17,12 @@ export function StrapiHowItWorks({
   return (
     <section className="py-16 lg:py-24">
       <Container>
-        <SectionHeading
-          as="h2"
-          textStyle="h3"
-          className="lg:text-strapi-header-2 mb-8"
-        >
-          {component.heading}
-        </SectionHeading>
-
-        {component.description && (
-          <Typography
-            tag="p"
-            variant="subtitle1"
-            textColor="primary"
-            fontWeight="normal"
-            className="mb-16 max-w-3xl"
-          >
-            {component.description}
-          </Typography>
-        )}
+        <SectionHeader layout="left">
+          <SectionTitle as="h2" size="default">
+            {component.heading}
+          </SectionTitle>
+          <SectionDescription>{component.description}</SectionDescription>
+        </SectionHeader>
 
         {component.items && component.items.length > 0 && (
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-0">
@@ -42,13 +32,11 @@ export function StrapiHowItWorks({
                 className="flex-1 lg:px-12 lg:first:pl-0 lg:last:pr-0"
               >
                 {item.icon && (
-                  <SectionIcon size="sm" className="mb-5">
-                    <StrapiBasicImage
-                      component={item.icon}
-                      fill
-                      hideWhenMissing
-                    />
-                  </SectionIcon>
+                  <StrapiBasicImage
+                    component={item.icon}
+                    fill
+                    hideWhenMissing
+                  />
                 )}
 
                 <Typography

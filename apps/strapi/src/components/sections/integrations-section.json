@@ -2,6 +2,7 @@
   "collectionName": "components_sections_integrations_section",
   "info": {
     "displayName": "Integrations Section",
+    "icon": "puzzlePiece",
     "description": ""
   },
   "options": {},

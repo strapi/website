@@ -2,6 +2,7 @@
   "collectionName": "components_sections_faq_section",
   "info": {
     "displayName": "FAQ Section",
+    "icon": "question",
     "description": ""
   },
   "options": {},

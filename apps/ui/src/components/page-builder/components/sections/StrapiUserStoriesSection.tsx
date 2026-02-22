@@ -7,8 +7,10 @@ import {
   FilterableCardGrid,
 } from "@/components/elementary/card-grid"
 import { Container } from "@/components/elementary/Container"
-import { SectionHeading } from "@/components/elementary/SectionHeading"
-import { SectionLabel } from "@/components/elementary/SectionLabel"
+import {
+  SectionTitle,
+  SectionLabel,
+} from "@/components/elementary/section-header"
 
 interface MockUserStory extends Record<string, unknown> {
   readonly title: string
@@ -87,7 +89,7 @@ export function StrapiUserStoriesSection({
             )}
 
             {component.heading != null && (
-              <SectionHeading as="h2">{component.heading}</SectionHeading>
+              <SectionTitle as="h2">{component.heading}</SectionTitle>
             )}
           </div>
         )}

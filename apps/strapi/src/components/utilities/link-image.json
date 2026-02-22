@@ -1,7 +1,8 @@
 {
   "collectionName": "components_utilities_link_images",
   "info": {
-    "displayName": "LinkImage"
+    "displayName": "LinkImage",
+    "icon": "images"
   },
   "options": {},
   "attributes": {

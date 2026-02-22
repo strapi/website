@@ -2,6 +2,7 @@
   "collectionName": "components_sections_footer_cta_badge",
   "info": {
     "displayName": "Footer CTA Badge",
+    "icon": "shield",
     "description": ""
   },
   "options": {},

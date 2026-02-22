@@ -1,9 +1,12 @@
 import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
-import { SectionDescription } from "@/components/elementary/SectionDescription"
-import { SectionHeading } from "@/components/elementary/SectionHeading"
-import { SectionLabel } from "@/components/elementary/SectionLabel"
+import {
+  SectionDescription,
+  SectionHeader,
+  SectionLabel,
+  SectionTitle,
+} from "@/components/elementary/section-header"
 import {
   Accordion,
   AccordionContent,
@@ -20,21 +23,11 @@ export function StrapiFaqSection({
     <section className="py-16 lg:py-24">
       <Container>
         <div className="mx-auto max-w-3xl">
-          {component.sectionLabel && (
-            <SectionLabel className="mb-4">
-              {component.sectionLabel}
-            </SectionLabel>
-          )}
-
-          <SectionHeading as="h2" className="mb-4">
-            {component.heading}
-          </SectionHeading>
-
-          {component.description && (
-            <SectionDescription className="mb-6">
-              {component.description}
-            </SectionDescription>
-          )}
+          <SectionHeader>
+            <SectionLabel>{component.sectionLabel}</SectionLabel>
+            <SectionTitle as="h2">{component.heading}</SectionTitle>
+            <SectionDescription>{component.description}</SectionDescription>
+          </SectionHeader>
 
           {component.items && component.items.length > 0 && (
             <Accordion collapsible className="mt-8" type="single">

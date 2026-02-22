@@ -5,6 +5,7 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "FooterItem"
+    icon: "hashtag"
   }
   attributes: {
     links: Schema.Attribute.Component<"utilities.link-text", true>
@@ -17,6 +18,7 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "How It Works Item"
+    icon: "lightbulb"
   }
   attributes: {
     description: Schema.Attribute.Text &
@@ -47,6 +49,7 @@ export interface FooterFooterCta extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Footer CTA"
+    icon: "cursor"
   }
   attributes: {
     codeSnippet: Schema.Attribute.String &
@@ -88,6 +91,7 @@ export interface FooterFooterCtaBadge extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Footer CTA Badge"
+    icon: "shield"
   }
   attributes: {
     icon: Schema.Attribute.Component<"utilities.basic-image", false> &
@@ -111,6 +115,7 @@ export interface FooterFooterCtaCard extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Footer CTA Card"
+    icon: "priceTag"
   }
   attributes: {
     description: Schema.Attribute.Text &
@@ -146,6 +151,7 @@ export interface FooterFooterMain extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Footer Main"
+    icon: "layout"
   }
   attributes: {
     copyRight: Schema.Attribute.String &
@@ -203,6 +209,7 @@ export interface FormsContactForm extends Struct.ComponentSchema {
   collectionName: "components_forms_contact_forms"
   info: {
     displayName: "ContactForm"
+    icon: "mail"
   }
   attributes: {
     description: Schema.Attribute.Text
@@ -215,6 +222,7 @@ export interface FormsNewsletterForm extends Struct.ComponentSchema {
   collectionName: "components_forms_newsletter_forms"
   info: {
     displayName: "Newsletter"
+    icon: "paperPlane"
   }
   attributes: {
     description: Schema.Attribute.Text
@@ -227,6 +235,7 @@ export interface NavbarNavItem extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_items"
   info: {
     displayName: "NavItem"
+    icon: "bulletList"
   }
   attributes: {
     link: Schema.Attribute.Component<"utilities.link-text", false>
@@ -238,6 +247,7 @@ export interface NavbarNavLink extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_links"
   info: {
     displayName: "NavLink"
+    icon: "link"
   }
   attributes: {
     description: Schema.Attribute.String
@@ -250,6 +260,7 @@ export interface NavbarNavSection extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_sections"
   info: {
     displayName: "NavSection"
+    icon: "folder"
   }
   attributes: {
     columns: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>
@@ -263,6 +274,7 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
   info: {
     description: "Main navigation bar with logo, nav items, and CTA links"
     displayName: "Navbar"
+    icon: "squaresFour"
   }
   attributes: {
     bottomLinks: Schema.Attribute.Component<"utilities.link", true>
@@ -288,7 +300,7 @@ export interface PlansPlanFeatureValue extends Struct.ComponentSchema {
   collectionName: "components_plans_plan_feature_values"
   info: {
     displayName: "PlanFeatureValue"
-    icon: "layer"
+    icon: "stack"
   }
   attributes: {
     feature: Schema.Attribute.Relation<
@@ -336,7 +348,7 @@ export interface PlansPlanPricingCardItemFeature
   collectionName: "components_plans_plan_pricing_card_item_features"
   info: {
     displayName: "PlanPricingCardItemFeature"
-    icon: "bulletList"
+    icon: "star"
   }
   attributes: {
     badge: Schema.Attribute.String
@@ -425,7 +437,7 @@ export interface PlansPricingCardPromo extends Struct.ComponentSchema {
   collectionName: "components_plans_pricing_card_promos"
   info: {
     displayName: "PricingCardPromo"
-    icon: "quote"
+    icon: "priceTag"
   }
   attributes: {
     description: Schema.Attribute.Text
@@ -438,7 +450,7 @@ export interface PlansPricingCardSso extends Struct.ComponentSchema {
   collectionName: "components_plans_pricing_card_ssos"
   info: {
     displayName: "PricingCardSSO"
-    icon: "grid"
+    icon: "key"
   }
   attributes: {
     description: Schema.Attribute.String
@@ -473,6 +485,7 @@ export interface SectionsBannerSlice extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Banner Slice"
+    icon: "presentationChart"
   }
   attributes: {
     backgroundVariant: Schema.Attribute.Enumeration<["default", "dark"]> &
@@ -510,6 +523,7 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "FAQ Section"
+    icon: "question"
   }
   attributes: {
     description: Schema.Attribute.String &
@@ -545,6 +559,7 @@ export interface SectionsHowItWorks extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "How It Works"
+    icon: "information"
   }
   attributes: {
     description: Schema.Attribute.Text &
@@ -574,6 +589,7 @@ export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Integrations Section"
+    icon: "puzzlePiece"
   }
   attributes: {
     heading: Schema.Attribute.String &
@@ -591,11 +607,24 @@ export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsSectionHeader extends Struct.ComponentSchema {
+  collectionName: "components_sections_section_headers"
+  info: {
+    displayName: "Section Header"
+    icon: "layout"
+  }
+  attributes: {
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required
+  }
+}
+
 export interface SectionsUserStoriesSection extends Struct.ComponentSchema {
   collectionName: "components_sections_user_stories_section"
   info: {
     description: ""
     displayName: "User Stories Section"
+    icon: "user"
   }
   attributes: {
     heading: Schema.Attribute.String &
@@ -658,7 +687,7 @@ export interface SeoUtilitiesSeoOg extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_seo_ogs"
   info: {
     displayName: "SeoOg"
-    icon: "oneToMany"
+    icon: "earth"
   }
   attributes: {
     description: Schema.Attribute.String
@@ -675,7 +704,7 @@ export interface SeoUtilitiesSeoTwitter extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_seo_twitters"
   info: {
     displayName: "SeoTwitter"
-    icon: "oneToMany"
+    icon: "discuss"
   }
   attributes: {
     card: Schema.Attribute.String
@@ -692,6 +721,7 @@ export interface SeoUtilitiesSocialIcons extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_social_icons"
   info: {
     displayName: "SocialIcons"
+    icon: "globe"
   }
   attributes: {
     socials: Schema.Attribute.Component<"utilities.link-image", true>
@@ -704,6 +734,7 @@ export interface UtilitiesAccordions extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Accordions"
+    icon: "stack"
   }
   attributes: {
     answer: Schema.Attribute.Text & Schema.Attribute.Required
@@ -715,6 +746,7 @@ export interface UtilitiesBasicImage extends Struct.ComponentSchema {
   collectionName: "components_utilities_basic_images"
   info: {
     displayName: "BasicImage"
+    icon: "image"
   }
   attributes: {
     alt: Schema.Attribute.String
@@ -730,6 +762,7 @@ export interface UtilitiesLink extends Struct.ComponentSchema {
   collectionName: "components_utilities_links"
   info: {
     displayName: "Link"
+    icon: "link"
   }
   attributes: {
     decorations: Schema.Attribute.Component<"utilities.link-decorations", false>
@@ -749,6 +782,7 @@ export interface UtilitiesLinkDecorations extends Struct.ComponentSchema {
   collectionName: "components_utilities_link_decorations"
   info: {
     displayName: "LinkDecorations"
+    icon: "paintBrush"
   }
   attributes: {
     hasIcons: Schema.Attribute.Boolean &
@@ -773,6 +807,7 @@ export interface UtilitiesLinkImage extends Struct.ComponentSchema {
   collectionName: "components_utilities_link_images"
   info: {
     displayName: "LinkImage"
+    icon: "images"
   }
   attributes: {
     href: Schema.Attribute.String & Schema.Attribute.Required
@@ -792,6 +827,7 @@ export interface UtilitiesLinkText extends Struct.ComponentSchema {
   collectionName: "components_utilities_link_texts"
   info: {
     displayName: "LinkText"
+    icon: "cursor"
   }
   attributes: {
     href: Schema.Attribute.String & Schema.Attribute.Required
@@ -810,6 +846,7 @@ export interface UtilitiesLinksWithTitle extends Struct.ComponentSchema {
   collectionName: "components_utilities_links_with_titles"
   info: {
     displayName: "LinksWithTitle"
+    icon: "bulletList"
   }
   attributes: {
     links: Schema.Attribute.Component<"utilities.link", true>
@@ -817,10 +854,31 @@ export interface UtilitiesLinksWithTitle extends Struct.ComponentSchema {
   }
 }
 
+export interface UtilitiesSectionHeader extends Struct.ComponentSchema {
+  collectionName: "components_utilities_section_headers"
+  info: {
+    displayName: "Section Header"
+    icon: "feather"
+  }
+  attributes: {
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    description: Schema.Attribute.RichText
+    label: Schema.Attribute.String
+    labelIcon: Schema.Attribute.Component<"utilities.basic-image", false>
+    layout: Schema.Attribute.Enumeration<["left", "center", "right"]> &
+      Schema.Attribute.DefaultTo<"center">
+    size: Schema.Attribute.Enumeration<["xs", "sm", "default", "lg", "xl"]> &
+      Schema.Attribute.DefaultTo<"default">
+    title: Schema.Attribute.Text & Schema.Attribute.Required
+    variant: Schema.Attribute.Enumeration<["default", "purple", "inverse"]>
+  }
+}
+
 export interface UtilitiesText extends Struct.ComponentSchema {
   collectionName: "components_utilities_texts"
   info: {
     displayName: "Text"
+    icon: "pencil"
   }
   attributes: {
     text: Schema.Attribute.String
@@ -869,6 +927,7 @@ declare module "@strapi/strapi" {
       "sections.faq-section": SectionsFaqSection
       "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection
+      "sections.section-header": SectionsSectionHeader
       "sections.user-stories-section": SectionsUserStoriesSection
       "seo-utilities.seo": SeoUtilitiesSeo
       "seo-utilities.seo-og": SeoUtilitiesSeoOg
@@ -881,6 +940,7 @@ declare module "@strapi/strapi" {
       "utilities.link-image": UtilitiesLinkImage
       "utilities.link-text": UtilitiesLinkText
       "utilities.links-with-title": UtilitiesLinksWithTitle
+      "utilities.section-header": UtilitiesSectionHeader
       "utilities.text": UtilitiesText
       "utilities.tooltip": UtilitiesTooltip
     }

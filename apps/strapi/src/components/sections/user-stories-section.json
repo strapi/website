@@ -2,6 +2,7 @@
   "collectionName": "components_sections_user_stories_section",
   "info": {
     "displayName": "User Stories Section",
+    "icon": "user",
     "description": ""
   },
   "options": {},

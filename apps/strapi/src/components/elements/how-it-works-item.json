@@ -2,6 +2,7 @@
   "collectionName": "components_elements_how_it_works_items",
   "info": {
     "displayName": "How It Works Item",
+    "icon": "lightbulb",
     "description": ""
   },
   "options": {},

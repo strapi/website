@@ -1,7 +1,8 @@
 {
   "collectionName": "components_navbar_nav_items",
   "info": {
-    "displayName": "NavItem"
+    "displayName": "NavItem",
+    "icon": "bulletList"
   },
   "options": {},
   "attributes": {

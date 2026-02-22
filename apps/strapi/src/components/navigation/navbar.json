@@ -2,6 +2,7 @@
   "collectionName": "components_navigation_navbars",
   "info": {
     "displayName": "Navbar",
+    "icon": "squaresFour",
     "description": "Main navigation bar with logo, nav items, and CTA links"
   },
   "attributes": {

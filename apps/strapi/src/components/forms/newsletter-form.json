@@ -1,7 +1,8 @@
 {
   "collectionName": "components_forms_newsletter_forms",
   "info": {
-    "displayName": "Newsletter"
+    "displayName": "Newsletter",
+    "icon": "paperPlane"
   },
   "options": {},
   "attributes": {

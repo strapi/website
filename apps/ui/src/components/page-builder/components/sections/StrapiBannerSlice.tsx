@@ -2,9 +2,12 @@ import type { Data } from "@repo/strapi-types"
 
 import { AppLink } from "@/components/elementary/AppLink"
 import { Container } from "@/components/elementary/Container"
-import { SectionDescription } from "@/components/elementary/SectionDescription"
-import { SectionHeading } from "@/components/elementary/SectionHeading"
-import { SectionLabel } from "@/components/elementary/SectionLabel"
+import {
+  SectionDescription,
+  SectionHeader,
+  SectionLabel,
+  SectionTitle,
+} from "@/components/elementary/section-header"
 import { getStrapiLinkHref } from "@/components/page-builder/components/utilities/StrapiLink"
 import { cn } from "@/lib/styles"
 
@@ -24,28 +27,16 @@ export function StrapiBannerSlice({
               "rounded-strapi-lg bg-strapi-blue-800 overflow-hidden px-8 py-20 lg:py-28"
           )}
         >
-          <div className="mx-auto max-w-3xl text-center">
-            {component.label && (
-              <SectionLabel className={cn("mb-3", isDark && "text-white")}>
-                {component.label}
-              </SectionLabel>
-            )}
-
-            <SectionHeading
-              as="h2"
-              textStyle="h3"
-              className={cn("mb-4", isDark && "text-white")}
-            >
+          <SectionHeader>
+            <SectionLabel variant={isDark ? "inverse" : "default"}>
+              {component.label}
+            </SectionLabel>
+            <SectionTitle as="h2" variant={isDark ? "inverse" : "default"}>
               {component.heading}
-            </SectionHeading>
-
-            {component.description && (
-              <SectionDescription
-                className={cn("mb-8", isDark && "text-white/80")}
-              >
-                {component.description}
-              </SectionDescription>
-            )}
+            </SectionTitle>
+            <SectionDescription variant={isDark ? "inverse" : "default"}>
+              {component.description}
+            </SectionDescription>
 
             {component.ctas && component.ctas.length > 0 && (
               <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -82,7 +73,7 @@ export function StrapiBannerSlice({
                 })}
               </div>
             )}
-          </div>
+          </SectionHeader>
         </div>
       </Container>
     </section>

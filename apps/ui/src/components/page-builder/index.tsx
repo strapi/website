@@ -8,6 +8,7 @@ import { StrapiBannerSlice } from "@/components/page-builder/components/sections
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
+import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
 import { StrapiUserStoriesSection } from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
 import { StrapiFooterCta } from "@/components/page-builder/single-types/footer/StrapiFooterCta"
 import { StrapiFooterMain } from "@/components/page-builder/single-types/footer/StrapiFooterMain"
@@ -34,6 +35,7 @@ export const ContentComponents: Partial<
   "sections.faq-section": StrapiFaqSection,
   "sections.how-it-works": StrapiHowItWorks,
   "sections.integrations-section": StrapiIntegrationsSection,
+  "sections.section-header": StrapiSectionHeader,
   "sections.user-stories-section": StrapiUserStoriesSection,
 
   // Footer

@@ -2,6 +2,7 @@
   "collectionName": "components_sections_how_it_works",
   "info": {
     "displayName": "How It Works",
+    "icon": "information",
     "description": ""
   },
   "options": {},

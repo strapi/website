@@ -567,6 +567,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.integrations-section",
         "sections.user-stories-section",
         "sections.how-it-works",
+        "sections.section-header",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

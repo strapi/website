@@ -311,7 +311,3 @@ export function StrapiPlanComparisonTable({
     </Container>
   )
 }
-
-StrapiPlanComparisonTable.displayName = "StrapiPlanComparisonTable"
-
-export default StrapiPlanComparisonTable

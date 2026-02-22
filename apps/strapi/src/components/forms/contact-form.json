@@ -1,7 +1,8 @@
 {
   "collectionName": "components_forms_contact_forms",
   "info": {
-    "displayName": "ContactForm"
+    "displayName": "ContactForm",
+    "icon": "mail"
   },
   "options": {},
   "attributes": {

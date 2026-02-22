@@ -2,7 +2,7 @@
   "collectionName": "components_plans_plan_feature_values",
   "info": {
     "displayName": "PlanFeatureValue",
-    "icon": "layer"
+    "icon": "stack"
   },
   "options": {},
   "attributes": {

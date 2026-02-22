@@ -1,7 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 import type React from "react"
 
-import AppLink from "@/components/elementary/AppLink"
+import { AppLink } from "@/components/elementary/AppLink"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 
 export interface StrapiLinkProps {
@@ -9,6 +9,7 @@ export interface StrapiLinkProps {
   readonly children?: React.ReactNode
   readonly className?: string
   readonly hideWhenMissing?: boolean
+  readonly adornmentClassName?: string
 }
 
 export const getStrapiLinkHref = (
@@ -31,6 +32,7 @@ export function StrapiLink({
   children,
   className,
   hideWhenMissing,
+  adornmentClassName,
 }: StrapiLinkProps) {
   if (component == null && hideWhenMissing) {
     return null
@@ -57,6 +59,7 @@ export function StrapiLink({
       href={linkHref}
       openInNewTab={newTab ?? false}
       className={className}
+      adornmentClassName={adornmentClassName}
       startAdornment={
         hasIcons && leftIcon ? (
           <StrapiBasicImage component={leftIcon} fill />
@@ -74,7 +77,3 @@ export function StrapiLink({
     </AppLink>
   )
 }
-
-StrapiLink.displayName = "StrapiLink"
-
-export default StrapiLink

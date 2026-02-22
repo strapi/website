@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_sections_section_headers",
+  "info": {
+    "displayName": "Section Header",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "component": "utilities.section-header",
+      "repeatable": false,
+      "required": true
+    }
+  },
+  "config": {}
+}

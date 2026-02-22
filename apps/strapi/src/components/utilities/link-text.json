@@ -1,7 +1,8 @@
 {
   "collectionName": "components_utilities_link_texts",
   "info": {
-    "displayName": "LinkText"
+    "displayName": "LinkText",
+    "icon": "cursor"
   },
   "options": {},
   "attributes": {

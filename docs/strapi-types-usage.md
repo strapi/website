@@ -26,9 +26,9 @@ import { Data, FindFirst, FindMany, Result, UID } from "@repo/strapi-types"
 | Type                      | Purpose                         | Example                                                     |
 | ------------------------- | ------------------------------- | ----------------------------------------------------------- |
 | `UID.ContentType`         | Union of all content type UIDs  | `"api::page.page"`                                          |
-| `UID.Component`           | Union of all component UIDs     | `"sections.hero"`                                           |
+| `UID.Component`           | Union of all component UIDs     | `"forms.newsletter-form"`                                   |
 | `Data.ContentType<"uid">` | Full content type data          | `Data.ContentType<"api::page.page">`                        |
-| `Data.Component<"uid">`   | Full component data             | `Data.Component<"sections.hero">`                           |
+| `Data.Component<"uid">`   | Full component data             | `Data.Component<"forms.newsletter-form">`                   |
 | `Result<"uid", params>`   | Response shape after population | `Result<"api::page.page", { populate: { content: true } }>` |
 | `FindFirst<uid>`          | Query params for single doc     | `FindFirst<"api::page.page">`                               |
 | `FindMany<uid>`           | Query params for multiple docs  | `FindMany<"api::page.page">`                                |
@@ -38,16 +38,15 @@ import { Data, FindFirst, FindMany, Result, UID } from "@repo/strapi-types"
 ```typescript
 import { Data } from "@repo/strapi-types"
 
-interface StrapiHeroProps {
-  readonly component: Data.Component<"sections.hero">
+interface StrapiNewsletterFormProps {
+  readonly component: Data.Component<"forms.newsletter-form">
 }
 
-export function StrapiHero({ component }: StrapiHeroProps) {
-  // component.title, component.subTitle, etc. are fully typed
+export function StrapiNewsletterForm({ component }: StrapiNewsletterFormProps) {
+  // component.title, etc. are fully typed
   return (
     <section>
-      <h1>{component.title}</h1>
-      {component.subTitle && <p>{component.subTitle}</p>}
+      <h2>{component.title}</h2>
     </section>
   )
 }
@@ -79,11 +78,11 @@ Use for type-safe component registries:
 ```typescript
 import { UID } from "@repo/strapi-types"
 
-const PageContentComponents: {
+const ContentComponents: {
   [K in UID.Component]?: React.ComponentType<any>
 } = {
-  "sections.hero": StrapiHero,
-  "sections.faq": StrapiFaq,
+  "forms.newsletter-form": StrapiNewsletterForm,
+  "plans.plan-pricing-cards": StrapiPlanPricingCards,
 }
 ```
 
@@ -100,10 +99,10 @@ type DynamicZoneItem = Data.Component<UID.Component> & {
 
 function renderComponent(item: DynamicZoneItem) {
   switch (item.__component) {
-    case "sections.hero":
-      return <StrapiHero component={item as Data.Component<"sections.hero">} />
-    case "sections.faq":
-      return <StrapiFaq component={item as Data.Component<"sections.faq">} />
+    case "forms.newsletter-form":
+      return <StrapiNewsletterForm component={item as Data.Component<"forms.newsletter-form">} />
+    case "plans.plan-pricing-cards":
+      return <StrapiPlanPricingCards component={item as Data.Component<"plans.plan-pricing-cards">} />
     default:
       return null
   }

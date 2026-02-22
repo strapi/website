@@ -3,6 +3,7 @@ import type React from "react"
 import { cn } from "@/lib/styles"
 
 const textColorVariants = {
+  foreground: "text-foreground",
   black: "text-black",
   white: "text-white",
   primary: "text-strapi-blue-800",
@@ -116,7 +117,3 @@ export function Typography({
     </Tag>
   )
 }
-
-Typography.displayName = "Typography"
-
-export default Typography

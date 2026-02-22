@@ -1,0 +1,53 @@
+{
+  "project": "notum",
+  "branchName": "ralph/work-batch",
+  "description": "Generic Ralph loop work batch",
+  "constraints": [],
+  "rules": [],
+  "nonGoals": [],
+  "qualityGates": [],
+  "loopConfig": {
+    "maxIterationsPerStory": 3,
+    "maxStagnantIterations": 2,
+    "orderedByPriority": true,
+    "memoryFile": "tmp/ralph-memory.jsonl",
+    "requiredChecks": [],
+    "finalReview": {
+      "enabled": true,
+      "minScore": 8,
+      "maxPasses": 3
+    },
+    "autonomy": {
+      "noQuestions": true,
+      "assumeBestJudgment": true
+    }
+  },
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "Example task",
+      "description": "Implement one scoped task",
+      "status": "open",
+      "priority": 1,
+      "passes": false,
+      "notes": "",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "All acceptance criteria for this story are satisfied",
+        "Required checks pass"
+      ],
+      "loopState": {
+        "phase": "queued",
+        "status": "pending",
+        "attempt": 0,
+        "errors": []
+      },
+      "data": {},
+      "metadata": {
+        "tags": ["generic"]
+      }
+    }
+  ],
+  "generatedAt": "2026-02-18T00:00:00.000Z",
+  "status": "ready"
+}

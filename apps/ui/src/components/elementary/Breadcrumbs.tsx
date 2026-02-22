@@ -1,7 +1,7 @@
 import type { Locale } from "next-intl"
 
-import AppLink from "@/components/elementary/AppLink"
-import StrapiStructuredData from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
+import { AppLink } from "@/components/elementary/AppLink"
+import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { generateBreadcrumbListSchema } from "@/lib/metadata/schemas"
 import { cn } from "@/lib/styles"
 import type { BreadCrumb } from "@/types/api"

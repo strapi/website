@@ -1,0 +1,45 @@
+{
+  "collectionName": "components_utilities_section_headers",
+  "info": {
+    "displayName": "Section Header",
+    "icon": "feather"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "label": {
+      "type": "string"
+    },
+    "labelIcon": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["default", "purple", "inverse"]
+    },
+    "size": {
+      "type": "enumeration",
+      "default": "default",
+      "enum": ["xs", "sm", "default", "lg", "xl"]
+    },
+    "layout": {
+      "type": "enumeration",
+      "default": "center",
+      "enum": ["left", "center", "right"]
+    },
+    "ctaLinks": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

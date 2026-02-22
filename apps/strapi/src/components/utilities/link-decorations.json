@@ -1,7 +1,8 @@
 {
   "collectionName": "components_utilities_link_decorations",
   "info": {
-    "displayName": "LinkDecorations"
+    "displayName": "LinkDecorations",
+    "icon": "paintBrush"
   },
   "options": {},
   "attributes": {

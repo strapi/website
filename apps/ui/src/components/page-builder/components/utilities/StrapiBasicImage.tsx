@@ -33,7 +33,6 @@ export function StrapiBasicImage({
 }: BasicImageProps) {
   const media: StrapiImageMedia = component?.media
   const selectedFormat = format ? media?.formats?.[format] : undefined
-
   const url = selectedFormat?.url ?? media?.url ?? component?.fallbackSrc
 
   if (url == null && hideWhenMissing) {
@@ -92,5 +91,3 @@ export function StrapiBasicImage({
     />
   )
 }
-
-StrapiBasicImage.displayName = "StrapiBasicImage"

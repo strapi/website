@@ -21,7 +21,7 @@ This workflow is intentionally adaptive. Local schemas evolve, so the skill must
 Ask the user for:
 
 1. **Source URL** (required): strapi.io page to scrape, for example `https://strapi.io/pricing`.
-2. **Target component** (optional): specific component UID to seed, for example `sections.hero`. If omitted, seed all recognized sections.
+2. **Target component** (optional): specific component UID to seed, for example `forms.newsletter-form`. If omitted, seed all recognized sections.
 3. **Target page path** (optional): local page full path, for example `/pricing`. If omitted, derive from source URL path.
 4. **Locale** (required): locale to seed into, for example `en`.
 5. **Parent page fullPath** (optional): explicit parent for nested pages. If omitted, derive from target page path.
@@ -91,13 +91,15 @@ Extract:
 Read schema definitions before mapping:
 
 - Page schema: `apps/strapi/src/api/page/content-types/page/schema.json`
+- Header schema: `apps/strapi/src/api/header/content-types/header/schema.json`
+- Footer schema: `apps/strapi/src/api/footer/content-types/footer/schema.json`
 - Component schemas: `apps/strapi/src/components/{category}/{name}.json`
 - Nested component schemas: recursively follow `component` references.
 - Optional context: `apps/strapi/src/populateDynamicZone/**/*.ts`
 
 Build a runtime schema map that includes:
 
-- Allowed dynamic zone component UIDs.
+- Allowed dynamic zone component UIDs for each content type (page, header, footer).
 - Field types (`string`, `text`, `richtext`, `boolean`, `integer`, `enumeration`, `media`, `relation`, `component`).
 - Required flags.
 - Enum allowed values.
@@ -176,7 +178,17 @@ Rules:
 - Reuse exact matches.
 - Create only when no exact match exists.
 
-### Step 9: Create or update page (locale + hierarchy safe)
+### Step 9: Create or update content entry (locale + hierarchy safe)
+
+Determine the target content type based on mapped components:
+
+| Component category           | Content type | API endpoint  | Type            |
+| ---------------------------- | ------------ | ------------- | --------------- |
+| `sections`, `forms`, `plans` | Page         | `api/pages`   | Collection type |
+| `navigation`                 | Header       | `api/headers` | Single type     |
+| `footer`                     | Footer       | `api/footers` | Single type     |
+
+#### For pages (collection type)
 
 Do not treat `fullPath` as authored data by default.
 
@@ -203,6 +215,13 @@ GET /api/pages?locale=<locale>&filters[fullPath][$eq]=<targetFullPath>
    - If `fullPath` is missing/stale because internal jobs are pending, report manual follow-up:
      - In Strapi admin, run `Recalculate all fullpaths`.
      - Run `Create all redirects` only when redirects are desired.
+
+#### For header/footer (single types)
+
+1. GET the existing entry with full `content` populate and locale.
+2. Merge new components into the existing `content` array (dynamic zone merge rule applies).
+3. PUT the merged content back.
+4. Single types always exist — never create, only update.
 
 ### Step 10: Report results
 
@@ -266,16 +285,12 @@ Include:
 
 Use these patterns only as initial candidates. Schema validation decides final mapping.
 
-| Source pattern                  | Local component                    |
-| ------------------------------- | ---------------------------------- |
-| Hero section with heading + CTA | `sections.hero`                    |
-| FAQ / accordion section         | `sections.faq`                     |
-| Image carousel / slider         | `sections.carousel`                |
-| Logo row / partner logos        | `sections.animated-logo-row`       |
-| Pricing cards with plans        | `plans.plan-pricing-cards`         |
-| Feature comparison table        | `plans.plan-comparison-table`      |
-| Newsletter signup form          | `forms.newsletter-form`            |
-| Contact form                    | `forms.contact-form`               |
-| Heading with CTA button         | `sections.heading-with-cta-button` |
-| Image with CTA button           | `sections.image-with-cta-button`   |
-| Horizontal image gallery        | `sections.horizontal-images`       |
+| Source pattern                     | Local component               | Content type |
+| ---------------------------------- | ----------------------------- | ------------ |
+| Pricing cards with plans           | `plans.plan-pricing-cards`    | Page         |
+| Feature comparison table           | `plans.plan-comparison-table` | Page         |
+| Newsletter signup form             | `forms.newsletter-form`       | Page         |
+| Contact form                       | `forms.contact-form`          | Page         |
+| Site navigation bar with mega menu | `navigation.navbar`           | Header       |
+| Footer main with links and socials | `footer.footer-main`          | Footer       |
+| Footer CTA with badges and cards   | `footer.footer-cta`           | Footer       |

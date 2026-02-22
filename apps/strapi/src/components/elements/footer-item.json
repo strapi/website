@@ -2,6 +2,7 @@
   "collectionName": "components_elements_footer_items",
   "info": {
     "displayName": "FooterItem",
+    "icon": "hashtag",
     "description": ""
   },
   "options": {},

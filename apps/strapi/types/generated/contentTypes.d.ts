@@ -447,48 +447,45 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
     }
   }
   attributes: {
-    copyRight: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
+    content: Schema.Attribute.DynamicZone<
+      ["footer.footer-main", "footer.footer-cta"]
+    >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    links: Schema.Attribute.Component<"utilities.link-text", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::footer.footer">
-    logoImage: Schema.Attribute.Component<"utilities.link-image", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     publishedAt: Schema.Attribute.DateTime
-    sections: Schema.Attribute.Component<"elements.footer-item", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    socials: Schema.Attribute.Component<"footer.footer-socials", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    tagline: Schema.Attribute.RichText &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiHeaderHeader extends Struct.SingleTypeSchema {
+  collectionName: "headers"
+  info: {
+    description: ""
+    displayName: "Header"
+    pluralName: "headers"
+    singularName: "header"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    content: Schema.Attribute.DynamicZone<["navigation.navbar"]>
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::header.header">
+    publishedAt: Schema.Attribute.DateTime
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -535,62 +532,6 @@ export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
   }
 }
 
-export interface ApiNavbarNavbar extends Struct.SingleTypeSchema {
-  collectionName: "navbars"
-  info: {
-    description: ""
-    displayName: "Navbar"
-    pluralName: "navbars"
-    singularName: "navbar"
-  }
-  options: {
-    draftAndPublish: false
-  }
-  pluginOptions: {
-    i18n: {
-      localized: true
-    }
-  }
-  attributes: {
-    announcementBar: Schema.Attribute.Component<
-      "navbar.announcement-bar",
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    ctaLinks: Schema.Attribute.Component<"utilities.link", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    locale: Schema.Attribute.String
-    localizations: Schema.Attribute.Relation<"oneToMany", "api::navbar.navbar">
-    logoImage: Schema.Attribute.Component<"utilities.image-with-link", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    navItems: Schema.Attribute.Component<"navbar.nav-item", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    publishedAt: Schema.Attribute.DateTime
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
 export interface ApiPagePage extends Struct.CollectionTypeSchema {
   collectionName: "pages"
   info: {
@@ -617,17 +558,16 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     children: Schema.Attribute.Relation<"oneToMany", "api::page.page">
     content: Schema.Attribute.DynamicZone<
       [
-        "sections.image-with-cta-button",
-        "sections.horizontal-images",
-        "sections.hero",
-        "sections.heading-with-cta-button",
-        "sections.faq",
-        "sections.carousel",
-        "sections.animated-logo-row",
         "forms.newsletter-form",
         "forms.contact-form",
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
+        "sections.faq-section",
+        "sections.banner-slice",
+        "sections.integrations-section",
+        "sections.user-stories-section",
+        "sections.how-it-works",
+        "sections.section-header",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -1319,8 +1259,8 @@ declare module "@strapi/strapi" {
       "admin::transfer-token-permission": AdminTransferTokenPermission
       "admin::user": AdminUser
       "api::footer.footer": ApiFooterFooter
+      "api::header.header": ApiHeaderHeader
       "api::internal-job.internal-job": ApiInternalJobInternalJob
-      "api::navbar.navbar": ApiNavbarNavbar
       "api::page.page": ApiPagePage
       "api::plan-feature.plan-feature": ApiPlanFeaturePlanFeature
       "api::plan.plan": ApiPlanPlan

@@ -6,18 +6,18 @@ Guidelines for creating and managing Strapi content type and component schemas.
 
 Pattern: `{category}.{kebab-case-name}`
 
-| Element        | Pattern                                    | Example                             |
-| -------------- | ------------------------------------------ | ----------------------------------- |
-| Strapi UID     | `category.kebab-case`                      | `sections.hero`                     |
-| Schema file    | `{name}.json`                              | `src/components/sections/hero.json` |
-| collectionName | `components_{category}_{name_underscored}` | `components_sections_hero`          |
+| Element        | Pattern                                    | Example                                     |
+| -------------- | ------------------------------------------ | ------------------------------------------- |
+| Strapi UID     | `category.kebab-case`                      | `forms.newsletter-form`                     |
+| Schema file    | `{name}.json`                              | `src/components/forms/newsletter-form.json` |
+| collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`          |
 
 The UID must match exactly in:
 
-1. Schema file location
-2. Page's dynamiczone components array
-3. Document middleware population rules
-4. Frontend component registry
+1. Schema file location (`apps/strapi/src/components/{category}/{name}.json`)
+2. Dynamic zone components array (page, header, or footer schema)
+3. Populate config path (`apps/strapi/src/populateDynamicZone/{category}/{name}.ts`)
+4. Frontend `ContentComponents` registry (`apps/ui/src/components/page-builder/index.tsx`)
 
 ## Schema Attributes
 

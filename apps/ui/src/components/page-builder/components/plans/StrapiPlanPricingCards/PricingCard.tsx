@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
 
-import Typography from "@/components/typography"
+import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 import { PricingCardPrice } from "./PricingCardPrice"

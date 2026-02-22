@@ -114,7 +114,3 @@ export function StrapiPlanPricingCards({
     </Container>
   )
 }
-
-StrapiPlanPricingCards.displayName = "StrapiPlanPricingCards"
-
-export default StrapiPlanPricingCards

@@ -109,7 +109,3 @@ export function PricingSwitcher({
     </div>
   )
 }
-
-PricingSwitcher.displayName = "PricingSwitcher"
-
-export default PricingSwitcher

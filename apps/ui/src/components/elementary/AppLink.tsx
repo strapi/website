@@ -14,6 +14,7 @@ export interface AppLinkProps
   readonly openInNewTab?: boolean
   readonly startAdornment?: React.ReactNode
   readonly endAdornment?: React.ReactNode
+  readonly adornmentClassName?: string
 }
 
 export function AppLink({
@@ -22,6 +23,7 @@ export function AppLink({
   children,
   endAdornment,
   startAdornment,
+  adornmentClassName,
   openInNewTab = false,
   variant = "link",
   size = "default",
@@ -38,13 +40,13 @@ export function AppLink({
   const AppLinkInner = (
     <>
       {startAdornment && (
-        <span className="relative size-4 transition-transform duration-200 ease-in group-hover:-translate-x-2">
+        <span className={cn("relative size-4", adornmentClassName)}>
           {startAdornment}
         </span>
       )}
       {children}
       {endAdornment && (
-        <span className="relative size-4 transition-transform duration-200 ease-in group-hover:translate-x-2">
+        <span className={cn("relative size-4", adornmentClassName)}>
           {endAdornment}
         </span>
       )}
@@ -76,7 +78,3 @@ export function AppLink({
     </a>
   )
 }
-
-AppLink.displayName = "AppLink"
-
-export default AppLink

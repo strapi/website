@@ -2,7 +2,7 @@
 
 import type { Nullable } from "@repo/shared-data"
 
-import Typography from "@/components/typography"
+import { Typography } from "@/components/typography"
 
 import { usePricingBilling } from "./PricingBillingContext"
 

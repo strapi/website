@@ -20,7 +20,3 @@ export function StrapiStructuredData({
 
   return null
 }
-
-StrapiStructuredData.displayName = "StructuredData"
-
-export default StrapiStructuredData

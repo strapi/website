@@ -1,7 +1,8 @@
 {
   "collectionName": "components_seo_utilities_social_icons",
   "info": {
-    "displayName": "SocialIcons"
+    "displayName": "SocialIcons",
+    "icon": "globe"
   },
   "options": {},
   "attributes": {
@@ -11,7 +12,7 @@
     "socials": {
       "type": "component",
       "repeatable": true,
-      "component": "utilities.image-with-link"
+      "component": "utilities.link-image"
     }
   }
 }

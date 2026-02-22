@@ -7,13 +7,13 @@ import type { Locale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 
 import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
-import StrapiPreviewListener from "@/components/elementary/StrapiPreviewListener"
+import { StrapiPreviewListener } from "@/components/elementary/StrapiPreviewListener"
 import { TailwindIndicator } from "@/components/elementary/TailwindIndicator"
-import StrapiFooter from "@/components/page-builder/single-types/footer/StrapiFooter"
-import StrapiNavbar from "@/components/page-builder/single-types/navbar/StrapiNavbar"
+import { StrapiFooter } from "@/components/page-builder/single-types/footer/StrapiFooter"
+import { StrapiHeader } from "@/components/page-builder/single-types/header/StrapiHeader"
 import { ClientProviders } from "@/components/providers/ClientProviders"
 import { ServerProviders } from "@/components/providers/ServerProviders"
-import TrackingScripts from "@/components/providers/TrackingScripts"
+import { TrackingScripts } from "@/components/providers/TrackingScripts"
 import { Toaster } from "@/components/ui/sonner"
 import { debugStaticParams } from "@/lib/build"
 import { fontPoppins } from "@/lib/fonts"
@@ -98,7 +98,7 @@ export default async function RootLayout({
           <ClientProviders>
             <div className="relative flex min-h-screen flex-col">
               <ErrorBoundary showErrorMessage>
-                <StrapiNavbar locale={locale} />
+                <StrapiHeader locale={locale} />
               </ErrorBoundary>
 
               <div className="flex-1">

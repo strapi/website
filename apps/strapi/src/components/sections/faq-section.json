@@ -1,0 +1,46 @@
+{
+  "collectionName": "components_sections_faq_section",
+  "info": {
+    "displayName": "FAQ Section",
+    "icon": "question",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "sectionLabel": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "heading": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.accordions",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

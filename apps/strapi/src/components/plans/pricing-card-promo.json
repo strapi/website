@@ -2,7 +2,7 @@
   "collectionName": "components_plans_pricing_card_promos",
   "info": {
     "displayName": "PricingCardPromo",
-    "icon": "quote"
+    "icon": "priceTag"
   },
   "options": {},
   "attributes": {

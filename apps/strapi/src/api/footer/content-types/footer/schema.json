@@ -16,61 +16,9 @@
     }
   },
   "attributes": {
-    "logoImage": {
-      "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "utilities.link-image",
-      "repeatable": false
-    },
-    "tagline": {
-      "type": "richtext",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "sections": {
-      "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "elements.footer-item",
-      "repeatable": true
-    },
-    "copyRight": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "links": {
-      "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "utilities.link-text",
-      "repeatable": true
-    },
-    "socials": {
-      "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "component": "footer.footer-socials",
-      "repeatable": false
+    "content": {
+      "type": "dynamiczone",
+      "components": ["footer.footer-main", "footer.footer-cta"]
     }
   }
 }

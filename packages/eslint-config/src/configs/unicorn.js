@@ -37,7 +37,7 @@ export default [
       "unicorn/no-await-expression-member": "off",
       "unicorn/explicit-length-check": "off",
       "unicorn/prefer-logical-operator-over-ternary": "warn",
-      "unicorn/consistent-destructuring": "warn",
+      "unicorn/consistent-destructuring": "off",
       "unicorn/no-unreadable-iife": "warn",
       "unicorn/prefer-event-target": "warn",
       "unicorn/prefer-query-selector": "off",

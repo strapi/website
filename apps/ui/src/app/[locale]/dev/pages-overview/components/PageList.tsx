@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 
-import AppLink from "@/components/elementary/AppLink"
-import Typography from "@/components/typography"
+import { AppLink } from "@/components/elementary/AppLink"
+import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 
-export default function PageList({
+export function PageList({
   pages,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

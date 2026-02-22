@@ -1,28 +1,20 @@
 {
   "collectionName": "components_navbar_nav_items",
   "info": {
-    "displayName": "NavItem"
+    "displayName": "NavItem",
+    "icon": "bulletList"
   },
   "options": {},
   "attributes": {
-    "label": {
-      "type": "string",
-      "required": true
-    },
-    "directLink": {
+    "link": {
       "type": "component",
-      "repeatable": false,
-      "component": "utilities.link"
+      "component": "utilities.link-text",
+      "repeatable": false
     },
     "sections": {
       "type": "component",
-      "repeatable": true,
-      "component": "navbar.nav-section"
-    },
-    "bottomLinks": {
-      "type": "component",
-      "repeatable": true,
-      "component": "utilities.link"
+      "component": "navbar.nav-section",
+      "repeatable": true
     }
   }
 }

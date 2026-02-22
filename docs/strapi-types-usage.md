@@ -78,7 +78,7 @@ Use for type-safe component registries:
 ```typescript
 import { UID } from "@repo/strapi-types"
 
-const PageContentComponents: {
+const ContentComponents: {
   [K in UID.Component]?: React.ComponentType<any>
 } = {
   "forms.newsletter-form": StrapiNewsletterForm,

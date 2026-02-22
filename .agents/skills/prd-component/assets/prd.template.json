@@ -2,10 +2,13 @@
   "project": "notum",
   "branchName": "ralph/work-batch",
   "description": "Generic Ralph loop work batch",
+  "constraints": [],
+  "rules": [],
+  "nonGoals": [],
+  "qualityGates": [],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
     "requiredChecks": [],
@@ -24,6 +27,7 @@
       "id": "US-001",
       "title": "Example task",
       "description": "Implement one scoped task",
+      "status": "open",
       "priority": 1,
       "passes": false,
       "notes": "",
@@ -40,9 +44,7 @@
       },
       "data": {},
       "metadata": {
-        "tags": [
-          "generic"
-        ]
+        "tags": ["generic"]
       }
     }
   ],

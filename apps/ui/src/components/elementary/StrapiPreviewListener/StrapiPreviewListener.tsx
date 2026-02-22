@@ -9,7 +9,7 @@ import { useRouter } from "@/lib/navigation"
  * This component reloads the application when an update from Strapi is reported. This is useful for the sidebar preview
  * in case of Growth or EE plans.
  */
-function StrapiPreviewWindowChangeListener({
+export function StrapiPreviewWindowChangeListener({
   hashedAllowedReloadOrigin, // to avoid bundling strapi URL, we pass this as a hash from SSR parent
 }: {
   hashedAllowedReloadOrigin: string
@@ -41,5 +41,3 @@ function StrapiPreviewWindowChangeListener({
 
   return null
 }
-
-export default StrapiPreviewWindowChangeListener

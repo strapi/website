@@ -1,11 +1,11 @@
-import { getEnvVar } from "@/lib/env-vars"
-
 /**
  * Function to format Strapi media URLs. There are 2 types of upload:
  * - S3 bucket - in this case, the URL is already correct and starts with https
  * - local upload - in this case, the URL starts with /uploads and we need to add API url prefix
  * (this happens in route handler for Strapi assets)
  *
+ * Always returns the client-friendly proxy URL (/api/asset/...) to avoid
+ * hydration mismatches when used inside client component boundaries.
  */
 export const formatStrapiMediaUrl = (
   imageUrl: string | undefined | null
@@ -19,20 +19,9 @@ export const formatStrapiMediaUrl = (
     !imageUrl.startsWith("http") &&
     imageUrl.startsWith("/uploads")
   ) {
-    // Local upload - add BE URL prefix
-    return typeof window === "undefined"
-      ? formatServerUrl(imageUrl)
-      : formatClientUrl(imageUrl)
+    return `/api/asset${imageUrl}`
   }
 
   // S3 upload or already formatted URL - return as is
   return imageUrl
-}
-
-const formatClientUrl = (imageUrl: string): string => {
-  return `/api/asset${imageUrl}`
-}
-
-const formatServerUrl = (imageUrl: string): string => {
-  return `${getEnvVar("STRAPI_URL")}${imageUrl}`
 }

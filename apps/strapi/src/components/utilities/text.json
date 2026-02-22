@@ -1,7 +1,8 @@
 {
   "collectionName": "components_utilities_texts",
   "info": {
-    "displayName": "Text"
+    "displayName": "Text",
+    "icon": "pencil"
   },
   "options": {},
   "attributes": {

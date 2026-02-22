@@ -2,16 +2,16 @@
   "project": "notum",
   "branchName": "ralph/backend-feature",
   "description": "Backend/API implementation batch",
+  "constraints": [],
+  "rules": [],
+  "nonGoals": [],
+  "qualityGates": ["pnpm lint", "cd apps/strapi && pnpm generate:types"],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
-    "requiredChecks": [
-      "pnpm lint",
-      "cd apps/strapi && pnpm generate:types"
-    ],
+    "requiredChecks": ["pnpm lint", "cd apps/strapi && pnpm generate:types"],
     "finalReview": {
       "enabled": true,
       "minScore": 8,
@@ -27,6 +27,7 @@
       "id": "BE-001",
       "title": "Add endpoint filtering by locale",
       "description": "Implement locale-aware filtering for public content endpoint",
+      "status": "open",
       "priority": 1,
       "passes": false,
       "notes": "",
@@ -57,10 +58,7 @@
       "metadata": {
         "taskType": "backend",
         "riskLevel": "medium",
-        "tags": [
-          "backend",
-          "api"
-        ]
+        "tags": ["backend", "api"]
       }
     }
   ],

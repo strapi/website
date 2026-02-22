@@ -1,9 +1,9 @@
 import { hashStringSHA256 } from "@/lib/crypto"
 import { getEnvVar } from "@/lib/env-vars"
 
-import StrapiPreviewWindowChangeListener from "./StrapiPreviewListener"
+import { StrapiPreviewWindowChangeListener } from "./StrapiPreviewListener"
 
-async function StrapiPreviewListener() {
+export async function StrapiPreviewListener() {
   const strapiUrl = getEnvVar("STRAPI_URL")
 
   if (!strapiUrl) {
@@ -25,5 +25,3 @@ async function StrapiPreviewListener() {
     />
   )
 }
-
-export default StrapiPreviewListener

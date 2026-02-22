@@ -6,7 +6,7 @@ import { Spinner } from "@/components/elementary/Spinner"
 import { cn } from "@/lib/styles"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[8px] text-base font-medium outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 spring-bounce",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-base rounded-[8px] font-medium outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 spring-bounce no-underline",
   {
     // Don't forget to keep in sync with Link component (LinkDecorations) in Strapi
     variants: {
@@ -24,10 +24,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-[42px] px-6 py-2 has-[>svg]:px-3",
         xs: "h-[28px] gap-1 px-3 text-xs has-[>svg]:px-2 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-[38px] gap-1.5 px-[18px] text-sm has-[>svg]:px-3",
-        lg: "h-[50px] px-10 has-[>svg]:px-4",
+        default: "h-[42px] px-6 py-2 has-[>svg]:px-3",
+        lg: "h-[50px] px-10 has-[>svg]:px-4 text-lg",
         icon: "size-9",
         "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",

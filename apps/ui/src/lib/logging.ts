@@ -7,6 +7,7 @@ import { getEnvVar } from "@/lib/env-vars"
  */
 export const logNonBlockingError = (...args: unknown[]) => {
   const showErrors = getEnvVar("SHOW_NON_BLOCKING_ERRORS")
+
   if (showErrors) {
     console.error(...args)
   }

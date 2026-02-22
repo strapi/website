@@ -1,7 +1,8 @@
 {
   "collectionName": "components_utilities_links_with_titles",
   "info": {
-    "displayName": "LinksWithTitle"
+    "displayName": "LinksWithTitle",
+    "icon": "bulletList"
   },
   "options": {},
   "attributes": {

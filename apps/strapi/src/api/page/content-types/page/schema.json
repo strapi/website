@@ -64,7 +64,13 @@
         "forms.newsletter-form",
         "forms.contact-form",
         "plans.plan-pricing-cards",
-        "plans.plan-comparison-table"
+        "plans.plan-comparison-table",
+        "sections.faq-section",
+        "sections.banner-slice",
+        "sections.integrations-section",
+        "sections.user-stories-section",
+        "sections.how-it-works",
+        "sections.section-header"
       ]
     },
     "children": {

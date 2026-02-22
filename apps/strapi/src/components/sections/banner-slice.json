@@ -1,0 +1,51 @@
+{
+  "collectionName": "components_sections_banner_slice",
+  "info": {
+    "displayName": "Banner Slice",
+    "icon": "presentationChart",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "heading": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ctas": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.link",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "backgroundVariant": {
+      "type": "enumeration",
+      "enum": ["default", "dark"],
+      "default": "default"
+    }
+  }
+}

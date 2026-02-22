@@ -5,10 +5,191 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "FooterItem"
+    icon: "hashtag"
   }
   attributes: {
     links: Schema.Attribute.Component<"utilities.link-text", true>
     title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_how_it_works_items"
+  info: {
+    description: ""
+    displayName: "How It Works Item"
+    icon: "lightbulb"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    icon: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface FooterFooterCta extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_cta"
+  info: {
+    description: ""
+    displayName: "Footer CTA"
+    icon: "cursor"
+  }
+  attributes: {
+    codeSnippet: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    ctaCards: Schema.Attribute.Component<"footer.footer-cta-card", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    featureBadges: Schema.Attribute.Component<"footer.footer-cta-badge", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    featureLogos: Schema.Attribute.Component<"utilities.basic-image", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface FooterFooterCtaBadge extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_cta_badge"
+  info: {
+    description: ""
+    displayName: "Footer CTA Badge"
+    icon: "shield"
+  }
+  attributes: {
+    icon: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    text: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface FooterFooterCtaCard extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_cta_card"
+  info: {
+    description: ""
+    displayName: "Footer CTA Card"
+    icon: "priceTag"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    icon: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    link: Schema.Attribute.Component<"utilities.link", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface FooterFooterMain extends Struct.ComponentSchema {
+  collectionName: "components_sections_footer_main"
+  info: {
+    description: ""
+    displayName: "Footer Main"
+    icon: "layout"
+  }
+  attributes: {
+    copyRight: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    links: Schema.Attribute.Component<"utilities.link-text", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    logoImage: Schema.Attribute.Component<"utilities.link-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    sections: Schema.Attribute.Component<"elements.footer-item", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    socials: Schema.Attribute.Component<"footer.footer-socials", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    tagline: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
   }
 }
 
@@ -28,6 +209,7 @@ export interface FormsContactForm extends Struct.ComponentSchema {
   collectionName: "components_forms_contact_forms"
   info: {
     displayName: "ContactForm"
+    icon: "mail"
   }
   attributes: {
     description: Schema.Attribute.Text
@@ -40,6 +222,7 @@ export interface FormsNewsletterForm extends Struct.ComponentSchema {
   collectionName: "components_forms_newsletter_forms"
   info: {
     displayName: "Newsletter"
+    icon: "paperPlane"
   }
   attributes: {
     description: Schema.Attribute.Text
@@ -48,28 +231,14 @@ export interface FormsNewsletterForm extends Struct.ComponentSchema {
   }
 }
 
-export interface NavbarAnnouncementBar extends Struct.ComponentSchema {
-  collectionName: "components_navbar_announcement_bars"
-  info: {
-    displayName: "AnnouncementBar"
-  }
-  attributes: {
-    badge: Schema.Attribute.String
-    isVisible: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
-    link: Schema.Attribute.Component<"utilities.link", false>
-    text: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
 export interface NavbarNavItem extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_items"
   info: {
     displayName: "NavItem"
+    icon: "bulletList"
   }
   attributes: {
-    bottomLinks: Schema.Attribute.Component<"utilities.link", true>
-    directLink: Schema.Attribute.Component<"utilities.link", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    link: Schema.Attribute.Component<"utilities.link-text", false>
     sections: Schema.Attribute.Component<"navbar.nav-section", true>
   }
 }
@@ -78,13 +247,12 @@ export interface NavbarNavLink extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_links"
   info: {
     displayName: "NavLink"
+    icon: "link"
   }
   attributes: {
     description: Schema.Attribute.String
     icon: Schema.Attribute.Component<"utilities.basic-image", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
-    link: Schema.Attribute.Component<"utilities.link", false> &
-      Schema.Attribute.Required
+    link: Schema.Attribute.Component<"utilities.link-text", false>
   }
 }
 
@@ -92,12 +260,27 @@ export interface NavbarNavSection extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_sections"
   info: {
     displayName: "NavSection"
+    icon: "folder"
   }
   attributes: {
+    columns: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>
     items: Schema.Attribute.Component<"navbar.nav-link", true>
-    layout: Schema.Attribute.Enumeration<["list", "grid"]> &
-      Schema.Attribute.DefaultTo<"list">
     title: Schema.Attribute.String
+  }
+}
+
+export interface NavigationNavbar extends Struct.ComponentSchema {
+  collectionName: "components_navigation_navbars"
+  info: {
+    description: "Main navigation bar with logo, nav items, and CTA links"
+    displayName: "Navbar"
+    icon: "squaresFour"
+  }
+  attributes: {
+    bottomLinks: Schema.Attribute.Component<"utilities.link", true>
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    logoImage: Schema.Attribute.Component<"utilities.link-image", false>
+    navItems: Schema.Attribute.Component<"navbar.nav-item", true>
   }
 }
 
@@ -117,7 +300,7 @@ export interface PlansPlanFeatureValue extends Struct.ComponentSchema {
   collectionName: "components_plans_plan_feature_values"
   info: {
     displayName: "PlanFeatureValue"
-    icon: "layer"
+    icon: "stack"
   }
   attributes: {
     feature: Schema.Attribute.Relation<
@@ -165,7 +348,7 @@ export interface PlansPlanPricingCardItemFeature
   collectionName: "components_plans_plan_pricing_card_item_features"
   info: {
     displayName: "PlanPricingCardItemFeature"
-    icon: "bulletList"
+    icon: "star"
   }
   attributes: {
     badge: Schema.Attribute.String
@@ -254,7 +437,7 @@ export interface PlansPricingCardPromo extends Struct.ComponentSchema {
   collectionName: "components_plans_pricing_card_promos"
   info: {
     displayName: "PricingCardPromo"
-    icon: "quote"
+    icon: "priceTag"
   }
   attributes: {
     description: Schema.Attribute.Text
@@ -267,7 +450,7 @@ export interface PlansPricingCardSso extends Struct.ComponentSchema {
   collectionName: "components_plans_pricing_card_ssos"
   info: {
     displayName: "PricingCardSSO"
-    icon: "grid"
+    icon: "key"
   }
   attributes: {
     description: Schema.Attribute.String
@@ -294,6 +477,168 @@ export interface PlansPricingSwitcher extends Struct.ComponentSchema {
     title: Schema.Attribute.String & Schema.Attribute.Required
     yearlySubtitle: Schema.Attribute.String
     yearlyTitle: Schema.Attribute.String
+  }
+}
+
+export interface SectionsBannerSlice extends Struct.ComponentSchema {
+  collectionName: "components_sections_banner_slice"
+  info: {
+    description: ""
+    displayName: "Banner Slice"
+    icon: "presentationChart"
+  }
+  attributes: {
+    backgroundVariant: Schema.Attribute.Enumeration<["default", "dark"]> &
+      Schema.Attribute.DefaultTo<"default">
+    ctas: Schema.Attribute.Component<"utilities.link", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsFaqSection extends Struct.ComponentSchema {
+  collectionName: "components_sections_faq_section"
+  info: {
+    description: ""
+    displayName: "FAQ Section"
+    icon: "question"
+  }
+  attributes: {
+    description: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    items: Schema.Attribute.Component<"utilities.accordions", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    sectionLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsHowItWorks extends Struct.ComponentSchema {
+  collectionName: "components_sections_how_it_works"
+  info: {
+    description: ""
+    displayName: "How It Works"
+    icon: "information"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    heading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    items: Schema.Attribute.Component<"elements.how-it-works-item", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
+  collectionName: "components_sections_integrations_section"
+  info: {
+    description: ""
+    displayName: "Integrations Section"
+    icon: "puzzlePiece"
+  }
+  attributes: {
+    heading: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface SectionsSectionHeader extends Struct.ComponentSchema {
+  collectionName: "components_sections_section_headers"
+  info: {
+    displayName: "Section Header"
+    icon: "layout"
+  }
+  attributes: {
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required
+  }
+}
+
+export interface SectionsUserStoriesSection extends Struct.ComponentSchema {
+  collectionName: "components_sections_user_stories_section"
+  info: {
+    description: ""
+    displayName: "User Stories Section"
+    icon: "user"
+  }
+  attributes: {
+    heading: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
   }
 }
 
@@ -342,7 +687,7 @@ export interface SeoUtilitiesSeoOg extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_seo_ogs"
   info: {
     displayName: "SeoOg"
-    icon: "oneToMany"
+    icon: "earth"
   }
   attributes: {
     description: Schema.Attribute.String
@@ -359,7 +704,7 @@ export interface SeoUtilitiesSeoTwitter extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_seo_twitters"
   info: {
     displayName: "SeoTwitter"
-    icon: "oneToMany"
+    icon: "discuss"
   }
   attributes: {
     card: Schema.Attribute.String
@@ -376,6 +721,7 @@ export interface SeoUtilitiesSocialIcons extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_social_icons"
   info: {
     displayName: "SocialIcons"
+    icon: "globe"
   }
   attributes: {
     socials: Schema.Attribute.Component<"utilities.link-image", true>
@@ -388,6 +734,7 @@ export interface UtilitiesAccordions extends Struct.ComponentSchema {
   info: {
     description: ""
     displayName: "Accordions"
+    icon: "stack"
   }
   attributes: {
     answer: Schema.Attribute.Text & Schema.Attribute.Required
@@ -399,6 +746,7 @@ export interface UtilitiesBasicImage extends Struct.ComponentSchema {
   collectionName: "components_utilities_basic_images"
   info: {
     displayName: "BasicImage"
+    icon: "image"
   }
   attributes: {
     alt: Schema.Attribute.String
@@ -410,22 +758,11 @@ export interface UtilitiesBasicImage extends Struct.ComponentSchema {
   }
 }
 
-export interface UtilitiesImageWithLink extends Struct.ComponentSchema {
-  collectionName: "components_utilities_image_with_links"
-  info: {
-    description: ""
-    displayName: "ImageWithLink"
-  }
-  attributes: {
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    link: Schema.Attribute.Component<"utilities.link", false>
-  }
-}
-
 export interface UtilitiesLink extends Struct.ComponentSchema {
   collectionName: "components_utilities_links"
   info: {
     displayName: "Link"
+    icon: "link"
   }
   attributes: {
     decorations: Schema.Attribute.Component<"utilities.link-decorations", false>
@@ -445,6 +782,7 @@ export interface UtilitiesLinkDecorations extends Struct.ComponentSchema {
   collectionName: "components_utilities_link_decorations"
   info: {
     displayName: "LinkDecorations"
+    icon: "paintBrush"
   }
   attributes: {
     hasIcons: Schema.Attribute.Boolean &
@@ -469,6 +807,7 @@ export interface UtilitiesLinkImage extends Struct.ComponentSchema {
   collectionName: "components_utilities_link_images"
   info: {
     displayName: "LinkImage"
+    icon: "images"
   }
   attributes: {
     href: Schema.Attribute.String & Schema.Attribute.Required
@@ -488,6 +827,7 @@ export interface UtilitiesLinkText extends Struct.ComponentSchema {
   collectionName: "components_utilities_link_texts"
   info: {
     displayName: "LinkText"
+    icon: "cursor"
   }
   attributes: {
     href: Schema.Attribute.String & Schema.Attribute.Required
@@ -506,6 +846,7 @@ export interface UtilitiesLinksWithTitle extends Struct.ComponentSchema {
   collectionName: "components_utilities_links_with_titles"
   info: {
     displayName: "LinksWithTitle"
+    icon: "bulletList"
   }
   attributes: {
     links: Schema.Attribute.Component<"utilities.link", true>
@@ -513,10 +854,31 @@ export interface UtilitiesLinksWithTitle extends Struct.ComponentSchema {
   }
 }
 
+export interface UtilitiesSectionHeader extends Struct.ComponentSchema {
+  collectionName: "components_utilities_section_headers"
+  info: {
+    displayName: "Section Header"
+    icon: "feather"
+  }
+  attributes: {
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    description: Schema.Attribute.RichText
+    label: Schema.Attribute.String
+    labelIcon: Schema.Attribute.Component<"utilities.basic-image", false>
+    layout: Schema.Attribute.Enumeration<["left", "center", "right"]> &
+      Schema.Attribute.DefaultTo<"center">
+    size: Schema.Attribute.Enumeration<["xs", "sm", "default", "lg", "xl"]> &
+      Schema.Attribute.DefaultTo<"default">
+    title: Schema.Attribute.Text & Schema.Attribute.Required
+    variant: Schema.Attribute.Enumeration<["default", "purple", "inverse"]>
+  }
+}
+
 export interface UtilitiesText extends Struct.ComponentSchema {
   collectionName: "components_utilities_texts"
   info: {
     displayName: "Text"
+    icon: "pencil"
   }
   attributes: {
     text: Schema.Attribute.String
@@ -538,13 +900,18 @@ declare module "@strapi/strapi" {
   export module Public {
     export interface ComponentSchemas {
       "elements.footer-item": ElementsFooterItem
+      "elements.how-it-works-item": ElementsHowItWorksItem
+      "footer.footer-cta": FooterFooterCta
+      "footer.footer-cta-badge": FooterFooterCtaBadge
+      "footer.footer-cta-card": FooterFooterCtaCard
+      "footer.footer-main": FooterFooterMain
       "footer.footer-socials": FooterFooterSocials
       "forms.contact-form": FormsContactForm
       "forms.newsletter-form": FormsNewsletterForm
-      "navbar.announcement-bar": NavbarAnnouncementBar
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
+      "navigation.navbar": NavigationNavbar
       "plans.plan-comparison-table": PlansPlanComparisonTable
       "plans.plan-feature-value": PlansPlanFeatureValue
       "plans.plan-pricing-card-item": PlansPlanPricingCardItem
@@ -556,18 +923,24 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-promo": PlansPricingCardPromo
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
+      "sections.banner-slice": SectionsBannerSlice
+      "sections.faq-section": SectionsFaqSection
+      "sections.how-it-works": SectionsHowItWorks
+      "sections.integrations-section": SectionsIntegrationsSection
+      "sections.section-header": SectionsSectionHeader
+      "sections.user-stories-section": SectionsUserStoriesSection
       "seo-utilities.seo": SeoUtilitiesSeo
       "seo-utilities.seo-og": SeoUtilitiesSeoOg
       "seo-utilities.seo-twitter": SeoUtilitiesSeoTwitter
       "seo-utilities.social-icons": SeoUtilitiesSocialIcons
       "utilities.accordions": UtilitiesAccordions
       "utilities.basic-image": UtilitiesBasicImage
-      "utilities.image-with-link": UtilitiesImageWithLink
       "utilities.link": UtilitiesLink
       "utilities.link-decorations": UtilitiesLinkDecorations
       "utilities.link-image": UtilitiesLinkImage
       "utilities.link-text": UtilitiesLinkText
       "utilities.links-with-title": UtilitiesLinksWithTitle
+      "utilities.section-header": UtilitiesSectionHeader
       "utilities.text": UtilitiesText
       "utilities.tooltip": UtilitiesTooltip
     }

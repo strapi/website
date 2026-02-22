@@ -1,10 +1,10 @@
 "use client"
 
-import AppLink from "@/components/elementary/AppLink"
+import { AppLink } from "@/components/elementary/AppLink"
 import { Container } from "@/components/elementary/Container"
 import { usePathname } from "@/lib/navigation"
 
-export default function DevNavbar() {
+export function DevNavbar() {
   const pathname = usePathname()
   const links = [
     {

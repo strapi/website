@@ -104,76 +104,15 @@ export async function fetchSeo(
   }
 }
 
-// ------ Navbar fetching functions
-
-export async function fetchNavbar(locale: Locale) {
+export async function fetchHeader(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchOne("api::navbar.navbar", undefined, {
+    return await PublicStrapiClient.fetchOne("api::header.header", undefined, {
       locale,
-      populate: {
-        logoImage: {
-          populate: {
-            image: {
-              populate: { media: true },
-            },
-            link: true,
-          },
-        },
-        announcementBar: {
-          populate: {
-            link: {
-              populate: {
-                page: true,
-                decorations: {
-                  populate: { leftIcon: true, rightIcon: true },
-                },
-              },
-            },
-          },
-        },
-        navItems: {
-          populate: {
-            directLink: {
-              populate: {
-                page: true,
-                decorations: {
-                  populate: { leftIcon: true, rightIcon: true },
-                },
-              },
-            },
-            sections: {
-              populate: {
-                items: {
-                  populate: {
-                    icon: true,
-                    link: { populate: { page: true } },
-                  },
-                },
-              },
-            },
-            bottomLinks: {
-              populate: {
-                page: true,
-                decorations: {
-                  populate: { leftIcon: true, rightIcon: true },
-                },
-              },
-            },
-          },
-        },
-        ctaLinks: {
-          populate: {
-            page: true,
-            decorations: {
-              populate: { leftIcon: true, rightIcon: true },
-            },
-          },
-        },
-      },
+      populateDynamicZone: { content: true },
     })
   } catch (e: unknown) {
     logNonBlockingError({
-      message: `Error fetching navbar for locale '${locale}'`,
+      message: `Error fetching header for locale '${locale}'`,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,
@@ -182,35 +121,11 @@ export async function fetchNavbar(locale: Locale) {
   }
 }
 
-// ------ Footer fetching functions
-
 export async function fetchFooter(locale: Locale) {
   try {
     return await PublicStrapiClient.fetchOne("api::footer.footer", undefined, {
       locale,
-      populate: {
-        sections: { populate: { links: { populate: { page: true } } } },
-        logoImage: {
-          populate: {
-            image: {
-              populate: {
-                media: true,
-              },
-            },
-            page: true,
-          },
-        },
-        links: { populate: { page: true } },
-        socials: {
-          populate: {
-            socials: {
-              populate: {
-                image: { populate: { media: true } },
-              },
-            },
-          },
-        },
-      },
+      populateDynamicZone: { content: true },
     })
   } catch (e: unknown) {
     logNonBlockingError({

@@ -102,7 +102,7 @@ The proxy hides sensitive information from the client.
 
 ```typescript
 const ALLOWED_STRAPI_ENDPOINTS: Record<string, string[]> = {
-  GET: ["api/pages", "api/footer", "api/navbar"],
+  GET: ["api/pages", "api/footer", "api/header"],
 }
 ```
 
@@ -116,10 +116,10 @@ Fetch a single document by ID (collection types) or without ID (single types).
 
 ```typescript
 // Single type (no ID)
-const navbar = await PublicStrapiClient.fetchOne(
-  "api::navbar.navbar",
+const header = await PublicStrapiClient.fetchOne(
+  "api::header.header",
   undefined,
-  { locale, populate: { links: true } }
+  { locale, populateDynamicZone: { content: true } }
 )
 
 // Collection type (with ID)
@@ -259,9 +259,10 @@ async function fetchData() {
 
 ```typescript
 // apps/ui/src/lib/strapi-api/base.ts
-export const API_ENDPOINTS: { [key in UID.ContentType]?: string } = {
+export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::page.page": "/pages",
   "api::footer.footer": "/footer",
+  "api::header.header": "/header",
   "api::your-new-type.your-new-type": "/your-new-types", // add here
 }
 ```

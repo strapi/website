@@ -29,8 +29,6 @@ export function TrackingScriptWrapper({
   )
 }
 
-function TrackingScripts() {
+export function TrackingScripts() {
   return <>{/* Tracking Scrips here */}</>
 }
-
-export default TrackingScripts

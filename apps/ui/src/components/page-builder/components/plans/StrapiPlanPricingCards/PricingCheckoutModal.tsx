@@ -238,7 +238,3 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
     </Dialog>
   )
 }
-
-PricingCheckoutModal.displayName = "PricingCheckoutModal"
-
-export default PricingCheckoutModal

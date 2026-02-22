@@ -30,13 +30,16 @@ See [docs/commands.md](docs/commands.md) for full command reference.
 
 ## Type Generation (Critical)
 
-After ANY Strapi schema change:
+After ANY Strapi schema change, run this immediately and autonomously — do not ask the user first:
 
 ```bash
 cd apps/strapi && pnpm generate:types
 ```
 
 This updates `@repo/strapi-types`. Forgetting causes silent type mismatches between apps.
+
+`generate:types` is a one-shot script, not a long-running server — it is safe to run at any time.
+If the command fails, block the current task and ask the user to restart Strapi, then re-run it.
 
 ## Documentation
 
@@ -51,14 +54,6 @@ This updates `@repo/strapi-types`. Forgetting causes silent type mismatches betw
 ## Running Services
 
 **Never launch dev servers (`pnpm dev`, `strapi develop`, `next dev`) in the background.** These spawn long-running processes that are hard to kill from within the agent.
-
-**Never kill or restart running services.** Do not use `kill`, `pkill`, or any signal to terminate dev servers. Schema changes require a Strapi restart — ask the user to do it manually.
-
-Before any skill that needs a running server:
-
-1. Check if the port is already in use: `lsof -ti:PORT` (Strapi: `1337`, Next.js: `3000`).
-2. If the port is active, assume the server is running — do not start another instance.
-3. If the port is free and the skill needs it, ask the user to start the server themselves in a separate terminal. Wait for confirmation before proceeding.
 
 ## Strapi Data Safety
 
@@ -75,20 +70,12 @@ GET → content = [{ existing1 }, { existing2 }]
 PUT { "data": { "content": [{ existing1 }, { existing2 }, { "__component": "sections.new", ... }] } }
 ```
 
-### Schema changes require server restart before writes
-
-After creating new schema files, the running Strapi server does not know about them. Writing unknown `__component` UIDs corrupts data.
-
-1. Create schema files, populate configs, registry entries.
-2. Ask the user to restart Strapi. Wait for confirmation.
-3. Only then seed content via MCP.
-
 ## Commits
 
 Uses conventional commits enforced by Husky + commitlint.
 
 ```bash
-pnpm commit    # Interactive Commitizen flow
+pnpm commit
 ```
 
 Or write manually: `type(scope): subject`

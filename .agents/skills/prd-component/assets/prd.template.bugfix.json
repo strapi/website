@@ -2,16 +2,16 @@
   "project": "notum",
   "branchName": "ralph/bugfix-batch",
   "description": "Bugfix batch",
+  "constraints": [],
+  "rules": [],
+  "nonGoals": [],
+  "qualityGates": ["pnpm lint", "cd apps/ui && pnpm typecheck"],
   "loopConfig": {
     "maxIterationsPerStory": 3,
     "maxStagnantIterations": 2,
-    "stopOnBlockedCheckpoint": true,
     "orderedByPriority": true,
     "memoryFile": "tmp/ralph-memory.jsonl",
-    "requiredChecks": [
-      "pnpm lint",
-      "cd apps/ui && pnpm typecheck"
-    ],
+    "requiredChecks": ["pnpm lint", "cd apps/ui && pnpm typecheck"],
     "finalReview": {
       "enabled": true,
       "minScore": 8,
@@ -27,6 +27,7 @@
       "id": "BUG-001",
       "title": "Fix navbar flicker on mobile",
       "description": "Eliminate hydration mismatch causing flicker on initial render",
+      "status": "open",
       "priority": 1,
       "passes": false,
       "notes": "",
@@ -55,10 +56,7 @@
       "metadata": {
         "taskType": "bugfix",
         "severity": "high",
-        "tags": [
-          "bug",
-          "ui"
-        ]
+        "tags": ["bug", "ui"]
       }
     }
   ],

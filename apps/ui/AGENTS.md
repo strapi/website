@@ -75,8 +75,8 @@ Use skill: `/create-content-component`, or do it manually
 
 1. Create Strapi schema — see [apps/strapi/AGENTS.md](../strapi/AGENTS.md)
 2. Generate types (see root AGENTS.md)
-3. Create component: `components/page-builder/components/{category}/Strapi{Name}.tsx`
-4. Register in `PageContentComponents`
+3. Create component (path depends on dynamic zone type — see [page-builder.md](../../docs/page-builder.md))
+4. Register in `ContentComponents`
 
 ## Related Documentation
 

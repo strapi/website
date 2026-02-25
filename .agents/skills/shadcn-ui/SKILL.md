@@ -1,6 +1,6 @@
 ---
 name: shadcn-ui
-description: Expert guidance for integrating and building applications with shadcn/ui components, including component discovery, installation, customization, and best practices.
+description: "Expert guidance for integrating shadcn/ui components in this Next.js monorepo (apps/ui). Handles component discovery, installation via CLI, customization to local conventions (cn() in @/lib/styles, Tailwind v4, radix-ui primitives), and best practices. Use this skill whenever the user wants to add, install, customize, or troubleshoot a shadcn/ui component — even if they just say 'add a button' or 'install tabs'. Also triggers on: shadcn, radix, UI component, cn utility, component library."
 ---
 
 # shadcn/ui Essentials (Repo-Specific)

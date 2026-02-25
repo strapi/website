@@ -1,6 +1,6 @@
 ---
 name: create-content-component
-description: "Creates a new page builder content component for both Strapi and the Next.js frontend. Triggers: add/create page component, new page section, page builder component, add form component."
+description: "Creates a new page builder content component for both Strapi and the Next.js frontend. Use this skill whenever the user wants to add a new section, form, or component to the page builder — including creating Strapi schemas, dynamic zone registration, populate configs, and React wrappers. Triggers: add/create page component, new page section, page builder component, add form component, new strapi schema, add content type, new section component, add dynamic zone component, create strapi component."
 ---
 
 # Add Page Builder

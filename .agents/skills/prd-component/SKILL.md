@@ -1,11 +1,13 @@
 ---
 name: prd-component
-description: "Create a flexible camelCase PRD JSON for Ralph loops with generic stories[] plus optional domain-specific data/metadata blocks."
+description: "Create a structured PRD (Product Requirements Document) as a JSON task file with prioritized stories for automated execution. Ralph is the project's task runner script that processes stories sequentially. Use this skill whenever the user wants to plan work, break down a feature into stories, create a task plan, or prepare a batch of component migrations. Triggers: create PRD, plan tasks, break down work, create stories, task planning, batch migration, ralph, plan component work."
 ---
 
 # PRD Intake (Generic)
 
 Use this skill to generate `prd.json` that works for component migration, bugfixing, backend logic, or mixed work.
+
+**Ralph** is the project's automated task runner (`.agents/skills/prd-component/ralph.sh`). It reads a PRD JSON file, iterates through stories in priority order, and executes each one by spawning Claude with the story's context and execution skill. Stories are retried up to `maxIterationsPerStory` times until acceptance criteria pass.
 
 ## Output
 

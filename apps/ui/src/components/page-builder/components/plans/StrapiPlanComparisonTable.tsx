@@ -19,8 +19,8 @@ type PlanFeatureRow = {
 const CATEGORY_ORDER: CategoryEnums[] = [
   "general",
   "cloud",
-  "terms-and-services",
   "usage",
+  "terms-and-services",
 ]
 
 /**

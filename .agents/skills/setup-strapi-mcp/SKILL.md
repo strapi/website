@@ -145,28 +145,7 @@ If Strapi MCP tools are available, verify by calling:
 
 Report success with available content types, or include the exact failure.
 
-### 8. Return structured setup report
-
-At the end, return:
-
-```json
-{
-  "actions_taken": [],
-  "created": [],
-  "updated": [],
-  "reused": [],
-  "skipped": [],
-  "errors": [],
-  "manual_steps_needed": []
-}
-```
-
-Include:
-
-- Whether `~/.mcp/strapi-mcp-server.config.json` was created or merged.
-- Whether `.mcp.json` was created or merged.
-- Whether `.claude/settings.local.json` was created or updated.
-- Whether MCP tools were verifiably reachable in the active session.
+Report what files were created/updated and whether MCP tools are reachable.
 
 ## Files Modified
 

@@ -107,19 +107,22 @@ Build a runtime schema map that includes:
 
 ### Step 5: Build schema-first mapping plan
 
+Match source sections to local component UIDs by reading `docs/component-registry.md`. Use pattern matching as initial candidates only — schema validation decides final mapping.
+
 For each extracted source section:
 
-1. Match to a candidate local component UID (heuristics are allowed but non-authoritative).
+1. Match to a candidate local component UID.
 2. Validate that UID is allowed by page `content` dynamic zone.
+   - If no local component matches, skip the section and describe what was found. Suggest `/create-content-component` when a new local component is needed.
 3. Map values recursively by schema:
    - Scalars: coerce conservatively and only when type-compatible.
    - Enumerations: assign only allowed values; otherwise skip and report.
    - Components: recurse into nested schema.
    - Relations: build unresolved placeholders for Step 8.
    - Media: build unresolved placeholders for Step 7.
+   - Unknown or new schema fields: try best-effort mapping only when type-compatible. If not safely mappable, skip and report. Never fail the whole run for one unmapped field unless user requests strict mode.
 4. Enforce required-field validity:
-   - If required field cannot be mapped, mark component fragment as invalid.
-   - Invalid fragments are skipped and reported.
+   - If a required field cannot be mapped, mark the component fragment as invalid, skip it, and report under `invalid`. Never fail the whole run for one invalid fragment.
 5. Link rule:
    - For `utilities.link` with unresolved page relation, convert to:
      - `type: "external"`
@@ -161,7 +164,7 @@ For each mapped media placeholder:
 
 Validation rules:
 
-- If media upload fails and field is optional, omit that field and report.
+- If media upload fails and field is optional, omit that field and continue.
 - If media upload fails and field is required, do not write `null`.
   - Skip the containing component fragment.
   - Add item to `invalid` and `requires_manual_followup`.
@@ -184,7 +187,7 @@ Dedupe keys (default guidance):
 Rules:
 
 - Query existing records first via `strapi_rest()` GET.
-- Reuse exact matches.
+- Reuse exact matches — always run find-before-create for page and relation entities to avoid duplicate plans/features/pages.
 - Create only when no exact match exists.
 
 ### Step 9: Create or update content entry (locale + hierarchy safe)
@@ -234,72 +237,4 @@ GET /api/pages?locale=<locale>&filters[fullPath][$eq]=<targetFullPath>
 
 ### Step 10: Report results
 
-Always return the final structured report:
-
-```json
-{
-  "actions_taken": [],
-  "created": [],
-  "updated": [],
-  "reused": [],
-  "mapped": [],
-  "best_effort_mapped": [],
-  "skipped": [],
-  "invalid": [],
-  "errors": [],
-  "manual_steps_needed": []
-}
-```
-
-Include:
-
-- Page info: `title`, `locale`, `fullPath`, `documentId`.
-- Component list with brief summaries.
-- Media upload results.
-- Relation reuse/create results.
-- Preview URL and admin URL when available.
-
-## Edge Cases
-
-### Unknown or new schema fields
-
-- Try best-effort mapping only when type-compatible.
-- If not safely mappable, skip and report.
-- Never fail the whole run for one unmapped field unless user requests strict mode.
-
-### Unknown components on source page
-
-- Skip unrecognized sections and describe what was found.
-- Suggest `/create-content-component` when a new local component is needed.
-
-### Required data missing
-
-- If required fields cannot be mapped, skip affected fragment and report it under `invalid`.
-
-### Missing images
-
-- Optional media fields: omit field and continue.
-- Required media fields: skip affected component fragment and report manual follow-up.
-
-### Duplicate content
-
-- Always run find-before-create for page and relation entities.
-- Reuse exact matches to avoid duplicate plans/features/pages.
-
-### Links with page relations
-
-- Convert unresolved `type: "page"` links to `type: "external"` with absolute source URL.
-
-## Component Matching Heuristics (non-authoritative)
-
-Use these patterns only as initial candidates. Schema validation decides final mapping.
-
-| Source pattern                     | Local component               | Content type |
-| ---------------------------------- | ----------------------------- | ------------ |
-| Pricing cards with plans           | `plans.plan-pricing-cards`    | Page         |
-| Feature comparison table           | `plans.plan-comparison-table` | Page         |
-| Newsletter signup form             | `forms.newsletter-form`       | Page         |
-| Contact form                       | `forms.contact-form`          | Page         |
-| Site navigation bar with mega menu | `navigation.navbar`           | Header       |
-| Footer main with links and socials | `footer.footer-main`          | Footer       |
-| Footer CTA with badges and cards   | `footer.footer-cta`           | Footer       |
+Report: actions taken, items created/updated/reused, items skipped/invalid, media upload results, relation reuse/create results, and any manual follow-up needed. Include page title, locale, fullPath, and documentId when available.

@@ -782,6 +782,22 @@ MANDATORY SKILL ROUTING — READ THIS FIRST:
    If the skill fails or is unavailable, mark the story as BLOCKED — do not fall back to manual implementation.
 SKILL_RULE
 )
+  elif [[ "$execution_skill" == "consolidate-patterns" ]]; then
+    execution_skill_rule=$(cat <<SKILL_RULE
+
+MANDATORY SKILL ROUTING — READ THIS FIRST:
+   This story REQUIRES the /consolidate-patterns skill. Do NOT implement manually.
+   The skill reviews recently created components for reusable patterns and extracts elementary components.
+
+   STEP 1: Read .agents/skills/consolidate-patterns/SKILL.md
+   STEP 2: Invoke /consolidate-patterns with the story's data payload:
+   - batch_story_ids: from data.batch_story_ids
+   - min_occurrences: from data.min_occurrences (default 2)
+   STEP 3: Follow the skill's output — extract patterns it identifies, skip if none found.
+
+   If the skill is unavailable, mark the story as BLOCKED — do not attempt manual pattern extraction.
+SKILL_RULE
+)
   fi
 
   if [[ -n "$REQUIRED_CHECKS" ]]; then

@@ -145,6 +145,27 @@ Do not duplicate `copyComponentInput` fields as top-level `data.*` camelCase key
 
 Use `metadata.checkpoints` for restart/write/review requirements.
 
+### URL/Selector Auto-Detection
+
+When the user provides a source URL (e.g. `strapi.io/*`, or any URL pointing to a live website) AND a CSS selector / XPath / section identifier / section description, the story IS a copy-component migration story. Apply these rules automatically:
+
+1. Set `metadata.executionSkill = "copy-component"`.
+2. Fill `data.copyComponentInput` with the user's exact values:
+   - `source_url`: the URL the user provided (verbatim)
+   - `selector`: the CSS selector or XPath the user provided (verbatim)
+   - `component_name`: derive from selector context or user description (kebab-case)
+   - `prd_goal`: derive from user description
+   - `content_constraints`: from user notes, or `"none"`
+   - `reuse_mode`: from user input, default `"balanced"`
+   - `shadcn_mode`: default `"prefer-existing"`
+   - `acceptance_profile`: default `"balanced-default"`
+   - `category`: from user input, default `"sections"`
+3. If the user provides multiple URLs for the same component (variants), fill `source_urls` array in `copyComponentInput`.
+4. Use the story description template from "Story description guidance" above.
+5. Include the standard copy-component acceptance criteria from "Acceptance criteria" above.
+
+**Critical**: URLs and selectors MUST appear in `data.copyComponentInput` — not only in acceptance criteria or description text. The ralph runner reads `copyComponentInput` to construct the skill invocation prompt. If the data is only in free-text fields, the skill will not receive it.
+
 ## Validation Rules
 
 A story is runnable when:

@@ -780,6 +780,12 @@ MANDATORY SKILL ROUTING — READ THIS FIRST:
    STEP 3: Follow the skill's output — do not override its decisions.
 
    If the skill fails or is unavailable, mark the story as BLOCKED — do not fall back to manual implementation.
+   Specific failure states that MUST trigger BLOCKED:
+   - Playwright browser tools not available or browser_navigate/browser_evaluate fail
+   - Extraction steps return empty/null data (no computed styles extracted)
+   - Token mapping produces zero design-token matches
+   - Required CSS properties (font-size, background-color, padding) missing from extraction
+   Do NOT guess CSS values from screenshots. Do NOT write manual Tailwind classes without extraction data.
 SKILL_RULE
 )
   elif [[ "$execution_skill" == "consolidate-patterns" ]]; then

@@ -1,15 +1,22 @@
-// Structure extraction — use with browser_evaluate on target section element (Step 2)
-// Pass as: (element) => { ... extractStructure code ... return extractStructure(element) }
-function extractStructure(el, depth = 0, maxDepth = 10) {
+// Structure extraction — standalone reference function (used inside mega-extract template)
+// Can also be used with browser_evaluate: (element) => { ... extractStructure code ... return extractStructure(element) }
+function extractStructure(el, depth = 0, maxDepth = 6) {
   if (depth > maxDepth) return null
+  const tag = el.tagName.toLowerCase()
+
+  // Skip junk elements
+  if (["script", "style", "noscript", "template"].includes(tag)) return null
 
   const text =
     el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
       ? el.textContent.trim()
       : null
 
+  // For SVGs: capture element itself but skip children (paths, circles, etc.)
+  const skipChildren = tag === "svg"
+
   return {
-    tag: el.tagName.toLowerCase(),
+    tag,
     text,
     attrs: {
       href: el.getAttribute("href"),
@@ -19,89 +26,70 @@ function extractStructure(el, depth = 0, maxDepth = 10) {
       type: el.getAttribute("type"),
     },
     childCount: el.children.length,
-    children: Array.from(el.children)
-      .map((c) => extractStructure(c, depth + 1, maxDepth))
-      .filter(Boolean),
+    children: skipChildren
+      ? []
+      : Array.from(el.children)
+          .map((c) => extractStructure(c, depth + 1, maxDepth))
+          .filter(Boolean),
   }
 }
 
-// Style extraction — use with browser_evaluate on target section element (Steps 3-4)
+// Style extraction — standalone reference function (used inside mega-extract template)
 // Run at desktop (1280x900) then mobile (375x812)
-// Pass as: (element) => { ... extractStyles code ... return extractStyles(element) }
-function extractStyles(el, depth = 0, maxDepth = 10) {
+// Can also be used with browser_evaluate: (element) => { ... extractStyles code ... return extractStyles(element) }
+function extractStyles(el, depth = 0, maxDepth = 6) {
   if (depth > maxDepth) return null
+  const tag = el.tagName.toLowerCase()
+
+  // Skip junk elements
+  if (["script", "style", "noscript", "template"].includes(tag)) return null
+
   const s = window.getComputedStyle(el)
+
+  // Skip hidden elements
+  if (s.display === "none") return null
 
   const text =
     el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
       ? el.textContent.trim()
       : null
 
+  // For SVGs: capture dimensions only, skip children
+  const skipChildren = tag === "svg"
+
   return {
-    tag: el.tagName.toLowerCase(),
+    tag,
     text,
     styles: {
-      // Typography
-      fontSize: s.fontSize,
-      fontWeight: s.fontWeight,
-      fontFamily: s.fontFamily,
-      lineHeight: s.lineHeight,
-      letterSpacing: s.letterSpacing,
-      textAlign: s.textAlign,
-      textTransform: s.textTransform,
-      color: s.color,
-      // Layout
-      display: s.display,
-      flexDirection: s.flexDirection,
-      flexWrap: s.flexWrap,
-      alignItems: s.alignItems,
-      justifyContent: s.justifyContent,
-      gap: s.gap,
+      fontSize: s.fontSize, fontWeight: s.fontWeight, fontFamily: s.fontFamily,
+      lineHeight: s.lineHeight, letterSpacing: s.letterSpacing, textAlign: s.textAlign,
+      textTransform: s.textTransform, color: s.color,
+      display: s.display, flexDirection: s.flexDirection, flexWrap: s.flexWrap,
+      alignItems: s.alignItems, justifyContent: s.justifyContent, gap: s.gap,
       gridTemplateColumns: s.gridTemplateColumns,
-      // Spacing
-      marginTop: s.marginTop,
-      marginBottom: s.marginBottom,
-      marginLeft: s.marginLeft,
-      marginRight: s.marginRight,
-      paddingTop: s.paddingTop,
-      paddingBottom: s.paddingBottom,
-      paddingLeft: s.paddingLeft,
-      paddingRight: s.paddingRight,
-      // Sizing
-      width: s.width,
-      maxWidth: s.maxWidth,
-      height: s.height,
-      minHeight: s.minHeight,
-      // Visual
-      backgroundColor: s.backgroundColor,
-      borderRadius: s.borderRadius,
-      boxShadow: s.boxShadow,
-      border: s.border,
-      opacity: s.opacity,
-      overflow: s.overflow,
-      position: s.position,
-      // Background details
-      backgroundImage: s.backgroundImage,
-      background: s.background,
-      // Transform & transitions
-      transform: s.transform,
-      transition: s.transition,
-      // Text decoration
-      textDecoration: s.textDecoration,
-      textDecorationColor: s.textDecorationColor,
-      // Object/aspect
-      aspectRatio: s.aspectRatio,
-      objectFit: s.objectFit,
-      objectPosition: s.objectPosition,
+      marginTop: s.marginTop, marginBottom: s.marginBottom,
+      marginLeft: s.marginLeft, marginRight: s.marginRight,
+      paddingTop: s.paddingTop, paddingBottom: s.paddingBottom,
+      paddingLeft: s.paddingLeft, paddingRight: s.paddingRight,
+      width: s.width, maxWidth: s.maxWidth, height: s.height, minHeight: s.minHeight,
+      backgroundColor: s.backgroundColor, borderRadius: s.borderRadius,
+      boxShadow: s.boxShadow, border: s.border, opacity: s.opacity,
+      overflow: s.overflow, position: s.position,
+      backgroundImage: s.backgroundImage, background: s.background,
+      transform: s.transform, transition: s.transition,
+      textDecoration: s.textDecoration, textDecorationColor: s.textDecorationColor,
+      aspectRatio: s.aspectRatio, objectFit: s.objectFit, objectPosition: s.objectPosition,
     },
-    children: Array.from(el.children)
-      .map((c) => extractStyles(c, depth + 1, maxDepth))
-      .filter(Boolean),
+    children: skipChildren
+      ? []
+      : Array.from(el.children)
+          .map((c) => extractStyles(c, depth + 1, maxDepth))
+          .filter(Boolean),
   }
 }
 
-// Cookie/modal dismissal — run via browser_evaluate before extraction if overlays are present
-// Pass as: () => { ... dismissOverlays code ... }
+// Cookie/modal dismissal — standalone reference function (handled automatically in mega-extract template)
+// Can also be used with browser_evaluate: () => { ... dismissOverlays code ... }
 function dismissOverlays() {
   // Common cookie banner selectors
   const selectors = [
@@ -115,8 +103,8 @@ function dismissOverlays() {
   })
 }
 
-// Scroll to section — run via browser_evaluate for lazy-loaded content before extracting
-// Pass as: (element) => { element.scrollIntoView({ behavior: "instant" }) }
+// Scroll to section — standalone reference function (handled automatically in mega-extract template)
+// Can also be used with browser_evaluate: (element) => { element.scrollIntoView({ behavior: "instant" }) }
 function scrollToElement(element) {
   element.scrollIntoView({ behavior: "instant" })
 }
@@ -167,24 +155,31 @@ const megaExtractTemplate = `async (page) => {
 
   await page.setViewportSize({ width: 1280, height: 900 });
   const desktop = await el.evaluate((el) => {
-    function _extractStructure(el, depth = 0, maxDepth = 10) {
+    function _extractStructure(el, depth = 0, maxDepth = 6) {
       if (depth > maxDepth) return null;
+      const tag = el.tagName.toLowerCase();
+      if (["script", "style", "noscript", "template"].includes(tag)) return null;
       const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
         ? el.textContent.trim() : null;
+      const skipChildren = tag === "svg";
       return {
-        tag: el.tagName.toLowerCase(), text,
+        tag, text,
         attrs: { href: el.getAttribute("href"), src: el.getAttribute("src"), alt: el.getAttribute("alt"), role: el.getAttribute("role"), type: el.getAttribute("type") },
         childCount: el.children.length,
-        children: Array.from(el.children).map(c => _extractStructure(c, depth + 1, maxDepth)).filter(Boolean),
+        children: skipChildren ? [] : Array.from(el.children).map(c => _extractStructure(c, depth + 1, maxDepth)).filter(Boolean),
       };
     }
-    function _extractStyles(el, depth = 0, maxDepth = 10) {
+    function _extractStyles(el, depth = 0, maxDepth = 6) {
       if (depth > maxDepth) return null;
+      const tag = el.tagName.toLowerCase();
+      if (["script", "style", "noscript", "template"].includes(tag)) return null;
       const s = window.getComputedStyle(el);
+      if (s.display === "none") return null;
       const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
         ? el.textContent.trim() : null;
+      const skipChildren = tag === "svg";
       return {
-        tag: el.tagName.toLowerCase(), text,
+        tag, text,
         styles: {
           fontSize: s.fontSize, fontWeight: s.fontWeight, fontFamily: s.fontFamily,
           lineHeight: s.lineHeight, letterSpacing: s.letterSpacing, textAlign: s.textAlign,
@@ -205,7 +200,7 @@ const megaExtractTemplate = `async (page) => {
           textDecoration: s.textDecoration, textDecorationColor: s.textDecorationColor,
           aspectRatio: s.aspectRatio, objectFit: s.objectFit, objectPosition: s.objectPosition,
         },
-        children: Array.from(el.children).map(c => _extractStyles(c, depth + 1, maxDepth)).filter(Boolean),
+        children: skipChildren ? [] : Array.from(el.children).map(c => _extractStyles(c, depth + 1, maxDepth)).filter(Boolean),
       };
     }
     return { structure: _extractStructure(el), styles: _extractStyles(el) };
@@ -213,13 +208,17 @@ const megaExtractTemplate = `async (page) => {
 
   await page.setViewportSize({ width: 375, height: 812 });
   const mobileStyles = await el.evaluate((el) => {
-    function _extractStyles(el, depth = 0, maxDepth = 10) {
+    function _extractStyles(el, depth = 0, maxDepth = 6) {
       if (depth > maxDepth) return null;
+      const tag = el.tagName.toLowerCase();
+      if (["script", "style", "noscript", "template"].includes(tag)) return null;
       const s = window.getComputedStyle(el);
+      if (s.display === "none") return null;
       const text = el.childNodes.length === 1 && el.childNodes[0].nodeType === 3
         ? el.textContent.trim() : null;
+      const skipChildren = tag === "svg";
       return {
-        tag: el.tagName.toLowerCase(), text,
+        tag, text,
         styles: {
           fontSize: s.fontSize, fontWeight: s.fontWeight, fontFamily: s.fontFamily,
           lineHeight: s.lineHeight, letterSpacing: s.letterSpacing, textAlign: s.textAlign,
@@ -240,7 +239,7 @@ const megaExtractTemplate = `async (page) => {
           textDecoration: s.textDecoration, textDecorationColor: s.textDecorationColor,
           aspectRatio: s.aspectRatio, objectFit: s.objectFit, objectPosition: s.objectPosition,
         },
-        children: Array.from(el.children).map(c => _extractStyles(c, depth + 1, maxDepth)).filter(Boolean),
+        children: skipChildren ? [] : Array.from(el.children).map(c => _extractStyles(c, depth + 1, maxDepth)).filter(Boolean),
       };
     }
     return _extractStyles(el);

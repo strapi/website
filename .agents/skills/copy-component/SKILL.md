@@ -7,7 +7,7 @@ description: "Copy a component from strapi.io by extracting structure and comput
 
 Extract a section from strapi.io, map its structure and styles to local design system tokens, and generate a full-stack page builder component.
 
-**Key principle**: Use `browser_evaluate` for exact computed style extraction — never guess CSS from screenshots. Map extracted values to design tokens deterministically, not visually.
+**Key principle**: Use `browser_run_code` for exact computed style extraction — never guess CSS from screenshots. Map extracted values to design tokens deterministically, not visually.
 
 **Standardization philosophy**: The source website (strapi.io) has fragmented, inconsistent styling. The goal is NOT pixel-perfect reproduction — it's standardizing into a cohesive design system. Always snap extracted values to the nearest design token from `packages/design-system/src/theme.css`. A 1-2px difference is a source inconsistency to fix, not a feature to preserve.
 

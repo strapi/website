@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-02-25 (added sections.solutions-hero)
+> Auto-updated by skills. Last updated: 2026-02-25
 
 ## Registry Freshness Policy
 
@@ -30,7 +30,6 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `sections.user-stories-section`         | sections      | User Stories Section        | label:string (opt), heading:string (opt)                                                                                                                                                                                                                                                          |
 | `sections.how-it-works`                 | sections      | How It Works                | heading:string (req), description:string (opt), items:repeatable elements.how-it-works-item                                                                                                                                                                                                       |
 | `sections.integrations-section`         | sections      | Integrations Section        | label:string (opt), heading:string (opt)                                                                                                                                                                                                                                                          |
-| `sections.solutions-hero`               | sections      | Solutions Hero              | label:string (opt), heading:string (req), description:text (opt), ctas:repeatable utilities.link, heroImage:utilities.basic-image (opt)                                                                                                                                                           |
 | `elements.how-it-works-item`            | elements      | How It Works Item           | icon:utilities.basic-image (opt), title:string (req), description:string (req)                                                                                                                                                                                                                    |
 | `forms.contact-form`                    | forms         | ContactForm                 | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
 | `forms.newsletter-form`                 | forms         | Newsletter                  | title:string, description:text, gdpr:component                                                                                                                                                                                                                                                    |
@@ -112,7 +111,6 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.faq-section`          | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           | Page         |
 | `sections.how-it-works`         | StrapiHowItWorks          | `page-builder/components/sections/StrapiHowItWorks`                           | Page         |
 | `sections.integrations-section` | StrapiIntegrationsSection | `page-builder/components/sections/StrapiIntegrationsSection`                  | Page         |
-| `sections.solutions-hero`       | StrapiSolutionsHero       | `page-builder/components/sections/StrapiSolutionsHero`                        | Page         |
 | `sections.user-stories-section` | StrapiUserStoriesSection  | `page-builder/components/sections/StrapiUserStoriesSection`                   | Page         |
 | `forms.newsletter-form`         | StrapiNewsletterForm      | `page-builder/components/forms/StrapiNewsletterForm`                          | Page         |
 | `plans.plan-comparison-table`   | StrapiPlanComparisonTable | `page-builder/components/plans/StrapiPlanComparisonTable`                     | Page         |

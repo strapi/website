@@ -175,7 +175,15 @@ A story is runnable when:
 - `status` (if present) is not `blocked`.
 - All stories in `dependsOn` have `passes=true` (skip, don't block, if unmet).
 - Required `data` for that story type is present.
-- If `metadata.executionSkill = "copy-component"`, `data.copyComponentInput` is present.
+- If `metadata.executionSkill = "copy-component"`:
+  - `data.copyComponentInput` MUST exist.
+  - `data.copyComponentInput.source_url` MUST be a non-empty URL string.
+  - `data.copyComponentInput.selector` MUST be a non-empty string.
+  - `data.copyComponentInput.component_name` MUST be a non-empty kebab-case string.
+  - If any of these are missing or empty, the story is invalid.
+- If `metadata.executionSkill = "consolidate-patterns"`:
+  - `data.batch_story_ids` MUST be a non-empty array of story ID strings.
+  - If missing, the story is invalid.
 
 If invalid:
 

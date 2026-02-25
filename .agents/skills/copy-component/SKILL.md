@@ -19,7 +19,7 @@ Extract a section from strapi.io, map its structure and styles to local design s
 - `create-content-component` skill available at `.agents/skills/create-content-component/SKILL.md`
 - Read `docs/component-registry.md` at workflow start for full component inventory (Strapi schemas, React wrappers, shadcn/ui components, page builder mappings). This avoids redundant filesystem scanning and ensures awareness of all existing assets.
 
-If Playwright browser tools are unavailable, stop and tell the user this skill cannot run reliably without computed-style extraction.
+**Fail-safe rule**: If Playwright browser tools are unavailable, any extraction step (Steps 2-4) returns empty or null data, or token mapping (Step 6) produces zero matches, STOP immediately and mark the work as BLOCKED with the exact failure reason. Never fall back to screenshot-based guessing, manual CSS estimation, or ad-hoc implementation. The value of this skill is deterministic computed-style extraction — without it, the output is unreliable and should not be produced.
 
 ## Skill Boundaries (No Duplication)
 
@@ -498,7 +498,7 @@ Sending a PUT/POST with an unregistered `__component` UID can corrupt the dynami
 
 ### Step 9: Generate React component
 
-Create the React component at the path established in Step 8 (schema scaffolding skipped React via `skip_react_component: true`). Use extracted Tailwind classes for a real implementation. Follow patterns from existing components:
+Create the real styled React implementation using extracted Tailwind classes from Steps 3-6. The `skip_react_component: true` passed to create-content-component in Step 8 only tells that skill to skip its basic scaffold — THIS step produces the actual component with computed-style-derived classes. Follow patterns from existing components:
 
 ```tsx
 import { Data } from "@repo/strapi-types"

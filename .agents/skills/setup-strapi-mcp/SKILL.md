@@ -182,3 +182,8 @@ Include:
 - **401 Unauthorized**: API token is invalid or expired. Create a new one in Strapi admin.
 - **MCP tools not available after config**: Restart Agent Code session to pick up new MCP servers.
 - **`/api/health` fails but admin opens**: Strapi may still be booting or route registration failed. Retry after startup and inspect Strapi logs.
+
+## See Also
+
+- `.agents/skills/seed-content/SKILL.md` — natural next step after MCP setup, for seeding content into Strapi
+- `.agents/skills/create-content-component/SKILL.md` — creating Strapi schemas that MCP can then write to

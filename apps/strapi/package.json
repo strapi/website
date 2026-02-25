@@ -19,7 +19,7 @@
     "import": "strapi import -f strapi-export.tar.gz",
     "lint": "eslint -c ../../eslint.config.mjs './**/*.{js,ts,jsx,tsx,cjs,mjs}'",
     "lint:fix": "pnpm lint --fix",
-    "run:db": "docker compose up -d db",
+    "run:db": "docker compose up -d db 2>/dev/null || echo '⚠ Docker not running — using local PostgreSQL'",
     "start": "strapi start",
     "strapi": "strapi",
     "test": "vitest run",

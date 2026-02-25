@@ -1,6 +1,6 @@
 ---
 name: add-locale
-description: "Adds a new language/locale to the application. Involves Strapi admin config, Next.js i18n routing, and translation files. Triggers: add language, add locale, new language, new translation, internationalization."
+description: "Adds a new language/locale to the application. Involves Strapi admin config, Next.js i18n routing, and translation files. Use this skill whenever the user mentions adding a language, translation, i18n, multilingual support, locale, or internationalization — even if they don't explicitly say 'locale'. Also triggers on: add language, add locale, new language, new translation, support another language."
 ---
 
 Add a new language/locale to the application. Involves Strapi admin config, Next.js i18n routing, and translation files.
@@ -29,7 +29,7 @@ Copy `apps/ui/locales/en.json` to `apps/ui/locales/{locale}.json`.
 
 The file structure must match `en.json` exactly — same keys, translated values. Initially copy as-is and mark values for translation.
 
-Existing locales for reference: `en.json`, `cs.json`.
+Check `apps/ui/locales/` for existing locale files to use as reference.
 
 ### 2. Update routing config
 

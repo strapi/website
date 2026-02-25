@@ -191,6 +191,69 @@ If invalid:
 - set `loopState.status = "blocked"`
 - append exact reasons to `loopState.errors`
 
+## Batch Migration from Manifest
+
+When the user provides a manifest file (markdown) listing multiple components to migrate, generate one PRD with all components as stories plus interleaved consolidation checkpoints.
+
+### Manifest format
+
+Each component is a markdown H2 heading followed by structured fields:
+
+```markdown
+## component-name
+
+- **URL**: https://strapi.io/page
+- **Selector**: section:nth-of-type(2)
+- **Variants**: https://strapi.io/other-page | selector: .hero-section | variant: enterprise
+- **Notes**: Has dark background variant, 3-column card grid
+- **Category**: sections
+- **Reuse mode**: balanced
+```
+
+Field defaults when omitted:
+
+- **Category**: `sections`
+- **Reuse mode**: `balanced`
+- **Shadcn mode**: `prefer-existing`
+- **Content constraints**: `none`
+
+### Generation rules
+
+1. **Read the manifest** and parse each H2 entry.
+2. **Generate one story per component** using the Component Migration Convention format:
+   - `metadata.executionSkill = "copy-component"`
+   - `data.copyComponentInput` filled from manifest fields (apply URL/Selector Auto-Detection rules)
+   - If **Variants** field is present, parse each variant entry and populate `source_urls` array in `copyComponentInput`
+   - Story description uses the standard copy-component template
+   - Include all standard copy-component acceptance criteria
+3. **Insert consolidation checkpoint** every 3-4 component stories:
+   - `metadata.executionSkill = "consolidate-patterns"`
+   - `data.batch_story_ids` lists the IDs of the preceding 3-4 component stories
+   - `data.min_occurrences = 2`
+   - `dependsOn` lists all preceding component story IDs in the batch
+   - Subsequent component stories `dependsOn` the checkpoint story
+   - Title: `"Consolidation checkpoint: review {component names} for reusable patterns"`
+   - Acceptance criteria: `["Recently created components reviewed for reusable patterns", "Any extracted elementary components pass typecheck", "docs/component-registry.md updated if new atoms created"]`
+4. **Priority ordering**: Component stories in manifest order (priority 1, 2, 3, ...), checkpoint stories inserted at the appropriate priority between batches.
+5. **PRD naming**: Use `prd-batch-migration-{date}.json` or user-specified name.
+
+### Example output structure
+
+For a manifest with 7 components (A, B, C, D, E, F, G):
+
+| Priority | ID     | Type        | dependsOn       |
+| -------- | ------ | ----------- | --------------- |
+| 1        | US-001 | Component A | []              |
+| 2        | US-002 | Component B | []              |
+| 3        | US-003 | Component C | []              |
+| 4        | US-004 | Checkpoint  | [001, 002, 003] |
+| 5        | US-005 | Component D | [004]           |
+| 6        | US-006 | Component E | [004]           |
+| 7        | US-007 | Component F | [004]           |
+| 8        | US-008 | Checkpoint  | [005, 006, 007] |
+| 9        | US-009 | Component G | [008]           |
+| 10       | US-010 | Checkpoint  | [009]           |
+
 ## Guardrails
 
 - **One file per session**: All features discussed in a single planning session go into **one PRD file** under `.agents/tasks/`. Never split related work into multiple PRD files — use `dependsOn` in stories to express ordering.

@@ -43,6 +43,7 @@ reuse_mode: <strict-reuse|balanced|pixel-first>
 shadcn_mode: <prefer-existing|allow-install|no-shadcn>
 acceptance_profile: <balanced-default>
 category: <optional; defaults to sections>
+source_urls: <optional; array of {url, selector, variant_name} for multi-variant components>
 ```
 
 Validation rules:
@@ -52,6 +53,8 @@ Validation rules:
 - `shadcn_mode` allowed values: `prefer-existing`, `allow-install`, `no-shadcn`.
 - `acceptance_profile` defaults to `balanced-default` when omitted.
 - `category` defaults to `sections` when omitted.
+- `source_urls` is optional. When provided, it's an array of objects with `url` (required), `selector` (required), and `variant_name` (required) fields. Each entry represents a visual variant of the same component found on a different page.
+- When `source_urls` is provided, the skill must visit each URL, extract styles for each variant, and merge them into a single component with a `variant` enumeration field. The `source_url` + `selector` fields serve as the primary/default variant.
 
 CamelCase compatibility:
 
@@ -63,6 +66,7 @@ CamelCase compatibility:
   - `reuseMode` -> `reuse_mode`
   - `shadcnMode` -> `shadcn_mode`
   - `acceptanceProfile` -> `acceptance_profile`
+  - `sourceUrls` -> `source_urls`
 
 Fail fast when invalid and do not proceed:
 

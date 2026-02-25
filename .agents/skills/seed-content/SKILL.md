@@ -144,11 +144,20 @@ Wait for explicit user approval.
 
 ### Step 7: Resolve media
 
+**Never use Playwright screenshots (`browser_take_screenshot`) to capture assets.** Screenshots produce lossy raster captures that lose transparency, resolution, and SVG scalability. Always extract the original source URL from the page DOM (e.g. `img[src]`, `source[srcset]`, inline SVG `<svg>` elements, CSS `background-image` URLs) and download directly.
+
+If a direct source URL cannot be determined (e.g. inline SVG without a file reference, canvas-rendered graphics), **skip the asset entirely** and report it in `manual_steps_needed`. Never fall back to a screenshot.
+
 For each mapped media placeholder:
 
-1. Download source asset with `curl -L`.
-2. Upload via `strapi_upload_media()`.
-3. Replace placeholder with local media ID.
+1. **Check for existing media first (reuse by name)**:
+   - Derive a filename from the source URL (e.g. `https://strapi.io/assets/icons/rocket.svg` → `rocket.svg`, `rocket`).
+   - Query Strapi media library: `GET /api/upload/files?filters[name][$containsi]=<filename>`.
+   - If a match exists, reuse its media ID — do not re-upload.
+2. **Download and upload only when no match exists**:
+   - Download source asset with `curl -L` using the original source URL.
+   - Upload via `strapi_upload_media()` with a descriptive `name` and `alternativeText` from the source `alt` attribute.
+3. Replace placeholder with local media ID (reused or newly uploaded).
 
 Validation rules:
 

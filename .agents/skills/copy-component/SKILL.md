@@ -141,7 +141,7 @@ From the structure, identify:
 
 - **Content fields**: headings (title, subtitle), body text, labels, descriptions
 - **Links**: label + href + whether it's a CTA button
-- **Images**: src + alt text
+- **Images and icons**: full absolute `src` URL + alt text. Resolve relative URLs against the page origin. These URLs are passed to `/seed-content` for direct download and upload to Strapi — never use `browser_take_screenshot` to capture image or icon assets.
 - **Lists/repeatable items**: cards, features, steps
 - **Section hierarchy**: what nests inside what
 
@@ -655,7 +655,7 @@ If the source section has visible hover effects (buttons, cards), extract them:
 
 ## What This Skill Does NOT Handle
 
-- **SVG icons**: Extracted as raw SVG but matching to an icon library is manual. Report which icons are needed.
+- **SVG icons**: Extract the original source URL when available (e.g. `<img src="...icon.svg">`). When the SVG is inlined in the DOM with no file reference, report which icons are needed for manual follow-up. Never use `browser_take_screenshot` to capture icons or images.
 - **Complex animations**: Can read `transition` and `animation` properties but reproduction is manual. Report what was found.
 - **Video/embed content**: Skip and report.
 - **Form logic**: Extracts structure only, not validation/submission behavior.

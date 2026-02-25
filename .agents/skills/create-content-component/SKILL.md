@@ -204,12 +204,15 @@ Target file: `apps/strapi/src/components/{category}/{name}.json`.
   "collectionName": "components_{category}_{name_with_underscores}",
   "info": {
     "displayName": "{PascalCaseName}",
+    "icon": "{chosen-icon}",
     "description": ""
   },
   "options": {},
   "attributes": {}
 }
 ```
+
+- **Icon selection**: Pick an icon that visually represents the component's purpose — be creative and varied. Avoid reusing the same icon across components. Available icons include: `alien`, `arrowDown`, `arrowLeft`, `arrowRight`, `arrowUp`, `bell`, `bold`, `bulletList`, `calendar`, `car`, `cast`, `chartBubble`, `chartCircle`, `check`, `clock`, `cloud`, `code`, `command`, `connector`, `crop`, `crown`, `cube`, `cursor`, `dashboard`, `database`, `discuss`, `doctor`, `earth`, `emotionHappy`, `emotionUnhappy`, `envelop`, `exit`, `eye`, `faders`, `feather`, `file`, `filter`, `folder`, `gate`, `globe`, `grid`, `handHeart`, `hashtag`, `headphone`, `heart`, `house`, `image`, `information`, `italic`, `key`, `landscape`, `layer`, `layout`, `lightbulb`, `link`, `lock`, `magic`, `manyToMany`, `manyToOne`, `manyWays`, `medicalCross`, `medium`, `message`, `microphone`, `monitor`, `moon`, `music`, `oneToMany`, `oneToOne`, `oneWay`, `paint`, `paintBrush`, `paperPlane`, `pencil`, `phone`, `picture`, `pin`, `plane`, `play`, `plus`, `priceTag`, `puzzle`, `puzzlePiece`, `question`, `quote`, `refresh`, `restaurant`, `rocket`, `rotate`, `scissors`, `search`, `seed`, `server`, `shield`, `shirt`, `shoppingCart`, `slideshow`, `spark`, `stack`, `star`, `store`, `strikeThrough`, `sun`, `television`, `thumbDown`, `thumbUp`, `train`, `twitter`, `typhoon`, `underline`, `user`, `volumeMute`, `volumeUp`, `walk`, `wheelchair`.
 
 - If existing, merge additively:
   - add missing attributes

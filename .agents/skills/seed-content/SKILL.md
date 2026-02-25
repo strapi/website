@@ -26,6 +26,7 @@ Ask the user for:
 4. **Locale** (required): locale to seed into, for example `en`.
 5. **Parent page fullPath** (optional): explicit parent for nested pages. If omitted, derive from target page path.
 6. **Unknown schema policy** (optional): default to `best-effort fill` unless user asks for stricter behavior.
+7. **Pre-extracted content** (optional): structure data already extracted by `/copy-component` mega-extract. When provided, skip Step 3 (source page fetching) and use this data directly. Shape: `{ structure, desktopStyles, mobileStyles }` from the mega-extract output.
 
 ## Safety Defaults
 
@@ -71,9 +72,11 @@ Check if port 1337 is in use (`lsof -ti:1337`), then verify Strapi responds:
 - If unavailable, fall back to checking `http://localhost:1337/admin`.
 - If Strapi is not running, ask the user to start it in a separate terminal and wait for confirmation. **Never launch dev servers in the background.**
 
-### Step 3: Fetch source page content
+### Step 3: Fetch or receive source page content
 
-Fetch rendered page content using the best available tool in this environment:
+If `preExtractedContent` was provided in the inputs, use its `structure` field directly — skip fetching. The content has already been extracted by the copy-component mega-extract and contains headings, body text, links, images, lists, and section hierarchy.
+
+Otherwise, fetch rendered page content using the best available tool in this environment:
 
 - Primary: Web fetch of HTML.
 - Fallback: browser automation snapshot for JavaScript-rendered layouts.

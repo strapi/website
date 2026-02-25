@@ -13,13 +13,13 @@ Extract a section from strapi.io, map its structure and styles to local design s
 
 ## Prerequisites
 
-- Playwright MCP tools available (browser_navigate, browser_snapshot, browser_evaluate, etc.)
+- Playwright MCP tools available (`browser_run_code`, `browser_take_screenshot`, `browser_snapshot` for fallback)
 - Design system tokens at `packages/design-system/src/theme.css` — **canonical source** for all standardized values. Read at workflow start.
 - Existing page builder patterns in `apps/ui/src/components/page-builder/`
 - `create-content-component` skill available for schema scaffolding delegation
 - Read `docs/component-registry.md` at workflow start for full component inventory
 
-**Fail-safe rule**: If Playwright browser tools are unavailable, any extraction step (Steps 2-4) returns empty or null data, or token mapping (Step 6) produces zero matches, STOP immediately and mark the work as BLOCKED with the exact failure reason. Never fall back to screenshot-based guessing, manual CSS estimation, or ad-hoc implementation. The value of this skill is deterministic computed-style extraction — without it, the output is unreliable and should not be produced.
+**Fail-safe rule**: If Playwright browser tools are unavailable, the mega-extract (Step 1) returns empty/null data or `selector_not_found` that cannot be resolved, or token mapping (Step 2) produces zero matches, STOP immediately and mark the work as BLOCKED with the exact failure reason. Never fall back to screenshot-based guessing, manual CSS estimation, or ad-hoc implementation. The value of this skill is deterministic computed-style extraction — without it, the output is unreliable and should not be produced.
 
 ## Skill Boundaries (No Duplication)
 
@@ -72,20 +72,25 @@ Fail fast when invalid:
    - Append `registry-refresh-required` to manual follow-up notes.
    - Include concise drift summary in errors only when drift blocks deterministic mapping.
 
-### Step 1: Navigate and identify target section
+### Step 1: Mega-extract structure and styles
 
-1. Navigate to the source URL via `browser_navigate`.
-2. Wait for page load, dismiss any cookie banners or modals.
-3. Take an accessibility snapshot via `browser_snapshot`.
-4. Resolve target with selector from contract.
-5. Selector fallback chain (only when selector fails):
-   - **Auto-heal**: take accessibility snapshot and infer closest semantic section using `prd_goal`.
-   - **Interactive** (if auto-heal also fails): present candidates and ask for a corrected selector.
-   - If fallback was required, record in final output under manual follow-up notes.
+Extract structure, desktop styles, and mobile styles in a single `browser_run_code` call.
 
-### Step 2: Extract structure and content
+1. Read `references/extraction-scripts.js` and locate the `megaExtractTemplate` string.
+2. Replace `__SOURCE_URL__` with the contract `source_url` and `__SELECTOR__` with the contract `selector`.
+3. Pass the resulting code string to `browser_run_code`.
+4. The template handles: navigation, overlay dismissal, scrolling, desktop structure+styles extraction (1280×900), mobile styles extraction (375×812), and viewport reset.
 
-Read `references/extraction-scripts.js` and use the `extractStructure` function with `browser_evaluate` on the target section element.
+**Result shape:** `{ structure, desktopStyles, mobileStyles }`
+
+**Selector failure:** If the result contains `{ error: "selector_not_found", availableSections: [...] }`:
+
+- First attempt auto-heal: take `browser_snapshot`, match sections against `prd_goal`.
+- If auto-heal fails: present the `availableSections` list and ask for a corrected selector.
+- Re-run mega-extract with the corrected selector.
+- Record fallback in manual follow-up notes.
+
+**Verification screenshot:** After mega-extract succeeds, take `browser_take_screenshot` of the target element for visual reference. All CSS values come from the mega-extract, not this screenshot.
 
 From the structure, identify:
 
@@ -95,24 +100,9 @@ From the structure, identify:
 - **Lists/repeatable items**: cards, features, steps
 - **Section hierarchy**: what nests inside what
 
-### Step 3: Extract computed styles (desktop)
+**Multi-variant extraction:** When `source_urls` is provided, run the mega-extract once per variant URL/selector. Merge results into a single data set before proceeding to Step 2.
 
-Read `references/extraction-scripts.js` and use the `extractStyles` function with `browser_evaluate`. Run at desktop: `browser_resize({ width: 1280, height: 900 })`.
-
-### Step 4: Extract computed styles (mobile)
-
-Resize to `browser_resize({ width: 375, height: 812 })`. Re-run `extractStyles` from `references/extraction-scripts.js` on the same target element.
-
-### Step 5: Take verification screenshot
-
-After extraction, take a screenshot at desktop width for visual reference:
-
-1. `browser_resize({ width: 1280, height: 900 })`
-2. `browser_take_screenshot` of the target element
-
-This screenshot is for **verification only** — all CSS values come from `browser_evaluate`.
-
-### Step 6: Map to design tokens
+### Step 2: Map to design tokens
 
 Map extracted computed values to Tailwind classes using the design system tokens from `packages/design-system/src/theme.css`. Read the theme file to get current token values first.
 
@@ -124,11 +114,11 @@ Map extracted computed values to Tailwind classes using the design system tokens
 
 #### Responsive Diffing
 
-Compare desktop (Step 3) vs mobile (Step 4) styles. Mobile is the base (no prefix), desktop overrides use `lg:`. See `references/token-mapping.md` → "Responsive Diffing" for details.
+Compare desktop vs mobile styles from the mega-extract (Step 1). Mobile is the base (no prefix), desktop overrides use `lg:`. See `references/token-mapping.md` → "Responsive Diffing" for details.
 
 If layouts are structurally very different (not just direction/size changes), ask the user to choose: simplify, implement both with responsive classes, or desktop-only.
 
-### Step 6b: Map elements to existing components
+### Step 3: Map elements to existing components
 
 Read `references/component-mapping.md` for Typography variant mapping, Link/CTA/Image mapping, Shadcn pattern matching, and Composition analysis patterns.
 
@@ -141,7 +131,7 @@ Apply the component mapping rules from that reference:
 - **Shadcn patterns**: match source UI patterns to shadcn components using `shadcn_mode` from intake.
 - **Composition**: detect section header pairs, card grids, icon+text lists for Strapi repeatable component modeling.
 
-### Step 7: Reuse audit and schema plan
+### Step 4: Reuse audit and schema plan
 
 Before any schema edits:
 
@@ -177,13 +167,13 @@ If a new or extended schema is needed, derive a concise attribute spec from extr
 - Images → `utilities.basic-image` or `utilities.link-image`
 - Repeated cards/items → nested repeatable component only when truly unique
 
-### Step 8: Delegate scaffolding to `/create-content-component`
+### Step 5: Delegate scaffolding to `/create-content-component`
 
-**CRITICAL — Do not bypass this delegation.** When schema work is required, invoke `/create-content-component` via the Skill tool instead of recreating those steps manually. Manual schema creation skips populate config generation and causes silent data loss in API responses. If Step 7 resolved to **Reuse as-is**, skip this step.
+**CRITICAL — Do not bypass this delegation.** When schema work is required, invoke `/create-content-component` via the Skill tool instead of recreating those steps manually. Manual schema creation skips populate config generation and causes silent data loss in API responses. If Step 4 resolved to **Reuse as-is**, skip this step.
 
 This step is automatic by default. Do not wait for additional user confirmation unless there is a blocking conflict that cannot be resolved deterministically.
 
-Invoke `/create-content-component` with the component name, category, and attribute spec from Step 7. Pass reuse intent (which existing utility components must be used). The create-content-component skill handles schema creation, dynamic zone registration, populate config, and type generation.
+Invoke `/create-content-component` with the component name, category, and attribute spec from Step 4. Pass reuse intent (which existing utility components must be used). The create-content-component skill handles schema creation, dynamic zone registration, populate config, and type generation.
 
 After delegation, verify outputs exist and are coherent:
 
@@ -193,15 +183,9 @@ After delegation, verify outputs exist and are coherent:
 - `apps/ui/src/components/page-builder/index.tsx` registration (page-level only)
 - Fresh `@repo/strapi-types` generation after schema changes
 
-**CRITICAL — Server restart handoff**: If new schema files were created or the page dynamic zone was modified, the running Strapi server does not know about the new component UIDs. **Do not proceed to content seeding.** Instead:
+### Step 6: Generate React component
 
-1. Tell the user: "New Strapi schemas were created. Please restart the Strapi server to pick up the changes, then confirm."
-2. Wait for user confirmation before any MCP write operations.
-3. Only after confirmation, proceed with React component generation and optional seeding.
-
-### Step 9: Generate React component
-
-Create the real styled React implementation using extracted Tailwind classes from Steps 3-6. The create-content-component skill (Step 8) produces a basic scaffold — THIS step replaces it with the actual component using computed-style-derived classes. Follow patterns from existing components:
+Create the real styled React implementation using extracted Tailwind classes from Steps 1-3. The create-content-component skill (Step 5) produces a basic scaffold — THIS step replaces it with the actual component using computed-style-derived classes. Follow patterns from existing components:
 
 ```tsx
 import { Data } from "@repo/strapi-types"
@@ -230,7 +214,7 @@ export default Strapi{PascalCaseName}
 
 Key rules:
 
-- Use extracted + mapped Tailwind classes from Step 6
+- Use extracted + mapped Tailwind classes from Step 2
 - Render Strapi data dynamically (not hardcoded text)
 - Handle optional fields with conditionals (`{component.subTitle && ...}`)
 - Map over repeatable components with `key={item.id}`
@@ -245,18 +229,19 @@ Component usage rules (mandatory):
 - **Images**: ALWAYS use `<StrapiBasicImage>` for `utilities.basic-image` fields. Import from `@/components/page-builder/components/utilities/StrapiBasicImage`.
 - **Linked images**: ALWAYS use `<StrapiLinkImage>` for `utilities.link-image` fields. Import from `@/components/page-builder/components/utilities/StrapiLinkImage`.
 - **Section wrapper**: ALWAYS wrap page-level section content in `<section>` → `<Container>`. Import Container from `@/components/elementary/Container`.
-- **Shadcn components**: Use shadcn/ui components identified in Step 6b. Import from `@/components/ui/{name}`.
+- **Section headers**: When a section has a label/title/description group at the top, ALWAYS wrap in `<SectionHeader>` → `<SectionLabel>` + `<SectionTitle>` + `<SectionDescription>`. Import from `@/components/elementary/section-header`. SectionHeader controls gap spacing and max-width — never render its children without the wrapper. CTAs or content grids go AFTER `</SectionHeader>` with `mt-8` margin, not inside it. For dark backgrounds, pass `variant="inverse"` to all children consistently.
+- **Shadcn components**: Use shadcn/ui components identified in Step 3. Import from `@/components/ui/{name}`.
 
-### Step 10: Validate registration and types
+### Step 7: Validate registration and types
 
-Verify that `create-content-component` (Step 8) completed successfully. Do NOT re-register here; only confirm outputs exist before running Step 11 quality gates:
+Verify that `create-content-component` (Step 5) completed successfully. Do NOT re-register here; only confirm outputs exist before running Step 8 quality gates:
 
 1. For dynamic-zone-level components, confirm a single (non-duplicate) `ContentComponents` mapping exists for the UID in `apps/ui/src/components/page-builder/index.tsx`.
 2. **CRITICAL — Populate config check**: For dynamic-zone-level components, verify `apps/strapi/src/populateDynamicZone/{category}/{name}.ts` exists on disk. Without this file the middleware silently omits nested relations from API responses. If missing, create it now.
 3. Confirm `@repo/strapi-types` were generated and reflect the new schema.
-4. Confirm generated types align with fields used in the React component from Step 9.
+4. Confirm generated types align with fields used in the React component from Step 6.
 
-### Step 11: Quality gates
+### Step 8: Quality gates
 
 Run checks:
 
@@ -265,15 +250,15 @@ Run checks:
 3. Source vs local screenshot capture for the migrated section
 4. Checklist pass:
    - standalone text blocks use `<Typography>` with `tag` for semantics and `variant` for visuals
-   - links/images use Strapi utility wrappers from Step 9 rules
+   - links/images use Strapi utility wrappers from Step 6 rules
    - no duplicate UID or `ContentComponents` mapping
 5. Optional when scope is broad: `pnpm lint`
 
 If any required gate fails, do not mark migration as done. Report failing command/check and include manual follow-up.
 
-### Step 12: Verify
+### Step 9: Verify
 
-1. Take a screenshot of the original section (if not already done in Step 5).
+1. Take a screenshot of the original section (if not already done in Step 1).
 2. If the local dev server is running, navigate to a page using the component and take a screenshot for comparison.
 3. Report what was created:
    - Strapi schema path
@@ -282,27 +267,36 @@ If any required gate fails, do not mark migration as done. Report failing comman
    - Registry entry
    - Any manual follow-up needed (icons, SVGs, animations, interactive states)
 
-### Step 12b: Review loop (up to 3 passes)
+### Step 9b: Review loop (up to 3 passes)
 
-Spawn a review sub-agent via the `Task` tool. Pass it: file list, intake contract, source URL/selector, screenshot comparison from Step 12.
+Spawn a review sub-agent via the `Task` tool. Pass it: file list, intake contract, source URL/selector, screenshot comparison from Step 9.
 
 The sub-agent must: read all files, check token mapping fidelity (no arbitrary values where tokens fit), check component composition (Typography, StrapiLink, section→Container), check code quality (no unused imports, no placeholders, displayName set, optional fields guarded), verify registry completeness (schema, **populate config must exist**, dynamic zone, ContentComponents mapping, fresh types). Fix issues directly. Return `PASS` or `NEEDS_WORK`.
 
 - If `NEEDS_WORK`, apply remaining fixes and start next pass.
-- If `PASS`, proceed to Step 13.
+- If `PASS`, proceed to Step 10.
 - After 3 passes without `PASS`, continue but include unresolved issues in manual follow-up.
 
-### Step 13: Report result
+### Step 10: Report result
 
 Report: files created/updated, components reused, any errors, and manual follow-up needed.
 
-### Step 14: Offer content seeding
+### Step 11: Offer content seeding
 
-After reporting:
+After reporting results, use `AskUserQuestion` to offer seeding:
 
-1. If new schemas were created, do not offer seeding until the user confirms Strapi restart.
-2. Ask user if they want to seed content using `/seed-content`, including source URL and component UID for context.
-3. If approved, invoke `/seed-content` with source URL, target component UID, and extracted content from Step 2.
+```yaml
+question: "Seed content from {source_url} into the new {component_name} component?"
+options:
+  - label: "Yes, seed from source page"
+    description: "Auto-seed using extracted content from Step 1. No re-scraping needed."
+  - label: "No, skip seeding"
+    description: "Component is ready but empty. Seed manually later."
+```
+
+- **Yes**: invoke `/seed-content` with `source_url`, target component UID, and pass the extracted `structure` data from Step 1 as `preExtractedContent` so seed-content can skip re-scraping the source page.
+- **No**: done. Report final summary.
+- **Other** (custom input): treat as clarification — different source URL, specific locale, or custom instructions. Adjust and invoke `/seed-content` accordingly.
 
 ## Hover and Interactive States
 
@@ -323,9 +317,9 @@ If the source section has visible hover effects (buttons, cards), extract them:
 
 ## Edge Cases
 
-- **Cookie banners/modals**: use `dismissOverlays` from `references/extraction-scripts.js` via `browser_evaluate`.
-- **Lazy-loaded images**: use `scrollToElement` from `references/extraction-scripts.js` via `browser_evaluate`, then wait briefly before extracting.
-- **Section not found**: take full-page screenshot, present accessibility snapshot sections, ask user for corrected selector.
+- **Cookie banners/modals**: handled automatically by the mega-extract template's `dismissOverlays` step.
+- **Lazy-loaded images**: handled automatically by the mega-extract template's `scrollIntoViewIfNeeded` step.
+- **Section not found**: the mega-extract returns `{ error: "selector_not_found", availableSections }`. Use the fallback chain described in Step 1.
 - **Deeply nested components**: flatten to 2-3 levels max. Create sub-components for repeated patterns rather than deeply nesting divs.
 
 ## See Also

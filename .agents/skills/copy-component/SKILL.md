@@ -431,7 +431,7 @@ If a new or extended schema is needed, derive a concise attribute spec from extr
 
 ### Step 8: Delegate scaffolding to `/create-content-component`
 
-When schema work is required, invoke `/create-content-component` instead of recreating those steps here. If Step 7 resolved to **Reuse as-is**, skip this step.
+**CRITICAL — Do not bypass this delegation.** When schema work is required, invoke `/create-content-component` via the Skill tool instead of recreating those steps manually. Manual schema creation skips populate config generation and causes silent data loss in API responses. If Step 7 resolved to **Reuse as-is**, skip this step.
 
 This step is automatic by default. Do not wait for additional user confirmation unless there is a blocking conflict that cannot be resolved deterministically.
 
@@ -553,8 +553,9 @@ Component usage rules (mandatory):
 Verify that `create-content-component` (Step 8) completed its Steps 4-7 successfully. Do NOT re-register here; only confirm outputs exist before running Step 11 quality gates:
 
 1. For dynamic-zone-level components, confirm a single (non-duplicate) `ContentComponents` mapping exists for the UID in `apps/ui/src/components/page-builder/index.tsx`.
-2. Confirm `@repo/strapi-types` were generated (check that the generated types file reflects the new schema).
-3. Confirm generated types align with fields used in the React component from Step 9.
+2. **CRITICAL — Populate config file-existence check**: For dynamic-zone-level components, verify that `apps/strapi/src/populateDynamicZone/{category}/{name}.ts` exists on disk. Without this file the middleware silently omits nested relations from API responses. If missing, create it now following the pattern from existing populate configs (import nested component populates and re-export as `NestedParams`).
+3. Confirm `@repo/strapi-types` were generated (check that the generated types file reflects the new schema).
+4. Confirm generated types align with fields used in the React component from Step 9.
 
 ### Step 11: Quality gates
 
@@ -601,7 +602,7 @@ For each pass (max 3):
    b. Check token mapping fidelity — no arbitrary Tailwind values where a design token fits, no hardcoded colors/sizes that should use `theme.css` tokens.
    c. Check component composition — `<Typography>` used for standalone text, `<StrapiLink>`/`<StrapiBasicImage>`/etc. used for Strapi fields, `<section>` → `<Container>` wrapper present.
    d. Check code quality — no unused imports, no placeholder comments, no hardcoded content strings, `displayName` set, optional fields guarded with conditionals.
-   e. Check registry completeness — schema file, populate config, dynamic zone registration (page-level), `ContentComponents` mapping, `@repo/strapi-types` is fresh.
+   e. Check registry completeness — schema file at `apps/strapi/src/components/{category}/{name}.json`, **populate config file at `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`** (MUST exist for dynamic-zone-level components — without it API silently omits nested data), dynamic zone registration (page-level), `ContentComponents` mapping, `@repo/strapi-types` is fresh. Fail review if populate config is missing.
    f. Review the screenshot comparison — if visual discrepancies exist and can be fixed via Tailwind/token adjustments, fix them directly.
    g. Fix any issues it finds directly.
    h. Return a summary of what it found and what it fixed, and a `<review_status>PASS</review_status>` or `<review_status>NEEDS_WORK</review_status>` tag.

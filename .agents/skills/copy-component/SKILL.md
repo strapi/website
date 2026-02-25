@@ -205,6 +205,19 @@ Use `browser_evaluate` on the target section element:
         opacity: s.opacity,
         overflow: s.overflow,
         position: s.position,
+        // Background details
+        backgroundImage: s.backgroundImage,
+        background: s.background,
+        // Transform & transitions
+        transform: s.transform,
+        transition: s.transition,
+        // Text decoration
+        textDecoration: s.textDecoration,
+        textDecorationColor: s.textDecorationColor,
+        // Object/aspect
+        aspectRatio: s.aspectRatio,
+        objectFit: s.objectFit,
+        objectPosition: s.objectPosition,
       },
       children: Array.from(el.children)
         .map((c) => extractStyles(c, depth + 1, maxDepth))

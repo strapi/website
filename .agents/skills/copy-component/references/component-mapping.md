@@ -106,7 +106,37 @@ shadcn_decision:
 
 Detect common composition patterns in the extracted structure:
 
-1. **Section header**: heading + subtitle pair at section top → render with `<Typography tag="h2">` + `<Typography tag="p">` using appropriate variants for the extracted sizes. Use consistent spacing (`mb-4` on heading, `mb-8`–`mb-12` after subtitle). Extract a reusable atom when the same pattern appears at least 2 times in the target component or when an equivalent atom already exists.
+1. **Section header**: heading + subtitle/description group at section top → ALWAYS wrap in `<SectionHeader>` from `@/components/elementary/section-header`. This controls gap spacing, max-width, and alignment. Never render SectionTitle/SectionDescription without the wrapper.
+
+   **Correct:**
+
+   ```tsx
+   <SectionHeader layout="center" size="default">
+     <SectionLabel variant="default">{component.label}</SectionLabel>
+     <SectionTitle as="h2" size="default">
+       {component.title}
+     </SectionTitle>
+     <SectionDescription variant="default">
+       {component.description}
+     </SectionDescription>
+   </SectionHeader>
+   ```
+
+   **Wrong — loses spacing and max-width control:**
+
+   ```tsx
+   <SectionTitle as="h2">{component.title}</SectionTitle>
+   <SectionDescription>{component.description}</SectionDescription>
+   ```
+
+   Props:
+   - `SectionHeader`: `size` (xs/sm/default/lg/xl), `layout` (left/center/right)
+   - `SectionTitle`: `as` (h1-h6, default h2), `size` (matches parent), `variant` (default/inverse/purple)
+   - `SectionDescription`: `variant` (default/inverse/purple)
+   - `SectionLabel`: `variant` (default/inverse/purple), `image` (optional utilities.basic-image icon)
+
+   For dark backgrounds, pass `variant="inverse"` to all children consistently.
+   CTAs or content below the header go AFTER `</SectionHeader>` with appropriate margin (`mt-8` typical), not inside it.
 
 2. **Card grid**: 3+ items with identical structure (image + title + text + link) → model as Strapi repeatable component. Render with `.map()` in React using a local sub-component or inline JSX. Use CSS grid (`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`).
 

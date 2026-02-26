@@ -341,15 +341,18 @@ Optional when broader changes are made:
 pnpm lint
 ```
 
-### 8. Server restart notice
+### 8. Wait for schema registration (automatic)
 
-If new schema files were created or the page dynamic zone was modified, remind the caller (user or parent skill):
+Strapi dev server auto-restarts on file changes (chokidar watches `cwd`). After all schema files are written, force a reliable watcher trigger and poll for readiness:
 
-> "New Strapi schemas were created. The running server must be restarted before any content can be written via MCP. Please restart Strapi and confirm."
+1. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher fires (belt-and-suspenders — `.json` changes should trigger it too, but `touch` ensures one final event after all writes complete).
+2. Wait 5 seconds for the restart cycle to begin (TS recompile + worker fork).
+3. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
+4. Check if the newly created UID appears in the component list.
+5. **Found** → proceed to Step 8b.
+6. **Timeout (30s)** → fall back to asking the user to restart Strapi manually. Wait for confirmation before proceeding.
 
-**Never proceed to MCP write operations (seeding content, updating pages) until the user confirms the server has been restarted.** Writing unknown `__component` UIDs corrupts dynamic zone data.
-
-If schema files were created or the page dynamic zone changed, do not proceed to content seeding until the user confirms restart.
+**Never skip this step** — writing unregistered `__component` UIDs corrupts dynamic zone data.
 
 ### 8b. Update component registry
 

@@ -26,7 +26,8 @@ Ask the user for:
 4. **Locale** (required): locale to seed into, for example `en`.
 5. **Parent page fullPath** (optional): explicit parent for nested pages. If omitted, derive from target page path.
 6. **Unknown schema policy** (optional): default to `best-effort fill` unless user asks for stricter behavior.
-7. **Pre-extracted content** (optional): structure data already extracted by `/copy-component` mega-extract. When provided, skip Step 3 (source page fetching) and use this data directly. Shape: `{ structure, desktopStyles, mobileStyles }` from the mega-extract output.
+7. **Pre-extracted content** (optional): structure data already extracted by `/copy-component` mega-extract. When provided, skip Step 3 (source page fetching) and use this data directly. Shape: `{ desktop, mobile }` from the mega-extract output — each is a merged structure+styles tree with nodes `{ tag, styles, text?, attrs?, children? }`.
+8. **caller_authorized** (optional, boolean, default false): when `true`, the calling skill has already obtained user intent — skip the preview/approval prompt in Step 6 and proceed directly to writes.
 
 ## Safety Defaults
 
@@ -53,7 +54,14 @@ PUT { "data": { "content": [{ existing1 }, { existing2 }, { "__component": "sect
 
 ### Schema registration rule (CRITICAL)
 
-Never write a `__component` UID to Strapi that the running server hasn't registered. After creating new schema files, ask the user to restart Strapi and wait for confirmation before any MCP write operations.
+Never write a `__component` UID to Strapi that the running server hasn't registered. After creating new schema files, verify registration automatically:
+
+1. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher triggers a restart.
+2. Wait 5 seconds for the restart cycle to begin.
+3. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
+4. Check if the target UID appears in the component list.
+5. **Found** → proceed with writes.
+6. **Timeout (30s)** → fall back to asking the user to restart Strapi manually. Wait for confirmation before any MCP write operations.
 
 ## Steps
 
@@ -74,7 +82,7 @@ Check if port 1337 is in use (`lsof -ti:1337`), then verify Strapi responds:
 
 ### Step 3: Fetch or receive source page content
 
-If `preExtractedContent` was provided in the inputs, use its `structure` field directly — skip fetching. The content has already been extracted by the copy-component mega-extract and contains headings, body text, links, images, lists, and section hierarchy.
+If `preExtractedContent` was provided in the inputs, use its `desktop` tree directly — skip fetching. The tree is a merged structure+styles tree (`{ tag, styles, text?, attrs?, children? }`) already extracted by the copy-component mega-extract and contains headings, body text, links, images, lists, and section hierarchy.
 
 Otherwise, fetch rendered page content using the best available tool in this environment:
 
@@ -146,7 +154,9 @@ Before any write operation, present:
 - Media URLs to upload.
 - Relations to resolve/create.
 
-Wait for explicit user approval.
+If `caller_authorized` is `true`, log the preview summary but **skip the approval prompt** — the calling skill has already obtained user intent. Proceed directly to Step 7.
+
+Otherwise, wait for explicit user approval.
 
 ### Step 7: Resolve media
 

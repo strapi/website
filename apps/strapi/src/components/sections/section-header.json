@@ -11,6 +11,24 @@
       "component": "utilities.section-header",
       "repeatable": false,
       "required": true
+    },
+    "background": {
+      "type": "enumeration",
+      "default": "none",
+      "enum": [
+        "none",
+        "light",
+        "dark"
+      ]
+    },
+    "sectionImage": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    },
+    "boxed": {
+      "type": "boolean",
+      "default": false
     }
   },
   "config": {}

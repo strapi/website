@@ -74,14 +74,14 @@ Fail fast when invalid:
 
 ### Step 1: Mega-extract structure and styles
 
-Extract structure, desktop styles, and mobile styles in a single `browser_run_code` call.
+Extract structure and styles in a single `browser_run_code` call (token-optimized).
 
 1. Read `references/extraction-scripts.js` and locate the `megaExtractTemplate` string.
 2. Replace `__SOURCE_URL__` with the contract `source_url` and `__SELECTOR__` with the contract `selector`.
 3. Pass the resulting code string to `browser_run_code`.
-4. The template handles: navigation, overlay dismissal, scrolling, desktop structure+styles extraction (1280×900), mobile styles extraction (375×812), and viewport reset.
+4. The template handles: navigation, overlay dismissal, scrolling, desktop extraction (1280×900), mobile extraction (375×812), and viewport reset.
 
-**Result shape:** `{ structure, desktopStyles, mobileStyles }`
+**Result shape:** `{ desktop, mobile }` — each is a merged structure+styles tree. Nodes: `{ tag, styles, text?, attrs?, children? }`. Only non-default style values are included. GSAP word-wrapper spans are collapsed into parent text.
 
 **Selector failure:** If the result contains `{ error: "selector_not_found", availableSections: [...] }`:
 
@@ -92,7 +92,7 @@ Extract structure, desktop styles, and mobile styles in a single `browser_run_co
 
 **Verification screenshot:** After mega-extract succeeds, take `browser_take_screenshot` of the target element for visual reference. All CSS values come from the mega-extract, not this screenshot.
 
-From the structure, identify:
+From the desktop tree, identify:
 
 - **Content fields**: headings (title, subtitle), body text, labels, descriptions
 - **Links**: label + href + whether it's a CTA button
@@ -114,22 +114,27 @@ Map extracted computed values to Tailwind classes using the design system tokens
 
 #### Responsive Diffing
 
-Compare desktop vs mobile styles from the mega-extract (Step 1). Mobile is the base (no prefix), desktop overrides use `lg:`. See `references/token-mapping.md` → "Responsive Diffing" for details.
+Compare `desktop` vs `mobile` trees from the mega-extract (Step 1). Mobile is the base (no prefix), desktop overrides use `lg:`. See `references/token-mapping.md` → "Responsive Diffing" for details.
 
 If layouts are structurally very different (not just direction/size changes), ask the user to choose: simplify, implement both with responsive classes, or desktop-only.
 
 ### Step 3: Map elements to existing components
 
-Read `references/component-mapping.md` for Typography variant mapping, Link/CTA/Image mapping, Shadcn pattern matching, and Composition analysis patterns.
+Read `references/component-mapping.md` for the SectionHeader decision tree, SectionTitle size mapping, Typography variant mapping, Link/CTA/Image mapping, Shadcn pattern matching, and Composition analysis patterns.
 
-Apply the component mapping rules from that reference:
+Apply the component mapping rules from that reference **in this order**:
 
-- **Typography**: map extracted font-size to `<Typography>` variant using the size table. Decouple `tag` (semantic) from `variant` (visual) when they differ.
-- **Links/CTAs**: map `<a>` elements to `<StrapiLink>`, `<StrapiLinkText>`, or `<StrapiLinkImage>` based on source styling patterns.
-- **Images**: map to `<StrapiBasicImage>` or `<StrapiLinkImage>`.
-- **Section wrapper**: every page-level section uses `<section>` → `<Container>` structure. Background/padding on `<section>`, not `<Container>`.
-- **Shadcn patterns**: match source UI patterns to shadcn components using `shadcn_mode` from intake.
-- **Composition**: detect section header pairs, card grids, icon+text lists for Strapi repeatable component modeling.
+1. **SectionHeader decision (FIRST)**: Check whether the section has a top-level intro group (label + heading + description block that introduces the section's content). If yes, that intro group MUST use SectionHeader components (SectionLabel, SectionTitle, SectionDescription) — never raw HTML tags, never Typography. This applies to the section's own header, NOT to text inside cards, repeatable items, or nested child components — those use Typography.
+
+2. **SectionTitle size mapping**: When SectionTitle is chosen, map the extracted desktop font-size to the closest `size` preset using the SectionTitle Size Mapping table. Never use raw `<h1>` with manual Tailwind font classes when a SectionTitle size preset matches within ±2px.
+
+3. **Typography**: Use ONLY for text blocks outside SectionHeader groups (card content, prices, stats, inline labels). Map font-size to variant using the Typography table.
+
+4. **Links/CTAs**: map `<a>` elements to `<StrapiLink>`, `<StrapiLinkText>`, or `<StrapiLinkImage>` based on source styling patterns.
+5. **Images**: map to `<StrapiBasicImage>` or `<StrapiLinkImage>`.
+6. **Section wrapper**: every page-level section uses `<section>` → `<Container>` structure. Background/padding on `<section>`, not `<Container>`.
+7. **Shadcn patterns**: match source UI patterns to shadcn components using `shadcn_mode` from intake.
+8. **Composition**: detect card grids, icon+text lists for Strapi repeatable component modeling.
 
 ### Step 4: Reuse audit and schema plan
 
@@ -224,12 +229,18 @@ Key rules:
 
 Component usage rules (mandatory):
 
-- **Text**: Use `<Typography>` for standalone text blocks. Use `tag` for semantic meaning and `variant` for visual size — they don't have to match. Skip Typography for inline `<span>` fragments or single-word slots. Import from `@/components/typography`.
+- **Section headers (CHECK FIRST)**: When a section has a top-level intro group (label + heading + description that introduces the section), ALWAYS wrap that group in `<SectionHeader>` with `<SectionLabel>`, `<SectionTitle>`, `<SectionDescription>` children. This does NOT apply to text inside cards, repeatable items, or nested components — those use Typography. Import from `@/components/elementary/section-header`. Rules:
+  - **SectionTitle size**: Match extracted font-size to a `size` preset (xs/sm/default/lg/xl) — see `references/component-mapping.md` SectionTitle Size Mapping table. NEVER use raw `<h1>`/`<h2>` with manual Tailwind font classes.
+  - **SectionTitle variant**: `default` for light backgrounds, `inverse` for dark, `purple` for purple-themed.
+  - **SectionDescription variant**: Same as SectionTitle — `inverse` for dark backgrounds. Do NOT add manual `text-white` or `className="text-white"`.
+  - **SectionHeader gap**: Controls spacing between children automatically. Do NOT add `mt-*` between SectionLabel, SectionTitle, and SectionDescription.
+  - **CTAs inside SectionHeader**: Place CTA containers inside `<SectionHeader>` with `mt-8` margin (or whatever spacing the source uses).
+  - **Dark backgrounds**: Pass `variant="inverse"` to ALL children consistently. This is sufficient — never add manual color overrides.
+- **Text (Typography)**: Use `<Typography>` ONLY for standalone text blocks outside SectionHeader groups (card content, prices, stats, inline labels). Use `tag` for semantic meaning, `variant` for visual size. Import from `@/components/typography`.
 - **Links/CTAs**: ALWAYS use `<StrapiLink>` for `utilities.link` fields, `<StrapiLinkText>` for `utilities.link-text` fields. Import from `@/components/page-builder/components/utilities/StrapiLink` and `StrapiLinkText`.
 - **Images**: ALWAYS use `<StrapiBasicImage>` for `utilities.basic-image` fields. Import from `@/components/page-builder/components/utilities/StrapiBasicImage`.
 - **Linked images**: ALWAYS use `<StrapiLinkImage>` for `utilities.link-image` fields. Import from `@/components/page-builder/components/utilities/StrapiLinkImage`.
 - **Section wrapper**: ALWAYS wrap page-level section content in `<section>` → `<Container>`. Import Container from `@/components/elementary/Container`.
-- **Section headers**: When a section has a label/title/description group at the top, ALWAYS wrap in `<SectionHeader>` → `<SectionLabel>` + `<SectionTitle>` + `<SectionDescription>`. Import from `@/components/elementary/section-header`. SectionHeader controls gap spacing and max-width — never render its children without the wrapper. CTAs or content grids go AFTER `</SectionHeader>` with `mt-8` margin, not inside it. For dark backgrounds, pass `variant="inverse"` to all children consistently.
 - **Shadcn components**: Use shadcn/ui components identified in Step 3. Import from `@/components/ui/{name}`.
 
 ### Step 7: Validate registration and types
@@ -249,54 +260,92 @@ Run checks:
 2. `cd apps/ui && pnpm typecheck`
 3. Source vs local screenshot capture for the migrated section
 4. Checklist pass:
-   - standalone text blocks use `<Typography>` with `tag` for semantics and `variant` for visuals
+   - SectionLabel/SectionTitle/SectionDescription are wrapped in a `<SectionHeader>` parent — if you see these children without the wrapper, or with manual `mt-*`/`gap-*`/`space-y-*` classes between them, the wrapper is missing
+   - `<SectionTitle>` uses a `size` preset, not raw Tailwind font classes
+   - dark background sections use `variant="inverse"` on all SectionHeader children, with NO manual `text-white` overrides
+   - standalone text blocks (outside SectionHeader) use `<Typography>` with `tag` for semantics and `variant` for visuals
    - links/images use Strapi utility wrappers from Step 6 rules
    - no duplicate UID or `ContentComponents` mapping
 5. Optional when scope is broad: `pnpm lint`
 
 If any required gate fails, do not mark migration as done. Report failing command/check and include manual follow-up.
 
-### Step 9: Verify
+### Step 9: Seed content (automatic)
 
-1. Take a screenshot of the original section (if not already done in Step 1).
-2. If the local dev server is running, navigate to a page using the component and take a screenshot for comparison.
-3. Report what was created:
-   - Strapi schema path
-   - Population config path
-   - React component path
-   - Registry entry
-   - Any manual follow-up needed (icons, SVGs, animations, interactive states)
+Seed content from the source page into the new component. This step is automatic — the intake contract already represents user authorization. Do not use `AskUserQuestion`.
 
-### Step 9b: Review loop (up to 3 passes)
+1. Invoke `/seed-content` with:
+   - `source_url`: from intake contract
+   - Target component UID: `{category}.{component_name}`
+   - `preExtractedContent`: the `{ desktop, mobile }` data from Step 1 (so seed-content skips re-scraping)
+   - `locale`: `en` (default)
+   - `caller_authorized`: `true` (skips seed-content's approval prompt)
+2. Capture the seeded page's `fullPath`, `locale`, and `documentId` from seed-content's output for use in Step 10.
+3. If seeding fails, log the error and continue to Step 10 — seeding failure does not block validation.
 
-Spawn a review sub-agent via the `Task` tool. Pass it: file list, intake contract, source URL/selector, screenshot comparison from Step 9.
+### Step 10: Visual validation + iteration loop
 
-The sub-agent must: read all files, check token mapping fidelity (no arbitrary values where tokens fit), check component composition (Typography, StrapiLink, section→Container), check code quality (no unused imports, no placeholders, displayName set, optional fields guarded), verify registry completeness (schema, **populate config must exist**, dynamic zone, ContentComponents mapping, fresh types). Fix issues directly. Return `PASS` or `NEEDS_WORK`.
+Validate the rendered component against the source screenshot and iterate on fixes. Combines visual comparison with code quality checks.
 
-- If `NEEDS_WORK`, apply remaining fixes and start next pass.
-- If `PASS`, proceed to Step 10.
-- After 3 passes without `PASS`, continue but include unresolved issues in manual follow-up.
+**Prerequisites:**
 
-### Step 10: Report result
+- Check Next.js dev server is running: `curl -s -o /dev/null -w "%{http_code}" http://localhost:3000`
+- If not running → mark validation as **SKIPPED**, skip to Step 11.
+
+**For each iteration (max 3):**
+
+#### A. Capture local render (component section only)
+
+1. `browser_navigate` to `http://localhost:3000/{locale}{fullPath}` (use seeded page from Step 9).
+2. Wait 2s for HMR and data fetch.
+3. Use `browser_run_code` to scroll to the component section and identify its bounding box (match by component type or section order).
+4. `browser_take_screenshot` of just the component element → `tmp/validation-local-{component_name}-pass{N}.png`.
+5. This matches the source screenshot scope (also component-only from Step 1).
+
+#### B. Compare source vs local screenshot
+
+| Dimension  | Threshold                      |
+| ---------- | ------------------------------ |
+| Layout     | Must match (grid, flex, order) |
+| Spacing    | Within 1 design token          |
+| Typography | Within 1 design token          |
+| Colors     | Must match design token        |
+| Content    | Must be complete (all fields)  |
+
+**"Close enough" = design-token-level accuracy**, not pixel-perfect. This aligns with the standardization philosophy: snapping to cohesive design system tokens.
+
+Verdict: **PASS** or **NEEDS_WORK** with specific issues listed.
+
+#### C. Code quality checks
+
+- SectionLabel/SectionTitle/SectionDescription wrapped in `<SectionHeader>` parent — no manual `mt-*`/`gap-*`/`space-y-*` between them
+- `<SectionTitle>` uses a `size` preset, not raw Tailwind font classes
+- Dark background sections use `variant="inverse"` on all SectionHeader children, with NO manual `text-white` overrides
+- Standalone text blocks (outside SectionHeader) use `<Typography>` with `tag`/`variant`
+- Links use `<StrapiLink>`/`<StrapiLinkText>`, images use `<StrapiBasicImage>`/`<StrapiLinkImage>`
+- `<section>` → `<Container>` structure
+- No unused imports, `displayName` set
+- Optional fields guarded with conditionals
+- Populate config exists on disk
+- No duplicate UID or `ContentComponents` mapping
+
+#### D. Apply fixes or exit
+
+- **NEEDS_WORK** → apply fixes, run `cd apps/ui && pnpm typecheck`, start next iteration.
+- **PASS** → exit loop, proceed to Step 11.
+- **After 3 iterations without PASS** → continue to Step 11 with unresolved issues listed in report.
+
+### Step 11: Report result
 
 Report: files created/updated, components reused, any errors, and manual follow-up needed.
 
-### Step 11: Offer content seeding
+Include:
 
-After reporting results, use `AskUserQuestion` to offer seeding:
-
-```yaml
-question: "Seed content from {source_url} into the new {component_name} component?"
-options:
-  - label: "Yes, seed from source page"
-    description: "Auto-seed using extracted content from Step 1. No re-scraping needed."
-  - label: "No, skip seeding"
-    description: "Component is ready but empty. Seed manually later."
-```
-
-- **Yes**: invoke `/seed-content` with `source_url`, target component UID, and pass the extracted `structure` data from Step 1 as `preExtractedContent` so seed-content can skip re-scraping the source page.
-- **No**: done. Report final summary.
-- **Other** (custom input): treat as clarification — different source URL, specific locale, or custom instructions. Adjust and invoke `/seed-content` accordingly.
+- **Validation status**: PASS / NEEDS_WORK (with remaining issues) / SKIPPED (dev server not running)
+- **Screenshots**: source reference path (from Step 1) + final local render path (from Step 10)
+- **Seeding status**: page `fullPath`, `locale`, `documentId` (from Step 9), or error if seeding failed
+- **Files created**: Strapi schema, populate config, React component, registry entry
+- **Manual follow-up**: icons, SVGs, animations, interactive states, unresolved validation issues
 
 ## Hover and Interactive States
 

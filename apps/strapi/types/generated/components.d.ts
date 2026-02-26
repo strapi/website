@@ -480,44 +480,6 @@ export interface PlansPricingSwitcher extends Struct.ComponentSchema {
   }
 }
 
-export interface SectionsBannerSlice extends Struct.ComponentSchema {
-  collectionName: "components_sections_banner_slice"
-  info: {
-    description: ""
-    displayName: "Banner Slice"
-    icon: "presentationChart"
-  }
-  attributes: {
-    backgroundVariant: Schema.Attribute.Enumeration<["default", "dark"]> &
-      Schema.Attribute.DefaultTo<"default">
-    ctas: Schema.Attribute.Component<"utilities.link", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    description: Schema.Attribute.Text &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    heading: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    label: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-  }
-}
-
 export interface SectionsFaqSection extends Struct.ComponentSchema {
   collectionName: "components_sections_faq_section"
   info: {
@@ -614,8 +576,12 @@ export interface SectionsSectionHeader extends Struct.ComponentSchema {
     icon: "layout"
   }
   attributes: {
+    background: Schema.Attribute.Enumeration<["none", "light", "dark"]> &
+      Schema.Attribute.DefaultTo<"none">
+    boxed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
+    sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
   }
 }
 
@@ -923,7 +889,6 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-promo": PlansPricingCardPromo
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
-      "sections.banner-slice": SectionsBannerSlice
       "sections.faq-section": SectionsFaqSection
       "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection

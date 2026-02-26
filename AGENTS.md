@@ -5,6 +5,11 @@ Monorepo starter with Strapi v5 CMS and Next.js 16 frontend. Uses pnpm workspace
 ## Core instructions
 
 - Save any screenshots or tmp files to tmp/
+- When updating skills ALWAYS update skills in `.agents/` folder, no the ones in agent specific folders like `.claude/`
+
+## Code style
+
+- Always use `interface` for prop types with `extend ComponentProps<"div">` where applicable
 
 ## Workspaces
 

@@ -24,7 +24,7 @@ The page builder enables content editors to compose pages from reusable componen
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │ DynamicZoneRenderer                                                  │    │
 │  │  └─ maps __component UID → React component via ContentComponents    │    │
-│  │       ├─ sections.banner-slice → StrapiBannerSlice (Page)           │    │
+│  │       ├─ sections.section-header → StrapiSectionHeader (Page)       │    │
 │  │       ├─ footer.footer-main → StrapiFooterMain (Footer)             │    │
 │  │       ├─ navigation.navbar → StrapiNavbar (Header)                  │    │
 │  │       └─ ...                                                        │    │
@@ -51,7 +51,7 @@ export const ContentComponents: Partial<
   Record<UID.Component, React.ComponentType<any>>
 > = {
   // Page sections/forms/plans
-  "sections.banner-slice": StrapiBannerSlice,
+  "sections.section-header": StrapiSectionHeader,
   "forms.newsletter-form": StrapiNewsletterForm,
   "plans.plan-pricing-cards": StrapiPlanPricingCards,
 
@@ -180,12 +180,14 @@ export default true
 **Pattern 2 — Has nested components or relations** (import shared utility configs; define inline for unique nesting):
 
 ```typescript
-// sections/banner-slice.ts
-import linkPopulate from "../utilities/link"
+// sections/section-header.ts
+import basicImagePopulate from "../utilities/basic-image"
+import sectionHeaderPopulate from "../utilities/section-header"
 
 export default {
   populate: {
-    ctas: linkPopulate,
+    section: sectionHeaderPopulate,
+    sectionImage: basicImagePopulate,
   },
 }
 ```

@@ -1,6 +1,8 @@
 import "server-only"
 
 import ReactMarkdown, { type Components } from "react-markdown"
+import rehypeRaw from "rehype-raw"
+import remarkGfm from "remark-gfm"
 
 import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
@@ -59,6 +61,10 @@ const components: Components = {
 
   em: ({ children }) => <em className="italic">{children}</em>,
 
+  del: ({ children }) => <del className="line-through">{children}</del>,
+
+  u: ({ children }) => <u className="underline">{children}</u>,
+
   a: ({ href, children }) => {
     const isExternal =
       href?.startsWith("http://") || href?.startsWith("https://")
@@ -94,7 +100,7 @@ const components: Components = {
   ),
 
   code: ({ children }) => (
-    <code className="bg-muted rounded px-1.5 py-0.5 font-mono text-sm">
+    <code className="bg-muted border-border rounded border px-1.5 py-0.5 font-mono text-sm">
       {children}
     </code>
   ),
@@ -111,7 +117,13 @@ export function Markdown({ children, className }: MarkdownProps) {
 
   return (
     <div data-slot="markdown" className={cn(className)}>
-      <ReactMarkdown components={components}>{children}</ReactMarkdown>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        components={components}
+      >
+        {children}
+      </ReactMarkdown>
     </div>
   )
 }

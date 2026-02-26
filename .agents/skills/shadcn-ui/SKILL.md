@@ -44,36 +44,6 @@ Current repo conventions to preserve:
    - `pnpm --filter @repo/ui typecheck`
    - `pnpm --filter @repo/ui lint`
 
-## Parent Skill Contract
-
-When invoked by another skill (for example `copy-component`), use this deterministic contract.
-
-Input fields:
-
-- `shadcn_mode`: `prefer-existing|allow-install|no-shadcn`
-- `source_pattern`: interaction pattern to map (accordion/tabs/dialog/etc.)
-- `candidate_component`: target shadcn component name
-- `local_alternative`: existing non-shadcn primitive/wrapper if any
-
-Decision rules:
-
-1. `no-shadcn`: do not install or introduce new shadcn components.
-2. `prefer-existing`: reuse installed shadcn first; otherwise use local alternative.
-3. `allow-install`: reuse installed shadcn first; install only when no suitable local alternative exists and user approves.
-
-Return block:
-
-```json
-{
-  "chosen_component": "",
-  "install_needed": false,
-  "reused_shadcn_components": [],
-  "new_installs_requested": [],
-  "restyle_actions": [],
-  "reason": ""
-}
-```
-
 ## Guardrails
 
 - Do not paste frozen dependency matrices into this skill.

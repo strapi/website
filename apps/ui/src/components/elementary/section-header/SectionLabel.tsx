@@ -15,9 +15,17 @@ export const sectionLabelVariants = cva(
         inverse: "text-background",
         purple: "text-strapi-purple-600",
       },
+      size: {
+        xs: "text-xs",
+        sm: "text-xs",
+        default: "",
+        lg: "text-base",
+        xl: "text-base",
+      },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   }
 )
@@ -32,6 +40,7 @@ export interface SectionLabelProps
 export function SectionLabel({
   variant,
   image,
+  size,
   children,
   className,
   ...props
@@ -43,7 +52,7 @@ export function SectionLabel({
   return (
     <div
       data-slot="section-label"
-      className={cn(sectionLabelVariants({ variant }), className)}
+      className={cn(sectionLabelVariants({ variant, size }), className)}
       {...props}
     >
       {image && <StrapiBasicImage component={image} />}

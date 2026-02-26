@@ -65,7 +65,8 @@
           "reuse_mode": "balanced",
           "shadcn_mode": "prefer-existing",
           "acceptance_profile": "balanced-default",
-          "category": "sections"
+          "category": "sections",
+          "source_urls": []
         }
       },
       "metadata": {

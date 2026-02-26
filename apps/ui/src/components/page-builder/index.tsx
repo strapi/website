@@ -4,7 +4,6 @@ import { StrapiNewsletterForm } from "@/components/page-builder/components/forms
 import { StrapiNavbar } from "@/components/page-builder/components/navigation/navbar/StrapiNavbar"
 import { StrapiPlanComparisonTable } from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
 import { StrapiPlanPricingCards } from "@/components/page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards"
-import { StrapiBannerSlice } from "@/components/page-builder/components/sections/StrapiBannerSlice"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
@@ -31,7 +30,6 @@ export const ContentComponents: Partial<
   "plans.plan-pricing-cards": StrapiPlanPricingCards,
 
   // Sections
-  "sections.banner-slice": StrapiBannerSlice,
   "sections.faq-section": StrapiFaqSection,
   "sections.how-it-works": StrapiHowItWorks,
   "sections.integrations-section": StrapiIntegrationsSection,

@@ -780,6 +780,28 @@ MANDATORY SKILL ROUTING — READ THIS FIRST:
    STEP 3: Follow the skill's output — do not override its decisions.
 
    If the skill fails or is unavailable, mark the story as BLOCKED — do not fall back to manual implementation.
+   Specific failure states that MUST trigger BLOCKED:
+   - Playwright browser tools not available or browser_navigate/browser_evaluate fail
+   - Extraction steps return empty/null data (no computed styles extracted)
+   - Token mapping produces zero design-token matches
+   - Required CSS properties (font-size, background-color, padding) missing from extraction
+   Do NOT guess CSS values from screenshots. Do NOT write manual Tailwind classes without extraction data.
+SKILL_RULE
+)
+  elif [[ "$execution_skill" == "consolidate-patterns" ]]; then
+    execution_skill_rule=$(cat <<SKILL_RULE
+
+MANDATORY SKILL ROUTING — READ THIS FIRST:
+   This story REQUIRES the /consolidate-patterns skill. Do NOT implement manually.
+   The skill reviews recently created components for reusable patterns and extracts elementary components.
+
+   STEP 1: Read .agents/skills/consolidate-patterns/SKILL.md
+   STEP 2: Invoke /consolidate-patterns with the story's data payload:
+   - batch_story_ids: from data.batch_story_ids
+   - min_occurrences: from data.min_occurrences (default 2)
+   STEP 3: Follow the skill's output — extract patterns it identifies, skip if none found.
+
+   If the skill is unavailable, mark the story as BLOCKED — do not attempt manual pattern extraction.
 SKILL_RULE
 )
   fi

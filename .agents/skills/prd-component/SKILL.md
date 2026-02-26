@@ -145,6 +145,27 @@ Do not duplicate `copyComponentInput` fields as top-level `data.*` camelCase key
 
 Use `metadata.checkpoints` for restart/write/review requirements.
 
+### URL/Selector Auto-Detection
+
+When the user provides a source URL (e.g. `strapi.io/*`, or any URL pointing to a live website) AND a CSS selector / XPath / section identifier / section description, the story IS a copy-component migration story. Apply these rules automatically:
+
+1. Set `metadata.executionSkill = "copy-component"`.
+2. Fill `data.copyComponentInput` with the user's exact values:
+   - `source_url`: the URL the user provided (verbatim)
+   - `selector`: the CSS selector or XPath the user provided (verbatim)
+   - `component_name`: derive from selector context or user description (kebab-case)
+   - `prd_goal`: derive from user description
+   - `content_constraints`: from user notes, or `"none"`
+   - `reuse_mode`: from user input, default `"balanced"`
+   - `shadcn_mode`: default `"prefer-existing"`
+   - `acceptance_profile`: default `"balanced-default"`
+   - `category`: from user input, default `"sections"`
+3. If the user provides multiple URLs for the same component (variants), fill `source_urls` array in `copyComponentInput`.
+4. Use the story description template from "Story description guidance" above.
+5. Include the standard copy-component acceptance criteria from "Acceptance criteria" above.
+
+**Critical**: URLs and selectors MUST appear in `data.copyComponentInput` — not only in acceptance criteria or description text. The ralph runner reads `copyComponentInput` to construct the skill invocation prompt. If the data is only in free-text fields, the skill will not receive it.
+
 ## Validation Rules
 
 A story is runnable when:
@@ -154,13 +175,84 @@ A story is runnable when:
 - `status` (if present) is not `blocked`.
 - All stories in `dependsOn` have `passes=true` (skip, don't block, if unmet).
 - Required `data` for that story type is present.
-- If `metadata.executionSkill = "copy-component"`, `data.copyComponentInput` is present.
+- If `metadata.executionSkill = "copy-component"`:
+  - `data.copyComponentInput` MUST exist.
+  - `data.copyComponentInput.source_url` MUST be a non-empty URL string.
+  - `data.copyComponentInput.selector` MUST be a non-empty string.
+  - `data.copyComponentInput.component_name` MUST be a non-empty kebab-case string.
+  - If any of these are missing or empty, the story is invalid.
+- If `metadata.executionSkill = "consolidate-patterns"`:
+  - `data.batch_story_ids` MUST be a non-empty array of story ID strings.
+  - If missing, the story is invalid.
 
 If invalid:
 
 - keep story in `stories[]`
 - set `loopState.status = "blocked"`
 - append exact reasons to `loopState.errors`
+
+## Batch Migration from Manifest
+
+When the user provides a manifest file (markdown) listing multiple components to migrate, generate one PRD with all components as stories plus interleaved consolidation checkpoints.
+
+### Manifest format
+
+Each component is a markdown H2 heading followed by structured fields:
+
+```markdown
+## component-name
+
+- **URL**: https://strapi.io/page
+- **Selector**: section:nth-of-type(2)
+- **Variants**: https://strapi.io/other-page | selector: .hero-section | variant: enterprise
+- **Notes**: Has dark background variant, 3-column card grid
+- **Category**: sections
+- **Reuse mode**: balanced
+```
+
+Field defaults when omitted:
+
+- **Category**: `sections`
+- **Reuse mode**: `balanced`
+- **Shadcn mode**: `prefer-existing`
+- **Content constraints**: `none`
+
+### Generation rules
+
+1. **Read the manifest** and parse each H2 entry.
+2. **Generate one story per component** using the Component Migration Convention format:
+   - `metadata.executionSkill = "copy-component"`
+   - `data.copyComponentInput` filled from manifest fields (apply URL/Selector Auto-Detection rules)
+   - If **Variants** field is present, parse each variant entry and populate `source_urls` array in `copyComponentInput`
+   - Story description uses the standard copy-component template
+   - Include all standard copy-component acceptance criteria
+3. **Insert consolidation checkpoint** every 3-4 component stories:
+   - `metadata.executionSkill = "consolidate-patterns"`
+   - `data.batch_story_ids` lists the IDs of the preceding 3-4 component stories
+   - `data.min_occurrences = 2`
+   - `dependsOn` lists all preceding component story IDs in the batch
+   - Subsequent component stories `dependsOn` the checkpoint story
+   - Title: `"Consolidation checkpoint: review {component names} for reusable patterns"`
+   - Acceptance criteria: `["Recently created components reviewed for reusable patterns", "Any extracted elementary components pass typecheck", "docs/component-registry.md updated if new atoms created"]`
+4. **Priority ordering**: Component stories in manifest order (priority 1, 2, 3, ...), checkpoint stories inserted at the appropriate priority between batches.
+5. **PRD naming**: Use `prd-batch-migration-{date}.json` or user-specified name.
+
+### Example output structure
+
+For a manifest with 7 components (A, B, C, D, E, F, G):
+
+| Priority | ID     | Type        | dependsOn       |
+| -------- | ------ | ----------- | --------------- |
+| 1        | US-001 | Component A | []              |
+| 2        | US-002 | Component B | []              |
+| 3        | US-003 | Component C | []              |
+| 4        | US-004 | Checkpoint  | [001, 002, 003] |
+| 5        | US-005 | Component D | [004]           |
+| 6        | US-006 | Component E | [004]           |
+| 7        | US-007 | Component F | [004]           |
+| 8        | US-008 | Checkpoint  | [005, 006, 007] |
+| 9        | US-009 | Component G | [008]           |
+| 10       | US-010 | Checkpoint  | [009]           |
 
 ## Guardrails
 

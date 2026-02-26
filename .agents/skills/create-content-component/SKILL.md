@@ -123,39 +123,6 @@ Given category `navigation` and name `navbar`:
 - React file: `apps/ui/src/components/page-builder/components/navigation/navbar/StrapiNavbar.tsx`
 - Populate config: `apps/strapi/src/populateDynamicZone/navigation/navbar.ts`
 
-## Caller Contract (Used by `/copy-component`)
-
-This skill must accept non-interactive handoff data and execute directly.
-
-Expected handoff fields:
-
-- `operation_mode`: should be `autonomous`
-- `name`
-- `category`
-- `component_name` (optional alias for `name`)
-- `source_url`
-- `selector`
-- `prd_goal`
-- `content_constraints`
-- `reuse_mode`
-- `shadcn_mode`
-- `acceptance_profile`
-- `attributes` (normalized field spec)
-- `reuse_constraints`
-- `duplicate_policy`
-- `detected_atoms` (array)
-- `reused_atoms` (array)
-- `new_atoms` (array)
-- `requires_shadcn_install` (boolean)
-- `shadcn_components` (array)
-- `schema_changed` (boolean hint from caller; recompute before return)
-- `requires_restart` (boolean hint from caller; recompute before return)
-- `seed_payload_ready` (boolean hint from caller)
-- `skip_react_component` (optional): when `true`, skip React component creation (Step 5) — the calling skill creates its own implementation
-
-If these are provided, do not prompt for extra confirmation; proceed with deterministic execution.
-Missing optional fields should be defaulted (empty arrays / `false`) instead of prompting.
-
 ## Steps
 
 ### 1. Resolve identity and run duplicate checks
@@ -212,7 +179,7 @@ Target file: `apps/strapi/src/components/{category}/{name}.json`.
 }
 ```
 
-- **Icon selection**: Pick an icon that visually represents the component's purpose — be creative and varied. Avoid reusing the same icon across components. Available icons include: `alien`, `arrowDown`, `arrowLeft`, `arrowRight`, `arrowUp`, `bell`, `bold`, `bulletList`, `calendar`, `car`, `cast`, `chartBubble`, `chartCircle`, `check`, `clock`, `cloud`, `code`, `command`, `connector`, `crop`, `crown`, `cube`, `cursor`, `dashboard`, `database`, `discuss`, `doctor`, `earth`, `emotionHappy`, `emotionUnhappy`, `envelop`, `exit`, `eye`, `faders`, `feather`, `file`, `filter`, `folder`, `gate`, `globe`, `grid`, `handHeart`, `hashtag`, `headphone`, `heart`, `house`, `image`, `information`, `italic`, `key`, `landscape`, `layer`, `layout`, `lightbulb`, `link`, `lock`, `magic`, `manyToMany`, `manyToOne`, `manyWays`, `medicalCross`, `medium`, `message`, `microphone`, `monitor`, `moon`, `music`, `oneToMany`, `oneToOne`, `oneWay`, `paint`, `paintBrush`, `paperPlane`, `pencil`, `phone`, `picture`, `pin`, `plane`, `play`, `plus`, `priceTag`, `puzzle`, `puzzlePiece`, `question`, `quote`, `refresh`, `restaurant`, `rocket`, `rotate`, `scissors`, `search`, `seed`, `server`, `shield`, `shirt`, `shoppingCart`, `slideshow`, `spark`, `stack`, `star`, `store`, `strikeThrough`, `sun`, `television`, `thumbDown`, `thumbUp`, `train`, `twitter`, `typhoon`, `underline`, `user`, `volumeMute`, `volumeUp`, `walk`, `wheelchair`.
+- **Icon selection**: Pick an icon that visually represents the component's purpose from `references/strapi-icons.txt`. Be creative and varied — avoid reusing the same icon across components.
 
 - If existing, merge additively:
   - add missing attributes
@@ -253,21 +220,13 @@ If utility-level:
 
 Create `apps/strapi/src/populateDynamicZone/{category}/{name}.ts`.
 
-The middleware auto-discovers this file from the filesystem — the file path maps directly to the Strapi UID (`{category}/{name}.ts` → `{category}.{name}`). No manual registration is needed.
-
-**Every dynamic-zone-level component (page, header, or footer) must have this file.** Without it the middleware silently omits nested relations from API responses.
-
-**Path must match the component's Strapi category exactly** — e.g. `footer/footer-cta.ts` for UID `footer.footer-cta`, `navigation/navbar.ts` for UID `navigation.navbar`. Placing a file in the wrong directory (e.g. `sections/footer-cta.ts`) produces a wrong UID mapping at runtime.
+The middleware auto-discovers this file — the path maps directly to the Strapi UID (`{category}/{name}.ts` → `{category}.{name}`). No manual registration is needed. **Every dynamic-zone-level component must have this file** — without it nested relations are silently omitted from API responses. The path category must match the Strapi UID exactly (e.g. `footer/footer-cta.ts` for `footer.footer-cta`); a wrong directory produces a broken UID mapping at runtime.
 
 #### Decision tree
 
 Inspect the component's Strapi schema to determine what to export:
 
-1. **No nested `component` or `relation` attributes** (only scalar fields: `string`, `text`, `boolean`, `enum`):
-
-```typescript
-export default true
-```
+1. **No nested `component` or `relation` attributes** (only scalar fields): `export default true`
 
 2. **Has nested components or relations** — build a `populate` object. Import shared utility configs instead of duplicating them:
 
@@ -286,24 +245,7 @@ export default {
 }
 ```
 
-3. **Deep or complex nesting** — add the type annotation for compile-time safety:
-
-```typescript
-import type { Modules } from "@strapi/strapi"
-import basicImagePopulate from "../utilities/basic-image"
-
-export default {
-  populate: {
-    items: {
-      populate: {
-        icon: {
-          populate: { media: true },
-        },
-      },
-    },
-  },
-} as Modules.Documents.Params.Populate.NestedParams<"{category}.{name}">
-```
+3. **Deep or complex nesting** — add `import type { Modules } from "@strapi/strapi"` and cast the export `as Modules.Documents.Params.Populate.NestedParams<"{category}.{name}">` for compile-time safety.
 
 #### Reusable utility imports
 
@@ -317,11 +259,9 @@ Always import from shared utility files rather than repeating inline definitions
 | `../utilities/link-image`       | `utilities.link-image` (has `image`, `page`)               |
 | `../utilities/link-text`        | `utilities.link-text`                                      |
 
-For utility-category components that are only ever used as nested fields (never appear directly in the page dynamic zone), the populate file is optional but recommended when you need to share the config via imports (e.g., a new `utilities.my-icon` referenced by multiple section populate files). Place it at `../utilities/my-icon.ts` and import where needed.
+For utility-category components, the populate file is optional but recommended when the config needs to be shared via imports by other section populate files.
 
 ### 5. Create or update React component
-
-> **Skip condition**: If caller passed `skip_react_component: true`, skip this step entirely. The calling skill will create its own React implementation.
 
 Target file depends on the dynamic zone type:
 
@@ -329,7 +269,7 @@ Target file depends on the dynamic zone type:
 - **Footer components**: `apps/ui/src/components/page-builder/single-types/footer/Strapi{PascalCaseName}.tsx`
 - **Navigation/Header components**: `apps/ui/src/components/page-builder/components/navigation/{name}/Strapi{PascalCaseName}.tsx`
 
-Create a compilable baseline that renders real data fields (no hardcoded placeholder text and no `removeThisWhenYouNeedMe` call):
+Create a compilable baseline that renders real data fields (no hardcoded placeholder text):
 
 ```tsx
 import { Data } from "@repo/strapi-types"
@@ -401,19 +341,18 @@ Optional when broader changes are made:
 pnpm lint
 ```
 
-### 8. Server restart notice
+### 8. Wait for schema registration (automatic)
 
-If new schema files were created or the page dynamic zone was modified, remind the caller (user or parent skill):
+Strapi dev server auto-restarts on file changes (chokidar watches `cwd`). After all schema files are written, force a reliable watcher trigger and poll for readiness:
 
-> "New Strapi schemas were created. The running server must be restarted before any content can be written via MCP. Please restart Strapi and confirm."
+1. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher fires (belt-and-suspenders — `.json` changes should trigger it too, but `touch` ensures one final event after all writes complete).
+2. Wait 5 seconds for the restart cycle to begin (TS recompile + worker fork).
+3. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
+4. Check if the newly created UID appears in the component list.
+5. **Found** → proceed to Step 8b.
+6. **Timeout (30s)** → fall back to asking the user to restart Strapi manually. Wait for confirmation before proceeding.
 
-**Never proceed to MCP write operations (seeding content, updating pages) until the user confirms the server has been restarted.** Writing unknown `__component` UIDs corrupts dynamic zone data.
-
-Set return flags:
-
-- `schema_changed=true` when schema files were created/updated additively.
-- `requires_restart=true` when new schema files were created or page dynamic zone changed.
-- `seed_payload_ready=true` only when schema-related restart requirement is fully satisfied.
+**Never skip this step** — writing unregistered `__component` UIDs corrupts dynamic zone data.
 
 ### 8b. Update component registry
 
@@ -425,32 +364,9 @@ Update `docs/component-registry.md` with newly created artifacts:
 
 Skip silently if `docs/component-registry.md` doesn't exist.
 
-### 9. Return structured result
+### 9. Report results
 
-Always finish with:
-
-```json
-{
-  "intake_contract_valid": true,
-  "acceptance_profile": "balanced-default",
-  "actions_taken": [],
-  "created": [],
-  "updated": [],
-  "reused": [],
-  "detected_atoms": [],
-  "reused_atoms": [],
-  "new_atoms": [],
-  "requires_shadcn_install": false,
-  "shadcn_components": [],
-  "schema_changed": false,
-  "requires_restart": false,
-  "seed_payload_ready": false,
-  "skipped": [],
-  "errors": [],
-  "quality_checks": [],
-  "manual_steps_needed": []
-}
-```
+Report what was created, updated, reused, and any errors or manual follow-up needed.
 
 ## Path Resilience
 

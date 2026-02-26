@@ -5,9 +5,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import { InlineMarkdown } from "./markdown/InlineMarkdown"
+
 interface Props {
   readonly children: React.ReactNode
-  readonly content: React.ReactNode
+  readonly content: string | null | undefined
   readonly contentProps?: Partial<
     React.ComponentPropsWithoutRef<typeof TooltipContent>
   >
@@ -18,7 +20,9 @@ export function Tooltip({ children, content, contentProps }: Props) {
     <TooltipProvider>
       <RadixTooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent {...contentProps}>{content}</TooltipContent>
+        <TooltipContent {...contentProps}>
+          <InlineMarkdown>{content}</InlineMarkdown>
+        </TooltipContent>
       </RadixTooltip>
     </TooltipProvider>
   )

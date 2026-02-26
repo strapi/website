@@ -7,9 +7,15 @@ export const sectionIconVariants = cva(
   "relative overflow-hidden [&_img]:object-contain",
   {
     variants: {
-      size: {},
+      size: {
+        sm: "size-8",
+        md: "size-12",
+        lg: "size-16",
+      },
     },
-    defaultVariants: {},
+    defaultVariants: {
+      size: "md",
+    },
   }
 )
 

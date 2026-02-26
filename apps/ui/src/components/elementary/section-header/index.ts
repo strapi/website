@@ -1,3 +1,4 @@
+export * from "./SectionCTA"
 export * from "./SectionDescription"
 export * from "./SectionTitle"
 export * from "./SectionIcon"

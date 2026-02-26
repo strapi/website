@@ -7,7 +7,7 @@ import { type badgeVariants, Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/styles"
 
 export interface PricingFeatureProps extends React.ComponentProps<"div"> {
-  tooltip?: React.ReactNode | null
+  tooltip?: string | null
   children?: React.ReactNode | null
   badge?: React.ReactNode | null
   badgeStyle?: VariantProps<typeof badgeVariants>["variant"]

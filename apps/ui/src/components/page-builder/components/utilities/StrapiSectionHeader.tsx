@@ -1,7 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 
-import { Markdown } from "@/components/elementary/markdown/Markdown"
 import {
+  SectionCTA,
   SectionDescription,
   SectionHeader,
   SectionLabel,
@@ -12,13 +12,15 @@ import { StrapiLink } from "@/components/page-builder/components/utilities/Strap
 export interface StrapiSectionHeaderProps {
   readonly component: Data.Component<"utilities.section-header">
   readonly className?: string
+  readonly variantOverride?: "default" | "inverse" | "purple"
 }
 
 export function StrapiSectionHeader({
   component,
   className,
+  variantOverride,
 }: StrapiSectionHeaderProps) {
-  console.log({ component })
+  const variant = variantOverride ?? component.variant ?? "default"
 
   return (
     <SectionHeader
@@ -26,24 +28,28 @@ export function StrapiSectionHeader({
       size={component.size}
       className={className}
     >
-      <SectionLabel variant={component.variant} image={component.labelIcon}>
+      <SectionLabel
+        size={component.size}
+        variant={variant}
+        image={component.labelIcon}
+      >
         {component.label}
       </SectionLabel>
 
-      <SectionTitle size={component.size} variant={component.variant}>
+      <SectionTitle size={component.size} variant={variant}>
         {component.title}
       </SectionTitle>
 
-      <SectionDescription variant={component.variant}>
-        <Markdown>{component.description}</Markdown>
+      <SectionDescription size={component.size} variant={variant}>
+        {component.description}
       </SectionDescription>
 
       {component.ctaLinks && component.ctaLinks.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-4">
-          {component.ctaLinks.map((link) => (
+        <SectionCTA layout={component.layout} spacing="lg">
+          {component.ctaLinks.map((link: Data.Component<"utilities.link">) => (
             <StrapiLink key={link.id} component={link} />
           ))}
-        </div>
+        </SectionCTA>
       )}
     </SectionHeader>
   )

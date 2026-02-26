@@ -563,7 +563,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
         "sections.faq-section",
-        "sections.banner-slice",
         "sections.integrations-section",
         "sections.user-stories-section",
         "sections.how-it-works",

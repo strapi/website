@@ -558,8 +558,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     children: Schema.Attribute.Relation<"oneToMany", "api::page.page">
     content: Schema.Attribute.DynamicZone<
       [
-        "forms.newsletter-form",
-        "forms.contact-form",
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
         "sections.faq-section",
@@ -567,6 +565,12 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.user-stories-section",
         "sections.how-it-works",
         "sections.section-header",
+        "sections.quote",
+        "blog.author-banner",
+        "sections.brand-logo-grid",
+        "sections.feature-card",
+        "sections.two-columns-benefits",
+        "forms.newsletter",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

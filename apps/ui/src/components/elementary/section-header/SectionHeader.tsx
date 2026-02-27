@@ -6,21 +6,53 @@ import { cn } from "@/lib/styles"
 export const sectionHeaderVariants = cva("flex flex-col w-full", {
   variants: {
     size: {
-      xs: "gap-3 *:max-w-174",
-      sm: "gap-3.5 *:max-w-174",
-      default: "gap-4 *:max-w-174",
-      lg: "gap-4 *:max-w-240",
-      xl: "gap-5 *:max-w-240",
+      xs: "gap-3",
+      sm: "gap-3.5",
+      default: "gap-4",
+      lg: "gap-4",
+      xl: "gap-5",
     },
     layout: {
       left: "items-start text-left",
       center: "items-center text-center",
       right: "items-end text-right",
     },
+    constrain: {
+      true: "",
+      false: "",
+    },
   },
+  compoundVariants: [
+    {
+      size: "xs",
+      constrain: true,
+      className: "*:max-w-174",
+    },
+    {
+      size: "sm",
+      constrain: true,
+      className: "*:max-w-174",
+    },
+    {
+      size: "default",
+      constrain: true,
+      className: "*:max-w-174",
+    },
+    {
+      size: "lg",
+      constrain: true,
+      className: "*:max-w-240",
+    },
+    {
+      size: "xl",
+      constrain: true,
+      className: "*:max-w-240",
+    },
+  ],
   defaultVariants: {
     size: "default",
     layout: "center",
+    constrain: true,
   },
 })
 
@@ -33,6 +65,7 @@ export function SectionHeader({
   children,
   size,
   layout: align,
+  constrain,
   className,
   ...props
 }: SectionHeaderProps) {
@@ -43,7 +76,10 @@ export function SectionHeader({
   return (
     <section
       data-slot="section-header"
-      className={cn(sectionHeaderVariants({ size, layout: align }), className)}
+      className={cn(
+        sectionHeaderVariants({ size, layout: align, constrain }),
+        className
+      )}
       {...props}
     >
       {children}

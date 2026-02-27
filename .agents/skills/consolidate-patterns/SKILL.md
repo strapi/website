@@ -71,7 +71,33 @@ For each remaining pattern:
 1. Update `docs/component-registry.md` → "React Elementary Components" table with new entries.
 2. Update `.agents/skills/copy-component/SKILL.md` Step 6b and Step 6d tables if the new elementary component is a pattern future components should use (e.g. a new section header variant, a new card layout).
 
-### Step 6: Quality gates
+### Step 6: Update component library page
+
+Add examples of each new elementary component to the dev component library at `apps/ui/src/app/[locale]/dev/component-library/page.tsx`.
+
+For each extracted elementary component:
+
+1. Read the current component library page file.
+2. **Import** the new elementary component (keep imports grouped with other elementary components).
+3. **Add a TOC entry**: append `{ id: "{kebab-case-name}", label: "{ComponentName}" }` to the `TOC` array.
+4. **Add a `<Section>` block** at the end (before the closing `</div>`):
+
+```tsx
+<Section id="{kebab-case-name}" title="{ComponentName}">
+  <div className="space-y-6">
+    <Variant label="Default">
+      <ComponentName>Example content</ComponentName>
+    </Variant>
+  </div>
+</Section>
+```
+
+5. If the component has CVA variants, sizes, or layout props, add a `<Variant>` block for each, following the existing patterns in the file (e.g. mapping over variant values, showing each in a bordered card).
+6. Use the `<Placeholder>` helper for image slots.
+
+Skip silently if the component library page file doesn't exist.
+
+### Step 7: Quality gates
 
 Run:
 
@@ -82,10 +108,10 @@ pnpm lint
 
 If either fails, fix the issues before proceeding.
 
-### Step 7: Commit and report
+### Step 8: Commit and report
 
 ```bash
-git add apps/ui/src/components/elementary/ apps/ui/src/components/page-builder/ docs/component-registry.md
+git add apps/ui/src/components/elementary/ apps/ui/src/components/page-builder/ docs/component-registry.md apps/ui/src/app/\[locale\]/dev/component-library/
 git commit -m "refactor: extract reusable patterns from batch {story_ids}"
 ```
 

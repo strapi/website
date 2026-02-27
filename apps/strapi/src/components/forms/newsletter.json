@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_forms_newsletter",
+  "info": {
+    "displayName": "Newsletter",
+    "icon": "paperPlane",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "emailPlaceholder": {
+      "type": "string"
+    },
+    "submitLabel": {
+      "type": "string"
+    },
+    "consentText": {
+      "type": "text"
+    }
+  }
+}

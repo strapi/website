@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_elements_brand_logo_grid_items",
+  "info": {
+    "displayName": "BrandLogoGridItem",
+    "icon": "cube"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false,
+      "required": true
+    },
+    "hasLink": {
+      "type": "boolean",
+      "default": false
+    },
+    "link": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false,
+      "conditions": {
+        "visible": {
+          "==": [{ "var": "hasLink" }, true]
+        }
+      }
+    },
+    "tooltip": {
+      "type": "component",
+      "component": "utilities.tooltip",
+      "repeatable": false
+    }
+  }
+}

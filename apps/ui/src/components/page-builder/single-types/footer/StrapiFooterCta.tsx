@@ -1,13 +1,13 @@
 "use client"
 
-import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 import { useState } from "react"
 
 import { Container } from "@/components/elementary/Container"
+import { SectionTitle } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import { getStrapiLinkHref } from "@/components/page-builder/components/utilities/StrapiLink"
-import { formatHref, isAppLink, Link } from "@/lib/navigation"
+import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
+import { Typography } from "@/components/typography"
 
 export function StrapiFooterCta({
   component,
@@ -25,7 +25,7 @@ export function StrapiFooterCta({
   }
 
   return (
-    <div
+    <section
       className="w-full"
       style={{
         background:
@@ -34,15 +34,14 @@ export function StrapiFooterCta({
     >
       <Container className="py-30">
         <div className="flex flex-col gap-14 lg:flex-row lg:gap-20">
-          {/* Left column: heading + code snippet + feature badges + logos */}
           <div className="flex flex-1 flex-col items-start gap-14">
-            <h2 className="text-strapi-blue-800 text-3xl font-bold">
+            <SectionTitle as="h2" size="sm">
               {component.heading}
-            </h2>
+            </SectionTitle>
 
             <div className="flex flex-col gap-6">
               {component.codeSnippet && (
-                <div className="flex w-fit items-center rounded-lg bg-white">
+                <div className="border-strapi-neutral-200 flex w-fit items-center rounded-lg border bg-white shadow-sm">
                   <pre className="text-strapi-neutral-800 py-4 pr-4 pl-6 font-mono text-base">
                     {component.codeSnippet}
                   </pre>
@@ -95,74 +94,55 @@ export function StrapiFooterCta({
             )}
           </div>
 
-          {/* Right column: CTA items with vertical accent bar */}
           {component.ctaCards && component.ctaCards.length > 0 && (
             <div className="flex flex-1 flex-col gap-14">
-              {component.ctaCards.map((card) => {
-                const href = getStrapiLinkHref(card.link)
-                const formattedHref = href ? formatHref(href) : undefined
-                const newTab = card.link?.newTab ?? false
-                const linkLabel = card.link?.label ?? "Learn more"
+              {component.ctaCards.map((card) => (
+                <div key={card.id} className="flex gap-8">
+                  <div className="bg-strapi-neutral-200 w-0.75 shrink-0 self-stretch rounded-full" />
 
-                return (
-                  <div key={card.id} className="flex gap-8">
-                    <div className="bg-strapi-neutral-200 w-1 shrink-0 self-stretch rounded-full" />
-
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-start gap-3">
-                        {card.icon && (
-                          <span className="relative mt-0.5 size-6 shrink-0">
-                            <StrapiBasicImage
-                              component={card.icon}
-                              fill
-                              className="object-contain"
-                            />
-                          </span>
-                        )}
-                        <p className="text-strapi-blue-800 text-2xl font-semibold">
-                          {card.title}
-                        </p>
-                      </div>
-
-                      {card.description && (
-                        <p className="text-strapi-neutral-700 mb-4 text-lg">
-                          {card.description}
-                        </p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-start gap-3">
+                      {card.icon && (
+                        <span className="relative mt-0.5 size-6 shrink-0">
+                          <StrapiBasicImage
+                            component={card.icon}
+                            fill
+                            className="object-contain"
+                          />
+                        </span>
                       )}
-
-                      {formattedHref && (
-                        <>
-                          {isAppLink(formattedHref) ? (
-                            <Link
-                              href={formattedHref}
-                              target={newTab ? "_blank" : undefined}
-                              rel={newTab ? "noopener" : undefined}
-                              className="text-strapi-blue-600 hover:text-strapi-blue-700 inline-flex items-center gap-1 text-base font-semibold transition-colors"
-                            >
-                              {linkLabel}
-                              <ArrowRightIcon size={16} />
-                            </Link>
-                          ) : (
-                            <a
-                              href={formattedHref}
-                              target={newTab ? "_blank" : undefined}
-                              rel={newTab ? "noopener noreferrer" : undefined}
-                              className="text-strapi-blue-600 hover:text-strapi-blue-700 inline-flex items-center gap-1 text-base font-semibold transition-colors"
-                            >
-                              {linkLabel}
-                              <ArrowRightIcon size={16} />
-                            </a>
-                          )}
-                        </>
-                      )}
+                      <Typography
+                        tag="p"
+                        variant="subtitle1"
+                        fontWeight="semiBold"
+                      >
+                        {card.title}
+                      </Typography>
                     </div>
+
+                    {card.description && (
+                      <Typography
+                        tag="p"
+                        variant="body1"
+                        textColor="neutral"
+                        className="mb-4"
+                      >
+                        {card.description}
+                      </Typography>
+                    )}
+
+                    <StrapiLink component={card.link} />
                   </div>
-                )
-              })}
+                </div>
+              ))}
             </div>
           )}
         </div>
       </Container>
-    </div>
+    </section>
   )
 }
+
+StrapiFooterCta.displayName = "StrapiFooterCta"
+
+export default StrapiFooterCta

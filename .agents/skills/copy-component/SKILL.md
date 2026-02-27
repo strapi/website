@@ -266,20 +266,25 @@ Run checks:
    - standalone text blocks (outside SectionHeader) use `<Typography>` with `tag` for semantics and `variant` for visuals
    - links/images use Strapi utility wrappers from Step 6 rules
    - no duplicate UID or `ContentComponents` mapping
+   - component library page (`apps/ui/src/app/[locale]/dev/component-library/page.tsx`) has a `<Section>` for this component with mock data and variants — if missing, add it following the pattern from `create-content-component` Step 9
 5. Optional when scope is broad: `pnpm lint`
 
 If any required gate fails, do not mark migration as done. Report failing command/check and include manual follow-up.
 
-### Step 9: Seed content (automatic)
+### Step 9: Seed content (MANDATORY — always runs)
 
-Seed content from the source page into the new component. This step is automatic — the intake contract already represents user authorization. Do not use `AskUserQuestion`.
+**This step is NOT optional.** Seed content into the local Strapi instance for every component migration. The intake contract already represents user authorization.
+
+**Only skip this step when the user has explicitly said "don't seed", "skip seeding", or "no content" in the original request.** Absence of a seeding instruction means DO seed — seeding is the default.
+
+Do NOT use `AskUserQuestion` — do NOT ask for confirmation — do NOT rationalize skipping ("I'll let the user seed later", "seeding can be done separately"). Just invoke `/seed-content`.
 
 1. Invoke `/seed-content` with:
    - `source_url`: from intake contract
    - Target component UID: `{category}.{component_name}`
    - `preExtractedContent`: the `{ desktop, mobile }` data from Step 1 (so seed-content skips re-scraping)
    - `locale`: `en` (default)
-   - `caller_authorized`: `true` (skips seed-content's approval prompt)
+   - `caller_authorized`: `true` (runs seed-content in fully autonomous mode — no prompts)
 2. Capture the seeded page's `fullPath`, `locale`, and `documentId` from seed-content's output for use in Step 10.
 3. If seeding fails, log the error and continue to Step 10 — seeding failure does not block validation.
 

@@ -15,6 +15,10 @@ export function DevNavbar() {
       href: "/dev/components-overview",
       label: "Components overview",
     },
+    {
+      href: "/dev/component-library",
+      label: "Component library",
+    },
   ]
 
   return (

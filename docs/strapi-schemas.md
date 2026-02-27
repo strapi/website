@@ -6,11 +6,11 @@ Guidelines for creating and managing Strapi content type and component schemas.
 
 Pattern: `{category}.{kebab-case-name}`
 
-| Element        | Pattern                                    | Example                                     |
-| -------------- | ------------------------------------------ | ------------------------------------------- |
-| Strapi UID     | `category.kebab-case`                      | `forms.newsletter-form`                     |
-| Schema file    | `{name}.json`                              | `src/components/forms/newsletter-form.json` |
-| collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`          |
+| Element        | Pattern                                    | Example                                |
+| -------------- | ------------------------------------------ | -------------------------------------- |
+| Strapi UID     | `category.kebab-case`                      | `forms.newsletter`                     |
+| Schema file    | `{name}.json`                              | `src/components/forms/newsletter.json` |
+| collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter`          |
 
 The UID must match exactly in:
 

@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_blog_author_banner",
+  "info": {
+    "displayName": "AuthorBanner",
+    "icon": "user",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "authorName": {
+      "type": "string",
+      "required": true
+    },
+    "authorRole": {
+      "type": "string"
+    },
+    "authorBio": {
+      "type": "text"
+    },
+    "authorAvatar": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "authorUrl": {
+      "type": "string"
+    }
+  }
+}

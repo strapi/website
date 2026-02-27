@@ -6,11 +6,11 @@ Strapi v5 CMS with PostgreSQL. Handles content management, page hierarchy, and A
 
 Pattern: `category.kebab-case`
 
-| Element        | Pattern                                    | Example                                     |
-| -------------- | ------------------------------------------ | ------------------------------------------- |
-| Strapi UID     | `category.kebab-case`                      | `forms.newsletter-form`                     |
-| Schema file    | `src/components/{category}/{name}.json`    | `src/components/forms/newsletter-form.json` |
-| collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`          |
+| Element        | Pattern                                    | Example                                |
+| -------------- | ------------------------------------------ | -------------------------------------- |
+| Strapi UID     | `category.kebab-case`                      | `forms.newsletter`                     |
+| Schema file    | `src/components/{category}/{name}.json`    | `src/components/forms/newsletter.json` |
+| collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter`          |
 
 The UID must match in: schema location, page dynamiczone, middleware population, frontend registry.
 

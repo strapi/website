@@ -19,10 +19,10 @@ import { Container } from "@/components/elementary/Container"
 ```typescript
 import { Data } from "@repo/strapi-types"
 
-export function StrapiNewsletterForm({
+export function StrapiNewsletter({
   component,
 }: {
-  readonly component: Data.Component<"forms.newsletter-form">
+  readonly component: Data.Component<"forms.newsletter">
 }) {
   return <section>{component.title}</section>
 }

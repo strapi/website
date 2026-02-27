@@ -14,20 +14,37 @@ This workflow is intentionally adaptive. Local schemas evolve, so the skill must
 - Strapi MCP server is configured. Verify with `strapi_list_servers()`.
 - If MCP is not configured, tell the user to run `/setup-strapi-mcp` first and stop.
 - Strapi is running locally at `http://localhost:1337`.
-- User approves write operations before any create/update calls.
+
+## Execution Modes
+
+### Autonomous mode (`caller_authorized: true`)
+
+When invoked by another skill (e.g. `/copy-component`) with `caller_authorized: true`, this skill runs **fully autonomously**:
+
+- **All required inputs are provided by the caller** — do not prompt for any of them.
+- **Skip all approval prompts** (Step 6 preview approval, Step 9 page-exists choice).
+- **Default to `append`** when a page already exists (do not ask replace/append/cancel).
+- **Never use `AskUserQuestion`** — the calling skill has already obtained user intent.
+- If something fails, log the error and continue. Report failures in Step 10.
+
+### Interactive mode (default, `caller_authorized: false`)
+
+When invoked directly by the user, prompt for missing inputs and request approval before writes.
 
 ## Inputs
 
-Ask the user for:
+| Input                   | Required | Default            | Description                                                                                           |
+| ----------------------- | -------- | ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `source_url`            | yes      | —                  | strapi.io page to scrape (e.g. `https://strapi.io/pricing`)                                           |
+| `target_component`      | no       | all recognized     | specific component UID to seed (e.g. `sections.newsletter-banner`)                                    |
+| `target_page_path`      | no       | derived from URL   | local page full path (e.g. `/pricing`)                                                                |
+| `locale`                | yes      | `en`               | locale to seed into                                                                                   |
+| `parent_page_fullPath`  | no       | derived from path  | explicit parent for nested pages                                                                      |
+| `unknown_schema_policy` | no       | `best-effort fill` | how to handle unmapped fields                                                                         |
+| `preExtractedContent`   | no       | —                  | `{ desktop, mobile }` structure data from `/copy-component` mega-extract. When provided, skip Step 3. |
+| `caller_authorized`     | no       | `false`            | when `true`, run in autonomous mode (see above)                                                       |
 
-1. **Source URL** (required): strapi.io page to scrape, for example `https://strapi.io/pricing`.
-2. **Target component** (optional): specific component UID to seed, for example `forms.newsletter-form`. If omitted, seed all recognized sections.
-3. **Target page path** (optional): local page full path, for example `/pricing`. If omitted, derive from source URL path.
-4. **Locale** (required): locale to seed into, for example `en`.
-5. **Parent page fullPath** (optional): explicit parent for nested pages. If omitted, derive from target page path.
-6. **Unknown schema policy** (optional): default to `best-effort fill` unless user asks for stricter behavior.
-7. **Pre-extracted content** (optional): structure data already extracted by `/copy-component` mega-extract. When provided, skip Step 3 (source page fetching) and use this data directly. Shape: `{ desktop, mobile }` from the mega-extract output — each is a merged structure+styles tree with nodes `{ tag, styles, text?, attrs?, children? }`.
-8. **caller_authorized** (optional, boolean, default false): when `true`, the calling skill has already obtained user intent — skip the preview/approval prompt in Step 6 and proceed directly to writes.
+In **interactive mode**, ask the user for any missing required inputs. In **autonomous mode**, derive all missing values automatically — never prompt.
 
 ## Safety Defaults
 
@@ -35,7 +52,8 @@ Ask the user for:
 - Use best-effort mapping only when type-compatible.
 - Never send payloads that violate required fields or enum constraints.
 - If data cannot be mapped safely, skip that fragment and report it.
-- Always show a preview and wait for explicit user approval before writing.
+- In interactive mode, show a preview and wait for explicit user approval before writing.
+- In autonomous mode, log the preview but proceed without prompting.
 
 ### Dynamic zone merge rule (CRITICAL)
 
@@ -56,12 +74,14 @@ PUT { "data": { "content": [{ existing1 }, { existing2 }, { "__component": "sect
 
 Never write a `__component` UID to Strapi that the running server hasn't registered. After creating new schema files, verify registration automatically:
 
-1. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher triggers a restart.
-2. Wait 5 seconds for the restart cycle to begin.
-3. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
-4. Check if the target UID appears in the component list.
-5. **Found** → proceed with writes.
-6. **Timeout (30s)** → fall back to asking the user to restart Strapi manually. Wait for confirmation before any MCP write operations.
+1. **Check Strapi is alive**: run `lsof -ti:1337`. If no process is listening, Strapi has crashed — ask the user to restart manually.
+2. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher triggers a restart.
+3. Wait 5 seconds for the restart cycle to begin.
+4. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
+5. **On each poll failure**, re-check `lsof -ti:1337`. If process died, stop polling and ask user to restart.
+6. Check if the target UID appears in the component list.
+7. **Found** → proceed with writes.
+8. **Timeout (30s) with process alive** → fall back to asking the user to restart Strapi manually. Wait for confirmation before any MCP write operations.
 
 ## Steps
 
@@ -139,24 +159,19 @@ For each extracted source section:
      - `type: "external"`
      - `href`: absolute source URL
 
-### Step 6: Preview and request approval
+### Step 6: Preview and approval
 
-Before any write operation, present:
+Build a preview of planned operations:
 
 - Component UIDs planned for create/update.
 - Page target and locale.
-- Mapping summary:
-  - `mapped`
-  - `best_effort_mapped`
-  - `skipped`
-  - `invalid`
-  - `requires_manual_followup`
+- Mapping summary: `mapped`, `best_effort_mapped`, `skipped`, `invalid`, `requires_manual_followup`.
 - Media URLs to upload.
 - Relations to resolve/create.
 
-If `caller_authorized` is `true`, log the preview summary but **skip the approval prompt** — the calling skill has already obtained user intent. Proceed directly to Step 7.
+**Autonomous mode**: Log the preview summary and proceed immediately to Step 7. Do NOT use `AskUserQuestion`.
 
-Otherwise, wait for explicit user approval.
+**Interactive mode**: Present the preview and wait for explicit user approval before continuing.
 
 ### Step 7: Resolve media
 
@@ -224,10 +239,8 @@ GET /api/pages?locale=<locale>&filters[fullPath][$eq]=<targetFullPath>
 ```
 
 2. If page exists:
-   - Ask user to choose:
-     - `replace` existing dynamic zone content
-     - `append` new components
-     - `cancel`
+   - **Autonomous mode**: default to `append` — add new components to existing content without prompting.
+   - **Interactive mode**: ask user to choose: `replace`, `append`, or `cancel`.
 3. If page does not exist:
    - Derive `slug` from target path.
    - Resolve parent page from `parentFullPath` or derived parent path (same locale).

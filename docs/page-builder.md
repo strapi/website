@@ -11,7 +11,7 @@ The page builder enables content editors to compose pages from reusable componen
 │  │ Page (api::page.page)        │ │ Header       │ │ Footer       │       │
 │  │  └─ content: dynamiczone     │ │ (single type)│ │ (single type)│       │
 │  │       ├─ sections.*          │ │  └─ content:  │ │  └─ content:  │       │
-│  │       ├─ forms.*             │ │    navigation.│ │    footer.*   │       │
+│  │       ├─ blog.*              │ │    navigation.│ │    footer.*   │       │
 │  │       └─ plans.*             │ │    navbar     │ │               │       │
 │  └──────────────────────────────┘ └──────────────┘ └──────────────┘       │
 │                                    │                                        │
@@ -52,7 +52,7 @@ export const ContentComponents: Partial<
 > = {
   // Page sections/forms/plans
   "sections.section-header": StrapiSectionHeader,
-  "forms.newsletter-form": StrapiNewsletterForm,
+  "forms.newsletter": StrapiNewsletter,
   "plans.plan-pricing-cards": StrapiPlanPricingCards,
 
   // Footer
@@ -70,14 +70,14 @@ This single registry serves all three dynamic zones (page, header, footer). `Dyn
 
 | Element               | Pattern                                    | Example                                                                             |
 | --------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------- |
-| Strapi UID            | `category.kebab-case`                      | `forms.newsletter-form`                                                             |
-| Strapi schema file    | `{name}.json`                              | `apps/strapi/src/components/forms/newsletter-form.json`                             |
-| Strapi collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter_form`                                                  |
-| React component       | `Strapi{PascalCase}`                       | `StrapiNewsletterForm`                                                              |
-| React file (page)     | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/forms/StrapiNewsletterForm.tsx`     |
+| Strapi UID            | `category.kebab-case`                      | `forms.newsletter`                                                                  |
+| Strapi schema file    | `{name}.json`                              | `apps/strapi/src/components/forms/newsletter.json`                                  |
+| Strapi collectionName | `components_{category}_{name_underscored}` | `components_forms_newsletter`                                                       |
+| React component       | `Strapi{PascalCase}`                       | `StrapiNewsletter`                                                                  |
+| React file (page)     | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/forms/StrapiNewsletter.tsx`         |
 | React file (footer)   | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/single-types/footer/StrapiFooterMain.tsx`      |
 | React file (header)   | `Strapi{PascalCase}.tsx`                   | `apps/ui/src/components/page-builder/components/navigation/navbar/StrapiNavbar.tsx` |
-| Populate config       | `{name}.ts`                                | `apps/strapi/src/populateDynamicZone/forms/newsletter-form.ts`                      |
+| Populate config       | `{name}.ts`                                | `apps/strapi/src/populateDynamicZone/forms/newsletter.ts`                           |
 
 ## Section Layout Pattern
 
@@ -123,10 +123,10 @@ import { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
 
-export function StrapiNewsletterForm({
+export function StrapiNewsletter({
   component,
 }: {
-  readonly component: Data.Component<"forms.newsletter-form">
+  readonly component: Data.Component<"forms.newsletter">
 }) {
   return (
     <section className="py-16 lg:py-24">
@@ -139,7 +139,7 @@ export function StrapiNewsletterForm({
 }
 ```
 
-The generic parameter is the Strapi component UID (e.g., `"forms.newsletter-form"`). This provides full type safety for all attributes defined in the component schema.
+The generic parameter is the Strapi component UID (e.g., `"forms.newsletter"`). This provides full type safety for all attributes defined in the component schema.
 
 **After changing Strapi schemas, regenerate types:**
 
@@ -160,7 +160,7 @@ The middleware reads populate configs from **`apps/strapi/src/populateDynamicZon
 ```
 populateDynamicZone/
   sections/how-it-works.ts   →  "sections.how-it-works"
-  forms/newsletter-form.ts   →  "forms.newsletter-form"
+  forms/newsletter.ts   →  "forms.newsletter"
   footer/footer-main.ts      →  "footer.footer-main"
   navigation/navbar.ts       →  "navigation.navbar"
   utilities/link.ts          →  "utilities.link"

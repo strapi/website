@@ -15,6 +15,42 @@ import { getEnvVar } from "@/lib/env-vars"
 
 export const revalidate = false
 
+function detectImageMimeFromBytes(bytes: Uint8Array): string | undefined {
+  const hasPrefix = (prefix: number[]) =>
+    prefix.every((value, index) => bytes[index] === value)
+
+  if (
+    bytes.length >= 8 &&
+    hasPrefix([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+  ) {
+    return "image/png"
+  }
+
+  if (bytes.length >= 3 && hasPrefix([0xff, 0xd8, 0xff])) {
+    return "image/jpeg"
+  }
+
+  if (bytes.length >= 4 && hasPrefix([0x47, 0x49, 0x46, 0x38])) {
+    return "image/gif"
+  }
+
+  if (
+    bytes.length >= 12 &&
+    bytes[0] === 0x52 &&
+    bytes[1] === 0x49 &&
+    bytes[2] === 0x46 &&
+    bytes[3] === 0x46 &&
+    bytes[8] === 0x57 &&
+    bytes[9] === 0x45 &&
+    bytes[10] === 0x42 &&
+    bytes[11] === 0x50
+  ) {
+    return "image/webp"
+  }
+
+  return undefined
+}
+
 async function handler(
   request: Request,
   { params }: { params: Promise<{ slug: string[] }> }
@@ -36,33 +72,32 @@ async function handler(
   }
 
   const strapiUrl = getEnvVar("STRAPI_URL", true)
-  const url = `${strapiUrl!}/${path}`
+  const { search } = new URL(request.url)
+  const url = `${strapiUrl!}/${path}${search ?? ""}`
+  const clonedRequest = request.clone()
 
-  const response = await fetch(url)
+  const { url: _, ...rest } = clonedRequest
+  const response = await fetch(url, {
+    ...rest,
+  })
 
-  /**
-   * Node fetch auto-decompresses the body but keeps the original
-   * Content-Encoding header, causing ERR_CONTENT_DECODING_FAILED in browsers.
-   * Build a clean response with only safe headers.
-   */
-  const headers = new Headers()
-  const contentType = response.headers.get("content-type")
-  const cacheControl = response.headers.get("cache-control")
-  const lastModified = response.headers.get("last-modified")
+  // Built-in fetch in Node.js may decompress response bodies, so drop stale encoding/length headers.
+  const headers = new Headers(response.headers)
+  headers.delete("content-encoding")
+  headers.delete("content-length")
 
-  if (contentType) {
-    headers.set("content-type", contentType)
+  // Some legacy uploads are stored as PNG/JPEG while their filename keeps .svg.
+  // Sniff those payloads and override MIME so browsers render them instead of parsing as XML.
+  if (path.toLowerCase().endsWith(".svg")) {
+    const clonedResponse = response.clone()
+    const buffer = await clonedResponse.arrayBuffer()
+    const detectedMime = detectImageMimeFromBytes(new Uint8Array(buffer))
+    if (detectedMime && detectedMime !== "image/svg+xml") {
+      headers.set("content-type", detectedMime)
+    }
   }
 
-  if (cacheControl) {
-    headers.set("cache-control", cacheControl)
-  }
-
-  if (lastModified) {
-    headers.set("last-modified", lastModified)
-  }
-
-  return new Response(response.body, {
+  return new NextResponse(response.body, {
     status: response.status,
     headers,
   })

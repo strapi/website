@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_sections_feature_card",
+  "info": {
+    "displayName": "FeatureCard",
+    "icon": "spark",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "imagePosition": {
+      "type": "enumeration",
+      "enum": ["left", "right"],
+      "default": "right"
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["plain", "bordered"],
+      "default": "plain"
+    },
+    "ctaLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.link"
+    }
+  }
+}

@@ -326,9 +326,26 @@ If utility-level:
 - Do not add a `ContentComponents` mapping.
 - Keep the component available for reuse by other components.
 
-### 7. Generate types and run quality gates
+### 7. Wait for schema registration (automatic)
 
-Run:
+**This step MUST run BEFORE type generation.** `generate:types` needs Strapi running with new schemas registered to produce correct types. Running it before restart produces stale types that cause cascading typecheck failures.
+
+Strapi dev server auto-restarts on file changes (chokidar watches `cwd`). After all schema files are written, force a reliable watcher trigger and poll for readiness:
+
+1. **Check Strapi is alive**: run `lsof -ti:1337`. If no process is listening, Strapi has crashed — ask the user to restart it manually and wait for confirmation.
+2. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher fires (belt-and-suspenders — `.json` changes should trigger it too, but `touch` ensures one final event after all writes complete).
+3. Wait 5 seconds for the restart cycle to begin (TS recompile + worker fork).
+4. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
+5. **On each poll failure**, re-check process health (`lsof -ti:1337`). If the process died during restart (e.g. TS compile error in populate config), report the crash immediately and ask the user to fix and restart — do not keep polling a dead process.
+6. Check if the newly created UID appears in the component list.
+7. **Found** → proceed to Step 7b.
+8. **Timeout (30s) with process still alive** → fall back to asking the user to restart Strapi manually. Wait for confirmation before proceeding.
+
+**Never skip this step** — writing unregistered `__component` UIDs corrupts dynamic zone data.
+
+### 7b. Generate types and run quality gates
+
+Run **after** Strapi has restarted and registered the new schemas:
 
 ```bash
 cd apps/strapi && pnpm generate:types
@@ -341,20 +358,7 @@ Optional when broader changes are made:
 pnpm lint
 ```
 
-### 8. Wait for schema registration (automatic)
-
-Strapi dev server auto-restarts on file changes (chokidar watches `cwd`). After all schema files are written, force a reliable watcher trigger and poll for readiness:
-
-1. Run `touch apps/strapi/src/index.ts` to guarantee the file watcher fires (belt-and-suspenders — `.json` changes should trigger it too, but `touch` ensures one final event after all writes complete).
-2. Wait 5 seconds for the restart cycle to begin (TS recompile + worker fork).
-3. Poll `strapi_get_components` via MCP every 5s, up to 6 attempts (30s total).
-4. Check if the newly created UID appears in the component list.
-5. **Found** → proceed to Step 8b.
-6. **Timeout (30s)** → fall back to asking the user to restart Strapi manually. Wait for confirmation before proceeding.
-
-**Never skip this step** — writing unregistered `__component` UIDs corrupts dynamic zone data.
-
-### 8b. Update component registry
+### 8. Update component registry
 
 Update `docs/component-registry.md` with newly created artifacts:
 
@@ -364,7 +368,32 @@ Update `docs/component-registry.md` with newly created artifacts:
 
 Skip silently if `docs/component-registry.md` doesn't exist.
 
-### 9. Report results
+### 9. Update component library page
+
+Add the new component to the dev component library at `apps/ui/src/app/[locale]/dev/component-library/page.tsx`. This page shows live examples of all components for visual reference during development.
+
+1. Read the current component library page file.
+2. **Import** the new React component at the top (keep imports grouped by category — page-builder components after elementary ones).
+3. **Add a TOC entry**: append `{ id: "{name}", label: "{DisplayName}" }` to the `TOC` array.
+4. **Create mock data**: define a const with example field values using `as Data.Component<"{category}.{name}">` (follow the `newsletterBannerDefaultExample` pattern already in the file).
+5. **Add a `<Section>` block** at the end (before the closing `</div>`):
+
+```tsx
+<Section id="{name}" title="{DisplayName}">
+  <div className="space-y-6">
+    <Variant label="Default">
+      <Strapi{PascalCaseName} component={mockDataConst} />
+    </Variant>
+  </div>
+</Section>
+```
+
+6. If the component has meaningful variants (e.g. with/without optional fields, different content lengths), add multiple `<Variant>` blocks with separate mock data.
+7. Use the `<Placeholder>` helper for image fields.
+
+Skip silently if the component library page file doesn't exist.
+
+### 10. Report results
 
 Report what was created, updated, reused, and any errors or manual follow-up needed.
 

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_sections_image_galleries",
+  "info": { "displayName": "Image Gallery", "icon": "picture" },
+  "options": {},
+  "attributes": {
+    "images": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": true,
+      "required": true
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["contained", "full-bleed"],
+      "default": "contained"
+    }
+  },
+  "pluginOptions": { "i18n": { "localized": true } }
+}

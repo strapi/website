@@ -528,6 +528,23 @@ export interface SectionsBrandLogoGrid extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsCaseStudyCard extends Struct.ComponentSchema {
+  collectionName: "components_sections_case_study_card"
+  info: {
+    description: ""
+    displayName: "CaseStudyCard"
+    icon: "star"
+  }
+  attributes: {
+    backgroundImage: Schema.Attribute.Component<"utilities.basic-image", false>
+    companyName: Schema.Attribute.String & Schema.Attribute.Required
+    ctaLink: Schema.Attribute.Component<"utilities.link-text", false> &
+      Schema.Attribute.Required
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    title: Schema.Attribute.Text & Schema.Attribute.Required
+  }
+}
+
 export interface SectionsContentCard extends Struct.ComponentSchema {
   collectionName: "components_sections_content_cards"
   info: {
@@ -627,6 +644,25 @@ export interface SectionsHowItWorks extends Struct.ComponentSchema {
           localized: true
         }
       }>
+  }
+}
+
+export interface SectionsImageGallery extends Struct.ComponentSchema {
+  collectionName: "components_sections_image_galleries"
+  info: {
+    displayName: "Image Gallery"
+    icon: "picture"
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    images: Schema.Attribute.Component<"utilities.basic-image", true> &
+      Schema.Attribute.Required
+    variant: Schema.Attribute.Enumeration<["contained", "full-bleed"]> &
+      Schema.Attribute.DefaultTo<"contained">
   }
 }
 
@@ -1063,10 +1099,12 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.brand-logo-grid": SectionsBrandLogoGrid
+      "sections.case-study-card": SectionsCaseStudyCard
       "sections.content-card": SectionsContentCard
       "sections.faq-section": SectionsFaqSection
       "sections.feature-card": SectionsFeatureCard
       "sections.how-it-works": SectionsHowItWorks
+      "sections.image-gallery": SectionsImageGallery
       "sections.integrations-section": SectionsIntegrationsSection
       "sections.quote": SectionsQuote
       "sections.section-header": SectionsSectionHeader

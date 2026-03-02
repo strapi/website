@@ -1,5 +1,6 @@
 import type React from "react"
 
+import { TriangleMask } from "@/components/elementary/TriangleMask"
 import { cn } from "@/lib/styles"
 
 export interface QuoteTriangleProps extends React.ComponentProps<"div"> {}
@@ -15,10 +16,9 @@ export function QuoteTriangle({
       className={cn("absolute top-0 left-0 aspect-square w-[389px]", className)}
       {...props}
     >
-      <div className="relative size-full [clip-path:polygon(100%_0,0_100%,0_0)]">
-        <div className="bg-strapi-blue-600 absolute inset-0" />
+      <TriangleMask position="top-left" fill="blue">
         {children}
-      </div>
+      </TriangleMask>
     </div>
   )
 }

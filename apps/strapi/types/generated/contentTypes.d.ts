@@ -575,6 +575,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "forms.newsletter",
         "sections.two-column-grid",
         "sections.content-card",
+        "sections.case-study-card",
+        "sections.image-gallery",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

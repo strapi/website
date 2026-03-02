@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-03-01T00:40
+> Auto-updated by skills. Last updated: 2026-03-02T18:45
 
 ## Registry Freshness Policy
 
@@ -37,6 +37,8 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `sections.two-column-grid`              | sections      | TwoColumnGrid               | section:utilities.section-header (req), items:repeatable elements.how-it-works-item, background:enumeration(none\|light\|gradient, default:none)                                                                                                                                                                |
 | `sections.two-columns-benefits`         | sections      | TwoColumnsBenefits          | section:utilities.section-header (req), items:repeatable elements.how-it-works-item                                                                                                                                                                                                                             |
 | `sections.content-card`                 | sections      | ContentCard                 | label:string (opt), title:string (req), content:richtext (req)                                                                                                                                                                                                                                                  |
+| `sections.case-study-card`              | sections      | CaseStudyCard               | companyName:string (req), title:text (req), image:utilities.basic-image (opt), ctaLink:utilities.link-text (req), backgroundImage:utilities.basic-image (opt)                                                                                                                                                   |
+| `sections.image-gallery`                | sections      | Image Gallery               | images:repeatable utilities.basic-image (req), variant:enumeration(contained\|full-bleed, default:contained)                                                                                                                                                                                                    |
 | `forms.newsletter`                      | forms         | Newsletter                  | title:string (req), description:text (opt), emailPlaceholder:string (opt), submitLabel:string (opt), consentText:text (opt)                                                                                                                                                                                     |
 | `elements.brand-logo-grid-item`         | elements      | BrandLogoGridItem           | image:utilities.basic-image (req), href:string (opt), newTab:boolean (default:false), tooltip:utilities.tooltip (opt)                                                                                                                                                                                           |
 | `elements.how-it-works-item`            | elements      | How It Works Item           | icon:utilities.basic-image (opt), title:string (req), description:string (req)                                                                                                                                                                                                                                  |
@@ -133,6 +135,8 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `forms.newsletter`              | StrapiNewsletter          | `page-builder/components/forms/StrapiNewsletter`                              | Page         |
 | `sections.quote`                | StrapiQuote               | `page-builder/components/sections/StrapiQuote`                                | Page         |
 | `sections.section-header`       | StrapiSectionHeader       | `page-builder/components/sections/StrapiSectionHeader`                        | Page         |
+| `sections.case-study-card`      | StrapiCaseStudyCard       | `page-builder/components/sections/StrapiCaseStudyCard`                        | Page         |
+| `sections.image-gallery`        | StrapiImageGallery        | `page-builder/components/sections/StrapiImageGallery`                         | Page         |
 | `sections.content-card`         | StrapiContentCard         | `page-builder/components/sections/StrapiContentCard`                          | Page         |
 | `sections.user-stories-section` | StrapiUserStoriesSection  | `page-builder/components/sections/StrapiUserStoriesSection`                   | Page         |
 | `blog.author-banner`            | StrapiAuthorBanner        | `page-builder/components/sections/StrapiAuthorBanner`                         | Page         |

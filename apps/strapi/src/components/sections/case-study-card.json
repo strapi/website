@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_sections_case_study_card",
+  "info": {
+    "displayName": "CaseStudyCard",
+    "icon": "star",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "companyName": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "required": true
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "ctaLink": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.link-text",
+      "required": true
+    },
+    "backgroundImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    }
+  }
+}

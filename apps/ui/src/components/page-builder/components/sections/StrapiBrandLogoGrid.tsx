@@ -32,6 +32,7 @@ function LogoImage({
           : "size-full"
       )}
       autoHeight
+      hideWhenMissing
     />
   )
 }

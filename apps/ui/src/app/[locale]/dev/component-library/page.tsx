@@ -29,13 +29,16 @@ import {
 } from "@/components/elementary/section-header"
 import { Spinner } from "@/components/elementary/Spinner"
 import { Tooltip } from "@/components/elementary/Tooltip"
-import { StrapiNewsletter } from "@/components/page-builder/components/forms/StrapiNewsletter"
+import { TriangleMask } from "@/components/elementary/TriangleMask"
+import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/sections/StrapiBrandLogoGrid"
+import { StrapiCaseStudyCard } from "@/components/page-builder/components/sections/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/sections/StrapiContentCard"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiImageGallery } from "@/components/page-builder/components/sections/StrapiImageGallery"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
@@ -47,6 +50,27 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
+
+// ---------------------------------------------------------------------------
+// Mock image helpers
+// ---------------------------------------------------------------------------
+
+const PLACEHOLDER_IMG = "https://picsum.photos/seed/strapi/800/600"
+const PLACEHOLDER_AVATAR = "https://picsum.photos/seed/avatar/200/200"
+const PLACEHOLDER_LOGO = "/images/logo/strapi-monogram-logo.svg"
+
+function mockBasicImage(
+  fallbackSrc = PLACEHOLDER_IMG,
+  alt = "Placeholder",
+  size?: { width: number; height: number }
+) {
+  return {
+    media: null,
+    alt,
+    fallbackSrc,
+    ...size,
+  } as Data.Component<"utilities.basic-image">
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -126,12 +150,15 @@ const TOC = [
   { id: "top-banner", label: "TopBanner" },
   { id: "content-card", label: "ContentCard" },
   { id: "box", label: "Box" },
+  { id: "triangle-mask", label: "TriangleMask" },
   { id: "faq-section", label: "FaqSection" },
   { id: "how-it-works", label: "HowItWorks" },
   { id: "author-banner", label: "AuthorBanner" },
   { id: "integrations-section", label: "IntegrationsSection" },
   { id: "user-stories-section", label: "UserStoriesSection" },
   { id: "brand-logo-grid", label: "BrandLogoGrid" },
+  { id: "case-study-card", label: "CaseStudyCard" },
+  { id: "image-gallery", label: "ImageGallery" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -313,6 +340,7 @@ const authorBannerDefaultExample = {
   authorBio:
     "Pierre is the CEO and co-founder of Strapi, the leading open-source headless CMS. He is passionate about open source, developer experience, and building products that empower creators.",
   authorUrl: "https://strapi.io",
+  authorAvatar: mockBasicImage(PLACEHOLDER_AVATAR, "Pierre Burgy"),
 } as Data.Component<"blog.author-banner">
 
 const authorBannerMinimalExample = {
@@ -330,28 +358,80 @@ const userStoriesSectionDefaultExample = {
   heading: "See what others are building with Strapi",
 } as Data.Component<"sections.user-stories-section">
 
+const LOGO_SIZE = { width: 90, height: 45 }
+
 const brandLogoGridPlainExample = {
   title: "Trusted by",
   variant: "plain",
   items: [
-    { id: 1, image: null },
-    { id: 2, image: null },
-    { id: 3, image: null },
-    { id: 4, image: null },
-    { id: 5, image: null },
+    { id: 1, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 1", LOGO_SIZE) },
+    { id: 2, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 2", LOGO_SIZE) },
+    { id: 3, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 3", LOGO_SIZE) },
+    { id: 4, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 4", LOGO_SIZE) },
+    { id: 5, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 5", LOGO_SIZE) },
   ],
 } as Data.Component<"sections.brand-logo-grid">
+
+const LOGO_SIZE_BORDERED = { width: 60, height: 60 }
 
 const brandLogoGridBorderedExample = {
   title: "Our Partners",
   variant: "bordered",
   items: [
-    { id: 1, image: null },
-    { id: 2, image: null },
-    { id: 3, image: null },
-    { id: 4, image: null },
+    {
+      id: 1,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 1", LOGO_SIZE_BORDERED),
+      tooltip: { content: "Strapi — Open-source headless CMS" },
+    },
+    {
+      id: 2,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 2", LOGO_SIZE_BORDERED),
+      tooltip: { content: "Vercel — Frontend cloud platform" },
+    },
+    {
+      id: 3,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 3", LOGO_SIZE_BORDERED),
+    },
+    {
+      id: 4,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 4", LOGO_SIZE_BORDERED),
+    },
   ],
 } as Data.Component<"sections.brand-logo-grid">
+
+const caseStudyCardDefaultExample = {
+  companyName: "Tesco",
+  title:
+    "Tesco rationalizes application portfolio, shortens release cycles and streamlines communication across 24 channels with Strapi",
+  image: mockBasicImage(PLACEHOLDER_LOGO, "Tesco logo"),
+  backgroundImage: mockBasicImage(PLACEHOLDER_IMG, "Background decoration"),
+  ctaLink: {
+    type: "external",
+    label: "Read their story",
+    href: "/user-stories/tesco",
+    newTab: false,
+  },
+} as unknown as Data.Component<"sections.case-study-card">
+
+const imageGalleryDefaultExample = {
+  images: Array.from({ length: 8 }, (_, i) => ({
+    id: i + 1,
+    media: null,
+    alt: `Gallery image ${i + 1}`,
+    fallbackSrc: `https://picsum.photos/seed/gallery${i + 1}/800/600`,
+  })),
+  variant: "contained",
+} as unknown as Data.Component<"sections.image-gallery">
+
+const imageGalleryFullBleedExample = {
+  images: Array.from({ length: 6 }, (_, i) => ({
+    id: i + 10,
+    media: null,
+    alt: `Full bleed image ${i + 1}`,
+    fallbackSrc: `https://picsum.photos/seed/fullbleed${i + 1}/800/600`,
+  })),
+  variant: "full-bleed",
+} as unknown as Data.Component<"sections.image-gallery">
 
 // ---------------------------------------------------------------------------
 // Page
@@ -1111,6 +1191,136 @@ export default function ComponentLibraryPage() {
       </Section>
 
       {/* ----------------------------------------------------------------- */}
+      {/* TriangleMask                                                      */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="triangle-mask" title="TriangleMask">
+        <div className="space-y-6">
+          <Variant label="All positions (fill=blue)">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(
+                [
+                  "top-left",
+                  "top-right",
+                  "bottom-left",
+                  "bottom-right",
+                ] as const
+              ).map((position) => (
+                <div key={position} className="aspect-square w-full">
+                  <TriangleMask position={position} fill="blue">
+                    <div className="flex size-full items-center justify-center text-xs font-medium text-white">
+                      {position}
+                    </div>
+                  </TriangleMask>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="All fill colors (position=top-left)">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(["none", "blue", "green", "purple"] as const).map((fill) => (
+                <div
+                  key={fill}
+                  className="bg-strapi-neutral-100 aspect-square w-full"
+                >
+                  <TriangleMask position="top-left" fill={fill}>
+                    <div
+                      className={`flex size-full items-center justify-center text-xs font-medium ${
+                        fill === "none"
+                          ? "text-strapi-neutral-500"
+                          : "text-white"
+                      }`}
+                    >
+                      {fill}
+                    </div>
+                  </TriangleMask>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="With image content">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(
+                [
+                  "top-left",
+                  "top-right",
+                  "bottom-left",
+                  "bottom-right",
+                ] as const
+              ).map((position) => (
+                <div key={position} className="aspect-square w-full">
+                  <TriangleMask position={position}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://picsum.photos/seed/triangle/400/400"
+                      alt={`Triangle mask ${position}`}
+                      className="size-full object-cover"
+                    />
+                  </TriangleMask>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="Custom sizes (non-square)">
+            <div className="flex flex-wrap items-end gap-4">
+              <div className="h-32 w-48">
+                <TriangleMask position="top-right" fill="purple">
+                  <div className="flex size-full items-center justify-center text-xs text-white">
+                    48 x 32
+                  </div>
+                </TriangleMask>
+              </div>
+
+              <div className="h-48 w-32">
+                <TriangleMask position="bottom-left" fill="green">
+                  <div className="flex size-full items-center justify-center text-xs text-white">
+                    32 x 48
+                  </div>
+                </TriangleMask>
+              </div>
+
+              <div className="h-24 w-64">
+                <TriangleMask position="top-left" fill="dark">
+                  <div className="flex size-full items-center justify-center text-xs text-white">
+                    64 x 24
+                  </div>
+                </TriangleMask>
+              </div>
+
+              <div className="size-16">
+                <TriangleMask position="bottom-right" fill="blue">
+                  <div className="flex size-full items-center justify-center text-[10px] text-white">
+                    16
+                  </div>
+                </TriangleMask>
+              </div>
+            </div>
+          </Variant>
+
+          <Variant label="Layered triangle masks (background + offset overlay)">
+            <div className="relative size-120">
+              <TriangleMask position="bottom-left" fill="blue">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://picsum.photos/seed/layered/600/600"
+                  alt="Triangle mask bottom-left"
+                  className="size-full object-cover"
+                />
+              </TriangleMask>
+
+              <div className="absolute bottom-[150px] left-[150px] size-80">
+                <TriangleMask position="bottom-left" fill="green">
+                  <div className="size-full" />
+                </TriangleMask>
+              </div>
+            </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
       {/* FaqSection                                                        */}
       {/* ----------------------------------------------------------------- */}
       <Section id="faq-section" title="FaqSection">
@@ -1184,6 +1394,32 @@ export default function ComponentLibraryPage() {
 
           <Variant label='variant="bordered" (logos with border boxes)'>
             <StrapiBrandLogoGrid component={brandLogoGridBorderedExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* CaseStudyCard                                                     */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="case-study-card" title="CaseStudyCard">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (clickable card with CTA)">
+            <StrapiCaseStudyCard component={caseStudyCardDefaultExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* ImageGallery                                                      */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="image-gallery" title="ImageGallery">
+        <div className="-mx-6 space-y-10">
+          <Variant label='variant="contained" (8 images, alternating 7/5 grid)'>
+            <StrapiImageGallery component={imageGalleryDefaultExample} />
+          </Variant>
+
+          <Variant label='variant="full-bleed" (6 images, edge-to-edge)'>
+            <StrapiImageGallery component={imageGalleryFullBleedExample} />
           </Variant>
         </div>
       </Section>

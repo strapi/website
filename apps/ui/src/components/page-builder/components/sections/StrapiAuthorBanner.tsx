@@ -70,7 +70,3 @@ export function StrapiAuthorBanner({
     </section>
   )
 }
-
-StrapiAuthorBanner.displayName = "StrapiAuthorBanner"
-
-export default StrapiAuthorBanner

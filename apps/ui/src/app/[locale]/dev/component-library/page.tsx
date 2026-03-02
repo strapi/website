@@ -1,6 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 
 import { AppLink } from "@/components/elementary/AppLink"
+import { Box } from "@/components/elementary/box/Box"
 import { CommandCTA } from "@/components/elementary/command-cta/CommandCTA"
 import {
   FeatureCard,
@@ -28,8 +29,20 @@ import {
 } from "@/components/elementary/section-header"
 import { Spinner } from "@/components/elementary/Spinner"
 import { Tooltip } from "@/components/elementary/Tooltip"
-import { StrapiNewsletter } from "@/components/page-builder/components/forms/StrapiNewsletter"
+import { TriangleMask } from "@/components/elementary/TriangleMask"
+import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
+import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
+import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
+import { StrapiBrandLogoGrid } from "@/components/page-builder/components/sections/StrapiBrandLogoGrid"
+import { StrapiCaseStudyCard } from "@/components/page-builder/components/sections/StrapiCaseStudyCard"
+import { StrapiContentCard } from "@/components/page-builder/components/sections/StrapiContentCard"
+import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
+import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiImageGallery } from "@/components/page-builder/components/sections/StrapiImageGallery"
+import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
+import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
+import { StrapiUserStoriesSection } from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
 import {
   Accordion,
   AccordionContent,
@@ -37,6 +50,27 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
+
+// ---------------------------------------------------------------------------
+// Mock image helpers
+// ---------------------------------------------------------------------------
+
+const PLACEHOLDER_IMG = "https://picsum.photos/seed/strapi/800/600"
+const PLACEHOLDER_AVATAR = "https://picsum.photos/seed/avatar/200/200"
+const PLACEHOLDER_LOGO = "/images/logo/strapi-monogram-logo.svg"
+
+function mockBasicImage(
+  fallbackSrc = PLACEHOLDER_IMG,
+  alt = "Placeholder",
+  size?: { width: number; height: number }
+) {
+  return {
+    media: null,
+    alt,
+    fallbackSrc,
+    ...size,
+  } as Data.Component<"utilities.basic-image">
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -112,6 +146,19 @@ const TOC = [
   { id: "newsletter-banner", label: "NewsletterBanner" },
   { id: "command-cta", label: "CommandCTA" },
   { id: "two-columns-benefits", label: "TwoColumnsBenefits" },
+  { id: "two-column-grid", label: "TwoColumnGrid" },
+  { id: "top-banner", label: "TopBanner" },
+  { id: "content-card", label: "ContentCard" },
+  { id: "box", label: "Box" },
+  { id: "triangle-mask", label: "TriangleMask" },
+  { id: "faq-section", label: "FaqSection" },
+  { id: "how-it-works", label: "HowItWorks" },
+  { id: "author-banner", label: "AuthorBanner" },
+  { id: "integrations-section", label: "IntegrationsSection" },
+  { id: "user-stories-section", label: "UserStoriesSection" },
+  { id: "brand-logo-grid", label: "BrandLogoGrid" },
+  { id: "case-study-card", label: "CaseStudyCard" },
+  { id: "image-gallery", label: "ImageGallery" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -155,6 +202,54 @@ const twoColumnsBenefitsExample = {
   ],
 } as Data.Component<"sections.two-columns-benefits">
 
+const twoColumnGridDefaultExample = {
+  section: {
+    title: "Everything you need for product management",
+    description:
+      "From basic catalog management to complex multi-variant products, Strapi adapts to your product complexity while maintaining performance.",
+    variant: "default",
+    size: "default",
+    layout: "center",
+  },
+  items: [
+    {
+      id: 1,
+      title: "Flexible product modeling",
+      description:
+        "Design product structures that mirror your business logic with unlimited custom fields and relationship types.",
+    },
+    {
+      id: 2,
+      title: "Digital asset management",
+      description:
+        "Organize and distribute product images, videos, and documents with automated optimization and CDN delivery.",
+    },
+    {
+      id: 3,
+      title: "Bulk import & export",
+      description:
+        "Migrate existing catalogs seamlessly and maintain data synchronization with external systems.",
+    },
+    {
+      id: 4,
+      title: "Multi-language support",
+      description:
+        "Manage product information in multiple languages and locales with translation workflows.",
+    },
+  ],
+  background: "none",
+} as Data.Component<"sections.two-column-grid">
+
+const twoColumnGridGradientExample = {
+  ...twoColumnGridDefaultExample,
+  background: "gradient",
+} as Data.Component<"sections.two-column-grid">
+
+const twoColumnGridLightExample = {
+  ...twoColumnGridDefaultExample,
+  background: "light",
+} as Data.Component<"sections.two-column-grid">
+
 const newsletterBannerShortExample = {
   title: "Stay in the loop",
   description: "Weekly product updates for developers and content teams.",
@@ -162,6 +257,181 @@ const newsletterBannerShortExample = {
   submitLabel: "Join now",
   consentText: "No spam. Unsubscribe any time.",
 } as Data.Component<"forms.newsletter">
+
+const topBannerDefaultExample = {
+  content:
+    "We just launched [Fimo.ai](https://fimo.ai/) - an AI Website Builder to create websites in minutes - [Try it now](https://fimo.ai/)",
+} as Data.Component<"navigation.top-banner">
+
+const topBannerShortExample = {
+  content:
+    "New feature available! Check out our [latest release](https://strapi.io)",
+} as Data.Component<"navigation.top-banner">
+
+const contentCardDefaultExample = {
+  label: "Strapi vs ButterCMS",
+  title: "Architecture & Hosting Flexibility",
+  content:
+    "Let's examine how these platforms differ in deployment options, infrastructure control, and scaling approaches – key factors that impact your team's operational autonomy and compliance requirements.\n\n| Feature | ButterCMS | Strapi |\n|---|---|---|\n| **Deployment Options** | Managed SaaS only | Self-hosted, cloud, on-premises |\n| **Infrastructure Control** | None (fully managed) | Complete control over hosting environment |\n| **Data Ownership** | Hosted on ButterCMS servers | Full data ownership and control |",
+} as Data.Component<"sections.content-card">
+
+const contentCardNoLabelExample = {
+  title: "What is Strapi?",
+  content:
+    "Strapi is an open-source, headless CMS built on Node.js that gives developers complete control over their content architecture and deployment environment. It supports both **REST and GraphQL APIs** out of the box.\n\n- Fully customizable content types\n- Role-based access control\n- Plugin ecosystem for extensibility\n- Self-hosted or managed cloud deployment",
+} as Data.Component<"sections.content-card">
+
+const faqSectionDefaultExample = {
+  sectionLabel: "FAQ",
+  heading: "Frequently Asked Questions",
+  description:
+    "Find answers to common questions about Strapi, our pricing, and how to get started.",
+  items: [
+    {
+      id: 1,
+      question: "What is Strapi?",
+      answer:
+        "Strapi is the leading open-source headless CMS. It's 100% JavaScript/TypeScript and fully customizable. It allows you to manage content and distribute it anywhere via APIs.",
+    },
+    {
+      id: 2,
+      question: "Is Strapi free to use?",
+      answer:
+        "Strapi offers a free Community Edition with all the core features. Enterprise plans are available for teams that need additional features like SSO, audit logs, and premium support.",
+    },
+    {
+      id: 3,
+      question: "Can I use Strapi with any frontend framework?",
+      answer:
+        "Yes! Strapi provides both REST and GraphQL APIs, so it works with any frontend — React, Vue, Angular, Next.js, Nuxt, Svelte, or even mobile apps.",
+    },
+  ],
+} as Data.Component<"sections.faq-section">
+
+const howItWorksDefaultExample = {
+  heading: "How It Works",
+  description:
+    "Get started with Strapi in three simple steps and launch your content-powered application.",
+  items: [
+    {
+      id: 1,
+      title: "Design your content structure",
+      description:
+        "Use the Content-Type Builder to create custom content models with fields, relations, and components — no code required.",
+    },
+    {
+      id: 2,
+      title: "Add and manage content",
+      description:
+        "Invite your team to collaborate on content using the intuitive admin panel with role-based access control.",
+    },
+    {
+      id: 3,
+      title: "Deliver everywhere",
+      description:
+        "Consume your content via auto-generated REST or GraphQL APIs and deliver it to any frontend, mobile app, or IoT device.",
+    },
+  ],
+} as Data.Component<"sections.how-it-works">
+
+const authorBannerDefaultExample = {
+  authorName: "Pierre Burgy",
+  authorRole: "CEO & Co-founder",
+  authorBio:
+    "Pierre is the CEO and co-founder of Strapi, the leading open-source headless CMS. He is passionate about open source, developer experience, and building products that empower creators.",
+  authorUrl: "https://strapi.io",
+  authorAvatar: mockBasicImage(PLACEHOLDER_AVATAR, "Pierre Burgy"),
+} as Data.Component<"blog.author-banner">
+
+const authorBannerMinimalExample = {
+  authorName: "Jane Doe",
+  authorRole: "Guest Author",
+} as Data.Component<"blog.author-banner">
+
+const integrationsSectionDefaultExample = {
+  label: "Integrations",
+  heading: "Works with your favorite tools",
+} as Data.Component<"sections.integrations-section">
+
+const userStoriesSectionDefaultExample = {
+  label: "User Stories",
+  heading: "See what others are building with Strapi",
+} as Data.Component<"sections.user-stories-section">
+
+const LOGO_SIZE = { width: 90, height: 45 }
+
+const brandLogoGridPlainExample = {
+  title: "Trusted by",
+  variant: "plain",
+  items: [
+    { id: 1, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 1", LOGO_SIZE) },
+    { id: 2, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 2", LOGO_SIZE) },
+    { id: 3, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 3", LOGO_SIZE) },
+    { id: 4, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 4", LOGO_SIZE) },
+    { id: 5, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 5", LOGO_SIZE) },
+  ],
+} as Data.Component<"sections.brand-logo-grid">
+
+const LOGO_SIZE_BORDERED = { width: 60, height: 60 }
+
+const brandLogoGridBorderedExample = {
+  title: "Our Partners",
+  variant: "bordered",
+  items: [
+    {
+      id: 1,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 1", LOGO_SIZE_BORDERED),
+      tooltip: { content: "Strapi — Open-source headless CMS" },
+    },
+    {
+      id: 2,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 2", LOGO_SIZE_BORDERED),
+      tooltip: { content: "Vercel — Frontend cloud platform" },
+    },
+    {
+      id: 3,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 3", LOGO_SIZE_BORDERED),
+    },
+    {
+      id: 4,
+      image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 4", LOGO_SIZE_BORDERED),
+    },
+  ],
+} as Data.Component<"sections.brand-logo-grid">
+
+const caseStudyCardDefaultExample = {
+  companyName: "Tesco",
+  title:
+    "Tesco rationalizes application portfolio, shortens release cycles and streamlines communication across 24 channels with Strapi",
+  image: mockBasicImage(PLACEHOLDER_LOGO, "Tesco logo"),
+  backgroundImage: mockBasicImage(PLACEHOLDER_IMG, "Background decoration"),
+  ctaLink: {
+    type: "external",
+    label: "Read their story",
+    href: "/user-stories/tesco",
+    newTab: false,
+  },
+} as unknown as Data.Component<"sections.case-study-card">
+
+const imageGalleryDefaultExample = {
+  images: Array.from({ length: 8 }, (_, i) => ({
+    id: i + 1,
+    media: null,
+    alt: `Gallery image ${i + 1}`,
+    fallbackSrc: `https://picsum.photos/seed/gallery${i + 1}/800/600`,
+  })),
+  variant: "contained",
+} as unknown as Data.Component<"sections.image-gallery">
+
+const imageGalleryFullBleedExample = {
+  images: Array.from({ length: 6 }, (_, i) => ({
+    id: i + 10,
+    media: null,
+    alt: `Full bleed image ${i + 1}`,
+    fallbackSrc: `https://picsum.photos/seed/fullbleed${i + 1}/800/600`,
+  })),
+  variant: "full-bleed",
+} as unknown as Data.Component<"sections.image-gallery">
 
 // ---------------------------------------------------------------------------
 // Page
@@ -632,17 +902,41 @@ export default function ComponentLibraryPage() {
             </div>
           </Variant>
 
-          <Variant label="FeatureCardTitle variants: default / inverse / muted">
+          <Variant label="Size variants: sm / default / lg">
+            <div className="space-y-8">
+              {(["sm", "default", "lg"] as const).map((size) => (
+                <div
+                  key={size}
+                  className="border-strapi-neutral-200 rounded-lg border p-6"
+                >
+                  <p className="text-strapi-neutral-500 mb-4 font-mono text-xs">
+                    size=&quot;{size}&quot;
+                  </p>
+                  <FeatureCard variant="bordered" layout="stacked" size={size}>
+                    <FeatureCardContent size={size}>
+                      <FeatureCardTitle size={size}>
+                        Feature Card at size {size}
+                      </FeatureCardTitle>
+                      <FeatureCardDescription size={size}>
+                        Description text scales with the size variant. Supports
+                        **markdown** formatting.
+                      </FeatureCardDescription>
+                      <FeatureCardCTA spacing={size}>
+                        <Button>Primary</Button>
+                        <Button variant="outline">Secondary</Button>
+                      </FeatureCardCTA>
+                    </FeatureCardContent>
+                  </FeatureCard>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="FeatureCardTitle (uses Typography header3)">
             <div className="space-y-4">
-              <FeatureCardTitle variant="default">
-                Default title
-              </FeatureCardTitle>
-              <div className="bg-strapi-blue-800 rounded px-4 py-2">
-                <FeatureCardTitle variant="inverse">
-                  Inverse title
-                </FeatureCardTitle>
-              </div>
-              <FeatureCardTitle variant="muted">Muted title</FeatureCardTitle>
+              <FeatureCardTitle>Default title</FeatureCardTitle>
+              <FeatureCardTitle as="h2">As h2</FeatureCardTitle>
+              <FeatureCardTitle as="h4">As h4</FeatureCardTitle>
             </div>
           </Variant>
         </div>
@@ -775,6 +1069,55 @@ export default function ComponentLibraryPage() {
       </Section>
 
       {/* ----------------------------------------------------------------- */}
+      {/* TwoColumnGrid                                                     */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="two-column-grid" title="TwoColumnGrid">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (no background)">
+            <StrapiTwoColumnGrid component={twoColumnGridDefaultExample} />
+          </Variant>
+
+          <Variant label="Gradient background">
+            <StrapiTwoColumnGrid component={twoColumnGridGradientExample} />
+          </Variant>
+
+          <Variant label="Light background">
+            <StrapiTwoColumnGrid component={twoColumnGridLightExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* TopBanner                                                        */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="top-banner" title="TopBanner">
+        <div className="-mx-6 space-y-6">
+          <Variant label="Default (with markdown links)">
+            <StrapiTopBanner component={topBannerDefaultExample} />
+          </Variant>
+
+          <Variant label="Short content">
+            <StrapiTopBanner component={topBannerShortExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* ContentCard                                                       */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="content-card" title="ContentCard">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (with label, title, and rich markdown content)">
+            <StrapiContentCard component={contentCardDefaultExample} />
+          </Variant>
+
+          <Variant label="Without label">
+            <StrapiContentCard component={contentCardNoLabelExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
       {/* CommandCTA                                                    */}
       {/* ----------------------------------------------------------------- */}
       <Section id="command-cta" title="CommandCTA">
@@ -807,6 +1150,276 @@ export default function ComponentLibraryPage() {
                 description="Check out our latest article on building headless CMS applications with Strapi and Next.js."
               />
             </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Box                                                               */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="box" title="Box">
+        <div className="space-y-6">
+          <Variant label="All variants">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+              {(
+                [
+                  "none",
+                  "light",
+                  "dark",
+                  "darker",
+                  "green",
+                  "gradient",
+                ] as const
+              ).map((variant) => (
+                <Box key={variant} variant={variant} className="rounded-lg p-8">
+                  <p
+                    className={`relative z-10 text-center text-sm font-medium ${
+                      variant === "dark" ||
+                      variant === "darker" ||
+                      variant === "green"
+                        ? "text-white"
+                        : "text-strapi-neutral-800"
+                    }`}
+                  >
+                    {variant}
+                  </p>
+                </Box>
+              ))}
+            </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* TriangleMask                                                      */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="triangle-mask" title="TriangleMask">
+        <div className="space-y-6">
+          <Variant label="All positions (fill=blue)">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(
+                [
+                  "top-left",
+                  "top-right",
+                  "bottom-left",
+                  "bottom-right",
+                ] as const
+              ).map((position) => (
+                <div key={position} className="aspect-square w-full">
+                  <TriangleMask position={position} fill="blue">
+                    <div className="flex size-full items-center justify-center text-xs font-medium text-white">
+                      {position}
+                    </div>
+                  </TriangleMask>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="All fill colors (position=top-left)">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(["none", "blue", "green", "purple"] as const).map((fill) => (
+                <div
+                  key={fill}
+                  className="bg-strapi-neutral-100 aspect-square w-full"
+                >
+                  <TriangleMask position="top-left" fill={fill}>
+                    <div
+                      className={`flex size-full items-center justify-center text-xs font-medium ${
+                        fill === "none"
+                          ? "text-strapi-neutral-500"
+                          : "text-white"
+                      }`}
+                    >
+                      {fill}
+                    </div>
+                  </TriangleMask>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="With image content">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(
+                [
+                  "top-left",
+                  "top-right",
+                  "bottom-left",
+                  "bottom-right",
+                ] as const
+              ).map((position) => (
+                <div key={position} className="aspect-square w-full">
+                  <TriangleMask position={position}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="https://picsum.photos/seed/triangle/400/400"
+                      alt={`Triangle mask ${position}`}
+                      className="size-full object-cover"
+                    />
+                  </TriangleMask>
+                </div>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="Custom sizes (non-square)">
+            <div className="flex flex-wrap items-end gap-4">
+              <div className="h-32 w-48">
+                <TriangleMask position="top-right" fill="purple">
+                  <div className="flex size-full items-center justify-center text-xs text-white">
+                    48 x 32
+                  </div>
+                </TriangleMask>
+              </div>
+
+              <div className="h-48 w-32">
+                <TriangleMask position="bottom-left" fill="green">
+                  <div className="flex size-full items-center justify-center text-xs text-white">
+                    32 x 48
+                  </div>
+                </TriangleMask>
+              </div>
+
+              <div className="h-24 w-64">
+                <TriangleMask position="top-left" fill="dark">
+                  <div className="flex size-full items-center justify-center text-xs text-white">
+                    64 x 24
+                  </div>
+                </TriangleMask>
+              </div>
+
+              <div className="size-16">
+                <TriangleMask position="bottom-right" fill="blue">
+                  <div className="flex size-full items-center justify-center text-[10px] text-white">
+                    16
+                  </div>
+                </TriangleMask>
+              </div>
+            </div>
+          </Variant>
+
+          <Variant label="Layered triangle masks (background + offset overlay)">
+            <div className="relative size-120">
+              <TriangleMask position="bottom-left" fill="blue">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://picsum.photos/seed/layered/600/600"
+                  alt="Triangle mask bottom-left"
+                  className="size-full object-cover"
+                />
+              </TriangleMask>
+
+              <div className="absolute bottom-[150px] left-[150px] size-80">
+                <TriangleMask position="bottom-left" fill="green">
+                  <div className="size-full" />
+                </TriangleMask>
+              </div>
+            </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* FaqSection                                                        */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="faq-section" title="FaqSection">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (with label, heading, description, and 3 items)">
+            <StrapiFaqSection component={faqSectionDefaultExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* HowItWorks                                                        */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="how-it-works" title="HowItWorks">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (3 steps, no icons)">
+            <StrapiHowItWorks component={howItWorksDefaultExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* AuthorBanner                                                      */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="author-banner" title="AuthorBanner">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (name, role, bio, link — no avatar)">
+            <StrapiAuthorBanner component={authorBannerDefaultExample} />
+          </Variant>
+
+          <Variant label="Minimal (name and role only)">
+            <StrapiAuthorBanner component={authorBannerMinimalExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* IntegrationsSection                                               */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="integrations-section" title="IntegrationsSection">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (with built-in mock integrations)">
+            <StrapiIntegrationsSection
+              component={integrationsSectionDefaultExample}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* UserStoriesSection                                                */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="user-stories-section" title="UserStoriesSection">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (with built-in mock stories)">
+            <StrapiUserStoriesSection
+              component={userStoriesSectionDefaultExample}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* BrandLogoGrid                                                     */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="brand-logo-grid" title="BrandLogoGrid">
+        <div className="-mx-6 space-y-10">
+          <Variant label='variant="plain" (logos with opacity hover effect)'>
+            <StrapiBrandLogoGrid component={brandLogoGridPlainExample} />
+          </Variant>
+
+          <Variant label='variant="bordered" (logos with border boxes)'>
+            <StrapiBrandLogoGrid component={brandLogoGridBorderedExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* CaseStudyCard                                                     */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="case-study-card" title="CaseStudyCard">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (clickable card with CTA)">
+            <StrapiCaseStudyCard component={caseStudyCardDefaultExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* ImageGallery                                                      */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="image-gallery" title="ImageGallery">
+        <div className="-mx-6 space-y-10">
+          <Variant label='variant="contained" (8 images, alternating 7/5 grid)'>
+            <StrapiImageGallery component={imageGalleryDefaultExample} />
+          </Variant>
+
+          <Variant label='variant="full-bleed" (6 images, edge-to-edge)'>
+            <StrapiImageGallery component={imageGalleryFullBleedExample} />
           </Variant>
         </div>
       </Section>

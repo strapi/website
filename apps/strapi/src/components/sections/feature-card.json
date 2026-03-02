@@ -34,6 +34,11 @@
       "enum": ["plain", "bordered"],
       "default": "plain"
     },
+    "size": {
+      "type": "enumeration",
+      "enum": ["sm", "default", "lg"],
+      "default": "default"
+    },
     "ctaLinks": {
       "type": "component",
       "repeatable": true,

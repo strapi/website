@@ -14,7 +14,3 @@ export function StrapiQuote({
 
   return <BoxedQuote component={component} />
 }
-
-StrapiQuote.displayName = "StrapiQuote"
-
-export default StrapiQuote

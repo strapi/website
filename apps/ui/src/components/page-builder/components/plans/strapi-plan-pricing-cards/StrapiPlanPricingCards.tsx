@@ -1,11 +1,11 @@
 import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
-import { PricingCard } from "@/components/page-builder/components/plans/StrapiPlanPricingCards/PricingCard"
+import { PricingCard } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/PricingCard"
 import {
   PricingFeature,
   PricingFeatures,
-} from "@/components/page-builder/components/plans/StrapiPlanPricingCards/PricingFeatures"
+} from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/PricingFeatures"
 import { cn } from "@/lib/styles"
 
 import {

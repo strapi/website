@@ -1,0 +1,72 @@
+{
+  "collectionName": "components_sections_two_column_grid",
+  "info": {
+    "displayName": "TwoColumnGrid",
+    "icon": "dashboard",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "repeatable": false,
+      "required": true,
+      "component": "utilities.section-header",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.how-it-works-item",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "background": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "light",
+        "gradient"
+      ],
+      "default": "none",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "purple"
+      ],
+      "default": "default",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "lg"
+      ],
+      "default": "default",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ import type { Locale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 
 import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
-import { StrapiPreviewListener } from "@/components/elementary/StrapiPreviewListener"
+import { StrapiPreviewListener } from "@/components/elementary/strapi-preview-listener"
 import { TailwindIndicator } from "@/components/elementary/TailwindIndicator"
 import { StrapiFooter } from "@/components/page-builder/single-types/footer/StrapiFooter"
 import { StrapiHeader } from "@/components/page-builder/single-types/header/StrapiHeader"

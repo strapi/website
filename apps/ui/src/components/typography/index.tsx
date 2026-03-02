@@ -61,7 +61,7 @@ const defaultStyles: Record<TypographyTag, Variant> = {
   label: "label",
 }
 
-type Variant = keyof typeof variantStyles
+export type Variant = keyof typeof variantStyles
 type TextColor = keyof typeof textColorVariants
 type TypographyTag =
   | "h1"

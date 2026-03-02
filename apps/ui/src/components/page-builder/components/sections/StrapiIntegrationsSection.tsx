@@ -2,15 +2,14 @@
 
 import type { Data } from "@repo/strapi-types"
 
-import {
-  CardGridItem,
-  FilterableCardGrid,
-} from "@/components/elementary/card-grid"
+import { FilterableCardGrid } from "@/components/elementary/card-grid"
 import { Container } from "@/components/elementary/Container"
 import {
   SectionTitle,
   SectionLabel,
 } from "@/components/elementary/section-header"
+import { Typography } from "@/components/typography"
+import { Card, CardContent } from "@/components/ui/card"
 
 interface MockIntegration extends Record<string, unknown> {
   readonly name: string
@@ -122,17 +121,26 @@ export function StrapiIntegrationsSection({
           filters={INTEGRATIONS_FILTER}
           items={MOCK_INTEGRATIONS}
           renderItem={(item) => (
-            <CardGridItem
-              key={item.name}
-              logo={
+            <Card key={item.name}>
+              <CardContent>
                 <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md text-xs font-bold">
                   {item.name.slice(0, 2)}
                 </div>
-              }
-              title={item.name}
-              description={item.description}
-              variant="integration"
-            />
+
+                <Typography
+                  tag="h3"
+                  variant="body1"
+                  textColor="foreground"
+                  fontWeight="semiBold"
+                >
+                  {item.name}
+                </Typography>
+
+                <Typography tag="p" variant="smallText1" textColor="muted">
+                  {item.description}
+                </Typography>
+              </CardContent>
+            </Card>
           )}
           searchKey="name"
           searchPlaceholder="Search integrations..."

@@ -1,34 +1,27 @@
-import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
 import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
-import { cn } from "@/lib/styles"
+import {
+  Typography,
+  type Variant as TypographyVariant,
+} from "@/components/typography"
 
-export const featureCardDescriptionVariants = cva(
-  "text-base text-strapi-neutral-700 leading-relaxed",
-  {
-    variants: {
-      variant: {
-        default: "",
-        inverse: "text-strapi-neutral-300",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
+const sizeVariantMap: Record<"sm" | "default" | "lg", TypographyVariant> = {
+  sm: "smallText1",
+  default: "body2",
+  lg: "body1",
+}
 
-export interface FeatureCardDescriptionProps
-  extends
-    React.ComponentProps<"div">,
-    VariantProps<typeof featureCardDescriptionVariants> {}
+export interface FeatureCardDescriptionProps {
+  readonly size?: "sm" | "default" | "lg"
+  readonly className?: string
+  readonly children?: React.ReactNode
+}
 
 export function FeatureCardDescription({
-  variant,
+  size = "default",
   className,
   children,
-  ...props
 }: FeatureCardDescriptionProps) {
   if (children == null) {
     return null
@@ -42,12 +35,13 @@ export function FeatureCardDescription({
     )
 
   return (
-    <div
-      data-slot="feature-card-description"
-      className={cn(featureCardDescriptionVariants({ variant }), className)}
-      {...props}
+    <Typography
+      tag="p"
+      variant={sizeVariantMap[size]}
+      textColor="neutral"
+      className={className}
     >
       {content}
-    </div>
+    </Typography>
   )
 }

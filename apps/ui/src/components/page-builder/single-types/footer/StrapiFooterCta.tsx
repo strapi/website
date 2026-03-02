@@ -142,7 +142,3 @@ export function StrapiFooterCta({
     </section>
   )
 }
-
-StrapiFooterCta.displayName = "StrapiFooterCta"
-
-export default StrapiFooterCta

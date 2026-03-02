@@ -1,5 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
+import { Box } from "@/components/elementary/box/Box"
 import { Typography } from "@/components/typography"
 
 import { PricingFeature } from "./PricingFeatures"
@@ -17,7 +18,11 @@ export function PricingExtraBox({ data }: PricingExtraBoxProps) {
   }
 
   return (
-    <aside className="rounded-strapi-lg bg-strapi-blue-100 mt-15 flex flex-col gap-0 p-8">
+    <Box
+      variant="light"
+      className="rounded-strapi-lg mt-15 flex flex-col gap-0 p-8"
+      role="complementary"
+    >
       <Typography tag="p" variant="subtitle1" fontWeight="semiBold">
         {title}
       </Typography>
@@ -47,6 +52,6 @@ export function PricingExtraBox({ data }: PricingExtraBoxProps) {
           {link && <StrapiLink component={link} />}
         </div>
       )}
-    </aside>
+    </Box>
   )
 }

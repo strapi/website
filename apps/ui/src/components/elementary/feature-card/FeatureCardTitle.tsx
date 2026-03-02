@@ -1,65 +1,63 @@
-import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
-import { cn } from "@/lib/styles"
+import {
+  Typography,
+  type Variant as TypographyVariant,
+} from "@/components/typography"
 
-export const featureCardTitleVariants = cva(
-  "text-2xl font-bold tracking-tight leading-snug",
-  {
-    variants: {
-      variant: {
-        default: "text-foreground",
-        inverse: "text-background",
-        muted: "text-strapi-neutral-800",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
+const sizeVariantMap: Record<"sm" | "default" | "lg", TypographyVariant> = {
+  sm: "subtitle2",
+  default: "subtitle1",
+  lg: "header3",
+}
 
-export interface FeatureCardTitleProps
-  extends
-    React.ComponentProps<"div">,
-    VariantProps<typeof featureCardTitleVariants> {
+export interface FeatureCardTitleProps {
   readonly as?: "h2" | "h3" | "h4" | "h5" | "h6" | "p"
+  readonly size?: "sm" | "default" | "lg"
   readonly icon?: React.ReactNode
+  readonly className?: string
+  readonly children?: React.ReactNode
 }
 
 export function FeatureCardTitle({
-  as: Comp = "h3",
-  variant,
+  as = "h3",
+  size = "default",
   icon,
   className,
   children,
-  ...props
 }: FeatureCardTitleProps) {
   if (!children) {
     return null
   }
 
+  const variant = sizeVariantMap[size]
+
   if (icon) {
     return (
-      <div data-slot="feature-card-title" className="flex items-start gap-3">
-        <div className="mt-1 shrink-0">{icon}</div>
-        <Comp
-          className={cn(featureCardTitleVariants({ variant }), className)}
-          {...props}
+      <div data-slot="feature-card-title" className="flex items-center gap-3">
+        <div className="shrink-0">{icon}</div>
+        <Typography
+          tag={as}
+          variant={variant}
+          fontWeight="bold"
+          textColor="primary"
+          className={className}
         >
           {children}
-        </Comp>
+        </Typography>
       </div>
     )
   }
 
   return (
-    <Comp
-      data-slot="feature-card-title"
-      className={cn(featureCardTitleVariants({ variant }), className)}
-      {...props}
+    <Typography
+      tag={as}
+      variant={variant}
+      fontWeight="bold"
+      textColor="primary"
+      className={className}
     >
       {children}
-    </Comp>
+    </Typography>
   )
 }

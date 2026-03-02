@@ -18,7 +18,7 @@
   "attributes": {
     "content": {
       "type": "dynamiczone",
-      "components": ["navigation.navbar"]
+      "components": ["navigation.top-banner", "navigation.navbar"]
     }
   }
 }

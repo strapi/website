@@ -305,6 +305,18 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
   }
 }
 
+export interface NavigationTopBanner extends Struct.ComponentSchema {
+  collectionName: "components_navigation_top_banners"
+  info: {
+    description: "Dismissible purple banner displayed above the navbar"
+    displayName: "TopBanner"
+    icon: "bell"
+  }
+  attributes: {
+    content: Schema.Attribute.RichText
+  }
+}
+
 export interface PlansPlanComparisonTable extends Struct.ComponentSchema {
   collectionName: "components_plans_plan_comparison_tables"
   info: {
@@ -516,6 +528,20 @@ export interface SectionsBrandLogoGrid extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsContentCard extends Struct.ComponentSchema {
+  collectionName: "components_sections_content_cards"
+  info: {
+    description: ""
+    displayName: "ContentCard"
+    icon: "file"
+  }
+  attributes: {
+    content: Schema.Attribute.RichText & Schema.Attribute.Required
+    label: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
 export interface SectionsFaqSection extends Struct.ComponentSchema {
   collectionName: "components_sections_faq_section"
   info: {
@@ -566,6 +592,8 @@ export interface SectionsFeatureCard extends Struct.ComponentSchema {
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     imagePosition: Schema.Attribute.Enumeration<["left", "right"]> &
       Schema.Attribute.DefaultTo<"right">
+    size: Schema.Attribute.Enumeration<["sm", "default", "lg"]> &
+      Schema.Attribute.DefaultTo<"default">
     title: Schema.Attribute.String & Schema.Attribute.Required
     variant: Schema.Attribute.Enumeration<["plain", "bordered"]> &
       Schema.Attribute.DefaultTo<"plain">
@@ -657,6 +685,51 @@ export interface SectionsSectionHeader extends Struct.ComponentSchema {
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
     sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
+  }
+}
+
+export interface SectionsTwoColumnGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_two_column_grid"
+  info: {
+    description: ""
+    displayName: "TwoColumnGrid"
+    icon: "dashboard"
+  }
+  attributes: {
+    background: Schema.Attribute.Enumeration<["none", "light", "gradient"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"none">
+    items: Schema.Attribute.Component<"elements.how-it-works-item", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    size: Schema.Attribute.Enumeration<["default", "lg"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"default">
+    variant: Schema.Attribute.Enumeration<["default", "purple"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"default">
   }
 }
 
@@ -977,6 +1050,7 @@ declare module "@strapi/strapi" {
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
       "navigation.navbar": NavigationNavbar
+      "navigation.top-banner": NavigationTopBanner
       "plans.plan-comparison-table": PlansPlanComparisonTable
       "plans.plan-feature-value": PlansPlanFeatureValue
       "plans.plan-pricing-card-item": PlansPlanPricingCardItem
@@ -989,12 +1063,14 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.brand-logo-grid": SectionsBrandLogoGrid
+      "sections.content-card": SectionsContentCard
       "sections.faq-section": SectionsFaqSection
       "sections.feature-card": SectionsFeatureCard
       "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection
       "sections.quote": SectionsQuote
       "sections.section-header": SectionsSectionHeader
+      "sections.two-column-grid": SectionsTwoColumnGrid
       "sections.two-columns-benefits": SectionsTwoColumnsBenefits
       "sections.user-stories-section": SectionsUserStoriesSection
       "seo-utilities.seo": SeoUtilitiesSeo

@@ -13,6 +13,7 @@ export const boxVariants = cva("relative overflow-hidden", {
       dark: "bg-strapi-blue-800",
       darker: "bg-strapi-blue-900",
       green: "bg-emerald-600",
+      gradient: "bg-linear-to-b from-sky-50 to-transparent",
     },
   },
   defaultVariants: {

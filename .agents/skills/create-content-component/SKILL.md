@@ -292,14 +292,11 @@ export function Strapi{PascalCaseName}({
   )
 }
 
-Strapi{PascalCaseName}.displayName = "Strapi{PascalCaseName}"
-
-export default Strapi{PascalCaseName}
 ```
 
 Rules:
 
-- Named export + default export.
+- Named export only (no default export).
 - Type props with `Data.Component<"{category}.{name}">`.
 - Use conditionals for optional fields.
 - Keep file compiling with current generated types.

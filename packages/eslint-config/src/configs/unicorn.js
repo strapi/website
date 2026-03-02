@@ -16,7 +16,7 @@ export default [
       "unicorn/no-anonymous-default-export": "off",
       "unicorn/no-array-sort": "off",
       "unicorn/no-array-reverse": "off",
-      "unicorn/no-document-cookie": "warn",
+      "unicorn/no-document-cookie": "off",
       "unicorn/no-null": "off",
       "unicorn/no-static-only-class": "off",
       "unicorn/no-unused-properties": "warn",

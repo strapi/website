@@ -212,9 +212,6 @@ export function Strapi{PascalCaseName}({
   )
 }
 
-Strapi{PascalCaseName}.displayName = "Strapi{PascalCaseName}"
-
-export default Strapi{PascalCaseName}
 ```
 
 Key rules:
@@ -223,8 +220,7 @@ Key rules:
 - Render Strapi data dynamically (not hardcoded text)
 - Handle optional fields with conditionals (`{component.subTitle && ...}`)
 - Map over repeatable components with `key={item.id}`
-- Named export + default export
-- `displayName` set explicitly
+- Named export only (no default export)
 - No `removeThisWhenYouNeedMe` — this is a real implementation, not a placeholder
 
 Component usage rules (mandatory):
@@ -329,7 +325,7 @@ Verdict: **PASS** or **NEEDS_WORK** with specific issues listed.
 - Standalone text blocks (outside SectionHeader) use `<Typography>` with `tag`/`variant`
 - Links use `<StrapiLink>`/`<StrapiLinkText>`, images use `<StrapiBasicImage>`/`<StrapiLinkImage>`
 - `<section>` → `<Container>` structure
-- No unused imports, `displayName` set
+- No unused imports
 - Optional fields guarded with conditionals
 - Populate config exists on disk
 - No duplicate UID or `ContentComponents` mapping

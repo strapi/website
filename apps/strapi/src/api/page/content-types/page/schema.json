@@ -73,7 +73,9 @@
         "sections.brand-logo-grid",
         "sections.feature-card",
         "sections.two-columns-benefits",
-        "forms.newsletter"
+        "forms.newsletter",
+        "sections.two-column-grid",
+        "sections.content-card"
       ]
     },
     "children": {

@@ -68,7 +68,3 @@ export function StrapiTwoColumnsBenefits({
     </section>
   )
 }
-
-StrapiTwoColumnsBenefits.displayName = "StrapiTwoColumnsBenefits"
-
-export default StrapiTwoColumnsBenefits

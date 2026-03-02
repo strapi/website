@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_navigation_top_banners",
+  "info": {
+    "displayName": "TopBanner",
+    "icon": "bell",
+    "description": "Dismissible purple banner displayed above the navbar"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "richtext"
+    }
+  }
+}

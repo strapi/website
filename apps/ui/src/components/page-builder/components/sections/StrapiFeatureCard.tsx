@@ -19,6 +19,7 @@ export function StrapiFeatureCard({
 }) {
   const hasImage = !!component.image
   const imageOnLeft = component.imagePosition === "left"
+  const size = component.size ?? "default"
 
   return (
     <section>
@@ -26,6 +27,7 @@ export function StrapiFeatureCard({
         <FeatureCard
           variant={component.variant ?? "plain"}
           layout={hasImage ? "split" : "stacked"}
+          size={size}
         >
           {hasImage && imageOnLeft && (
             <FeatureCardImage>
@@ -33,8 +35,9 @@ export function StrapiFeatureCard({
             </FeatureCardImage>
           )}
 
-          <FeatureCardContent size={hasImage ? "lg" : "default"}>
+          <FeatureCardContent size={hasImage ? "lg" : size}>
             <FeatureCardTitle
+              size={size}
               icon={
                 component.icon ? (
                   <StrapiBasicImage component={component.icon} />
@@ -45,13 +48,13 @@ export function StrapiFeatureCard({
             </FeatureCardTitle>
 
             {component.description && (
-              <FeatureCardDescription>
+              <FeatureCardDescription size={size}>
                 {component.description}
               </FeatureCardDescription>
             )}
 
             {component.ctaLinks && component.ctaLinks.length > 0 && (
-              <FeatureCardCTA>
+              <FeatureCardCTA spacing={size}>
                 {component.ctaLinks.map((link) => (
                   <StrapiLink key={link.id} component={link} />
                 ))}
@@ -69,7 +72,3 @@ export function StrapiFeatureCard({
     </section>
   )
 }
-
-StrapiFeatureCard.displayName = "StrapiFeatureCard"
-
-export default StrapiFeatureCard

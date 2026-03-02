@@ -74,7 +74,3 @@ export function StrapiNewsletter({ component }: StrapiNewsletterProps) {
     </SectionHeaderContainer>
   )
 }
-
-StrapiNewsletter.displayName = "StrapiNewsletter"
-
-export default StrapiNewsletter

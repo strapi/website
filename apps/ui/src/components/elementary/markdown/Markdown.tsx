@@ -110,6 +110,26 @@ const components: Components = {
       {children}
     </pre>
   ),
+
+  table: ({ children }) => (
+    <div className="mb-4 w-full overflow-x-auto">
+      <table className="border-strapi-neutral-500 text-strapi-small-1 w-full border-collapse border">
+        {children}
+      </table>
+    </div>
+  ),
+
+  th: ({ children }) => (
+    <th className="border-strapi-border bg-strapi-blue-100 border px-6 py-4 text-center align-middle font-normal">
+      {children}
+    </th>
+  ),
+
+  td: ({ children }) => (
+    <td className="border-strapi-border border px-6 py-4 align-middle">
+      {children}
+    </td>
+  ),
 }
 
 export function Markdown({ children, className }: MarkdownProps) {

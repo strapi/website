@@ -7,7 +7,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground group border-border hover:border-strapi-neutral-300 flex flex-col gap-0 overflow-hidden rounded-xl border p-0 shadow-none transition-all duration-200 hover:shadow-md",
         className
       )}
       {...props}
@@ -65,7 +65,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-content"
-      className={cn("px-6", className)}
+      className={cn("flex flex-1 flex-col gap-3 p-6", className)}
       {...props}
     />
   )
@@ -75,7 +75,40 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-footer"
-      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      className={cn("flex items-center px-6 pt-0 pb-6", className)}
+      {...props}
+    />
+  )
+}
+
+function CardImage({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  if (!children) {
+    return null
+  }
+
+  return (
+    <div
+      data-slot="card-image"
+      className={cn(
+        "relative overflow-hidden [&_img]:size-full [&_img]:object-cover",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
+function CardLabel({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="card-label"
+      className={cn("text-muted-foreground text-sm font-medium", className)}
       {...props}
     />
   )
@@ -89,4 +122,6 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  CardImage,
+  CardLabel,
 }

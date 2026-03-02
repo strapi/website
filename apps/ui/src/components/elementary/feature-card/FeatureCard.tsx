@@ -14,10 +14,16 @@ export const featureCardVariants = cva("grid items-center", {
       stacked: "grid-cols-1",
       split: "grid-cols-1 lg:grid-cols-2",
     },
+    size: {
+      sm: "gap-2",
+      default: "gap-4",
+      lg: "gap-6",
+    },
   },
   defaultVariants: {
     variant: "plain",
     layout: "stacked",
+    size: "default",
   },
 })
 
@@ -29,6 +35,7 @@ export interface FeatureCardProps
 export function FeatureCard({
   variant,
   layout,
+  size,
   className,
   children,
   ...props
@@ -40,7 +47,7 @@ export function FeatureCard({
   return (
     <div
       data-slot="feature-card"
-      className={cn(featureCardVariants({ variant, layout }), className)}
+      className={cn(featureCardVariants({ variant, layout, size }), className)}
       {...props}
     >
       {children}

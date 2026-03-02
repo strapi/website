@@ -114,7 +114,3 @@ export function StrapiBrandLogoGrid({
     </section>
   )
 }
-
-StrapiBrandLogoGrid.displayName = "StrapiBrandLogoGrid"
-
-export default StrapiBrandLogoGrid

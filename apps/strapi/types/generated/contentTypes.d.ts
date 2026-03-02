@@ -479,7 +479,9 @@ export interface ApiHeaderHeader extends Struct.SingleTypeSchema {
     }
   }
   attributes: {
-    content: Schema.Attribute.DynamicZone<["navigation.navbar"]>
+    content: Schema.Attribute.DynamicZone<
+      ["navigation.top-banner", "navigation.navbar"]
+    >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -571,6 +573,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.feature-card",
         "sections.two-columns-benefits",
         "forms.newsletter",
+        "sections.two-column-grid",
+        "sections.content-card",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

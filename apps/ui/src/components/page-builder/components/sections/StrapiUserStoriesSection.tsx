@@ -1,16 +1,22 @@
 "use client"
 
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 
-import {
-  CardGridItem,
-  FilterableCardGrid,
-} from "@/components/elementary/card-grid"
+import { FilterableCardGrid } from "@/components/elementary/card-grid"
 import { Container } from "@/components/elementary/Container"
 import {
   SectionTitle,
   SectionLabel,
 } from "@/components/elementary/section-header"
+import { Typography } from "@/components/typography"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardImage,
+  CardLabel,
+} from "@/components/ui/card"
 
 interface MockUserStory extends Record<string, unknown> {
   readonly title: string
@@ -99,18 +105,34 @@ export function StrapiUserStoriesSection({
           filters={USE_CASES_FILTER}
           items={MOCK_STORIES}
           renderItem={(item) => (
-            <CardGridItem
-              key={item.title}
-              logo={
-                <span className="text-muted-foreground text-sm font-medium">
-                  {item.company}
-                </span>
-              }
-              title={item.title}
-              topImage={<div className="h-full w-full bg-gray-200" />}
-              variant="story"
-              ctaHref="#"
-            />
+            <Card key={item.title}>
+              <CardImage className="aspect-video w-full">
+                <div className="h-full w-full bg-gray-200" />
+              </CardImage>
+
+              <CardContent>
+                <CardLabel>{item.company}</CardLabel>
+
+                <Typography
+                  tag="h3"
+                  variant="body1"
+                  textColor="foreground"
+                  fontWeight="bold"
+                >
+                  {item.title}
+                </Typography>
+              </CardContent>
+
+              <CardFooter>
+                <a
+                  href="#"
+                  className="text-strapi-small-1 text-strapi-green-600 hover:text-strapi-green-700 inline-flex items-center gap-1 font-medium transition-colors"
+                >
+                  Read a story
+                  <ArrowRightIcon className="size-4" />
+                </a>
+              </CardFooter>
+            </Card>
           )}
           searchKey="title"
           searchPlaceholder="Search user stories..."

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_sections_testimonies",
+  "info": {
+    "displayName": "Testimonies",
+    "icon": "slideshow",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.testimony-item"
+    }
+  }
+}

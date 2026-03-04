@@ -68,16 +68,20 @@
         "sections.user-stories-section",
         "sections.how-it-works",
         "sections.section-header",
-        "sections.quote",
-        "blog.author-banner",
-        "sections.brand-logo-grid",
-        "sections.feature-card",
         "sections.two-columns-benefits",
-        "forms.newsletter",
         "sections.two-column-grid",
-        "sections.content-card",
-        "sections.case-study-card",
-        "sections.image-gallery"
+        "cards.feature-card",
+        "cards.content-card",
+        "cards.case-study-card",
+        "media.image",
+        "media.image-gallery",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "blog.author-banner",
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video"
       ]
     },
     "children": {

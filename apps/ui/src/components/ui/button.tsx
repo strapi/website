@@ -6,7 +6,7 @@ import { Spinner } from "@/components/elementary/Spinner"
 import { cn } from "@/lib/styles"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-base rounded-[8px] font-medium outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 spring-bounce no-underline",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-base rounded-[8px] font-medium outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 animate-spring-sm no-underline",
   {
     // Don't forget to keep in sync with Link component (LinkDecorations) in Strapi
     variants: {

@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_cards_feature_card",
+  "info": {
+    "displayName": "FeatureCard",
+    "icon": "spark",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "imagePosition": {
+      "type": "enumeration",
+      "enum": ["left", "right"],
+      "default": "right"
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["plain", "bordered"],
+      "default": "plain"
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": ["sm", "default", "lg"],
+      "default": "default"
+    },
+    "ctaLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.link"
+    }
+  }
+}

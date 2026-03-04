@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-03-02T18:45
+> Auto-updated by skills. Last updated: 2026-03-04T22:00
 
 ## Registry Freshness Policy
 
@@ -78,7 +78,12 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `plans.pricing-card-checkout-modal`     | plans         | PricingCardCheckoutModal    | planMonthlyPrice:string, planMonthlyItemPriceId:string, includedSeats:integer, additionalSeatMonthlyPrice:string, additionalSeatMonthlyItemPriceId:string, ssoMonthlyPrice:string, ssoMonthlyPricePerSeat:string, ssoMonthlyItemPriceId:string, ssoDefaultSelected:boolean, ssoDescription:string               |
 | `plans.pricing-card-promo`              | plans         | PricingCardPromo            | title:string, subtitle:text, description:text                                                                                                                                                                                                                                                                   |
 | `plans.pricing-card-sso`                | plans         | PricingCardSSO              | title:string, price:string, subtext:string, description:string                                                                                                                                                                                                                                                  |
+| `sections.testimonies`                  | sections      | Testimonies                 | items:repeatable elements.testimony-item                                                                                                                                                                                                                                                                        |
+| `elements.testimony-item`               | elements      | TestimonyItem               | image:utilities.basic-image, videoUrl:string                                                                                                                                                                                                                                                                    |
 | `plans.pricing-switcher`                | plans         | PricingSwitcher             | title:string, monthlyTitle:string, monthlySubtitle:string, yearlyTitle:string, yearlySubtitle:string, showYearlyToggle:boolean, isYearlyDefault:boolean, planTypesSwitcher:component                                                                                                                            |
+| `sections.meet-the-team`                | sections      | MeetTheTeam                 | section:utilities.section-header (req), items:repeatable elements.team-member-item (req), ctaTitle:string (opt), ctaLink:utilities.link-text (opt)                                                                                                                                                              |
+| `elements.team-member-item`             | elements      | TeamMemberItem              | image:utilities.basic-image (opt), name:string (req), role:string (req), department:string (opt)                                                                                                                                                                                                                |
+| `media.video`                           | media         | Video                       | url:string (req), thumbnail:utilities.basic-image (opt), link:utilities.link (opt), alignment:enumeration(left\|center\|right, default:center)                                                                                                                                                                  |
 
 ## React Elementary Components
 
@@ -145,6 +150,9 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.two-columns-benefits` | StrapiTwoColumnsBenefits  | `page-builder/components/sections/StrapiTwoColumnsBenefits`                   | Page         |
 | `plans.plan-comparison-table`   | StrapiPlanComparisonTable | `page-builder/components/plans/StrapiPlanComparisonTable`                     | Page         |
 | `plans.plan-pricing-cards`      | StrapiPlanPricingCards    | `page-builder/components/plans/StrapiPlanPricingCards/StrapiPlanPricingCards` | Page         |
+| `sections.testimonies`          | StrapiTestimonies         | `page-builder/components/sections/StrapiTestimonies`                          | Page         |
+| `sections.meet-the-team`        | StrapiMeetTheTeam         | `page-builder/components/sections/StrapiMeetTheTeam`                          | Page         |
+| `media.video`                   | StrapiVideo               | `page-builder/components/media/StrapiVideo`                                   | Page         |
 | `footer.footer-main`            | StrapiFooterMain          | `page-builder/single-types/footer/StrapiFooterMain`                           | Footer       |
 | `footer.footer-cta`             | StrapiFooterCta           | `page-builder/single-types/footer/StrapiFooterCta`                            | Footer       |
 | `navigation.top-banner`         | StrapiTopBanner           | `page-builder/components/navigation/top-banner/StrapiTopBanner`               | Header       |

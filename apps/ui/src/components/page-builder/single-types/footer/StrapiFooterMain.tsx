@@ -65,7 +65,7 @@ export function StrapiFooterMain({
                     <li key={link.id}>
                       <StrapiLinkText
                         component={link}
-                        className="text-strapi-neutral-700 spring-bounce inline-block text-sm leading-[1.2]"
+                        className="text-strapi-neutral-700 animate-spring-sm inline-block text-sm leading-[1.2]"
                       />
                     </li>
                   ))}
@@ -98,7 +98,7 @@ export function StrapiFooterMain({
                 <StrapiLinkImage
                   key={social.id}
                   component={social}
-                  className="spring-bounce spring-bounce-pop size-5"
+                  className="animate-spring-lg size-5"
                 />
               ))}
             </div>

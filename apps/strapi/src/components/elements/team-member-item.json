@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_elements_team_member_items",
+  "info": {
+    "displayName": "TeamMemberItem",
+    "icon": "user",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    },
+    "department": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "text"
+    }
+  }
+}

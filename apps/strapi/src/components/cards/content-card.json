@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_cards_content_cards",
+  "info": {
+    "displayName": "ContentCard",
+    "icon": "file",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

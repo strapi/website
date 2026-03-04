@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_media_brand_logo_grids",
+  "info": {
+    "displayName": "BrandLogoGrid",
+    "icon": "grid"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "plain",
+        "bordered"
+      ],
+      "default": "plain"
+    },
+    "items": {
+      "type": "component",
+      "component": "elements.brand-logo-grid-item",
+      "repeatable": true,
+      "required": true
+    }
+  }
+}

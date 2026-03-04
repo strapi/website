@@ -38,8 +38,8 @@
   @apply text-strapi-small-1 font-semibold tracking-[0.5px] uppercase;
 }
 
-@utility spring-bounce {
-  --_spring-hover-scale: 1.02;
+/* Shared spring animation base — applied to any animate-spring variant */
+[class*="animate-spring"] {
   transform: translateZ(0);
   transition:
     color 250ms linear,
@@ -79,6 +79,14 @@
   }
 }
 
-@utility spring-bounce-pop {
+@utility animate-spring-sm {
+  --_spring-hover-scale: 1.02;
+}
+
+@utility animate-spring {
+  --_spring-hover-scale: 1.05;
+}
+
+@utility animate-spring-lg {
   --_spring-hover-scale: 1.1;
 }

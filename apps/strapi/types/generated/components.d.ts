@@ -16,6 +16,59 @@ export interface BlogAuthorBanner extends Struct.ComponentSchema {
   }
 }
 
+export interface CardsCaseStudyCard extends Struct.ComponentSchema {
+  collectionName: "components_cards_case_study_card"
+  info: {
+    description: ""
+    displayName: "CaseStudyCard"
+    icon: "star"
+  }
+  attributes: {
+    backgroundImage: Schema.Attribute.Component<"utilities.basic-image", false>
+    companyName: Schema.Attribute.String & Schema.Attribute.Required
+    ctaLink: Schema.Attribute.Component<"utilities.link-text", false> &
+      Schema.Attribute.Required
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    title: Schema.Attribute.Text & Schema.Attribute.Required
+  }
+}
+
+export interface CardsContentCard extends Struct.ComponentSchema {
+  collectionName: "components_cards_content_cards"
+  info: {
+    description: ""
+    displayName: "ContentCard"
+    icon: "file"
+  }
+  attributes: {
+    content: Schema.Attribute.RichText & Schema.Attribute.Required
+    label: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface CardsFeatureCard extends Struct.ComponentSchema {
+  collectionName: "components_cards_feature_card"
+  info: {
+    description: ""
+    displayName: "FeatureCard"
+    icon: "spark"
+  }
+  attributes: {
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    description: Schema.Attribute.Text
+    icon: Schema.Attribute.Component<"utilities.basic-image", false>
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    imagePosition: Schema.Attribute.Enumeration<["left", "right"]> &
+      Schema.Attribute.DefaultTo<"right">
+    size: Schema.Attribute.Enumeration<["sm", "default", "lg"]> &
+      Schema.Attribute.DefaultTo<"default">
+    title: Schema.Attribute.String & Schema.Attribute.Required
+    variant: Schema.Attribute.Enumeration<["plain", "bordered"]> &
+      Schema.Attribute.DefaultTo<"plain">
+  }
+}
+
 export interface ElementsBrandLogoGridItem extends Struct.ComponentSchema {
   collectionName: "components_elements_brand_logo_grid_items"
   info: {
@@ -72,6 +125,36 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
           localized: true
         }
       }>
+  }
+}
+
+export interface ElementsTeamMemberItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_team_member_items"
+  info: {
+    description: ""
+    displayName: "TeamMemberItem"
+    icon: "user"
+  }
+  attributes: {
+    bio: Schema.Attribute.Text
+    department: Schema.Attribute.String
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    location: Schema.Attribute.String
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    role: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface ElementsTestimonyItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_testimony_items"
+  info: {
+    description: ""
+    displayName: "TestimonyItem"
+    icon: "play"
+  }
+  attributes: {
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    videoUrl: Schema.Attribute.String
   }
 }
 
@@ -252,6 +335,72 @@ export interface FormsNewsletter extends Struct.ComponentSchema {
   }
 }
 
+export interface MediaBrandLogoGrid extends Struct.ComponentSchema {
+  collectionName: "components_media_brand_logo_grids"
+  info: {
+    displayName: "BrandLogoGrid"
+    icon: "grid"
+  }
+  attributes: {
+    items: Schema.Attribute.Component<"elements.brand-logo-grid-item", true> &
+      Schema.Attribute.Required
+    title: Schema.Attribute.String
+    variant: Schema.Attribute.Enumeration<["plain", "bordered"]> &
+      Schema.Attribute.DefaultTo<"plain">
+  }
+}
+
+export interface MediaImage extends Struct.ComponentSchema {
+  collectionName: "components_media_images"
+  info: {
+    description: ""
+    displayName: "Image"
+    icon: "picture"
+  }
+  attributes: {
+    alignment: Schema.Attribute.Enumeration<["left", "center", "right"]> &
+      Schema.Attribute.DefaultTo<"center">
+    image: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.Required
+    link: Schema.Attribute.Component<"utilities.link", false>
+  }
+}
+
+export interface MediaImageGallery extends Struct.ComponentSchema {
+  collectionName: "components_media_image_galleries"
+  info: {
+    displayName: "Image Gallery"
+    icon: "picture"
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    images: Schema.Attribute.Component<"utilities.basic-image", true> &
+      Schema.Attribute.Required
+    variant: Schema.Attribute.Enumeration<["contained", "full-bleed"]> &
+      Schema.Attribute.DefaultTo<"contained">
+  }
+}
+
+export interface MediaVideo extends Struct.ComponentSchema {
+  collectionName: "components_media_videos"
+  info: {
+    description: ""
+    displayName: "Video"
+    icon: "play"
+  }
+  attributes: {
+    alignment: Schema.Attribute.Enumeration<["left", "center", "right"]> &
+      Schema.Attribute.DefaultTo<"center">
+    link: Schema.Attribute.Component<"utilities.link", false>
+    thumbnail: Schema.Attribute.Component<"utilities.basic-image", false>
+    url: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
 export interface NavbarNavItem extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_items"
   info: {
@@ -300,6 +449,7 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
   attributes: {
     bottomLinks: Schema.Attribute.Component<"utilities.link", true>
     ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    githubStars: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
     logoImage: Schema.Attribute.Component<"utilities.link-image", false>
     navItems: Schema.Attribute.Component<"navbar.nav-item", true>
   }
@@ -513,52 +663,6 @@ export interface PlansPricingSwitcher extends Struct.ComponentSchema {
   }
 }
 
-export interface SectionsBrandLogoGrid extends Struct.ComponentSchema {
-  collectionName: "components_sections_brand_logo_grids"
-  info: {
-    displayName: "BrandLogoGrid"
-    icon: "grid"
-  }
-  attributes: {
-    items: Schema.Attribute.Component<"elements.brand-logo-grid-item", true> &
-      Schema.Attribute.Required
-    title: Schema.Attribute.String
-    variant: Schema.Attribute.Enumeration<["plain", "bordered"]> &
-      Schema.Attribute.DefaultTo<"plain">
-  }
-}
-
-export interface SectionsCaseStudyCard extends Struct.ComponentSchema {
-  collectionName: "components_sections_case_study_card"
-  info: {
-    description: ""
-    displayName: "CaseStudyCard"
-    icon: "star"
-  }
-  attributes: {
-    backgroundImage: Schema.Attribute.Component<"utilities.basic-image", false>
-    companyName: Schema.Attribute.String & Schema.Attribute.Required
-    ctaLink: Schema.Attribute.Component<"utilities.link-text", false> &
-      Schema.Attribute.Required
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    title: Schema.Attribute.Text & Schema.Attribute.Required
-  }
-}
-
-export interface SectionsContentCard extends Struct.ComponentSchema {
-  collectionName: "components_sections_content_cards"
-  info: {
-    description: ""
-    displayName: "ContentCard"
-    icon: "file"
-  }
-  attributes: {
-    content: Schema.Attribute.RichText & Schema.Attribute.Required
-    label: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
-  }
-}
-
 export interface SectionsFaqSection extends Struct.ComponentSchema {
   collectionName: "components_sections_faq_section"
   info: {
@@ -595,28 +699,6 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
   }
 }
 
-export interface SectionsFeatureCard extends Struct.ComponentSchema {
-  collectionName: "components_sections_feature_card"
-  info: {
-    description: ""
-    displayName: "FeatureCard"
-    icon: "spark"
-  }
-  attributes: {
-    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
-    description: Schema.Attribute.Text
-    icon: Schema.Attribute.Component<"utilities.basic-image", false>
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    imagePosition: Schema.Attribute.Enumeration<["left", "right"]> &
-      Schema.Attribute.DefaultTo<"right">
-    size: Schema.Attribute.Enumeration<["sm", "default", "lg"]> &
-      Schema.Attribute.DefaultTo<"default">
-    title: Schema.Attribute.String & Schema.Attribute.Required
-    variant: Schema.Attribute.Enumeration<["plain", "bordered"]> &
-      Schema.Attribute.DefaultTo<"plain">
-  }
-}
-
 export interface SectionsHowItWorks extends Struct.ComponentSchema {
   collectionName: "components_sections_how_it_works"
   info: {
@@ -647,25 +729,6 @@ export interface SectionsHowItWorks extends Struct.ComponentSchema {
   }
 }
 
-export interface SectionsImageGallery extends Struct.ComponentSchema {
-  collectionName: "components_sections_image_galleries"
-  info: {
-    displayName: "Image Gallery"
-    icon: "picture"
-  }
-  pluginOptions: {
-    i18n: {
-      localized: true
-    }
-  }
-  attributes: {
-    images: Schema.Attribute.Component<"utilities.basic-image", true> &
-      Schema.Attribute.Required
-    variant: Schema.Attribute.Enumeration<["contained", "full-bleed"]> &
-      Schema.Attribute.DefaultTo<"contained">
-  }
-}
-
 export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
   collectionName: "components_sections_integrations_section"
   info: {
@@ -689,22 +752,20 @@ export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
   }
 }
 
-export interface SectionsQuote extends Struct.ComponentSchema {
-  collectionName: "components_sections_quote"
+export interface SectionsMeetTheTeam extends Struct.ComponentSchema {
+  collectionName: "components_sections_meet_the_teams"
   info: {
     description: ""
-    displayName: "Quote"
-    icon: "quote"
+    displayName: "MeetTheTeam"
+    icon: "grid"
   }
   attributes: {
-    authorAvatar: Schema.Attribute.Component<"utilities.basic-image", false>
-    authorName: Schema.Attribute.String & Schema.Attribute.Required
-    authorRole: Schema.Attribute.String
-    companyLogo: Schema.Attribute.Component<"utilities.basic-image", false>
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    quote: Schema.Attribute.Text & Schema.Attribute.Required
-    variant: Schema.Attribute.Enumeration<["boxed", "image"]> &
-      Schema.Attribute.DefaultTo<"boxed">
+    ctaLink: Schema.Attribute.Component<"utilities.link-text", false>
+    ctaTitle: Schema.Attribute.String
+    items: Schema.Attribute.Component<"elements.team-member-item", true> &
+      Schema.Attribute.Required
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required
   }
 }
 
@@ -721,6 +782,18 @@ export interface SectionsSectionHeader extends Struct.ComponentSchema {
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
     sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
+  }
+}
+
+export interface SectionsTestimonies extends Struct.ComponentSchema {
+  collectionName: "components_sections_testimonies"
+  info: {
+    description: ""
+    displayName: "Testimonies"
+    icon: "slideshow"
+  }
+  attributes: {
+    items: Schema.Attribute.Component<"elements.testimony-item", true>
   }
 }
 
@@ -902,6 +975,25 @@ export interface SeoUtilitiesSocialIcons extends Struct.ComponentSchema {
   }
 }
 
+export interface TestimonialsQuote extends Struct.ComponentSchema {
+  collectionName: "components_testimonials_quote"
+  info: {
+    description: ""
+    displayName: "Quote"
+    icon: "quote"
+  }
+  attributes: {
+    authorAvatar: Schema.Attribute.Component<"utilities.basic-image", false>
+    authorName: Schema.Attribute.String & Schema.Attribute.Required
+    authorRole: Schema.Attribute.String
+    companyLogo: Schema.Attribute.Component<"utilities.basic-image", false>
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    quote: Schema.Attribute.Text & Schema.Attribute.Required
+    variant: Schema.Attribute.Enumeration<["boxed", "image"]> &
+      Schema.Attribute.DefaultTo<"boxed">
+  }
+}
+
 export interface UtilitiesAccordions extends Struct.ComponentSchema {
   collectionName: "components_utilities_accordions"
   info: {
@@ -1073,15 +1165,24 @@ declare module "@strapi/strapi" {
   export module Public {
     export interface ComponentSchemas {
       "blog.author-banner": BlogAuthorBanner
+      "cards.case-study-card": CardsCaseStudyCard
+      "cards.content-card": CardsContentCard
+      "cards.feature-card": CardsFeatureCard
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
       "elements.footer-item": ElementsFooterItem
       "elements.how-it-works-item": ElementsHowItWorksItem
+      "elements.team-member-item": ElementsTeamMemberItem
+      "elements.testimony-item": ElementsTestimonyItem
       "footer.footer-cta": FooterFooterCta
       "footer.footer-cta-badge": FooterFooterCtaBadge
       "footer.footer-cta-card": FooterFooterCtaCard
       "footer.footer-main": FooterFooterMain
       "footer.footer-socials": FooterFooterSocials
       "forms.newsletter": FormsNewsletter
+      "media.brand-logo-grid": MediaBrandLogoGrid
+      "media.image": MediaImage
+      "media.image-gallery": MediaImageGallery
+      "media.video": MediaVideo
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
@@ -1098,16 +1199,12 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-promo": PlansPricingCardPromo
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
-      "sections.brand-logo-grid": SectionsBrandLogoGrid
-      "sections.case-study-card": SectionsCaseStudyCard
-      "sections.content-card": SectionsContentCard
       "sections.faq-section": SectionsFaqSection
-      "sections.feature-card": SectionsFeatureCard
       "sections.how-it-works": SectionsHowItWorks
-      "sections.image-gallery": SectionsImageGallery
       "sections.integrations-section": SectionsIntegrationsSection
-      "sections.quote": SectionsQuote
+      "sections.meet-the-team": SectionsMeetTheTeam
       "sections.section-header": SectionsSectionHeader
+      "sections.testimonies": SectionsTestimonies
       "sections.two-column-grid": SectionsTwoColumnGrid
       "sections.two-columns-benefits": SectionsTwoColumnsBenefits
       "sections.user-stories-section": SectionsUserStoriesSection
@@ -1115,6 +1212,7 @@ declare module "@strapi/strapi" {
       "seo-utilities.seo-og": SeoUtilitiesSeoOg
       "seo-utilities.seo-twitter": SeoUtilitiesSeoTwitter
       "seo-utilities.social-icons": SeoUtilitiesSocialIcons
+      "testimonials.quote": TestimonialsQuote
       "utilities.accordions": UtilitiesAccordions
       "utilities.basic-image": UtilitiesBasicImage
       "utilities.link": UtilitiesLink

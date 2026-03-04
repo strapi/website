@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_sections_meet_the_teams",
+  "info": {
+    "displayName": "MeetTheTeam",
+    "icon": "grid",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.section-header",
+      "required": true
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.team-member-item",
+      "required": true
+    },
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaLink": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.link-text"
+    }
+  }
+}

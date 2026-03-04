@@ -128,6 +128,36 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsTeamMemberItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_team_member_items"
+  info: {
+    description: ""
+    displayName: "TeamMemberItem"
+    icon: "user"
+  }
+  attributes: {
+    bio: Schema.Attribute.Text
+    department: Schema.Attribute.String
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    location: Schema.Attribute.String
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    role: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface ElementsTestimonyItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_testimony_items"
+  info: {
+    description: ""
+    displayName: "TestimonyItem"
+    icon: "play"
+  }
+  attributes: {
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    videoUrl: Schema.Attribute.String
+  }
+}
+
 export interface FooterFooterCta extends Struct.ComponentSchema {
   collectionName: "components_sections_footer_cta"
   info: {
@@ -352,6 +382,22 @@ export interface MediaImageGallery extends Struct.ComponentSchema {
       Schema.Attribute.Required
     variant: Schema.Attribute.Enumeration<["contained", "full-bleed"]> &
       Schema.Attribute.DefaultTo<"contained">
+  }
+}
+
+export interface MediaVideo extends Struct.ComponentSchema {
+  collectionName: "components_media_videos"
+  info: {
+    description: ""
+    displayName: "Video"
+    icon: "play"
+  }
+  attributes: {
+    alignment: Schema.Attribute.Enumeration<["left", "center", "right"]> &
+      Schema.Attribute.DefaultTo<"center">
+    link: Schema.Attribute.Component<"utilities.link", false>
+    thumbnail: Schema.Attribute.Component<"utilities.basic-image", false>
+    url: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -706,6 +752,23 @@ export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsMeetTheTeam extends Struct.ComponentSchema {
+  collectionName: "components_sections_meet_the_teams"
+  info: {
+    description: ""
+    displayName: "MeetTheTeam"
+    icon: "grid"
+  }
+  attributes: {
+    ctaLink: Schema.Attribute.Component<"utilities.link-text", false>
+    ctaTitle: Schema.Attribute.String
+    items: Schema.Attribute.Component<"elements.team-member-item", true> &
+      Schema.Attribute.Required
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required
+  }
+}
+
 export interface SectionsSectionHeader extends Struct.ComponentSchema {
   collectionName: "components_sections_section_headers"
   info: {
@@ -719,6 +782,18 @@ export interface SectionsSectionHeader extends Struct.ComponentSchema {
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
     sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
+  }
+}
+
+export interface SectionsTestimonies extends Struct.ComponentSchema {
+  collectionName: "components_sections_testimonies"
+  info: {
+    description: ""
+    displayName: "Testimonies"
+    icon: "slideshow"
+  }
+  attributes: {
+    items: Schema.Attribute.Component<"elements.testimony-item", true>
   }
 }
 
@@ -1096,6 +1171,8 @@ declare module "@strapi/strapi" {
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
       "elements.footer-item": ElementsFooterItem
       "elements.how-it-works-item": ElementsHowItWorksItem
+      "elements.team-member-item": ElementsTeamMemberItem
+      "elements.testimony-item": ElementsTestimonyItem
       "footer.footer-cta": FooterFooterCta
       "footer.footer-cta-badge": FooterFooterCtaBadge
       "footer.footer-cta-card": FooterFooterCtaCard
@@ -1105,6 +1182,7 @@ declare module "@strapi/strapi" {
       "media.brand-logo-grid": MediaBrandLogoGrid
       "media.image": MediaImage
       "media.image-gallery": MediaImageGallery
+      "media.video": MediaVideo
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
@@ -1124,7 +1202,9 @@ declare module "@strapi/strapi" {
       "sections.faq-section": SectionsFaqSection
       "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection
+      "sections.meet-the-team": SectionsMeetTheTeam
       "sections.section-header": SectionsSectionHeader
+      "sections.testimonies": SectionsTestimonies
       "sections.two-column-grid": SectionsTwoColumnGrid
       "sections.two-columns-benefits": SectionsTwoColumnsBenefits
       "sections.user-stories-section": SectionsUserStoriesSection

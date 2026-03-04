@@ -36,7 +36,10 @@ import { StrapiNewsletter } from "@/components/page-builder/components/forms/str
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
+import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
+import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
+import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
@@ -161,6 +164,9 @@ const TOC = [
   { id: "case-study-card", label: "CaseStudyCard" },
   { id: "image-gallery", label: "ImageGallery" },
   { id: "image", label: "Image" },
+  { id: "testimonies", label: "Testimonies" },
+  { id: "meet-the-team", label: "MeetTheTeam" },
+  { id: "video", label: "Video" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -1487,6 +1493,236 @@ export default function ComponentLibraryPage() {
 
           <Variant label="With link (clickable image)">
             <StrapiImage component={imageWithLinkExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="testimonies" title="Testimonies">
+        <div className="-mx-6 space-y-10">
+          <Variant label="3 items (wraps to 2+1)">
+            <StrapiTestimonies
+              component={
+                {
+                  id: 100,
+                  __component: "sections.testimonies",
+                  items: [
+                    {
+                      id: 1,
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/testimony1/590/332",
+                        "Team member 1"
+                      ),
+                      videoUrl: "https://youtu.be/example1",
+                    },
+                    {
+                      id: 2,
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/testimony2/590/332",
+                        "Team member 2"
+                      ),
+                      videoUrl: "https://youtu.be/example2",
+                    },
+                    {
+                      id: 3,
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/testimony3/590/332",
+                        "Team member 3"
+                      ),
+                      videoUrl: "https://youtu.be/example3",
+                    },
+                  ],
+                } as Data.Component<"sections.testimonies">
+              }
+            />
+          </Variant>
+
+          <Variant label="2 items (centered)">
+            <StrapiTestimonies
+              component={
+                {
+                  id: 101,
+                  __component: "sections.testimonies",
+                  items: [
+                    {
+                      id: 1,
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/testimony4/590/332",
+                        "Team member 1"
+                      ),
+                      videoUrl: "https://youtu.be/example4",
+                    },
+                    {
+                      id: 2,
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/testimony5/590/332",
+                        "Team member 2"
+                      ),
+                      videoUrl: "https://youtu.be/example5",
+                    },
+                  ],
+                } as Data.Component<"sections.testimonies">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="meet-the-team" title="MeetTheTeam">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default with filter">
+            <StrapiMeetTheTeam
+              component={
+                {
+                  id: 200,
+                  __component: "sections.meet-the-team",
+                  section: {
+                    id: 1,
+                    title: "Meet the team",
+                    description: null,
+                    label: null,
+                    labelIcon: null,
+                    variant: "default",
+                    size: "default",
+                    layout: "center",
+                    ctaLinks: [],
+                  },
+                  items: [
+                    {
+                      id: 1,
+                      name: "Pierre Burgy",
+                      role: "Chief Executive Officer",
+                      department: "Leadership",
+                      location: "Paris",
+                      bio: "Pierre created Strapi with Aurélien and Jim back in 2015. He's a strong believer in open-source, remote and people-first organizations. You can also find him regularly windsurfing or mountain-biking!",
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/team1/241/286",
+                        "Pierre Burgy"
+                      ),
+                    },
+                    {
+                      id: 2,
+                      name: "Aurélien Georget",
+                      role: "Chief Product Officer",
+                      department: "Leadership",
+                      location: "Paris",
+                      bio: "Aurélien co-founded Strapi and leads the product vision. Passionate about developer experience and open-source communities.",
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/team2/241/286",
+                        "Aurélien Georget"
+                      ),
+                    },
+                    {
+                      id: 3,
+                      name: "Alexandre Bodin",
+                      role: "Chief Technical Officer",
+                      department: "Leadership",
+                      location: "Paris",
+                      bio: "Alexandre is the technical mastermind behind Strapi's architecture. When not coding, he enjoys hiking in the French Alps.",
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/team3/241/286",
+                        "Alexandre Bodin"
+                      ),
+                    },
+                    {
+                      id: 4,
+                      name: "Hicham E.",
+                      role: "Lead Front-End Engineer",
+                      department: "Engineering",
+                      location: "Remote",
+                      bio: "Hicham leads the front-end team and is passionate about building performant, accessible user interfaces.",
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/team4/241/286",
+                        "Hicham E."
+                      ),
+                    },
+                    {
+                      id: 5,
+                      name: "Victor Coisne",
+                      role: "VP Marketing",
+                      department: "Marketing",
+                      location: "Paris",
+                      bio: "Victor drives Strapi's marketing strategy and community growth. A firm believer in the power of developer communities.",
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/team5/241/286",
+                        "Victor Coisne"
+                      ),
+                    },
+                    {
+                      id: 6,
+                      name: "Emilie R.",
+                      role: "Head of Product",
+                      department: "Product",
+                      location: "Lyon",
+                      bio: "Emilie shapes the product roadmap and ensures Strapi meets the needs of its diverse user base.",
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/team6/241/286",
+                        "Emilie R."
+                      ),
+                    },
+                  ],
+                  ctaTitle: "Wish to see your photo here?",
+                  ctaLink: {
+                    id: 1,
+                    type: "external",
+                    label: "See Open Positions",
+                    newTab: true,
+                    href: "https://jobs.lever.co/strapi/",
+                  },
+                } as Data.Component<"sections.meet-the-team">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="video" title="Video">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (YouTube embed, no thumbnail)">
+            <StrapiVideo
+              component={
+                {
+                  id: 300,
+                  __component: "media.video",
+                  url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                  thumbnail: null,
+                  link: null,
+                  alignment: "center",
+                } as Data.Component<"media.video">
+              }
+            />
+          </Variant>
+
+          <Variant label="With thumbnail poster">
+            <StrapiVideo
+              component={
+                {
+                  id: 301,
+                  __component: "media.video",
+                  url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                  thumbnail: mockBasicImage(
+                    "https://picsum.photos/seed/video-thumb/1280/720",
+                    "Video thumbnail"
+                  ),
+                  link: null,
+                  alignment: "center",
+                } as Data.Component<"media.video">
+              }
+            />
+          </Variant>
+
+          <Variant label="Left-aligned">
+            <StrapiVideo
+              component={
+                {
+                  id: 302,
+                  __component: "media.video",
+                  url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                  thumbnail: null,
+                  link: null,
+                  alignment: "left",
+                } as Data.Component<"media.video">
+              }
+            />
           </Variant>
         </div>
       </Section>

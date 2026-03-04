@@ -78,7 +78,10 @@
         "media.brand-logo-grid",
         "testimonials.quote",
         "blog.author-banner",
-        "forms.newsletter"
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video"
       ]
     },
     "children": {

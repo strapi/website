@@ -7,10 +7,13 @@ import { StrapiNewsletter } from "@/components/page-builder/components/forms/str
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
+import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
 import { StrapiNavbar } from "@/components/page-builder/components/navigation/navbar/StrapiNavbar"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiPlanPricingCards } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/StrapiPlanPricingCards"
 import { StrapiPlanComparisonTable } from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
+import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
+import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
@@ -61,6 +64,11 @@ export const ContentComponents: Partial<
   "media.image": StrapiImage,
   "media.image-gallery": StrapiImageGallery,
   "media.brand-logo-grid": StrapiBrandLogoGrid,
+  "media.video": StrapiVideo,
+
+  // Sections (continued)
+  "sections.testimonies": StrapiTestimonies,
+  "sections.meet-the-team": StrapiMeetTheTeam,
 
   // Testimonials
   "testimonials.quote": StrapiQuote,

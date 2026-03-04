@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_elements_testimony_items",
+  "info": {
+    "displayName": "TestimonyItem",
+    "icon": "play",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "videoUrl": {
+      "type": "string"
+    }
+  }
+}

@@ -578,6 +578,9 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "testimonials.quote",
         "blog.author-banner",
         "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

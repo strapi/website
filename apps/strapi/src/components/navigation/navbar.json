@@ -25,6 +25,10 @@
       "type": "component",
       "component": "utilities.link",
       "repeatable": true
+    },
+    "githubStars": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

@@ -10,7 +10,7 @@ import { getStrapiLinkTextHref } from "@/components/page-builder/components/util
 export function StrapiCaseStudyCard({
   component,
 }: {
-  readonly component: Data.Component<"sections.case-study-card">
+  readonly component: Data.Component<"cards.case-study-card">
 }) {
   const linkHref = getStrapiLinkTextHref(component.ctaLink)
 
@@ -39,7 +39,7 @@ export function StrapiCaseStudyCard({
             openInNewTab={component.ctaLink?.newTab ?? false}
             className="group relative block no-underline"
           >
-            <div className="rounded-strapi-lg spring-bounce bg-white shadow-md">
+            <div className="rounded-strapi-lg animate-spring-sm bg-white shadow-md">
               <div className="flex flex-col p-8 lg:flex-row-reverse lg:items-center lg:justify-between lg:p-19">
                 {component.image && (
                   <div className="relative mb-8 h-16 w-36 shrink-0 lg:mb-0 lg:h-28 lg:w-32">

@@ -6,7 +6,7 @@ import { StrapiBasicImage } from "@/components/page-builder/components/utilities
 export function QuoteAuthorBlock({
   component,
 }: {
-  readonly component: Data.Component<"sections.quote">
+  readonly component: Data.Component<"testimonials.quote">
 }) {
   return (
     <QuoteAuthor

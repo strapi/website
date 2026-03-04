@@ -15,7 +15,7 @@ import { StrapiLink } from "@/components/page-builder/components/utilities/Strap
 export function StrapiFeatureCard({
   component,
 }: {
-  readonly component: Data.Component<"sections.feature-card">
+  readonly component: Data.Component<"cards.feature-card">
 }) {
   const hasImage = !!component.image
   const imageOnLeft = component.imagePosition === "left"

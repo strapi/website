@@ -6,4 +6,4 @@ export default {
   populate: {
     images: basicImagePopulate,
   },
-} as Modules.Documents.Params.Populate.NestedParams<"sections.image-gallery">
+} as Modules.Documents.Params.Populate.NestedParams<"media.image-gallery">

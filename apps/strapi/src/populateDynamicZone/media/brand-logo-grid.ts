@@ -13,4 +13,4 @@ export default {
       },
     },
   },
-} as Modules.Documents.Params.Populate.NestedParams<"sections.brand-logo-grid">
+} as Modules.Documents.Params.Populate.NestedParams<"media.brand-logo-grid">

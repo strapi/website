@@ -6,7 +6,7 @@ import { ImageQuote } from "./ImageQuote"
 export function StrapiQuote({
   component,
 }: {
-  readonly component: Data.Component<"sections.quote">
+  readonly component: Data.Component<"testimonials.quote">
 }) {
   if (component.variant === "image") {
     return <ImageQuote component={component} />

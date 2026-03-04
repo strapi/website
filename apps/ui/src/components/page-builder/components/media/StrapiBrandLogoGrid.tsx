@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/styles"
 
 type BrandLogoGridItem = NonNullable<
-  Data.Component<"sections.brand-logo-grid">["items"]
+  Data.Component<"media.brand-logo-grid">["items"]
 >[number]
 
 function LogoImage({
@@ -86,7 +86,7 @@ function LogoItem({
 export function StrapiBrandLogoGrid({
   component,
 }: {
-  readonly component: Data.Component<"sections.brand-logo-grid">
+  readonly component: Data.Component<"media.brand-logo-grid">
 }) {
   const variant = component.variant ?? "plain"
 

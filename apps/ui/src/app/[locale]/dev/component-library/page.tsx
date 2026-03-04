@@ -30,15 +30,16 @@ import {
 import { Spinner } from "@/components/elementary/Spinner"
 import { Tooltip } from "@/components/elementary/Tooltip"
 import { TriangleMask } from "@/components/elementary/TriangleMask"
+import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
+import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
+import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
+import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
+import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
-import { StrapiBrandLogoGrid } from "@/components/page-builder/components/sections/StrapiBrandLogoGrid"
-import { StrapiCaseStudyCard } from "@/components/page-builder/components/sections/StrapiCaseStudyCard"
-import { StrapiContentCard } from "@/components/page-builder/components/sections/StrapiContentCard"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
-import { StrapiImageGallery } from "@/components/page-builder/components/sections/StrapiImageGallery"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
@@ -159,6 +160,7 @@ const TOC = [
   { id: "brand-logo-grid", label: "BrandLogoGrid" },
   { id: "case-study-card", label: "CaseStudyCard" },
   { id: "image-gallery", label: "ImageGallery" },
+  { id: "image", label: "Image" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -273,13 +275,13 @@ const contentCardDefaultExample = {
   title: "Architecture & Hosting Flexibility",
   content:
     "Let's examine how these platforms differ in deployment options, infrastructure control, and scaling approaches – key factors that impact your team's operational autonomy and compliance requirements.\n\n| Feature | ButterCMS | Strapi |\n|---|---|---|\n| **Deployment Options** | Managed SaaS only | Self-hosted, cloud, on-premises |\n| **Infrastructure Control** | None (fully managed) | Complete control over hosting environment |\n| **Data Ownership** | Hosted on ButterCMS servers | Full data ownership and control |",
-} as Data.Component<"sections.content-card">
+} as Data.Component<"cards.content-card">
 
 const contentCardNoLabelExample = {
   title: "What is Strapi?",
   content:
     "Strapi is an open-source, headless CMS built on Node.js that gives developers complete control over their content architecture and deployment environment. It supports both **REST and GraphQL APIs** out of the box.\n\n- Fully customizable content types\n- Role-based access control\n- Plugin ecosystem for extensibility\n- Self-hosted or managed cloud deployment",
-} as Data.Component<"sections.content-card">
+} as Data.Component<"cards.content-card">
 
 const faqSectionDefaultExample = {
   sectionLabel: "FAQ",
@@ -370,7 +372,7 @@ const brandLogoGridPlainExample = {
     { id: 4, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 4", LOGO_SIZE) },
     { id: 5, image: mockBasicImage(PLACEHOLDER_LOGO, "Company 5", LOGO_SIZE) },
   ],
-} as Data.Component<"sections.brand-logo-grid">
+} as Data.Component<"media.brand-logo-grid">
 
 const LOGO_SIZE_BORDERED = { width: 60, height: 60 }
 
@@ -397,7 +399,7 @@ const brandLogoGridBorderedExample = {
       image: mockBasicImage(PLACEHOLDER_LOGO, "Partner 4", LOGO_SIZE_BORDERED),
     },
   ],
-} as Data.Component<"sections.brand-logo-grid">
+} as Data.Component<"media.brand-logo-grid">
 
 const caseStudyCardDefaultExample = {
   companyName: "Tesco",
@@ -411,7 +413,7 @@ const caseStudyCardDefaultExample = {
     href: "/user-stories/tesco",
     newTab: false,
   },
-} as unknown as Data.Component<"sections.case-study-card">
+} as unknown as Data.Component<"cards.case-study-card">
 
 const imageGalleryDefaultExample = {
   images: Array.from({ length: 8 }, (_, i) => ({
@@ -421,7 +423,7 @@ const imageGalleryDefaultExample = {
     fallbackSrc: `https://picsum.photos/seed/gallery${i + 1}/800/600`,
   })),
   variant: "contained",
-} as unknown as Data.Component<"sections.image-gallery">
+} as unknown as Data.Component<"media.image-gallery">
 
 const imageGalleryFullBleedExample = {
   images: Array.from({ length: 6 }, (_, i) => ({
@@ -431,7 +433,49 @@ const imageGalleryFullBleedExample = {
     fallbackSrc: `https://picsum.photos/seed/fullbleed${i + 1}/800/600`,
   })),
   variant: "full-bleed",
-} as unknown as Data.Component<"sections.image-gallery">
+} as unknown as Data.Component<"media.image-gallery">
+
+const imageDefaultExample = {
+  image: mockBasicImage(
+    "https://picsum.photos/seed/strapi-img/800/400",
+    "Example image",
+    { width: 800, height: 400 }
+  ),
+  alignment: "center",
+} as Data.Component<"media.image">
+
+const imageWithLinkExample = {
+  image: mockBasicImage(
+    "https://picsum.photos/seed/strapi-link-img/600/300",
+    "Clickable image",
+    { width: 600, height: 300 }
+  ),
+  link: {
+    type: "external",
+    label: "Visit Strapi",
+    href: "https://strapi.io",
+    newTab: true,
+  },
+  alignment: "center",
+} as unknown as Data.Component<"media.image">
+
+const imageLeftExample = {
+  image: mockBasicImage(
+    "https://picsum.photos/seed/strapi-left/400/300",
+    "Left-aligned image",
+    { width: 400, height: 300 }
+  ),
+  alignment: "left",
+} as Data.Component<"media.image">
+
+const imageRightExample = {
+  image: mockBasicImage(
+    "https://picsum.photos/seed/strapi-right/400/300",
+    "Right-aligned image",
+    { width: 400, height: 300 }
+  ),
+  alignment: "right",
+} as Data.Component<"media.image">
 
 // ---------------------------------------------------------------------------
 // Page
@@ -1420,6 +1464,29 @@ export default function ComponentLibraryPage() {
 
           <Variant label='variant="full-bleed" (6 images, edge-to-edge)'>
             <StrapiImageGallery component={imageGalleryFullBleedExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Image                                                             */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="image" title="Image">
+        <div className="-mx-6 space-y-10">
+          <Variant label='alignment="center" (default)'>
+            <StrapiImage component={imageDefaultExample} />
+          </Variant>
+
+          <Variant label='alignment="left"'>
+            <StrapiImage component={imageLeftExample} />
+          </Variant>
+
+          <Variant label='alignment="right"'>
+            <StrapiImage component={imageRightExample} />
+          </Variant>
+
+          <Variant label="With link (clickable image)">
+            <StrapiImage component={imageWithLinkExample} />
           </Variant>
         </div>
       </Section>

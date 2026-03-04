@@ -31,7 +31,7 @@ function getSpanClass(index: number): string {
 export function StrapiImageGallery({
   component,
 }: {
-  readonly component: Data.Component<"sections.image-gallery">
+  readonly component: Data.Component<"media.image-gallery">
 }) {
   const images = component.images ?? []
 

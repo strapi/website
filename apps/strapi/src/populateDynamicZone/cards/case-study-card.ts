@@ -9,4 +9,4 @@ export default {
     ctaLink: linkTextPopulate,
     backgroundImage: basicImagePopulate,
   },
-} as Modules.Documents.Params.Populate.NestedParams<"sections.case-study-card">
+} as Modules.Documents.Params.Populate.NestedParams<"cards.case-study-card">

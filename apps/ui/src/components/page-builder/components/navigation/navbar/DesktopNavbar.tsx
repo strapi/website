@@ -1,6 +1,7 @@
 import type { Nullable } from "@repo/shared-data"
 import type { Data } from "@repo/strapi-types"
 
+import { GithubStarButton } from "@/components/elementary/GithubStarButton"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import {
   NavigationMenu,
@@ -19,6 +20,7 @@ interface DesktopNavbarProps extends React.ComponentProps<"div"> {
   readonly ctaLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
+  readonly githubStars: number | null
   readonly className?: string
 }
 
@@ -27,6 +29,7 @@ export function DesktopNavbar({
   ctaLinks,
   bottomLinks,
   logoImage,
+  githubStars,
   className,
   ...restProps
 }: DesktopNavbarProps) {
@@ -60,6 +63,7 @@ export function DesktopNavbar({
       ) : null}
 
       <div className="ml-auto flex items-center gap-2">
+        <GithubStarButton stars={githubStars} />
         {ctaLinks?.map((link, index) => (
           <StrapiLink
             key={link.id ?? index}

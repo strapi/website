@@ -7,7 +7,7 @@ import { Markdown } from "@/components/elementary/markdown/Markdown"
 export function StrapiContentCard({
   component,
 }: {
-  readonly component: Data.Component<"sections.content-card">
+  readonly component: Data.Component<"cards.content-card">
 }) {
   if (!component.title) return null
 

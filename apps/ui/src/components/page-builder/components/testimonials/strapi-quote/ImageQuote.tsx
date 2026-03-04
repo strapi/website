@@ -9,7 +9,7 @@ import { QuoteAuthorBlock } from "./QuoteAuthorBlock"
 export function ImageQuote({
   component,
 }: {
-  readonly component: Data.Component<"sections.quote">
+  readonly component: Data.Component<"testimonials.quote">
 }) {
   return (
     <section className="py-24">

@@ -74,7 +74,7 @@ export function MobileNavbar({
                 return (
                   <div key={item.id}>
                     <DirectNavItem
-                      className="spring-bounce w-full justify-start text-lg font-semibold"
+                      className="animate-spring-sm w-full justify-start text-lg font-semibold"
                       item={item}
                     />
                     {Array.isArray(sections) && (

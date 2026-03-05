@@ -17,7 +17,7 @@ export function FeatureCardImage({
     <div
       data-slot="feature-card-image"
       className={cn(
-        "relative overflow-hidden [&_img]:size-full [&_img]:object-cover",
+        "rounded-strapi-sm relative aspect-video overflow-hidden [&_img]:size-full [&_img]:object-contain",
         className
       )}
       {...props}

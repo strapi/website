@@ -1,0 +1,53 @@
+{
+  "entities": {
+    "universals": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 109,
+      "errors": []
+    },
+    "redirects": {
+      "total": 115,
+      "migrated": 115,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 138,
+      "errors": []
+    },
+    "post-categories": {
+      "total": 10,
+      "migrated": 10,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 26,
+      "errors": []
+    },
+    "post-tags": {
+      "total": 103,
+      "migrated": 103,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 143,
+      "errors": []
+    },
+    "blog-posts": {
+      "total": 1190,
+      "migrated": 21,
+      "skipped": 1169,
+      "failed": 0,
+      "lastProcessedId": 1448,
+      "errors": []
+    },
+    "plans": {
+      "total": 12,
+      "migrated": 12,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 16,
+      "errors": []
+    }
+  },
+  "lastRun": "2026-03-05T12:03:10.277Z"
+}

@@ -31,7 +31,7 @@ export function StrapiFeatureCard({
         >
           {hasImage && imageOnLeft && (
             <FeatureCardImage>
-              <StrapiBasicImage component={component.image} />
+              <StrapiBasicImage component={component.image} fill />
             </FeatureCardImage>
           )}
 
@@ -64,7 +64,7 @@ export function StrapiFeatureCard({
 
           {hasImage && !imageOnLeft && (
             <FeatureCardImage>
-              <StrapiBasicImage component={component.image} />
+              <StrapiBasicImage component={component.image} fill />
             </FeatureCardImage>
           )}
         </FeatureCard>

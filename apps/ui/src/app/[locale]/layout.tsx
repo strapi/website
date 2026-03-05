@@ -101,9 +101,7 @@ export default async function RootLayout({
                 <StrapiHeader locale={locale} />
               </ErrorBoundary>
 
-              <div className="flex-1">
-                <div>{children}</div>
-              </div>
+              <div className="flex-1">{children}</div>
 
               <TailwindIndicator />
 

@@ -97,6 +97,32 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsHeroHomeCta extends Struct.ComponentSchema {
+  collectionName: "components_elements_hero_home_ctas"
+  info: {
+    description: ""
+    displayName: "HeroHomeCta"
+    icon: "code"
+  }
+  attributes: {
+    code: Schema.Attribute.String
+    cta: Schema.Attribute.Component<"utilities.link", false>
+  }
+}
+
+export interface ElementsHeroHomeTestimonials extends Struct.ComponentSchema {
+  collectionName: "components_elements_hero_home_testimonials"
+  info: {
+    description: ""
+    displayName: "HeroHomeTestimonials"
+    icon: "star"
+  }
+  attributes: {
+    logos: Schema.Attribute.Component<"utilities.basic-image", true>
+    title: Schema.Attribute.String
+  }
+}
+
 export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
   collectionName: "components_elements_how_it_works_items"
   info: {
@@ -451,6 +477,7 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
     ctaLinks: Schema.Attribute.Component<"utilities.link", true>
     githubStars: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
     logoImage: Schema.Attribute.Component<"utilities.link-image", false>
+    logoImageLight: Schema.Attribute.Component<"utilities.link-image", false>
     navItems: Schema.Attribute.Component<"navbar.nav-item", true>
   }
 }
@@ -696,6 +723,39 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
           localized: true
         }
       }>
+  }
+}
+
+export interface SectionsHero extends Struct.ComponentSchema {
+  collectionName: "components_sections_heroes"
+  info: {
+    description: ""
+    displayName: "Hero"
+    icon: "rocket"
+  }
+  attributes: {
+    ctas: Schema.Attribute.Component<"utilities.link", true>
+    description: Schema.Attribute.RichText
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    label: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface SectionsHeroHome extends Struct.ComponentSchema {
+  collectionName: "components_sections_hero_homes"
+  info: {
+    description: ""
+    displayName: "HeroHome"
+    icon: "house"
+  }
+  attributes: {
+    cta: Schema.Attribute.Component<"elements.hero-home-cta", false>
+    testimonials: Schema.Attribute.Component<
+      "elements.hero-home-testimonials",
+      false
+    >
+    title: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -1170,6 +1230,8 @@ declare module "@strapi/strapi" {
       "cards.feature-card": CardsFeatureCard
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
       "elements.footer-item": ElementsFooterItem
+      "elements.hero-home-cta": ElementsHeroHomeCta
+      "elements.hero-home-testimonials": ElementsHeroHomeTestimonials
       "elements.how-it-works-item": ElementsHowItWorksItem
       "elements.team-member-item": ElementsTeamMemberItem
       "elements.testimony-item": ElementsTestimonyItem
@@ -1200,6 +1262,8 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.faq-section": SectionsFaqSection
+      "sections.hero": SectionsHero
+      "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection
       "sections.meet-the-team": SectionsMeetTheTeam

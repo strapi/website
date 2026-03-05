@@ -581,6 +581,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.testimonies",
         "sections.meet-the-team",
         "media.video",
+        "sections.hero",
+        "sections.hero-home",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

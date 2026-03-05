@@ -32,7 +32,9 @@ export function GithubStarButton({
       {...restProps}
     >
       <GithubIcon className="size-6" />
-      <Typography variant="body2">{formatStars(stars)}</Typography>
+      <Typography variant="body2" className="text-inherit">
+        {formatStars(stars)}
+      </Typography>
     </a>
   )
 }

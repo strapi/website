@@ -40,6 +40,8 @@ import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVi
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
+import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
+import { StrapiHeroHome } from "@/components/page-builder/components/sections/StrapiHeroHome"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
@@ -167,6 +169,8 @@ const TOC = [
   { id: "testimonies", label: "Testimonies" },
   { id: "meet-the-team", label: "MeetTheTeam" },
   { id: "video", label: "Video" },
+  { id: "hero", label: "Hero" },
+  { id: "hero-home", label: "HeroHome" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -1721,6 +1725,124 @@ export default function ComponentLibraryPage() {
                   link: null,
                   alignment: "left",
                 } as Data.Component<"media.video">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hero" title="Hero">
+        <div className="space-y-6">
+          <Variant label="Default">
+            <StrapiHero
+              component={
+                {
+                  id: 400,
+                  __component: "sections.hero",
+                  label: "Open Source",
+                  title: "Design APIs fast, manage content easily.",
+                  description:
+                    "Strapi is the leading **open-source headless CMS**. It's 100% JavaScript/TypeScript, fully customizable, and developer-first.",
+                  ctas: [
+                    {
+                      id: 401,
+                      type: "page",
+                      label: "Get Started",
+                      href: "/cloud",
+                      newTab: false,
+                      page: null,
+                      decorations: {
+                        id: 501,
+                        variant: "default",
+                        size: "lg",
+                        hasIcons: false,
+                        leftIcon: null,
+                        rightIcon: null,
+                      },
+                    },
+                    {
+                      id: 402,
+                      type: "external",
+                      label: "Watch Demo",
+                      href: "#",
+                      newTab: false,
+                      page: null,
+                      decorations: {
+                        id: 502,
+                        variant: "outline",
+                        size: "lg",
+                        hasIcons: false,
+                        leftIcon: null,
+                        rightIcon: null,
+                      },
+                    },
+                  ],
+                  image: mockBasicImage(
+                    "https://picsum.photos/seed/hero/1200/600",
+                    "Hero image"
+                  ),
+                } as Data.Component<"sections.hero">
+              }
+            />
+          </Variant>
+
+          <Variant label="Without CTAs">
+            <StrapiHero
+              component={
+                {
+                  id: 403,
+                  __component: "sections.hero",
+                  title: "A simpler hero without buttons",
+                  description: "Just a title and description, no call-to-action buttons.",
+                  label: null,
+                  ctas: [],
+                  image: null,
+                } as Data.Component<"sections.hero">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hero-home" title="HeroHome">
+        <div className="space-y-6">
+          <Variant label="Default">
+            <StrapiHeroHome
+              component={
+                {
+                  id: 410,
+                  __component: "sections.hero-home",
+                  cta: {
+                    id: 411,
+                    code: "npx create-strapi@latest",
+                    cta: {
+                      id: 412,
+                      type: "external",
+                      label: "Get Started Free",
+                      href: "#",
+                      newTab: false,
+                      page: null,
+                      decorations: {
+                        id: 413,
+                        variant: "default",
+                        size: "lg",
+                        hasIcons: false,
+                        leftIcon: null,
+                        rightIcon: null,
+                      },
+                    },
+                  },
+                  testimonials: {
+                    id: 414,
+                    title: "Trusted by 800,000+ developers worldwide",
+                    logos: [
+                      mockBasicImage(PLACEHOLDER_LOGO, "Company 1"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Company 2"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Company 3"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Company 4"),
+                    ],
+                  },
+                } as Data.Component<"sections.hero-home">
               }
             />
           </Variant>

@@ -10,7 +10,7 @@ export const sectionDescriptionVariants = cva(
     variants: {
       variant: {
         default: "",
-        inverse: "text-strapi-neutral-400",
+        inverse: "text-background/60",
         purple: "",
       },
       size: {

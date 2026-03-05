@@ -448,6 +448,9 @@
   }
 
   /* Strapi Design System Colors */
+  --color-strapi-gray-700: oklch(0.523 0.052 284.472); /* #364153 */
+  --color-strapi-gray-950: oklch(0.13 0.0274 262.234); /* #030712 */
+
   --color-strapi-neutral-0: oklch(1 0 0); /* #ffffff */
   --color-strapi-neutral-100: oklch(0.974 0.004 286.326); /* #f6f6f9 */
   --color-strapi-neutral-200: oklch(0.938 0.007 286.27); /* #eaeaef */

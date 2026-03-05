@@ -81,7 +81,9 @@
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
-        "media.video"
+        "media.video",
+        "sections.hero",
+        "sections.hero-home"
       ]
     },
     "children": {

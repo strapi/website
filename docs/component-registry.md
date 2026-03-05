@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-03-04T22:00
+> Auto-updated by skills. Last updated: 2026-03-05T21:10
 
 ## Registry Freshness Policy
 
@@ -83,6 +83,10 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `plans.pricing-switcher`                | plans         | PricingSwitcher             | title:string, monthlyTitle:string, monthlySubtitle:string, yearlyTitle:string, yearlySubtitle:string, showYearlyToggle:boolean, isYearlyDefault:boolean, planTypesSwitcher:component                                                                                                                            |
 | `sections.meet-the-team`                | sections      | MeetTheTeam                 | section:utilities.section-header (req), items:repeatable elements.team-member-item (req), ctaTitle:string (opt), ctaLink:utilities.link-text (opt)                                                                                                                                                              |
 | `elements.team-member-item`             | elements      | TeamMemberItem              | image:utilities.basic-image (opt), name:string (req), role:string (req), department:string (opt)                                                                                                                                                                                                                |
+| `sections.hero`                         | sections      | Hero                        | label:string (opt), title:string (req), description:richtext (opt), ctas:repeatable utilities.link (opt), image:utilities.basic-image (opt)                                                                                                                                                                      |
+| `sections.hero-home`                    | sections      | HeroHome                    | cta:elements.hero-home-cta (opt), testimonials:elements.hero-home-testimonials (opt)                                                                                                                                                                                                                             |
+| `elements.hero-home-cta`                | elements      | HeroHomeCta                 | code:string (opt), cta:utilities.link (opt)                                                                                                                                                                                                                                                                      |
+| `elements.hero-home-testimonials`       | elements      | HeroHomeTestimonials        | title:string (opt), logos:repeatable utilities.basic-image (opt)                                                                                                                                                                                                                                                 |
 | `media.video`                           | media         | Video                       | url:string (req), thumbnail:utilities.basic-image (opt), link:utilities.link (opt), alignment:enumeration(left\|center\|right, default:center)                                                                                                                                                                  |
 
 ## React Elementary Components
@@ -134,6 +138,8 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | UID                             | React Component           | Path                                                                          | Dynamic Zone |
 | ------------------------------- | ------------------------- | ----------------------------------------------------------------------------- | ------------ |
 | `sections.feature-card`         | StrapiFeatureCard         | `page-builder/components/sections/StrapiFeatureCard`                          | Page         |
+| `sections.hero`                 | StrapiHero                | `page-builder/components/sections/StrapiHero`                                 | Page         |
+| `sections.hero-home`            | StrapiHeroHome            | `page-builder/components/sections/StrapiHeroHome`                             | Page         |
 | `sections.faq-section`          | StrapiFaqSection          | `page-builder/components/sections/StrapiFaqSection`                           | Page         |
 | `sections.how-it-works`         | StrapiHowItWorks          | `page-builder/components/sections/StrapiHowItWorks`                           | Page         |
 | `sections.integrations-section` | StrapiIntegrationsSection | `page-builder/components/sections/StrapiIntegrationsSection`                  | Page         |

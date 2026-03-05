@@ -38,7 +38,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
     <>
       <StrapiStructuredData structuredData={data?.seo?.structuredData} />
 
-      <main className={cn("flex w-full flex-col overflow-hidden")}>
+      <main className={cn("flex w-full flex-col")}>
         <Container>
           <Breadcrumbs
             breadcrumbs={response?.meta?.breadcrumbs}

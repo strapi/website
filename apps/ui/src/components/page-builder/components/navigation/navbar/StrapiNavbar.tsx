@@ -14,19 +14,24 @@ export async function StrapiNavbar({
   const githubStars = component.githubStars ? await fetchGithubStars() : null
 
   return (
-    <nav className="bg-background sticky top-0 z-40 flex h-16 w-full [animation:nav-shadow_linear_both] items-center [animation-range:0px_80px] [animation-timeline:scroll()] lg:h-20">
+    <nav
+      data-navbar
+      className="sticky top-0 z-40 flex h-16 w-full [animation:nav-scroll-shadow_linear_both,nav-scroll-snap_ease-out_both] items-center [--nav-logo-default-opacity:1] [--nav-logo-light-opacity:0] [--nav-text-initial:inherit] [--nav-text-scrolled:inherit] [animation-range:0px_80px,0px_40px] [animation-timeline:scroll(),scroll()] lg:h-20 lg:text-[var(--nav-text-initial)]"
+    >
       <Container>
         <DesktopNavbar
           navItems={component.navItems}
           ctaLinks={component.ctaLinks}
           bottomLinks={component.bottomLinks}
           logoImage={component.logoImage}
+          logoImageLight={component.logoImageLight}
           githubStars={githubStars}
         />
 
         <MobileNavbar
           navItems={component.navItems}
           logoImage={component.logoImage}
+          logoImageLight={component.logoImageLight}
           bottomLinks={component.bottomLinks}
         />
       </Container>

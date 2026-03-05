@@ -42,6 +42,20 @@
   scrollbar-width: none; /* Firefox */
 }
 
+@utility dot-grid {
+  background-image: radial-gradient(circle, #252540 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+@utility gradient-hero-glow {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #a15bed 73.08%,
+    #4845f6 86.54%,
+    rgba(72, 69, 246, 0) 100%
+  );
+}
+
 @utility strapi-container {
   width: 100%;
   margin-inline: auto;
@@ -67,9 +81,31 @@
   }
 }
 
-@keyframes nav-shadow {
+@keyframes nav-scroll-shadow {
   to {
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+  }
+}
+
+@keyframes nav-scroll-snap {
+  to {
+    background-color: var(--color-background);
+    color: var(--nav-text-scrolled);
+    --nav-logo-default-opacity: 1;
+    --nav-logo-light-opacity: 0;
+  }
+}
+
+/* When a dark hero is present, swap to light logo on all sizes */
+body:has([data-dark-hero]) nav[data-navbar] {
+  --nav-logo-default-opacity: 0;
+  --nav-logo-light-opacity: 1;
+}
+
+/* White nav text only on desktop */
+@media (width >= 1024px) {
+  body:has([data-dark-hero]) nav[data-navbar] {
+    --nav-text-initial: white;
   }
 }
 
@@ -98,6 +134,25 @@
     rgba(255, 255, 255, 0) 69.5%,
     rgba(255, 255, 255, 0.8) 100%
   ) !important;
+}
+
+.hero-home-card-border {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 92, 255, 0.5) 0%,
+    rgba(99, 92, 255, 0.15) 25%,
+    rgba(54, 65, 83, 0.5) 50%,
+    rgba(54, 65, 83, 0.3) 100%
+  );
+}
+
+.hero-home-code-border {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 92, 255, 0.6) 0%,
+    rgba(151, 57, 222, 0.4) 40%,
+    rgba(54, 65, 83, 0.5) 100%
+  );
 }
 
 @layer base {

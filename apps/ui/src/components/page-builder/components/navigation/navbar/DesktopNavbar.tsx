@@ -20,15 +20,20 @@ interface DesktopNavbarProps extends React.ComponentProps<"div"> {
   readonly ctaLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
+  readonly logoImageLight: Nullable<Data.Component<"utilities.link-image">>
   readonly githubStars: number | null
   readonly className?: string
 }
+
+const logoClassName =
+  "flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-7 [&_img]:!w-auto xl:[&_img]:!max-h-8"
 
 export function DesktopNavbar({
   navItems,
   ctaLinks,
   bottomLinks,
   logoImage,
+  logoImageLight,
   githubStars,
   className,
   ...restProps
@@ -38,12 +43,26 @@ export function DesktopNavbar({
       className={cn("hidden items-center gap-3 lg:flex", className)}
       {...restProps}
     >
-      {logoImage && (
-        <StrapiLinkImage
-          component={logoImage}
-          className="flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-7 [&_img]:!w-auto xl:[&_img]:!max-h-8"
-        />
-      )}
+      <div className="relative shrink-0">
+        {logoImage && (
+          <StrapiLinkImage
+            component={logoImage}
+            className={cn(
+              logoClassName,
+              "opacity-[var(--nav-logo-default-opacity)]"
+            )}
+          />
+        )}
+        {logoImageLight && (
+          <StrapiLinkImage
+            component={logoImageLight}
+            className={cn(
+              logoClassName,
+              "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"
+            )}
+          />
+        )}
+      </div>
 
       {navItems?.length ? (
         <NavigationMenu className="static max-w-none flex-initial">

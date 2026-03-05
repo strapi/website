@@ -16,12 +16,17 @@ import { StrapiLinkImage } from "../../utilities/StrapiLinkImage"
 interface MobileNavbarProps extends React.ComponentProps<"div"> {
   readonly navItems: Nullable<Data.Component<"navbar.nav-item">[]>
   readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
+  readonly logoImageLight: Nullable<Data.Component<"utilities.link-image">>
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
 }
+
+const logoClassName =
+  "flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-6 [&_img]:!w-auto"
 
 export function MobileNavbar({
   navItems,
   logoImage,
+  logoImageLight,
   className,
   bottomLinks,
   ...restProps
@@ -37,12 +42,26 @@ export function MobileNavbar({
       className={cn("relative flex justify-between lg:hidden", className)}
       {...restProps}
     >
-      {logoImage && (
-        <StrapiLinkImage
-          component={logoImage}
-          className="flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-6 [&_img]:!w-auto"
-        />
-      )}
+      <div className="relative shrink-0">
+        {logoImage && (
+          <StrapiLinkImage
+            component={logoImage}
+            className={cn(
+              logoClassName,
+              "opacity-[var(--nav-logo-default-opacity)]"
+            )}
+          />
+        )}
+        {logoImageLight && (
+          <StrapiLinkImage
+            component={logoImageLight}
+            className={cn(
+              logoClassName,
+              "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"
+            )}
+          />
+        )}
+      </div>
 
       <Button variant="secondary" size="icon" onClick={() => setIsOpen(true)}>
         <ListIcon weight="bold" />

@@ -14,6 +14,8 @@ import { StrapiPlanPricingCards } from "@/components/page-builder/components/pla
 import { StrapiPlanComparisonTable } from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
+import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
+import { StrapiHeroHome } from "@/components/page-builder/components/sections/StrapiHeroHome"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
@@ -47,6 +49,8 @@ export const ContentComponents: Partial<
   "blog.author-banner": StrapiAuthorBanner,
 
   // Sections
+  "sections.hero": StrapiHero,
+  "sections.hero-home": StrapiHeroHome,
   "sections.faq-section": StrapiFaqSection,
   "sections.how-it-works": StrapiHowItWorks,
   "sections.integrations-section": StrapiIntegrationsSection,

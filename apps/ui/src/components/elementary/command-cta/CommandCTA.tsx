@@ -1,8 +1,7 @@
 "use client"
 
-import { CopyButton } from "@/components/elementary/CopyButton"
 import { Box } from "@/components/elementary/box/Box"
-import { Typography } from "@/components/typography"
+import { CopyButton } from "@/components/elementary/CopyButton"
 import { Button } from "@/components/ui/button"
 import { useClip } from "@/hooks/useClip"
 import { cn } from "@/lib/styles"
@@ -36,25 +35,10 @@ export function CommandCTA({
       {...props}
     >
       <div className="relative z-10">
-        <Typography
-          tag="h3"
-          textColor="white"
-          variant="subtitle1"
-          fontWeight="semiBold"
-          className="mb-4"
-        >
-          {title}
-        </Typography>
+        <h3 className="mb-4 text-2xl font-semibold text-white">{title}</h3>
 
         {description && (
-          <Typography
-            tag="p"
-            variant="body2"
-            textColor="white"
-            className="mb-5"
-          >
-            {description}
-          </Typography>
+          <p className="mb-5 text-base text-white">{description}</p>
         )}
 
         {codeSnippet && (

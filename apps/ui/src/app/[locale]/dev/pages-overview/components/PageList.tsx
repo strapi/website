@@ -3,7 +3,6 @@
 import { useState } from "react"
 
 import { AppLink } from "@/components/elementary/AppLink"
-import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 
 export function PageList({
@@ -29,7 +28,9 @@ export function PageList({
       <div className="flex flex-col gap-6">
         {pages?.map((page) => (
           <div key={page.id}>
-            <Typography variant="header1">{page.title}</Typography>
+            <h2 className="text-foreground text-5xl font-bold tracking-tight">
+              {page.title}
+            </h2>
             <AppLink
               href={page.fullPath ?? ""}
               openInNewTab
@@ -42,12 +43,13 @@ export function PageList({
                 {page?.content?.map(
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (block: any, i: number) => (
-                    <Typography
+                    <p
                       // eslint-disable-next-line react/no-array-index-key
                       key={`${block.id ?? block.__component}-${i}`}
+                      className="text-foreground text-lg"
                     >
                       {block.__component}
-                    </Typography>
+                    </p>
                   )
                 )}
               </div>

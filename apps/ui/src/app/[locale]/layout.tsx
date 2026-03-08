@@ -88,7 +88,7 @@ export default async function RootLayout({
       </head>
       <body
         className={cn(
-          "text-strapi-blue-800 min-h-screen bg-white font-sans",
+          "text-foreground min-h-screen bg-white font-sans",
           fontPoppins.variable
         )}
       >

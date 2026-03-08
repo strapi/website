@@ -139,7 +139,9 @@ export function FilterableCardGrid<T extends Record<string, unknown>>({
 
           {filters?.map((group) => (
             <div key={group.label} className="flex flex-col gap-3">
-              <p className="typo-label text-foreground">{group.label}</p>
+              <p className="text-foreground text-sm font-semibold tracking-[0.5px] uppercase">
+                {group.label}
+              </p>
 
               <div className="flex flex-col gap-2">
                 {group.options.map((option) => {
@@ -157,7 +159,7 @@ export function FilterableCardGrid<T extends Record<string, unknown>>({
                       />
                       <Label
                         htmlFor={`filter-${group.label}-${option.value}`}
-                        className="text-strapi-body-2 cursor-pointer font-normal"
+                        className="cursor-pointer text-base font-normal"
                       >
                         {option.label}
                       </Label>

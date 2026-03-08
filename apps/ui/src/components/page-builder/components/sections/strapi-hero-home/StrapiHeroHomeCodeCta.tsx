@@ -1,7 +1,6 @@
 "use client"
 
 import { CopyButton } from "@/components/elementary/CopyButton"
-import { Typography } from "@/components/typography"
 import { ShineBorder } from "@/components/ui/shine-border"
 
 export interface StrapiHeroHomeCodeCtaProps {
@@ -22,9 +21,7 @@ export function StrapiHeroHomeCodeCta({ code }: StrapiHeroHomeCodeCtaProps) {
           ]}
         />
         <div className="relative z-10 flex items-center justify-between gap-4 px-4 py-3.5">
-          <Typography variant="body1" textColor="white">
-            {code}
-          </Typography>
+          <p className="text-lg text-white">{code}</p>
 
           <CopyButton
             copyContent={code}

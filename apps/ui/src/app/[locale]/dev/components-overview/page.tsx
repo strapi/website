@@ -3,7 +3,6 @@ import type { Locale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 
 import { ComponentsList } from "@/app/[locale]/dev/components-overview/components/ComponentsList"
-import { Typography } from "@/components/typography"
 import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 
@@ -50,7 +49,9 @@ export default async function ComponentsOverviewPage({
 
   return (
     <>
-      <Typography tag="h1">All Components ({components?.length})</Typography>
+      <h1 className="text-foreground text-5xl font-bold tracking-tight">
+        All Components ({components?.length})
+      </h1>
       <ComponentsList components={components} pages={pages} />
     </>
   )

@@ -2,8 +2,6 @@
 
 import type { Nullable } from "@repo/shared-data"
 
-import { Typography } from "@/components/typography"
-
 import { usePricingBilling } from "./PricingBillingContext"
 
 interface PricingCardPriceProps {
@@ -57,17 +55,15 @@ export function PricingCardPrice({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <Typography variant="header3" tag="p">
+        <p className="text-foreground text-3xl font-bold tracking-tight">
           {(billing === "yearly" && yearly?.yearlyPerMonth) || price}
-        </Typography>
+        </p>
         {priceSubtext && (
-          <Typography variant="smallText1" tag="p" textColor="muted">
-            {priceSubtext}
-          </Typography>
+          <p className="text-strapi-neutral-600 text-sm">{priceSubtext}</p>
         )}
       </div>
       {billing === "yearly" && (
-        <Typography variant="smallText1">
+        <p className="text-foreground text-sm">
           {yearly?.preSavingsYearly && (
             <>
               <span className="text-strapi-neutral-600 line-through">
@@ -76,7 +72,7 @@ export function PricingCardPrice({
             </>
           )}
           {yearlyPrice} billed yearly
-        </Typography>
+        </p>
       )}
     </div>
   )

@@ -7,7 +7,6 @@ import {
   SectionHeaderContainer,
   SectionTitle,
 } from "@/components/elementary/section-header"
-import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 
 import newsletterPaperPlane from "./newsletter-paper-plane.svg"
@@ -60,14 +59,9 @@ export function StrapiNewsletter({ component }: StrapiNewsletterProps) {
           </form>
 
           {component.consentText && (
-            <Typography
-              tag="p"
-              variant="smallText1"
-              textColor="white"
-              className="mt-5 w-full text-center leading-relaxed"
-            >
+            <p className="mt-5 w-full text-center text-sm leading-relaxed text-white">
               {component.consentText}
-            </Typography>
+            </p>
           )}
         </div>
       </div>

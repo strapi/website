@@ -999,7 +999,7 @@ export default function ComponentLibraryPage() {
             </div>
           </Variant>
 
-          <Variant label="FeatureCardTitle (uses Typography header3)">
+          <Variant label="FeatureCardTitle">
             <div className="space-y-4">
               <FeatureCardTitle>Default title</FeatureCardTitle>
               <FeatureCardTitle as="h2">As h2</FeatureCardTitle>

@@ -3,7 +3,6 @@ import type { Data } from "@repo/strapi-types"
 import { HeroContainer } from "@/components/elementary/HeroContainer"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
-import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 import { StrapiHeroHomeCodeCta } from "./StrapiHeroHomeCodeCta"
@@ -46,12 +45,9 @@ export function StrapiHeroHome({
               <div className="border-strapi-gray-700/50 rounded-strapi-lg grid grow-0 grid-cols-1 grid-rows-[1fr_auto] max-md:border">
                 {component.testimonials.title ? (
                   <div className="border-strapi-gray-700/50 flex items-center justify-center border-b px-8 py-5 sm:px-16 sm:py-12">
-                    <Typography
-                      variant="body2"
-                      className="text-strapi-gray-400 px-6 text-center"
-                    >
+                    <p className="text-strapi-gray-400 px-6 text-center text-base">
                       {component.testimonials.title}
-                    </Typography>
+                    </p>
                   </div>
                 ) : null}
 
@@ -69,12 +65,12 @@ export function StrapiHeroHome({
                         key={logo.id}
                         className="flex items-center justify-center p-5 sm:p-12"
                       >
-                        <div className="relative aspect-3/2 w-full max-w-[78px]">
+                        <div className="relative size-[72px] md:size-[78px]">
                           <StrapiBasicImage
                             component={logo}
                             transparentPlaceholder
                             mode="fill"
-                            sizes="(max-width: 1024px) 30vw, 180px"
+                            sizes="(max-width: 767px) 72px, 78px"
                             className="object-contain"
                             decorative
                           />

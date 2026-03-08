@@ -1,7 +1,6 @@
 import { LightningIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 
-import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 export interface PricingCardPromoProps extends React.ComponentProps<"div"> {
@@ -27,24 +26,16 @@ export function PricingCardPromo({
       )}
       {...restProps}
     >
-      <Typography
-        variant="body2"
-        className="text-strapi-blue-500 flex items-baseline gap-2"
-        fontWeight="medium"
-      >
+      <p className="text-strapi-blue-500 flex items-baseline gap-2 text-base font-medium">
         <span className="relative top-0.75">
           <LightningIcon weight="fill" />
         </span>{" "}
         {title}
-      </Typography>
+      </p>
       {subtitle && (
-        <Typography variant="body2" fontWeight="medium">
-          {subtitle}
-        </Typography>
+        <p className="text-foreground text-base font-medium">{subtitle}</p>
       )}
-      {description && (
-        <Typography variant="smallText1">{description}</Typography>
-      )}
+      {description && <p className="text-sm">{description}</p>}
     </div>
   )
 }

@@ -4,7 +4,6 @@ import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
-import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -97,26 +96,23 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <Typography variant="label">{card.plan?.name}</Typography>
-              <Typography
-                variant="smallText1"
-                fontWeight="normal"
-                textColor="neutral"
-                uppercase
-              >
+              <p className="text-foreground text-sm font-semibold tracking-[0.5px] uppercase">
+                {card.plan?.name}
+              </p>
+              <p className="text-strapi-neutral-700 text-sm uppercase">
                 {t("selfHosted")}
-              </Typography>
+              </p>
             </div>
             <div className="flex flex-row items-center justify-between">
               <div className="flex items-baseline">
-                <Typography variant="header3" fontWeight="semiBold">
+                <p className="text-foreground text-3xl font-semibold tracking-tight">
                   {checkoutState.planPreviewTotal != null
                     ? formatUsd(checkoutState.planPreviewTotal)
                     : null}
-                </Typography>
-                <Typography variant="body2" textColor="neutral">
+                </p>
+                <p className="text-strapi-neutral-700 text-base">
                   {t("billingPeriodMonthly")}
-                </Typography>
+                </p>
               </div>
               {checkoutState.hasSeatCheckout && (
                 <div className="flex flex-col gap-3">
@@ -145,14 +141,12 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
                         className="relative z-2 w-24"
                         aria-label={t("seatCountLabel")}
                       />
-                      <Typography
-                        className="absolute top-1.5 right-2 z-1 select-none"
-                        tag="span"
-                        textColor="muted"
+                      <span
+                        className="text-strapi-neutral-600 absolute top-1.5 right-2 z-1 text-base select-none"
                         aria-hidden="true"
                       >
                         {t("seats")}
-                      </Typography>
+                      </span>
                     </div>
                     <Button
                       type="button"
@@ -202,26 +196,22 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
           )}
 
           <div className="border-border flex flex-col items-baseline justify-between gap-2 border-t pt-6 sm:flex-row">
-            <Typography variant="body1">{t("totalBeforeTaxes")}</Typography>
+            <p className="text-foreground text-lg">{t("totalBeforeTaxes")}</p>
             {checkoutState.estimatedTotal != null ? (
-              <Typography variant="subtitle2" fontWeight="semiBold">
+              <p className="text-foreground text-xl font-semibold">
                 {formatUsd(checkoutState.estimatedTotal)}
-                <Typography variant="smallText1" tag="span" textColor="neutral">
+                <span className="text-strapi-neutral-700 ml-1 text-sm">
                   {t("billingPeriodMonthly")}
-                </Typography>
-              </Typography>
+                </span>
+              </p>
             ) : (
-              <Typography variant="smallText1" textColor="muted">
+              <p className="text-strapi-neutral-600 text-sm">
                 {t("totalShownAtCheckout")}
-              </Typography>
+              </p>
             )}
           </div>
 
-          {error && (
-            <Typography variant="smallText1" className="text-red-600">
-              {error}
-            </Typography>
-          )}
+          {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
 
         <DialogFooter className="mt-6">

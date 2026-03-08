@@ -9,7 +9,6 @@ import {
   SectionTitle,
   SectionLabel,
 } from "@/components/elementary/section-header"
-import { Typography } from "@/components/typography"
 import {
   Card,
   CardContent,
@@ -113,20 +112,15 @@ export function StrapiUserStoriesSection({
               <CardContent>
                 <CardLabel>{item.company}</CardLabel>
 
-                <Typography
-                  tag="h3"
-                  variant="body1"
-                  textColor="foreground"
-                  fontWeight="bold"
-                >
+                <h3 className="text-foreground text-lg font-bold">
                   {item.title}
-                </Typography>
+                </h3>
               </CardContent>
 
               <CardFooter>
                 <a
                   href="#"
-                  className="text-strapi-small-1 text-strapi-green-600 hover:text-strapi-green-700 inline-flex items-center gap-1 font-medium transition-colors"
+                  className="text-strapi-green-600 hover:text-strapi-green-700 inline-flex items-center gap-1 text-sm font-medium transition-colors"
                 >
                   Read a story
                   <ArrowRightIcon className="size-4" />

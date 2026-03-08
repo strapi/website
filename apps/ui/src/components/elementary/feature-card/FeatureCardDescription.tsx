@@ -1,15 +1,12 @@
 import type React from "react"
 
 import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
-import {
-  Typography,
-  type Variant as TypographyVariant,
-} from "@/components/typography"
+import { cn } from "@/lib/styles"
 
-const sizeVariantMap: Record<"sm" | "default" | "lg", TypographyVariant> = {
-  sm: "smallText1",
-  default: "body2",
-  lg: "body1",
+const sizeVariantMap: Record<"sm" | "default" | "lg", string> = {
+  sm: "text-sm",
+  default: "text-base",
+  lg: "text-lg",
 }
 
 export interface FeatureCardDescriptionProps {
@@ -35,13 +32,10 @@ export function FeatureCardDescription({
     )
 
   return (
-    <Typography
-      tag="p"
-      variant={sizeVariantMap[size]}
-      textColor="neutral"
-      className={className}
+    <p
+      className={cn(sizeVariantMap[size], "text-strapi-neutral-700", className)}
     >
       {content}
-    </Typography>
+    </p>
   )
 }

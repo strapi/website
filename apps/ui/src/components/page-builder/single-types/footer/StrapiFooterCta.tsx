@@ -6,7 +6,6 @@ import { Container } from "@/components/elementary/Container"
 import { SectionTitle } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
-import { Typography } from "@/components/typography"
 import { useClip } from "@/hooks/useClip"
 
 export function StrapiFooterCta({
@@ -69,7 +68,7 @@ export function StrapiFooterCta({
                             />
                           </span>
                         )}
-                        <span className="text-strapi-blue-800 text-base font-semibold">
+                        <span className="text-foreground text-base font-semibold">
                           {badge.text}
                         </span>
                       </div>
@@ -114,24 +113,15 @@ export function StrapiFooterCta({
                           />
                         </span>
                       )}
-                      <Typography
-                        tag="p"
-                        variant="subtitle1"
-                        fontWeight="semiBold"
-                      >
+                      <p className="text-foreground text-2xl font-semibold">
                         {card.title}
-                      </Typography>
+                      </p>
                     </div>
 
                     {card.description && (
-                      <Typography
-                        tag="p"
-                        variant="body1"
-                        textColor="neutral"
-                        className="mb-4"
-                      >
+                      <p className="text-strapi-neutral-700 mb-4 text-lg">
                         {card.description}
-                      </Typography>
+                      </p>
                     )}
 
                     <StrapiLink component={card.link} />

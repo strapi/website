@@ -4,7 +4,6 @@ import { Box } from "@/components/elementary/box/Box"
 import { Container } from "@/components/elementary/Container"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
-import { Typography } from "@/components/typography"
 
 export function StrapiTwoColumnGrid({
   component,
@@ -38,23 +37,22 @@ export function StrapiTwoColumnGrid({
                     </div>
                   )}
 
-                  <Typography
-                    tag="h3"
-                    variant={size === "lg" ? "header3" : "subtitle1"}
-                    fontWeight="semiBold"
-                    className={
+                  <h3
+                    className={[
+                      size === "lg" ? "text-3xl tracking-tight" : "text-2xl",
+                      "font-semibold",
                       variant === "purple"
                         ? "text-strapi-purple-600"
-                        : undefined
-                    }
+                        : "text-foreground",
+                    ].join(" ")}
                   >
                     {item.title}
-                  </Typography>
+                  </h3>
                 </div>
 
-                <Typography tag="p" variant="body1" textColor="neutral">
+                <p className="text-strapi-neutral-700 text-lg">
                   {item.description}
-                </Typography>
+                </p>
               </div>
             ))}
           </div>

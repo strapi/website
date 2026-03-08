@@ -3,7 +3,6 @@ import type { Data } from "@repo/strapi-types"
 import { Container } from "@/components/elementary/Container"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
-import { Typography } from "@/components/typography"
 
 export function StrapiTwoColumnsBenefits({
   component,
@@ -43,23 +42,14 @@ export function StrapiTwoColumnsBenefits({
                       </div>
                     )}
 
-                    <Typography
-                      tag="h3"
-                      variant="body1"
-                      fontWeight="semiBold"
-                      className="lg:text-xl"
-                    >
+                    <h3 className="text-foreground text-lg font-semibold lg:text-xl">
                       {item.title}
-                    </Typography>
+                    </h3>
                   </div>
 
-                  <Typography
-                    tag="p"
-                    variant="smallText1"
-                    className="text-center lg:text-left lg:text-base"
-                  >
+                  <p className="text-center text-sm lg:text-left lg:text-base">
                     {item.description}
-                  </Typography>
+                  </p>
                 </div>
               </div>
             ))}

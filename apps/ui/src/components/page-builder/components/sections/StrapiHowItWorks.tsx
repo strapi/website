@@ -7,7 +7,6 @@ import {
   SectionTitle,
 } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import { Typography } from "@/components/typography"
 
 export function StrapiHowItWorks({
   component,
@@ -42,19 +41,11 @@ export function StrapiHowItWorks({
                   />
                 )}
 
-                <Typography
-                  tag="h3"
-                  variant="body1"
-                  textColor="primary"
-                  fontWeight="semiBold"
-                  className="lg:text-strapi-subtitle-1 mb-4"
-                >
+                <h3 className="text-foreground mb-4 text-lg font-semibold lg:text-2xl">
                   {item.title}
-                </Typography>
+                </h3>
 
-                <Typography tag="p" variant="body1" textColor="primary">
-                  {item.description}
-                </Typography>
+                <p className="text-lg">{item.description}</p>
               </div>
             ))}
           </div>

@@ -12,3 +12,17 @@ declare module "next-intl" {
     // Formats: typeof formats
   }
 }
+
+declare global {
+  interface Window {
+    hbspt?: {
+      forms: {
+        create: (opts: {
+          portalId: string
+          formId: string
+          target: string
+        }) => void
+      }
+    }
+  }
+}

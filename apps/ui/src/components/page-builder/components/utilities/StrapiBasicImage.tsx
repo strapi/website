@@ -18,6 +18,8 @@ export interface BasicImageProps extends Omit<
   readonly forcedSizes?: { width?: number | null; height?: number | null }
   readonly format?: "large" | "small" | "medium" | "thumbnail"
   readonly autoHeight?: boolean
+  readonly fadeIn?: boolean
+  readonly transparentPlaceholder?: boolean
 }
 
 export function StrapiBasicImage({
@@ -29,6 +31,8 @@ export function StrapiBasicImage({
   format,
   useNativeNextImageOnly,
   autoHeight,
+  fadeIn,
+  transparentPlaceholder,
   ...imgProps
 }: BasicImageProps) {
   const media: StrapiImageMedia = component?.media
@@ -38,8 +42,6 @@ export function StrapiBasicImage({
   if (url == null && hideWhenMissing) {
     return null
   }
-
-  const ImageComp = useNativeNextImageOnly ? Image : ImageWithFallback
 
   const sizes = {
     width:
@@ -76,18 +78,28 @@ export function StrapiBasicImage({
     sizes.height = undefined
   }
 
+  const sharedProps = {
+    style: {
+      width: sizes.width,
+      height: autoHeight && !imgProps.fill ? "auto" : sizes.height,
+      ...imgProps.style,
+    },
+    className,
+    src: src as string,
+    alt: component?.alt ?? media?.caption ?? media?.alternativeText ?? "",
+    ...sizes,
+    ...imgProps,
+  }
+
+  if (useNativeNextImageOnly) {
+    return <Image {...sharedProps} />
+  }
+
   return (
-    <ImageComp
-      style={{
-        width: sizes.width,
-        height: autoHeight && !imgProps.fill ? "auto" : sizes.height,
-        ...imgProps.style,
-      }}
-      className={className}
-      src={src as string}
-      alt={component?.alt ?? media?.caption ?? media?.alternativeText ?? ""}
-      {...sizes}
-      {...imgProps}
+    <ImageWithFallback
+      fadeIn={fadeIn}
+      transparentPlaceholder={transparentPlaceholder}
+      {...sharedProps}
     />
   )
 }

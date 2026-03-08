@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_forms_hubspot_form",
+  "info": {
+    "displayName": "HubSpot Form",
+    "icon": "envelop",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "form": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hubspot-form.hubspot-form"
+    }
+  }
+}

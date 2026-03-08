@@ -4,6 +4,28 @@
 
 @import "tw-animate-css";
 
+@theme inline {
+  --animate-shine: shine var(--duration) infinite linear;
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
+  }
+}
+
+/*
+  ---break---
+*/
+
+@custom-variant dark (&:is(.dark *));
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -42,9 +64,15 @@
   scrollbar-width: none; /* Firefox */
 }
 
-@utility dot-grid {
+@utility bg-dot-grid {
   background-image: radial-gradient(circle, #252540 1px, transparent 1px);
   background-size: 8px 8px;
+}
+
+@keyframes hero-glow-drift {
+  to {
+    translate: 360px -120px;
+  }
 }
 
 @utility gradient-hero-glow {
@@ -115,51 +143,70 @@ body:has([data-dark-hero]) nav[data-navbar] {
   }
 }
 
-.infinite-scroll-container-horizontal {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.infinite-scroll-horizontal {
-  width: max-content;
-  flex-wrap: nowrap;
-  animation: scrollHorizontal 30s linear infinite;
-}
-
-.bg-gradient-slider {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0) 31%,
-    rgba(255, 255, 255, 0) 69.5%,
-    rgba(255, 255, 255, 0.8) 100%
-  ) !important;
-}
-
-.hero-home-card-border {
-  background: linear-gradient(
-    135deg,
-    rgba(99, 92, 255, 0.5) 0%,
-    rgba(99, 92, 255, 0.15) 25%,
-    rgba(54, 65, 83, 0.5) 50%,
-    rgba(54, 65, 83, 0.3) 100%
-  );
-}
-
-.hero-home-code-border {
-  background: linear-gradient(
-    90deg,
-    rgba(99, 92, 255, 0.6) 0%,
-    rgba(151, 57, 222, 0.4) 40%,
-    rgba(54, 65, 83, 0.5) 100%
-  );
-}
-
 @layer base {
   * {
     @apply border-gray-300 outline-purple-500/50;
   }
   body {
     @apply bg-gray-100 text-gray-900;
+  }
+}
+
+.spinner-container {
+  --_s: var(--spinner-size, 40px);
+  --_expanded: calc(var(--_s) * 1.5);
+  display: inline-grid;
+  place-items: center;
+  width: var(--_expanded);
+  height: var(--_expanded);
+}
+
+.spinner {
+  --_s: inherit;
+  --_expanded: inherit;
+  --_dot: calc(var(--_s) * 0.525);
+  --_bg: no-repeat linear-gradient(currentColor 0 0);
+  display: inline-block;
+  background: var(--_bg), var(--_bg), var(--_bg), var(--_bg);
+  background-size: var(--_dot) var(--_dot);
+  animation: spinner-move 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+}
+
+@keyframes spinner-move {
+  0% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
+    width: var(--_s);
+    height: var(--_s);
+  }
+  33% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
+    width: var(--_expanded);
+    height: var(--_expanded);
+  }
+  66% {
+    background-position:
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0;
+    width: var(--_expanded);
+    height: var(--_expanded);
+  }
+  100% {
+    background-position:
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0;
+    width: var(--_s);
+    height: var(--_s);
   }
 }

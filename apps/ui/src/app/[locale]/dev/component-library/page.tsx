@@ -32,18 +32,19 @@ import { Tooltip } from "@/components/elementary/Tooltip"
 import { TriangleMask } from "@/components/elementary/TriangleMask"
 import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
+import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/strapi-hubspot-form/StrapiHubSpotForm"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
+import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
-import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
-import { StrapiHeroHome } from "@/components/page-builder/components/sections/StrapiHeroHome"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
+import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
@@ -171,6 +172,7 @@ const TOC = [
   { id: "video", label: "Video" },
   { id: "hero", label: "Hero" },
   { id: "hero-home", label: "HeroHome" },
+  { id: "hubspot-form", label: "HubSpot Form" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -580,21 +582,15 @@ export default function ComponentLibraryPage() {
       <Section id="spinner" title="Spinner">
         <div className="space-y-6">
           <Variant label="Sizes & Colors">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-12">
               <div className="rounded bg-gray-800 p-4">
-                <Spinner className="h-4 w-4 border-2" />
+                <Spinner size="sm" className="text-white" />
               </div>
               <div className="rounded bg-gray-800 p-4">
-                <Spinner className="h-6 w-6 border-2" />
+                <Spinner size="sm" className="text-white" />
               </div>
-              <Spinner
-                className="h-6 w-6 border-2"
-                borderColorClass="border-strapi-blue-600"
-              />
-              <Spinner
-                className="h-8 w-8 border-3"
-                borderColorClass="border-strapi-purple-500"
-              />
+              <Spinner className="text-strapi-blue-600" />
+              <Spinner size="lg" className="text-strapi-purple-500" />
             </div>
           </Variant>
         </div>
@@ -1733,22 +1729,23 @@ export default function ComponentLibraryPage() {
 
       <Section id="hero" title="Hero">
         <div className="space-y-6">
-          <Variant label="Default">
+          <Variant label="Product launch">
             <StrapiHero
               component={
                 {
                   id: 400,
                   __component: "sections.hero",
-                  label: "Open Source",
-                  title: "Design APIs fast, manage content easily.",
+                  label: "Composable Content Platform",
+                  title:
+                    "Launch campaign pages and product docs without slowing engineering down.",
                   description:
-                    "Strapi is the leading **open-source headless CMS**. It's 100% JavaScript/TypeScript, fully customizable, and developer-first.",
+                    "Give marketing, product, and regional teams a shared workspace for shipping **localized pages**, **structured content**, and **reusable sections** on the same release cadence.",
                   ctas: [
                     {
                       id: 401,
-                      type: "page",
-                      label: "Get Started",
-                      href: "/cloud",
+                      type: "external",
+                      label: "Explore Platform",
+                      href: "/product",
                       newTab: false,
                       page: null,
                       decorations: {
@@ -1763,8 +1760,8 @@ export default function ComponentLibraryPage() {
                     {
                       id: 402,
                       type: "external",
-                      label: "Watch Demo",
-                      href: "#",
+                      label: "Book a Demo",
+                      href: "/contact",
                       newTab: false,
                       page: null,
                       decorations: {
@@ -1778,23 +1775,25 @@ export default function ComponentLibraryPage() {
                     },
                   ],
                   image: mockBasicImage(
-                    "https://picsum.photos/seed/hero/1200/600",
-                    "Hero image"
+                    "https://picsum.photos/seed/platform-launch/1200/600",
+                    "Team reviewing launch metrics on a dashboard"
                   ),
                 } as Data.Component<"sections.hero">
               }
             />
           </Variant>
 
-          <Variant label="Without CTAs">
+          <Variant label="Editorial focus">
             <StrapiHero
               component={
                 {
                   id: 403,
                   __component: "sections.hero",
-                  title: "A simpler hero without buttons",
-                  description: "Just a title and description, no call-to-action buttons.",
-                  label: null,
+                  title:
+                    "Turn long approval cycles into a clean publishing workflow.",
+                  description:
+                    "Model content once, route it through review, and let teams publish to web, app, and email from the same source of truth.",
+                  label: "For content teams",
                   ctas: [],
                   image: null,
                 } as Data.Component<"sections.hero">
@@ -1806,20 +1805,22 @@ export default function ComponentLibraryPage() {
 
       <Section id="hero-home" title="HeroHome">
         <div className="space-y-6">
-          <Variant label="Default">
+          <Variant label="CLI + social proof">
             <StrapiHeroHome
               component={
                 {
                   id: 410,
                   __component: "sections.hero-home",
+                  title:
+                    "Build your content stack in minutes, then scale it across every channel.",
                   cta: {
                     id: 411,
-                    code: "npx create-strapi@latest",
+                    code: "pnpm create strapi-app",
                     cta: {
                       id: 412,
                       type: "external",
-                      label: "Get Started Free",
-                      href: "#",
+                      label: "Start Free",
+                      href: "/cloud",
                       newTab: false,
                       page: null,
                       decorations: {
@@ -1834,15 +1835,59 @@ export default function ComponentLibraryPage() {
                   },
                   testimonials: {
                     id: 414,
-                    title: "Trusted by 800,000+ developers worldwide",
+                    title:
+                      "Chosen by teams shipping product, commerce, and documentation at scale",
                     logos: [
-                      mockBasicImage(PLACEHOLDER_LOGO, "Company 1"),
-                      mockBasicImage(PLACEHOLDER_LOGO, "Company 2"),
-                      mockBasicImage(PLACEHOLDER_LOGO, "Company 3"),
-                      mockBasicImage(PLACEHOLDER_LOGO, "Company 4"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Acme"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Northstar"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Helio"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Pioneer"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Vertex"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Beacon"),
                     ],
                   },
                 } as Data.Component<"sections.hero-home">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hubspot-form" title="HubSpot Form">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Live embed">
+            <StrapiHubSpotForm
+              component={
+                {
+                  id: 900,
+                  __component: "forms.hubspot-form",
+                  form: {
+                    id: 901,
+                    documentId: "component-library-demo-form",
+                    name: "Component Library Demo Form",
+                    portalId: "6893032",
+                    formId: "d3fe1d5f-9812-4046-81ed-4dd913373f2f",
+                    placeholderHeight: 620,
+                  },
+                } as Data.Component<"forms.hubspot-form">
+              }
+            />
+          </Variant>
+          <Variant label="Compact placeholder">
+            <StrapiHubSpotForm
+              component={
+                {
+                  id: 902,
+                  __component: "forms.hubspot-form",
+                  form: {
+                    id: 903,
+                    documentId: "component-library-demo-form-compact",
+                    name: "Component Library Demo Form Compact",
+                    portalId: "6893032",
+                    formId: "d3fe1d5f-9812-4046-81ed-4dd913373f2f",
+                    placeholderHeight: 420,
+                  },
+                } as Data.Component<"forms.hubspot-form">
               }
             />
           </Variant>

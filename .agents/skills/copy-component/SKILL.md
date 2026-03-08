@@ -37,7 +37,7 @@ Require this contract before execution:
 component_name: <kebab-case>
 source_url: <https://strapi.io/...>
 selector: <CSS selector for the exact section root>
-prd_goal: <1-3 sentence purpose and expected outcome>
+goal: <1-3 sentence purpose and expected outcome>
 content_constraints: <explicit constraints; use "none" when empty>
 reuse_mode: <strict-reuse|balanced|pixel-first>
 shadcn_mode: <prefer-existing|allow-install|no-shadcn>
@@ -47,7 +47,7 @@ source_urls: <optional; array of {url, selector, variant_name} for multi-variant
 
 Validation checklist:
 
-- Required: `component_name`, `source_url`, `selector`, `prd_goal`, `content_constraints`
+- Required: `component_name`, `source_url`, `selector`, `goal`, `content_constraints`
 - `reuse_mode`: `strict-reuse` | `balanced` | `pixel-first`
 - `shadcn_mode`: `prefer-existing` | `allow-install` | `no-shadcn`
 - `category`: defaults to `sections`
@@ -85,7 +85,7 @@ Extract structure and styles in a single `browser_run_code` call (token-optimize
 
 **Selector failure:** If the result contains `{ error: "selector_not_found", availableSections: [...] }`:
 
-- First attempt auto-heal: take `browser_snapshot`, match sections against `prd_goal`.
+- First attempt auto-heal: take `browser_snapshot`, match sections against `goal`.
 - If auto-heal fails: present the `availableSections` list and ask for a corrected selector.
 - Re-run mega-extract with the corrected selector.
 - Record fallback in manual follow-up notes.
@@ -255,14 +255,7 @@ Run checks:
 1. `cd apps/strapi && pnpm generate:types`
 2. `cd apps/ui && pnpm typecheck`
 3. Source vs local screenshot capture for the migrated section
-4. Checklist pass:
-   - SectionLabel/SectionTitle/SectionDescription are wrapped in a `<SectionHeader>` parent — if you see these children without the wrapper, or with manual `mt-*`/`gap-*`/`space-y-*` classes between them, the wrapper is missing
-   - `<SectionTitle>` uses a `size` preset, not raw Tailwind font classes
-   - dark background sections use `variant="inverse"` on all SectionHeader children, with NO manual `text-white` overrides
-   - standalone text blocks (outside SectionHeader) use `<Typography>` with `tag` for semantics and `variant` for visuals
-   - links/images use Strapi utility wrappers from Step 6 rules
-   - no duplicate UID or `ContentComponents` mapping
-   - component library page (`apps/ui/src/app/[locale]/dev/component-library/page.tsx`) has a `<Section>` for this component with mock data and variants — if missing, add it following the pattern from `create-content-component` Step 9
+4. Run the full code quality checklist from `references/quality-checks.md`
 5. Optional when scope is broad: `pnpm lint`
 
 If any required gate fails, do not mark migration as done. Report failing command/check and include manual follow-up.
@@ -319,16 +312,7 @@ Verdict: **PASS** or **NEEDS_WORK** with specific issues listed.
 
 #### C. Code quality checks
 
-- SectionLabel/SectionTitle/SectionDescription wrapped in `<SectionHeader>` parent — no manual `mt-*`/`gap-*`/`space-y-*` between them
-- `<SectionTitle>` uses a `size` preset, not raw Tailwind font classes
-- Dark background sections use `variant="inverse"` on all SectionHeader children, with NO manual `text-white` overrides
-- Standalone text blocks (outside SectionHeader) use `<Typography>` with `tag`/`variant`
-- Links use `<StrapiLink>`/`<StrapiLinkText>`, images use `<StrapiBasicImage>`/`<StrapiLinkImage>`
-- `<section>` → `<Container>` structure
-- No unused imports
-- Optional fields guarded with conditionals
-- Populate config exists on disk
-- No duplicate UID or `ContentComponents` mapping
+Run the full checklist from `references/quality-checks.md`.
 
 #### D. Apply fixes or exit
 

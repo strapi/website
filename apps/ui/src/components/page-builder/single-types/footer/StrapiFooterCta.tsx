@@ -1,27 +1,23 @@
 "use client"
 
 import type { Data } from "@repo/strapi-types"
-import { useState } from "react"
 
 import { Container } from "@/components/elementary/Container"
 import { SectionTitle } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import { Typography } from "@/components/typography"
+import { useClip } from "@/hooks/useClip"
 
 export function StrapiFooterCta({
   component,
 }: {
   readonly component: Data.Component<"footer.footer-cta">
 }) {
-  const [copied, setCopied] = useState(false)
+  const { copied, copy } = useClip()
 
   const handleCopy = async () => {
-    if (!component.codeSnippet) return
-
-    await navigator.clipboard.writeText(component.codeSnippet)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    await copy(component.codeSnippet)
   }
 
   return (
@@ -50,6 +46,7 @@ export function StrapiFooterCta({
                     type="button"
                     onClick={handleCopy}
                     className="text-strapi-purple-500 hover:text-strapi-purple-600 pr-6 text-base font-semibold transition-colors"
+                    aria-label={copied ? "Code copied" : "Copy code"}
                   >
                     {copied ? "Copied!" : "Copy"}
                   </button>

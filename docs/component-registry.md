@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-03-05T21:10
+> Auto-updated by skills. Last updated: 2026-03-06T10:42
 
 ## Registry Freshness Policy
 
@@ -40,6 +40,7 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `sections.case-study-card`              | sections      | CaseStudyCard               | companyName:string (req), title:text (req), image:utilities.basic-image (opt), ctaLink:utilities.link-text (req), backgroundImage:utilities.basic-image (opt)                                                                                                                                                   |
 | `sections.image-gallery`                | sections      | Image Gallery               | images:repeatable utilities.basic-image (req), variant:enumeration(contained\|full-bleed, default:contained)                                                                                                                                                                                                    |
 | `forms.newsletter`                      | forms         | Newsletter                  | title:string (req), description:text (opt), emailPlaceholder:string (opt), submitLabel:string (opt), consentText:text (opt)                                                                                                                                                                                     |
+| `forms.hubspot-form`                    | forms         | HubSpot Form                | portalId:string (req), formId:string (req), title:string (opt), description:text (opt)                                                                                                                                                                                                                          |
 | `elements.brand-logo-grid-item`         | elements      | BrandLogoGridItem           | image:utilities.basic-image (req), href:string (opt), newTab:boolean (default:false), tooltip:utilities.tooltip (opt)                                                                                                                                                                                           |
 | `elements.how-it-works-item`            | elements      | How It Works Item           | icon:utilities.basic-image (opt), title:string (req), description:string (req)                                                                                                                                                                                                                                  |
 | `seo-utilities.seo`                     | seo-utilities | Seo                         | metaTitle:string, metaDescription:string, metaImage:media, keywords:text, twitter:component, og:component, canonicalUrl:string, metaRobots:enumeration, structuredData:json                                                                                                                                     |
@@ -144,6 +145,7 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.how-it-works`         | StrapiHowItWorks          | `page-builder/components/sections/StrapiHowItWorks`                           | Page         |
 | `sections.integrations-section` | StrapiIntegrationsSection | `page-builder/components/sections/StrapiIntegrationsSection`                  | Page         |
 | `forms.newsletter`              | StrapiNewsletter          | `page-builder/components/forms/StrapiNewsletter`                              | Page         |
+| `forms.hubspot-form`            | StrapiHubspotForm         | `page-builder/components/forms/StrapiHubspotForm`                              | Page         |
 | `sections.quote`                | StrapiQuote               | `page-builder/components/sections/StrapiQuote`                                | Page         |
 | `sections.section-header`       | StrapiSectionHeader       | `page-builder/components/sections/StrapiSectionHeader`                        | Page         |
 | `sections.case-study-card`      | StrapiCaseStudyCard       | `page-builder/components/sections/StrapiCaseStudyCard`                        | Page         |

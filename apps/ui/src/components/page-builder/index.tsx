@@ -3,6 +3,7 @@ import type { UID } from "@repo/strapi-types"
 import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
 import { StrapiFeatureCard } from "@/components/page-builder/components/cards/StrapiFeatureCard"
+import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/strapi-hubspot-form/StrapiHubSpotForm"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
@@ -12,12 +13,12 @@ import { StrapiNavbar } from "@/components/page-builder/components/navigation/na
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiPlanPricingCards } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/StrapiPlanPricingCards"
 import { StrapiPlanComparisonTable } from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
+import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
-import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
-import { StrapiHeroHome } from "@/components/page-builder/components/sections/StrapiHeroHome"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
+import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
@@ -44,6 +45,7 @@ export const ContentComponents: Partial<
 
   // Forms
   "forms.newsletter": StrapiNewsletter,
+  "forms.hubspot-form": StrapiHubSpotForm,
 
   // Blog
   "blog.author-banner": StrapiAuthorBanner,

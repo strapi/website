@@ -583,6 +583,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "media.video",
         "sections.hero",
         "sections.hero-home",
+        "forms.hubspot-form",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

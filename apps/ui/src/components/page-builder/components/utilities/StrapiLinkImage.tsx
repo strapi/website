@@ -7,6 +7,7 @@ import { cn } from "@/lib/styles"
 export interface StrapiLinkImageProps {
   readonly component: Data.Component<"utilities.link-image"> | undefined | null
   readonly className?: string
+  readonly transparentPlaceholder?: boolean
 }
 
 export const getStrapiLinkImageHref = (
@@ -26,6 +27,7 @@ export const getStrapiLinkImageHref = (
 export function StrapiLinkImage({
   component,
   className,
+  transparentPlaceholder,
 }: StrapiLinkImageProps) {
   if (component?.image == null) {
     return null
@@ -50,7 +52,7 @@ export function StrapiLinkImage({
         aria-label={label ?? undefined}
         className={combinedClassName}
       >
-        <StrapiBasicImage component={component.image} />
+        <StrapiBasicImage component={component.image} transparentPlaceholder={transparentPlaceholder} />
       </Link>
     )
   }
@@ -63,7 +65,7 @@ export function StrapiLinkImage({
       aria-label={label ?? undefined}
       className={combinedClassName}
     >
-      <StrapiBasicImage component={component.image} />
+      <StrapiBasicImage component={component.image} transparentPlaceholder={transparentPlaceholder} />
     </a>
   )
 }

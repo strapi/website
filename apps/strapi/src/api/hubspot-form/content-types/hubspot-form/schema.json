@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hubspot_forms",
+  "info": {
+    "singularName": "hubspot-form",
+    "pluralName": "hubspot-forms",
+    "displayName": "HubSpot Form"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "portalId": {
+      "type": "string",
+      "required": true
+    },
+    "formId": {
+      "type": "string",
+      "required": true
+    },
+    "placeholderHeight": {
+      "type": "integer",
+      "default": 300
+    }
+  }
+}

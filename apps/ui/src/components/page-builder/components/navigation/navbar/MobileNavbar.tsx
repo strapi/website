@@ -21,7 +21,7 @@ interface MobileNavbarProps extends React.ComponentProps<"div"> {
 }
 
 const logoClassName =
-  "flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-6 [&_img]:!w-auto"
+  "flex shrink-0 items-center p-0 [&_img]:!h-6 [&_img]:!w-auto"
 
 export function MobileNavbar({
   navItems,
@@ -46,6 +46,7 @@ export function MobileNavbar({
         {logoImage && (
           <StrapiLinkImage
             component={logoImage}
+            transparentPlaceholder
             className={cn(
               logoClassName,
               "opacity-[var(--nav-logo-default-opacity)]"
@@ -55,6 +56,7 @@ export function MobileNavbar({
         {logoImageLight && (
           <StrapiLinkImage
             component={logoImageLight}
+            transparentPlaceholder
             className={cn(
               logoClassName,
               "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"

@@ -83,7 +83,8 @@
         "sections.meet-the-team",
         "media.video",
         "sections.hero",
-        "sections.hero-home"
+        "sections.hero-home",
+        "forms.hubspot-form"
       ]
     },
     "children": {

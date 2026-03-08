@@ -26,7 +26,7 @@ interface DesktopNavbarProps extends React.ComponentProps<"div"> {
 }
 
 const logoClassName =
-  "flex shrink-0 items-center p-0 [&_img]:!h-full [&_img]:!max-h-7 [&_img]:!w-auto xl:[&_img]:!max-h-8"
+  "flex shrink-0 items-center p-0 [&_img]:!h-7 [&_img]:!w-auto xl:[&_img]:!h-8"
 
 export function DesktopNavbar({
   navItems,
@@ -47,6 +47,7 @@ export function DesktopNavbar({
         {logoImage && (
           <StrapiLinkImage
             component={logoImage}
+            transparentPlaceholder
             className={cn(
               logoClassName,
               "opacity-[var(--nav-logo-default-opacity)]"
@@ -56,6 +57,7 @@ export function DesktopNavbar({
         {logoImageLight && (
           <StrapiLinkImage
             component={logoImageLight}
+            transparentPlaceholder
             className={cn(
               logoClassName,
               "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"

@@ -1,24 +1,28 @@
+import { cva, type VariantProps } from "class-variance-authority"
+
 import { cn } from "@/lib/styles"
 
-interface Props {
-  readonly className?: string
-  readonly borderColorClass?: string
-  readonly borderWidthClass?: string
-}
+const spinnerVariants = cva("spinner-container", {
+  variants: {
+    size: {
+      xs: "[--spinner-size:12px]",
+      sm: "[--spinner-size:24px]",
+      default: "[--spinner-size:40px]",
+      lg: "[--spinner-size:60px]",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+})
 
-export function Spinner({
-  className = "",
-  borderColorClass = "border-white",
-  borderWidthClass = "border",
-}: Props) {
+interface SpinnerProps
+  extends React.ComponentProps<"span">, VariantProps<typeof spinnerVariants> {}
+
+export function Spinner({ size, className, ...props }: SpinnerProps) {
   return (
-    <span
-      className={cn(
-        "box-border inline-block min-h-2 min-w-2 animate-spin rounded-full border-solid border-b-transparent",
-        borderWidthClass,
-        borderColorClass,
-        className
-      )}
-    />
+    <span className={cn(spinnerVariants({ size }))} {...props}>
+      <span className={cn("spinner text-strapi-blue-500", className)} />
+    </span>
   )
 }

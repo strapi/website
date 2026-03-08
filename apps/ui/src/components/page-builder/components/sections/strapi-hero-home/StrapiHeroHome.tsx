@@ -19,9 +19,9 @@ export function StrapiHeroHome({
         <div className="border-strapi-gray-700/50 rounded-strapi-lg md:border">
           <div className="md:bg-strapi-gray-950 rounded-strapi-lg flex w-full flex-col px-4 md:flex-row md:px-0">
             <div className="border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-between px-0 py-16 text-center md:items-start md:border-r md:px-14 md:text-left">
-              <Typography variant="header1" textColor="white">
+              <h1 className="text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
                 {component.title}
-              </Typography>
+              </h1>
 
               {component.cta.code ? (
                 <div className="mt-11 flex w-full flex-row flex-wrap items-center justify-center gap-6 md:justify-start">
@@ -43,9 +43,9 @@ export function StrapiHeroHome({
             </div>
 
             {component.testimonials ? (
-              <div className="border-strapi-gray-700/50 rounded-strapi-lg grid grow-0 grid-cols-1 max-md:border">
+              <div className="border-strapi-gray-700/50 rounded-strapi-lg grid grow-0 grid-cols-1 grid-rows-[1fr_auto] max-md:border">
                 {component.testimonials.title ? (
-                  <div className="border-strapi-gray-700/50 flex items-center justify-center border-b px-8 py-5 sm:px-12">
+                  <div className="border-strapi-gray-700/50 flex items-center justify-center border-b px-8 py-5 sm:px-16 sm:py-12">
                     <Typography
                       variant="body2"
                       className="text-strapi-gray-400 px-6 text-center"
@@ -67,15 +67,16 @@ export function StrapiHeroHome({
                     {component.testimonials.logos.map((logo) => (
                       <div
                         key={logo.id}
-                        className="flex items-center justify-center p-5"
+                        className="flex items-center justify-center p-5 sm:p-12"
                       >
-                        <div className="relative aspect-3/2 w-full max-w-[180px]">
+                        <div className="relative aspect-3/2 w-full max-w-[78px]">
                           <StrapiBasicImage
                             component={logo}
                             transparentPlaceholder
-                            fill
+                            mode="fill"
                             sizes="(max-width: 1024px) 30vw, 180px"
-                            className="object-contain p-6"
+                            className="object-contain"
+                            decorative
                           />
                         </div>
                       </div>

@@ -55,7 +55,7 @@ export function SectionLabel({
       className={cn(sectionLabelVariants({ variant, size }), className)}
       {...props}
     >
-      {image && <StrapiBasicImage component={image} />}
+      {image && <StrapiBasicImage component={image} mode="intrinsic" />}
       {children}
     </div>
   )

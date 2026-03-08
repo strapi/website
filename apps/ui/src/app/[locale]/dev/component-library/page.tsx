@@ -65,16 +65,35 @@ import { Button } from "@/components/ui/button"
 const PLACEHOLDER_IMG = "https://picsum.photos/seed/strapi/800/600"
 const PLACEHOLDER_AVATAR = "https://picsum.photos/seed/avatar/200/200"
 const PLACEHOLDER_LOGO = "/images/logo/strapi-monogram-logo.svg"
+const DEFAULT_MOCK_MEDIA_SIZE = { width: 800, height: 600 }
+
+function mockMedia(
+  url: string,
+  size: { width: number; height: number } = DEFAULT_MOCK_MEDIA_SIZE
+) {
+  const seed = Array.from(url).reduce(
+    (total, character) => total + (character.codePointAt(0) ?? 0),
+    0
+  )
+
+  return {
+    id: seed,
+    documentId: `mock-${seed}`,
+    url,
+    width: size.width,
+    height: size.height,
+    formats: null,
+  }
+}
 
 function mockBasicImage(
-  fallbackSrc = PLACEHOLDER_IMG,
+  src = PLACEHOLDER_IMG,
   alt = "Placeholder",
   size?: { width: number; height: number }
 ) {
   return {
-    media: null,
+    media: mockMedia(src, size),
     alt,
-    fallbackSrc,
     ...size,
   } as Data.Component<"utilities.basic-image">
 }
@@ -430,9 +449,8 @@ const caseStudyCardDefaultExample = {
 const imageGalleryDefaultExample = {
   images: Array.from({ length: 8 }, (_, i) => ({
     id: i + 1,
-    media: null,
+    media: mockMedia(`https://picsum.photos/seed/gallery${i + 1}/800/600`),
     alt: `Gallery image ${i + 1}`,
-    fallbackSrc: `https://picsum.photos/seed/gallery${i + 1}/800/600`,
   })),
   variant: "contained",
 } as unknown as Data.Component<"media.image-gallery">
@@ -440,9 +458,8 @@ const imageGalleryDefaultExample = {
 const imageGalleryFullBleedExample = {
   images: Array.from({ length: 6 }, (_, i) => ({
     id: i + 10,
-    media: null,
+    media: mockMedia(`https://picsum.photos/seed/fullbleed${i + 1}/800/600`),
     alt: `Full bleed image ${i + 1}`,
-    fallbackSrc: `https://picsum.photos/seed/fullbleed${i + 1}/800/600`,
   })),
   variant: "full-bleed",
 } as unknown as Data.Component<"media.image-gallery">

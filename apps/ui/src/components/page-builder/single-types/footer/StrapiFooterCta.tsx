@@ -62,8 +62,10 @@ export function StrapiFooterCta({
                           <span className="relative size-5 shrink-0">
                             <StrapiBasicImage
                               component={badge.icon}
-                              fill
+                              mode="fill"
                               className="object-contain"
+                              sizes="20px"
+                              decorative
                             />
                           </span>
                         )}
@@ -82,8 +84,10 @@ export function StrapiFooterCta({
                   <span key={logo.id} className="relative h-8 w-28">
                     <StrapiBasicImage
                       component={logo}
-                      fill
+                      mode="fill"
                       className="object-contain"
+                      sizes="112px"
+                      decorative
                     />
                   </span>
                 ))}
@@ -103,8 +107,10 @@ export function StrapiFooterCta({
                         <span className="relative mt-0.5 size-6 shrink-0">
                           <StrapiBasicImage
                             component={card.icon}
-                            fill
+                            mode="fill"
                             className="object-contain"
+                            sizes="24px"
+                            decorative
                           />
                         </span>
                       )}

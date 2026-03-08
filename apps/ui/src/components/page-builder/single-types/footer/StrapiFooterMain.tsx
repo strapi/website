@@ -37,6 +37,10 @@ export function StrapiFooterMain({
             <StrapiLinkImage
               component={component.logoImage}
               className="h-8 w-28"
+              imageMode="fill"
+              imageClassName="object-contain"
+              sizes="112px"
+              decorative
             />
 
             {component.tagline && (
@@ -99,6 +103,10 @@ export function StrapiFooterMain({
                   key={social.id}
                   component={social}
                   className="animate-spring-lg size-5"
+                  imageMode="fill"
+                  imageClassName="object-contain"
+                  sizes="20px"
+                  decorative
                 />
               ))}
             </div>

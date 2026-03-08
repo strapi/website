@@ -34,8 +34,11 @@ export function StrapiHowItWorks({
                 {item.icon && (
                   <StrapiBasicImage
                     component={item.icon}
-                    fill
+                    mode="responsive"
+                    className="mb-4 h-6 w-auto object-contain"
                     hideWhenMissing
+                    sizes="24px"
+                    decorative
                   />
                 )}
 

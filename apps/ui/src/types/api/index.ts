@@ -26,7 +26,7 @@ export interface APIResponseCollection<T> {
   meta: APIResponseCollectionMetadata
 }
 
-type StrapiImageMediaFormat = {
+export type StrapiImageMediaFormat = {
   ext?: string
   url?: string
   hash?: string
@@ -37,6 +37,10 @@ type StrapiImageMediaFormat = {
   width?: number
   height?: number
 }
+
+export type StrapiImageMediaFormats = Partial<
+  Record<"large" | "small" | "medium" | "thumbnail", StrapiImageMediaFormat>
+> | null
 
 export type StrapiImageMedia = {
   documentId: string
@@ -49,12 +53,7 @@ export type StrapiImageMedia = {
   createdAt?: string
   updatedAt?: string
   publishedAt?: string
-  formats: {
-    large: StrapiImageMediaFormat
-    small: StrapiImageMediaFormat
-    medium: StrapiImageMediaFormat
-    thumbnail: StrapiImageMediaFormat
-  }
+  formats: StrapiImageMediaFormats
   hash?: string
   ext?: string
   mime?: string

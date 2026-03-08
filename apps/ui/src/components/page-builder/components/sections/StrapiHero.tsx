@@ -48,7 +48,12 @@ export function StrapiHero({
         </SectionHeader>
 
         {component.image ? (
-          <StrapiBasicImage component={component.image} />
+          <StrapiBasicImage
+            component={component.image}
+            mode="responsive"
+            className="max-w-[640px]"
+            sizes="(max-width: 768px) 100vw, 640px"
+          />
         ) : null}
       </div>
     </HeroContainer>

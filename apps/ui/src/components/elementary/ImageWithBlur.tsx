@@ -35,11 +35,5 @@ export function ImageWithBlur({
     ? TRANSPARENT_PIXEL
     : rgbDataURL(...(blurRgb ?? DEFAULT_GRAY))
 
-  return (
-    <Image
-      placeholder="blur"
-      blurDataURL={blurDataURL}
-      {...imgProps}
-    />
-  )
+  return <Image placeholder="blur" blurDataURL={blurDataURL} {...imgProps} />
 }

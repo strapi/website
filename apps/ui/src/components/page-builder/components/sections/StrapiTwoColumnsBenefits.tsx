@@ -32,12 +32,13 @@ export function StrapiTwoColumnsBenefits({
                 <div className="flex flex-col gap-1 lg:gap-2">
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
                     {item.icon && (
-                      <div className="size-8 shrink-0 lg:mt-0.5 lg:size-6">
+                      <div className="relative size-8 shrink-0 lg:mt-0.5 lg:size-6">
                         <StrapiBasicImage
                           component={item.icon}
-                          width={24}
-                          height={24}
-                          className="size-full object-contain"
+                          mode="fill"
+                          className="object-contain"
+                          sizes="24px"
+                          decorative
                         />
                       </div>
                     )}

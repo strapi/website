@@ -31,7 +31,12 @@ export function StrapiFeatureCard({
         >
           {hasImage && imageOnLeft && (
             <FeatureCardImage>
-              <StrapiBasicImage component={component.image} />
+              <StrapiBasicImage
+                component={component.image}
+                mode="responsive"
+                className="w-full"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
             </FeatureCardImage>
           )}
 
@@ -40,7 +45,10 @@ export function StrapiFeatureCard({
               size={size}
               icon={
                 component.icon ? (
-                  <StrapiBasicImage component={component.icon} />
+                  <StrapiBasicImage
+                    component={component.icon}
+                    mode="intrinsic"
+                  />
                 ) : undefined
               }
             >
@@ -64,7 +72,12 @@ export function StrapiFeatureCard({
 
           {hasImage && !imageOnLeft && (
             <FeatureCardImage>
-              <StrapiBasicImage component={component.image} />
+              <StrapiBasicImage
+                component={component.image}
+                mode="responsive"
+                className="w-full"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
             </FeatureCardImage>
           )}
         </FeatureCard>

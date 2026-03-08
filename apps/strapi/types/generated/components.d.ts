@@ -345,6 +345,21 @@ export interface FooterFooterSocials extends Struct.ComponentSchema {
   }
 }
 
+export interface FormsHubspotForm extends Struct.ComponentSchema {
+  collectionName: "components_forms_hubspot_form"
+  info: {
+    description: ""
+    displayName: "HubSpot Form"
+    icon: "envelop"
+  }
+  attributes: {
+    form: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::hubspot-form.hubspot-form"
+    >
+  }
+}
+
 export interface FormsNewsletter extends Struct.ComponentSchema {
   collectionName: "components_forms_newsletter"
   info: {
@@ -1075,10 +1090,8 @@ export interface UtilitiesBasicImage extends Struct.ComponentSchema {
   }
   attributes: {
     alt: Schema.Attribute.String
-    fallbackSrc: Schema.Attribute.String
     height: Schema.Attribute.Integer
-    media: Schema.Attribute.Media<"images" | "videos"> &
-      Schema.Attribute.Required
+    media: Schema.Attribute.Media<"images"> & Schema.Attribute.Required
     width: Schema.Attribute.Integer
   }
 }
@@ -1240,6 +1253,7 @@ declare module "@strapi/strapi" {
       "footer.footer-cta-card": FooterFooterCtaCard
       "footer.footer-main": FooterFooterMain
       "footer.footer-socials": FooterFooterSocials
+      "forms.hubspot-form": FormsHubspotForm
       "forms.newsletter": FormsNewsletter
       "media.brand-logo-grid": MediaBrandLogoGrid
       "media.image": MediaImage

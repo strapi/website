@@ -27,12 +27,13 @@ export function StrapiTwoColumnGrid({
               <div key={item.id} className="flex flex-col gap-3">
                 <div className="flex items-start gap-3">
                   {item.icon && (
-                    <div className="size-10 shrink-0">
+                    <div className="relative size-10 shrink-0">
                       <StrapiBasicImage
                         component={item.icon}
-                        width={40}
-                        height={40}
-                        className="size-full object-contain"
+                        mode="fill"
+                        className="object-contain"
+                        sizes="40px"
+                        decorative
                       />
                     </div>
                   )}

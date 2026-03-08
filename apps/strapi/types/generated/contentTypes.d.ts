@@ -494,6 +494,38 @@ export interface ApiHeaderHeader extends Struct.SingleTypeSchema {
   }
 }
 
+export interface ApiHubspotFormHubspotForm extends Struct.CollectionTypeSchema {
+  collectionName: "hubspot_forms"
+  info: {
+    displayName: "HubSpot Form"
+    pluralName: "hubspot-forms"
+    singularName: "hubspot-form"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    formId: Schema.Attribute.String & Schema.Attribute.Required
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::hubspot-form.hubspot-form"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    placeholderHeight: Schema.Attribute.Integer &
+      Schema.Attribute.DefaultTo<300>
+    portalId: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
   collectionName: "internal_jobs"
   info: {
@@ -1276,6 +1308,7 @@ declare module "@strapi/strapi" {
       "admin::user": AdminUser
       "api::footer.footer": ApiFooterFooter
       "api::header.header": ApiHeaderHeader
+      "api::hubspot-form.hubspot-form": ApiHubspotFormHubspotForm
       "api::internal-job.internal-job": ApiInternalJobInternalJob
       "api::page.page": ApiPagePage
       "api::plan-feature.plan-feature": ApiPlanFeaturePlanFeature

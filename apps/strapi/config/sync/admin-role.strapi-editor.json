@@ -23,7 +23,6 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
@@ -51,7 +50,6 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
@@ -79,7 +77,6 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
@@ -102,7 +99,6 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.href",
           "logoImage.link.newTab",
           "logoImage.link.label"
@@ -125,7 +121,6 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.href",
           "logoImage.link.newTab",
           "logoImage.link.label"
@@ -148,7 +143,6 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.href",
           "logoImage.link.newTab",
           "logoImage.link.label"

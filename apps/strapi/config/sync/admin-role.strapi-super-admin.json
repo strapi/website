@@ -23,14 +23,11 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "x31h9wrq8l80aeozkg4mtukn",
@@ -41,9 +38,7 @@
       "actionParameters": {},
       "subject": "api::footer.footer",
       "properties": {
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "fo5iz77654daud85iogcqc99",
@@ -54,9 +49,7 @@
       "actionParameters": {},
       "subject": "api::footer.footer",
       "properties": {
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "pd76hn5iws730z4zv08bbl47",
@@ -80,14 +73,11 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "t24fbvyia59b7yd3y0jjhl3p",
@@ -111,14 +101,11 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "xftg8728m2ii2g8mezostsup",
@@ -129,13 +116,7 @@
       "actionParameters": {},
       "subject": "api::internal-job.internal-job",
       "properties": {
-        "fields": [
-          "jobType",
-          "relatedDocumentId",
-          "payload",
-          "state",
-          "error"
-        ]
+        "fields": ["jobType", "relatedDocumentId", "payload", "state", "error"]
       },
       "conditions": [],
       "documentId": "tblstqin43fn8bstv1tbejyc",
@@ -164,13 +145,7 @@
       "actionParameters": {},
       "subject": "api::internal-job.internal-job",
       "properties": {
-        "fields": [
-          "jobType",
-          "relatedDocumentId",
-          "payload",
-          "state",
-          "error"
-        ]
+        "fields": ["jobType", "relatedDocumentId", "payload", "state", "error"]
       },
       "conditions": [],
       "documentId": "w5biv59gps1t3gtljlnjvl6k",
@@ -181,13 +156,7 @@
       "actionParameters": {},
       "subject": "api::internal-job.internal-job",
       "properties": {
-        "fields": [
-          "jobType",
-          "relatedDocumentId",
-          "payload",
-          "state",
-          "error"
-        ]
+        "fields": ["jobType", "relatedDocumentId", "payload", "state", "error"]
       },
       "conditions": [],
       "documentId": "mask7c9hp8gwn4ydqv7id9yt",
@@ -206,14 +175,11 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "napqgcfcpg79ve5z4cf8iais",
@@ -224,9 +190,7 @@
       "actionParameters": {},
       "subject": "api::navbar.navbar",
       "properties": {
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "a5jmh56xyntmz21gaxdfjiu8",
@@ -237,9 +201,7 @@
       "actionParameters": {},
       "subject": "api::navbar.navbar",
       "properties": {
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "w7llqj5f94bdkhos5rogmbuj",
@@ -258,14 +220,11 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "yc70kl3d5x7s6twqpmbqaenk",
@@ -284,14 +243,11 @@
           "logoImage.image.alt",
           "logoImage.image.width",
           "logoImage.image.height",
-          "logoImage.image.fallbackSrc",
           "logoImage.link.label",
           "logoImage.link.href",
           "logoImage.link.newTab"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "mmlpxhkojga647v5xn527gsn",
@@ -334,9 +290,7 @@
           "seo.structuredData",
           "redirects"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "poi4brkbj216qy1qy7gqh05j",
@@ -347,9 +301,7 @@
       "actionParameters": {},
       "subject": "api::page.page",
       "properties": {
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "d01kl6om4548nyljbh3ofgst",
@@ -360,9 +312,7 @@
       "actionParameters": {},
       "subject": "api::page.page",
       "properties": {
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "pcmhke777f75pc67xghz6mek",
@@ -405,9 +355,7 @@
           "seo.structuredData",
           "redirects"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "vg6mhjkjh254ilpu1m40l3a7",
@@ -450,9 +398,7 @@
           "seo.structuredData",
           "redirects"
         ],
-        "locales": [
-          "en"
-        ]
+        "locales": ["en"]
       },
       "conditions": [],
       "documentId": "agi5teo3t94g1jxndw92hxna",
@@ -463,12 +409,7 @@
       "actionParameters": {},
       "subject": "api::redirect.redirect",
       "properties": {
-        "fields": [
-          "source",
-          "destination",
-          "permanent",
-          "page"
-        ]
+        "fields": ["source", "destination", "permanent", "page"]
       },
       "conditions": [],
       "documentId": "dg0gitzq77wx7loxxf3ltk96",
@@ -497,12 +438,7 @@
       "actionParameters": {},
       "subject": "api::redirect.redirect",
       "properties": {
-        "fields": [
-          "source",
-          "destination",
-          "permanent",
-          "page"
-        ]
+        "fields": ["source", "destination", "permanent", "page"]
       },
       "conditions": [],
       "documentId": "q4ki6xwkojdl1af0m8mhjszh",
@@ -513,12 +449,7 @@
       "actionParameters": {},
       "subject": "api::redirect.redirect",
       "properties": {
-        "fields": [
-          "source",
-          "destination",
-          "permanent",
-          "page"
-        ]
+        "fields": ["source", "destination", "permanent", "page"]
       },
       "conditions": [],
       "documentId": "p27vg406q2dya7dc4cl85phg",

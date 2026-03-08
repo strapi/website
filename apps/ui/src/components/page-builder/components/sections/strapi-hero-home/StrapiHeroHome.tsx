@@ -17,7 +17,7 @@ export function StrapiHeroHome({
       {component.cta ? (
         <div className="border-strapi-gray-700/50 rounded-strapi-lg md:border">
           <div className="md:bg-strapi-gray-950 rounded-strapi-lg flex w-full flex-col px-4 md:flex-row md:px-0">
-            <div className="border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-between px-0 py-16 text-center md:items-start md:border-r md:px-14 md:text-left">
+            <div className="border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-center px-0 py-16 text-center md:items-start md:border-r md:px-14 md:text-left">
               <h1 className="text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
                 {component.title}
               </h1>

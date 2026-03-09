@@ -55,7 +55,7 @@ export function StrapiCaseStudyCard({
                 )}
 
                 <div className="max-w-140">
-                  <span className="text-xs font-bold tracking-wider text-emerald-500 uppercase lg:text-sm">
+                  <span className="text-strapi-blue-500 text-xs font-bold tracking-wider uppercase lg:text-sm">
                     {component.companyName}
                   </span>
 
@@ -66,12 +66,12 @@ export function StrapiCaseStudyCard({
               </div>
 
               <div className="border-border relative flex items-center justify-between border-t px-8 py-6 lg:px-19 lg:py-7">
-                <span className="text-xs font-bold tracking-wider text-emerald-500 uppercase lg:text-sm">
+                <span className="text-strapi-blue-500 text-xs font-bold tracking-wider uppercase lg:text-sm">
                   {component.ctaLink?.label}
                 </span>
 
                 <CaretRightIcon
-                  className="ml-4 size-3 text-emerald-500"
+                  className="text-strapi-blue-500 ml-4 size-3"
                   weight="bold"
                   aria-hidden="true"
                 />

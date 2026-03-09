@@ -22,6 +22,7 @@
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.2.2",
+    "@next/third-parties": "^16.1.6",
     "@phosphor-icons/react": "^2.1.10",
     "@repo/design-system": "workspace:*",
     "@repo/shared-data": "workspace:*",
@@ -37,6 +38,7 @@
     "dayjs": "^1.11.19",
     "embla-carousel-react": "^8.6.0",
     "lodash": "catalog:",
+    "motion": "^12.35.2",
     "next": "16.1.6",
     "next-intl": "4.8.3",
     "next-recaptcha-v3": "1.5.3",

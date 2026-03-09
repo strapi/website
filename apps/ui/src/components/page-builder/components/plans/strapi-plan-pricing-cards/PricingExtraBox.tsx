@@ -1,7 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
 import { Box } from "@/components/elementary/box/Box"
-import { Typography } from "@/components/typography"
 
 import { PricingFeature } from "./PricingFeatures"
 import { StrapiLink } from "../../utilities/StrapiLink"
@@ -23,22 +22,15 @@ export function PricingExtraBox({ data }: PricingExtraBoxProps) {
       className="rounded-strapi-lg mt-15 flex flex-col gap-0 p-8"
       role="complementary"
     >
-      <Typography tag="p" variant="subtitle1" fontWeight="semiBold">
-        {title}
-      </Typography>
+      <p className="text-foreground text-2xl font-semibold">{title}</p>
 
       {(description || link || Array.isArray(features)) && (
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="flex flex-col flex-wrap gap-6 md:flex-row">
             {description && (
-              <Typography
-                tag="p"
-                variant="body2"
-                fontWeight="medium"
-                className="w-full lg:w-auto"
-              >
+              <p className="text-foreground w-full text-base font-medium lg:w-auto">
                 {description}
-              </Typography>
+              </p>
             )}
             <div className="flex flex-col flex-wrap gap-6 md:flex-row">
               {Array.isArray(features) &&

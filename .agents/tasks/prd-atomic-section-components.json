@@ -58,11 +58,7 @@
     "Markdown component is server-only — use `import 'server-only'` at the top",
     "Markdown links: external URLs get target='_blank' rel='noopener noreferrer'"
   ],
-  "qualityGates": [
-    "pnpm lint",
-    "pnpm typecheck",
-    "pnpm build"
-  ],
+  "qualityGates": ["pnpm lint", "pnpm typecheck", "pnpm build"],
   "stories": [
     {
       "id": "US-001",
@@ -208,10 +204,7 @@
       "id": "US-006",
       "title": "Create base Markdown component with server-only enforcement",
       "status": "completed",
-      "dependsOn": [
-        "US-002",
-        "US-005"
-      ],
+      "dependsOn": ["US-002", "US-005"],
       "description": "As a developer, I want a server-only Markdown component that renders markdown strings using react-markdown with custom renderers mapped to typography atoms.",
       "acceptanceCriteria": [
         "File created at apps/ui/src/components/elementary/markdown/Markdown.tsx",
@@ -255,13 +248,7 @@
       "id": "US-007",
       "title": "Export all components and verify full build",
       "status": "completed",
-      "dependsOn": [
-        "US-001",
-        "US-002",
-        "US-003",
-        "US-004",
-        "US-006"
-      ],
+      "dependsOn": ["US-001", "US-002", "US-003", "US-004", "US-006"],
       "description": "As a developer, I want all atoms and the Markdown component properly exported and the full build passing.",
       "acceptanceCriteria": [
         "All 4 section atoms are importable: SectionLabel, SectionHeading, SectionDescription, SectionIcon",

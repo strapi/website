@@ -5,7 +5,6 @@ import { Fragment } from "react"
 
 import { Container } from "@/components/elementary/Container"
 import { Tooltip } from "@/components/elementary/Tooltip"
-import { Typography } from "@/components/typography"
 
 type PlanType = Data.ContentType<"api::plan.plan">
 type PlanFeatureType = Data.ContentType<"api::plan-feature.plan-feature">
@@ -35,7 +34,7 @@ function renderDescription(description: string | null | undefined) {
   const parts = description.split(/(\*\*.*?\*\*)/)
 
   return (
-    <Typography tag="span" variant="smallText1" textColor="neutral">
+    <span className="text-strapi-neutral-700 text-sm">
       {parts.map((part, i) =>
         part.startsWith("**") && part.endsWith("**") ? (
           <span key={i} className="text-strapi-blue-500">
@@ -45,7 +44,7 @@ function renderDescription(description: string | null | undefined) {
           part
         )
       )}
-    </Typography>
+    </span>
   )
 }
 
@@ -180,14 +179,9 @@ export function StrapiPlanComparisonTable({
                   scope="col"
                   className="w-40 min-w-40 px-2 py-2 text-center align-bottom"
                 >
-                  <Typography
-                    tag="span"
-                    variant="body2"
-                    fontWeight="semiBold"
-                    uppercase
-                  >
+                  <span className="text-base font-semibold uppercase">
                     {plan.name}
-                  </Typography>
+                  </span>
                 </th>
               ))}
             </tr>
@@ -204,13 +198,9 @@ export function StrapiPlanComparisonTable({
                       scope="colgroup"
                       className="px-2 py-2 text-left"
                     >
-                      <Typography
-                        tag="span"
-                        variant="body1"
-                        fontWeight="semiBold"
-                      >
+                      <span className="text-foreground text-lg font-semibold">
                         {t(`plans.planFeatureCategory.${category}` as never)}
-                      </Typography>
+                      </span>
                     </th>
                   </tr>
                   {features.map(({ feature, planValues }) => (
@@ -224,9 +214,9 @@ export function StrapiPlanComparisonTable({
                       >
                         <div className="flex flex-col gap-3">
                           <span className="flex items-center">
-                            <Typography tag="span" variant="smallText1">
+                            <span className="text-foreground text-sm">
                               {feature.name}
-                            </Typography>
+                            </span>
                             {feature?.tooltip?.content && (
                               <Tooltip
                                 contentProps={{
@@ -263,28 +253,20 @@ export function StrapiPlanComparisonTable({
                             className="w-[120px] min-w-[120px] px-2 py-3 text-center align-middle"
                           >
                             {hasTextValue ? (
-                              <Typography
-                                tag="span"
-                                variant="body2"
-                                fontWeight="medium"
-                              >
+                              <span className="text-foreground text-base font-medium">
                                 <span className="md:hidden">{mobileText}</span>
                                 <span className="hidden md:inline">
                                   {desktopText}
                                 </span>
-                              </Typography>
+                              </span>
                             ) : planValue ? (
                               <span className="inline-flex items-center justify-center">
                                 <CheckIcon weight="bold" className="h-4 w-4" />
                               </span>
                             ) : (
-                              <Typography
-                                tag="span"
-                                variant="body2"
-                                fontWeight="medium"
-                              >
+                              <span className="text-foreground text-base font-medium">
                                 -
-                              </Typography>
+                              </span>
                             )}
                           </td>
                         )
@@ -299,14 +281,9 @@ export function StrapiPlanComparisonTable({
       </div>
 
       {component.footnote && (
-        <Typography
-          tag="p"
-          variant="smallText1"
-          textColor="neutral"
-          className="mt-4 px-4"
-        >
+        <p className="text-strapi-neutral-700 mt-4 px-4 text-sm">
           {component.footnote}
-        </Typography>
+        </p>
       )}
     </Container>
   )

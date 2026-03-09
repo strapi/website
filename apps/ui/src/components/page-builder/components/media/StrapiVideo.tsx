@@ -63,8 +63,7 @@ export function StrapiVideo({
     return null
   }
 
-  const hasThumbnail =
-    component.thumbnail?.media || component.thumbnail?.fallbackSrc
+  const hasThumbnail = component.thumbnail?.media
 
   return (
     <section className="py-12 lg:py-16">
@@ -80,8 +79,10 @@ export function StrapiVideo({
               >
                 <StrapiBasicImage
                   component={component.thumbnail}
-                  fill
+                  mode="fill"
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  decorative
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/30">

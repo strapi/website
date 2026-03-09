@@ -1,8 +1,6 @@
 import { GithubIcon } from "@/components/icons"
 import { cn } from "@/lib/styles"
 
-import { Typography } from "../typography"
-
 function formatStars(count: number): string {
   return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count)
 }
@@ -32,7 +30,7 @@ export function GithubStarButton({
       {...restProps}
     >
       <GithubIcon className="size-6" />
-      <Typography variant="body2">{formatStars(stars)}</Typography>
+      <span className="text-base text-inherit">{formatStars(stars)}</span>
     </a>
   )
 }

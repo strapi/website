@@ -27,8 +27,10 @@ export function StrapiCaseStudyCard({
               <TriangleMask position="bottom-left">
                 <StrapiBasicImage
                   component={component.backgroundImage}
-                  fill
+                  mode="fill"
                   className="object-cover"
+                  sizes="(max-width: 1024px) 256px, 384px"
+                  decorative
                 />
               </TriangleMask>
             </div>
@@ -45,8 +47,9 @@ export function StrapiCaseStudyCard({
                   <div className="relative mb-8 h-16 w-36 shrink-0 lg:mb-0 lg:h-28 lg:w-32">
                     <StrapiBasicImage
                       component={component.image}
-                      fill
+                      mode="fill"
                       className="object-contain"
+                      sizes="(max-width: 1024px) 144px, 128px"
                     />
                   </div>
                 )}

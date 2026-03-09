@@ -6,7 +6,7 @@ const textColorVariants = {
   foreground: "text-foreground",
   black: "text-black",
   white: "text-white",
-  primary: "text-strapi-blue-800",
+  primary: "text-foreground",
   neutral: "text-strapi-neutral-700",
   muted: "text-strapi-neutral-600",
 }
@@ -24,16 +24,16 @@ const fontWeightVariants = {
 }
 
 const variantStyles = {
-  header1: "typo-header-1",
-  header2: "typo-header-2",
-  header3: "typo-header-3",
-  subtitle1: "typo-subtitle-1",
-  subtitle2: "typo-subtitle-2",
-  body1: "typo-body-1",
-  body2: "typo-body-2",
-  smallText1: "typo-small-1",
-  smallText2: "typo-small-2",
-  label: "typo-label",
+  header1: "text-5xl tracking-tight",
+  header2: "text-4xl tracking-tight",
+  header3: "text-3xl tracking-tight",
+  subtitle1: "text-2xl",
+  subtitle2: "text-xl",
+  body1: "text-lg",
+  body2: "text-base",
+  smallText1: "text-sm",
+  smallText2: "text-xs",
+  label: "text-sm tracking-[0.5px] uppercase",
 }
 
 const defaultFontWeights: Record<Variant, FontWeight> = {
@@ -46,7 +46,7 @@ const defaultFontWeights: Record<Variant, FontWeight> = {
   body2: "normal",
   smallText1: "normal",
   smallText2: "normal",
-  label: "bold",
+  label: "semiBold",
 }
 
 const defaultStyles: Record<TypographyTag, Variant> = {
@@ -90,7 +90,7 @@ export function Typography({
   children,
   className,
   variant,
-  textColor = "primary",
+  textColor = "foreground",
   uppercase,
   fontWeight,
   tag: Tag = "p",

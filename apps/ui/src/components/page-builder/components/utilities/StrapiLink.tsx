@@ -62,12 +62,24 @@ export function StrapiLink({
       adornmentClassName={adornmentClassName}
       startAdornment={
         hasIcons && leftIcon ? (
-          <StrapiBasicImage component={leftIcon} fill />
+          <StrapiBasicImage
+            component={leftIcon}
+            mode="fill"
+            className="object-contain"
+            decorative
+            sizes="16px"
+          />
         ) : undefined
       }
       endAdornment={
         hasIcons && rightIcon ? (
-          <StrapiBasicImage component={rightIcon} fill />
+          <StrapiBasicImage
+            component={rightIcon}
+            mode="fill"
+            className="object-contain"
+            decorative
+            sizes="16px"
+          />
         ) : undefined
       }
       variant={variant}

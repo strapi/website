@@ -3,7 +3,6 @@ import type { Data } from "@repo/strapi-types"
 import { Container } from "@/components/elementary/Container"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
-import { Typography } from "@/components/typography"
 
 export function StrapiTwoColumnsBenefits({
   component,
@@ -32,33 +31,25 @@ export function StrapiTwoColumnsBenefits({
                 <div className="flex flex-col gap-1 lg:gap-2">
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
                     {item.icon && (
-                      <div className="size-8 shrink-0 lg:mt-0.5 lg:size-6">
+                      <div className="relative size-8 shrink-0 lg:mt-0.5 lg:size-6">
                         <StrapiBasicImage
                           component={item.icon}
-                          width={24}
-                          height={24}
-                          className="size-full object-contain"
+                          mode="fill"
+                          className="object-contain"
+                          sizes="24px"
+                          decorative
                         />
                       </div>
                     )}
 
-                    <Typography
-                      tag="h3"
-                      variant="body1"
-                      fontWeight="semiBold"
-                      className="lg:text-xl"
-                    >
+                    <h3 className="text-foreground text-lg font-semibold lg:text-xl">
                       {item.title}
-                    </Typography>
+                    </h3>
                   </div>
 
-                  <Typography
-                    tag="p"
-                    variant="smallText1"
-                    className="text-center lg:text-left lg:text-base"
-                  >
+                  <p className="text-center text-sm lg:text-left lg:text-base">
                     {item.description}
-                  </Typography>
+                  </p>
                 </div>
               </div>
             ))}

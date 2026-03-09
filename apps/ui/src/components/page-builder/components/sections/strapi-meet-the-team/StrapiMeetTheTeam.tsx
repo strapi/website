@@ -133,10 +133,11 @@ export function StrapiMeetTheTeam({
               <div className="bg-strapi-neutral-100 relative aspect-square w-full shrink-0 sm:aspect-auto sm:w-[44%]">
                 <StrapiBasicImage
                   component={selectedMember.image}
-                  fill
+                  mode="fill"
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, 400px"
                   hideWhenMissing
+                  decorative
                 />
               </div>
 

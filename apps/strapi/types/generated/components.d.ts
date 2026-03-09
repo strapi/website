@@ -97,6 +97,47 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsHeroHomeCta extends Struct.ComponentSchema {
+  collectionName: "components_elements_hero_home_ctas"
+  info: {
+    description: ""
+    displayName: "HeroHomeCta"
+    icon: "code"
+  }
+  attributes: {
+    code: Schema.Attribute.String
+    cta: Schema.Attribute.Component<"utilities.link", false>
+  }
+}
+
+export interface ElementsHeroHomeFeature extends Struct.ComponentSchema {
+  collectionName: "components_elements_hero_home_features"
+  info: {
+    description: ""
+    displayName: "HeroHomeFeature"
+    icon: "picture"
+  }
+  attributes: {
+    icon: Schema.Attribute.Component<"utilities.basic-image", false>
+    media: Schema.Attribute.Media<"images" | "videos"> &
+      Schema.Attribute.Required
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface ElementsHeroHomeTestimonials extends Struct.ComponentSchema {
+  collectionName: "components_elements_hero_home_testimonials"
+  info: {
+    description: ""
+    displayName: "HeroHomeTestimonials"
+    icon: "star"
+  }
+  attributes: {
+    logos: Schema.Attribute.Component<"utilities.basic-image", true>
+    title: Schema.Attribute.String
+  }
+}
+
 export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
   collectionName: "components_elements_how_it_works_items"
   info: {
@@ -319,6 +360,21 @@ export interface FooterFooterSocials extends Struct.ComponentSchema {
   }
 }
 
+export interface FormsHubspotForm extends Struct.ComponentSchema {
+  collectionName: "components_forms_hubspot_form"
+  info: {
+    description: ""
+    displayName: "HubSpot Form"
+    icon: "envelop"
+  }
+  attributes: {
+    form: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::hubspot-form.hubspot-form"
+    >
+  }
+}
+
 export interface FormsNewsletter extends Struct.ComponentSchema {
   collectionName: "components_forms_newsletter"
   info: {
@@ -451,6 +507,7 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
     ctaLinks: Schema.Attribute.Component<"utilities.link", true>
     githubStars: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
     logoImage: Schema.Attribute.Component<"utilities.link-image", false>
+    logoImageLight: Schema.Attribute.Component<"utilities.link-image", false>
     navItems: Schema.Attribute.Component<"navbar.nav-item", true>
   }
 }
@@ -696,6 +753,41 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
           localized: true
         }
       }>
+  }
+}
+
+export interface SectionsHero extends Struct.ComponentSchema {
+  collectionName: "components_sections_heroes"
+  info: {
+    description: ""
+    displayName: "Hero"
+    icon: "rocket"
+  }
+  attributes: {
+    ctas: Schema.Attribute.Component<"utilities.link", true>
+    description: Schema.Attribute.RichText
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    label: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface SectionsHeroHome extends Struct.ComponentSchema {
+  collectionName: "components_sections_hero_homes"
+  info: {
+    description: ""
+    displayName: "HeroHome"
+    icon: "house"
+  }
+  attributes: {
+    cta: Schema.Attribute.Component<"elements.hero-home-cta", false>
+    features: Schema.Attribute.Component<"elements.hero-home-feature", true>
+    rotatingPhrases: Schema.Attribute.Component<"utilities.text", true>
+    testimonials: Schema.Attribute.Component<
+      "elements.hero-home-testimonials",
+      false
+    >
+    title: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -1015,10 +1107,8 @@ export interface UtilitiesBasicImage extends Struct.ComponentSchema {
   }
   attributes: {
     alt: Schema.Attribute.String
-    fallbackSrc: Schema.Attribute.String
     height: Schema.Attribute.Integer
-    media: Schema.Attribute.Media<"images" | "videos"> &
-      Schema.Attribute.Required
+    media: Schema.Attribute.Media<"images"> & Schema.Attribute.Required
     width: Schema.Attribute.Integer
   }
 }
@@ -1170,6 +1260,9 @@ declare module "@strapi/strapi" {
       "cards.feature-card": CardsFeatureCard
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
       "elements.footer-item": ElementsFooterItem
+      "elements.hero-home-cta": ElementsHeroHomeCta
+      "elements.hero-home-feature": ElementsHeroHomeFeature
+      "elements.hero-home-testimonials": ElementsHeroHomeTestimonials
       "elements.how-it-works-item": ElementsHowItWorksItem
       "elements.team-member-item": ElementsTeamMemberItem
       "elements.testimony-item": ElementsTestimonyItem
@@ -1178,6 +1271,7 @@ declare module "@strapi/strapi" {
       "footer.footer-cta-card": FooterFooterCtaCard
       "footer.footer-main": FooterFooterMain
       "footer.footer-socials": FooterFooterSocials
+      "forms.hubspot-form": FormsHubspotForm
       "forms.newsletter": FormsNewsletter
       "media.brand-logo-grid": MediaBrandLogoGrid
       "media.image": MediaImage
@@ -1200,6 +1294,8 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.faq-section": SectionsFaqSection
+      "sections.hero": SectionsHero
+      "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
       "sections.integrations-section": SectionsIntegrationsSection
       "sections.meet-the-team": SectionsMeetTheTeam

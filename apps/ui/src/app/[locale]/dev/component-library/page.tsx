@@ -32,16 +32,19 @@ import { Tooltip } from "@/components/elementary/Tooltip"
 import { TriangleMask } from "@/components/elementary/TriangleMask"
 import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
+import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/strapi-hubspot-form/StrapiHubSpotForm"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
+import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
+import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
@@ -62,16 +65,49 @@ import { Button } from "@/components/ui/button"
 const PLACEHOLDER_IMG = "https://picsum.photos/seed/strapi/800/600"
 const PLACEHOLDER_AVATAR = "https://picsum.photos/seed/avatar/200/200"
 const PLACEHOLDER_LOGO = "/images/logo/strapi-monogram-logo.svg"
+const PLACEHOLDER_VIDEO =
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+const DEFAULT_MOCK_MEDIA_SIZE = { width: 800, height: 600 }
+
+interface MockMediaOverrides {
+  readonly alternativeText?: string
+  readonly caption?: string
+  readonly mime?: string
+  readonly name?: string
+}
+
+function mockMedia(
+  url: string,
+  size: { width: number; height: number } = DEFAULT_MOCK_MEDIA_SIZE,
+  overrides?: MockMediaOverrides
+) {
+  const seed = Array.from(url).reduce(
+    (total, character) => total + (character.codePointAt(0) ?? 0),
+    0
+  )
+
+  return {
+    id: seed,
+    documentId: `mock-${seed}`,
+    url,
+    width: size.width,
+    height: size.height,
+    formats: null,
+    mime: overrides?.mime ?? "image/jpeg",
+    alternativeText: overrides?.alternativeText,
+    caption: overrides?.caption,
+    name: overrides?.name,
+  }
+}
 
 function mockBasicImage(
-  fallbackSrc = PLACEHOLDER_IMG,
+  src = PLACEHOLDER_IMG,
   alt = "Placeholder",
   size?: { width: number; height: number }
 ) {
   return {
-    media: null,
+    media: mockMedia(src, size),
     alt,
-    fallbackSrc,
     ...size,
   } as Data.Component<"utilities.basic-image">
 }
@@ -167,6 +203,9 @@ const TOC = [
   { id: "testimonies", label: "Testimonies" },
   { id: "meet-the-team", label: "MeetTheTeam" },
   { id: "video", label: "Video" },
+  { id: "hero", label: "Hero" },
+  { id: "hero-home", label: "HeroHome" },
+  { id: "hubspot-form", label: "HubSpot Form" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -424,9 +463,8 @@ const caseStudyCardDefaultExample = {
 const imageGalleryDefaultExample = {
   images: Array.from({ length: 8 }, (_, i) => ({
     id: i + 1,
-    media: null,
+    media: mockMedia(`https://picsum.photos/seed/gallery${i + 1}/800/600`),
     alt: `Gallery image ${i + 1}`,
-    fallbackSrc: `https://picsum.photos/seed/gallery${i + 1}/800/600`,
   })),
   variant: "contained",
 } as unknown as Data.Component<"media.image-gallery">
@@ -434,9 +472,8 @@ const imageGalleryDefaultExample = {
 const imageGalleryFullBleedExample = {
   images: Array.from({ length: 6 }, (_, i) => ({
     id: i + 10,
-    media: null,
+    media: mockMedia(`https://picsum.photos/seed/fullbleed${i + 1}/800/600`),
     alt: `Full bleed image ${i + 1}`,
-    fallbackSrc: `https://picsum.photos/seed/fullbleed${i + 1}/800/600`,
   })),
   variant: "full-bleed",
 } as unknown as Data.Component<"media.image-gallery">
@@ -576,21 +613,15 @@ export default function ComponentLibraryPage() {
       <Section id="spinner" title="Spinner">
         <div className="space-y-6">
           <Variant label="Sizes & Colors">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-12">
               <div className="rounded bg-gray-800 p-4">
-                <Spinner className="h-4 w-4 border-2" />
+                <Spinner size="sm" className="text-white" />
               </div>
               <div className="rounded bg-gray-800 p-4">
-                <Spinner className="h-6 w-6 border-2" />
+                <Spinner size="sm" className="text-white" />
               </div>
-              <Spinner
-                className="h-6 w-6 border-2"
-                borderColorClass="border-strapi-blue-600"
-              />
-              <Spinner
-                className="h-8 w-8 border-3"
-                borderColorClass="border-strapi-purple-500"
-              />
+              <Spinner className="text-strapi-blue-600" />
+              <Spinner size="lg" className="text-strapi-purple-500" />
             </div>
           </Variant>
         </div>
@@ -982,7 +1013,7 @@ export default function ComponentLibraryPage() {
             </div>
           </Variant>
 
-          <Variant label="FeatureCardTitle (uses Typography header3)">
+          <Variant label="FeatureCardTitle">
             <div className="space-y-4">
               <FeatureCardTitle>Default title</FeatureCardTitle>
               <FeatureCardTitle as="h2">As h2</FeatureCardTitle>
@@ -1721,6 +1752,229 @@ export default function ComponentLibraryPage() {
                   link: null,
                   alignment: "left",
                 } as Data.Component<"media.video">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hero" title="Hero">
+        <div className="space-y-6">
+          <Variant label="Product launch">
+            <StrapiHero
+              component={
+                {
+                  id: 400,
+                  __component: "sections.hero",
+                  label: "Composable Content Platform",
+                  title:
+                    "Launch campaign pages and product docs without slowing engineering down.",
+                  description:
+                    "Give marketing, product, and regional teams a shared workspace for shipping **localized pages**, **structured content**, and **reusable sections** on the same release cadence.",
+                  ctas: [
+                    {
+                      id: 401,
+                      type: "external",
+                      label: "Explore Platform",
+                      href: "/product",
+                      newTab: false,
+                      page: null,
+                      decorations: {
+                        id: 501,
+                        variant: "default",
+                        size: "lg",
+                        hasIcons: false,
+                        leftIcon: null,
+                        rightIcon: null,
+                      },
+                    },
+                    {
+                      id: 402,
+                      type: "external",
+                      label: "Book a Demo",
+                      href: "/contact",
+                      newTab: false,
+                      page: null,
+                      decorations: {
+                        id: 502,
+                        variant: "outline",
+                        size: "lg",
+                        hasIcons: false,
+                        leftIcon: null,
+                        rightIcon: null,
+                      },
+                    },
+                  ],
+                  image: mockBasicImage(
+                    "https://picsum.photos/seed/platform-launch/1200/600",
+                    "Team reviewing launch metrics on a dashboard"
+                  ),
+                } as Data.Component<"sections.hero">
+              }
+            />
+          </Variant>
+
+          <Variant label="Editorial focus">
+            <StrapiHero
+              component={
+                {
+                  id: 403,
+                  __component: "sections.hero",
+                  title:
+                    "Turn long approval cycles into a clean publishing workflow.",
+                  description:
+                    "Model content once, route it through review, and let teams publish to web, app, and email from the same source of truth.",
+                  label: "For content teams",
+                  ctas: [],
+                  image: null,
+                } as Data.Component<"sections.hero">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hero-home" title="HeroHome">
+        <div className="space-y-6">
+          <Variant label="CLI + social proof">
+            <StrapiHeroHome
+              component={
+                {
+                  id: 410,
+                  __component: "sections.hero-home",
+                  title:
+                    "Build your content stack in minutes, then scale it across every channel.",
+                  cta: {
+                    id: 411,
+                    code: "pnpm create strapi-app",
+                    cta: {
+                      id: 412,
+                      type: "external",
+                      label: "Start Free",
+                      href: "/cloud",
+                      newTab: false,
+                      page: null,
+                      decorations: {
+                        id: 413,
+                        variant: "default",
+                        size: "lg",
+                        hasIcons: false,
+                        leftIcon: null,
+                        rightIcon: null,
+                      },
+                    },
+                  },
+                  rotatingPhrases: [
+                    { id: 7001, text: "Websites" },
+                    { id: 7002, text: "Web Apps" },
+                    { id: 7003, text: "Mobile Apps" },
+                    { id: 7004, text: "Intranets" },
+                    { id: 7005, text: "LMS" },
+                  ],
+                  testimonials: {
+                    id: 414,
+                    title:
+                      "Chosen by teams shipping product, commerce, and documentation at scale",
+                    logos: [
+                      mockBasicImage(PLACEHOLDER_LOGO, "Acme"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Northstar"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Helio"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Pioneer"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Vertex"),
+                      mockBasicImage(PLACEHOLDER_LOGO, "Beacon"),
+                    ],
+                  },
+                  features: [
+                    {
+                      id: 415,
+                      title: "Create APIs",
+                      icon: mockBasicImage(PLACEHOLDER_LOGO, "Create APIs", {
+                        width: 40,
+                        height: 40,
+                      }),
+                      media: mockMedia(
+                        "https://picsum.photos/seed/hero-feature-1/1280/720",
+                        { width: 1280, height: 720 },
+                        {
+                          alternativeText: "Create APIs feature preview",
+                        }
+                      ),
+                    },
+                    {
+                      id: 416,
+                      title: "Content Management",
+                      icon: mockBasicImage(
+                        PLACEHOLDER_LOGO,
+                        "Content Management",
+                        { width: 40, height: 40 }
+                      ),
+                      media: mockMedia(
+                        PLACEHOLDER_VIDEO,
+                        { width: 1280, height: 720 },
+                        {
+                          mime: "video/mp4",
+                          name: "flower.mp4",
+                        }
+                      ),
+                    },
+                    {
+                      id: 417,
+                      title: "Customization",
+                      icon: mockBasicImage(PLACEHOLDER_LOGO, "Customization", {
+                        width: 40,
+                        height: 40,
+                      }),
+                      media: mockMedia(
+                        "https://picsum.photos/seed/hero-feature-3/1280/720",
+                        { width: 1280, height: 720 },
+                        {
+                          alternativeText: "Customization feature preview",
+                        }
+                      ),
+                    },
+                  ],
+                } as Data.Component<"sections.hero-home">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hubspot-form" title="HubSpot Form">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Live embed">
+            <StrapiHubSpotForm
+              component={
+                {
+                  id: 900,
+                  __component: "forms.hubspot-form",
+                  form: {
+                    id: 901,
+                    documentId: "component-library-demo-form",
+                    name: "Component Library Demo Form",
+                    portalId: "6893032",
+                    formId: "d3fe1d5f-9812-4046-81ed-4dd913373f2f",
+                    placeholderHeight: 620,
+                  },
+                } as Data.Component<"forms.hubspot-form">
+              }
+            />
+          </Variant>
+          <Variant label="Compact placeholder">
+            <StrapiHubSpotForm
+              component={
+                {
+                  id: 902,
+                  __component: "forms.hubspot-form",
+                  form: {
+                    id: 903,
+                    documentId: "component-library-demo-form-compact",
+                    name: "Component Library Demo Form Compact",
+                    portalId: "6893032",
+                    formId: "d3fe1d5f-9812-4046-81ed-4dd913373f2f",
+                    placeholderHeight: 420,
+                  },
+                } as Data.Component<"forms.hubspot-form">
               }
             />
           </Variant>

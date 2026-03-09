@@ -1,27 +1,22 @@
 "use client"
 
 import type { Data } from "@repo/strapi-types"
-import { useState } from "react"
 
 import { Container } from "@/components/elementary/Container"
 import { SectionTitle } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
-import { Typography } from "@/components/typography"
+import { useClip } from "@/hooks/useClip"
 
 export function StrapiFooterCta({
   component,
 }: {
   readonly component: Data.Component<"footer.footer-cta">
 }) {
-  const [copied, setCopied] = useState(false)
+  const { copied, copy } = useClip()
 
   const handleCopy = async () => {
-    if (!component.codeSnippet) return
-
-    await navigator.clipboard.writeText(component.codeSnippet)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    await copy(component.codeSnippet)
   }
 
   return (
@@ -50,6 +45,7 @@ export function StrapiFooterCta({
                     type="button"
                     onClick={handleCopy}
                     className="text-strapi-purple-500 hover:text-strapi-purple-600 pr-6 text-base font-semibold transition-colors"
+                    aria-label={copied ? "Code copied" : "Copy code"}
                   >
                     {copied ? "Copied!" : "Copy"}
                   </button>
@@ -65,12 +61,14 @@ export function StrapiFooterCta({
                           <span className="relative size-5 shrink-0">
                             <StrapiBasicImage
                               component={badge.icon}
-                              fill
+                              mode="fill"
                               className="object-contain"
+                              sizes="20px"
+                              decorative
                             />
                           </span>
                         )}
-                        <span className="text-strapi-blue-800 text-base font-semibold">
+                        <span className="text-foreground text-base font-semibold">
                           {badge.text}
                         </span>
                       </div>
@@ -85,8 +83,10 @@ export function StrapiFooterCta({
                   <span key={logo.id} className="relative h-8 w-28">
                     <StrapiBasicImage
                       component={logo}
-                      fill
+                      mode="fill"
                       className="object-contain"
+                      sizes="112px"
+                      decorative
                     />
                   </span>
                 ))}
@@ -106,29 +106,22 @@ export function StrapiFooterCta({
                         <span className="relative mt-0.5 size-6 shrink-0">
                           <StrapiBasicImage
                             component={card.icon}
-                            fill
+                            mode="fill"
                             className="object-contain"
+                            sizes="24px"
+                            decorative
                           />
                         </span>
                       )}
-                      <Typography
-                        tag="p"
-                        variant="subtitle1"
-                        fontWeight="semiBold"
-                      >
+                      <p className="text-foreground text-2xl font-semibold">
                         {card.title}
-                      </Typography>
+                      </p>
                     </div>
 
                     {card.description && (
-                      <Typography
-                        tag="p"
-                        variant="body1"
-                        textColor="neutral"
-                        className="mb-4"
-                      >
+                      <p className="text-strapi-neutral-700 mb-4 text-lg">
                         {card.description}
-                      </Typography>
+                      </p>
                     )}
 
                     <StrapiLink component={card.link} />

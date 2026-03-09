@@ -25,14 +25,16 @@ function LogoImage({
   return (
     <StrapiBasicImage
       component={item.image}
+      mode="responsive"
       className={cn(
         "object-contain",
         variant === "plain"
           ? "h-[45px] w-auto opacity-50 transition-opacity hover:opacity-100"
           : "size-full"
       )}
-      autoHeight
       hideWhenMissing
+      sizes={variant === "plain" ? "45px" : "80px"}
+      decorative
     />
   )
 }

@@ -11,6 +11,11 @@
       "component": "utilities.link-image",
       "repeatable": false
     },
+    "logoImageLight": {
+      "type": "component",
+      "component": "utilities.link-image",
+      "repeatable": false
+    },
     "navItems": {
       "type": "component",
       "component": "navbar.nav-item",

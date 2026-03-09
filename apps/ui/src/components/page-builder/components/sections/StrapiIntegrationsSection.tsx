@@ -8,7 +8,6 @@ import {
   SectionTitle,
   SectionLabel,
 } from "@/components/elementary/section-header"
-import { Typography } from "@/components/typography"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface MockIntegration extends Record<string, unknown> {
@@ -127,18 +126,13 @@ export function StrapiIntegrationsSection({
                   {item.name.slice(0, 2)}
                 </div>
 
-                <Typography
-                  tag="h3"
-                  variant="body1"
-                  textColor="foreground"
-                  fontWeight="semiBold"
-                >
+                <h3 className="text-foreground text-lg font-semibold">
                   {item.name}
-                </Typography>
+                </h3>
 
-                <Typography tag="p" variant="smallText1" textColor="muted">
+                <p className="text-strapi-neutral-600 text-sm">
                   {item.description}
-                </Typography>
+                </p>
               </CardContent>
             </Card>
           )}

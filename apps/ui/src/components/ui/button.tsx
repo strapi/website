@@ -56,7 +56,7 @@ function Button({
   const Comp = asChild ? SlotPrimitive.Slot : "button"
 
   if (isLoading) {
-    props.children = <Spinner className="h-4 w-4 border-2" />
+    props.children = <Spinner size="sm" />
   }
 
   return (

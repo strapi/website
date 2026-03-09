@@ -9,7 +9,6 @@ import {
   PillGroupItem,
   PillGroupLink,
 } from "@/components/elementary/PillGroup"
-import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 import { usePricingBilling } from "./PricingBillingContext"
@@ -40,9 +39,9 @@ export function PricingSwitcher({
     >
       <div className="flex w-full flex-col items-start justify-between gap-8 md:flex-row md:items-end">
         {component.title && (
-          <Typography tag="h2" variant="header2" className="text-left">
+          <h2 className="text-foreground text-left text-4xl font-bold tracking-tight">
             {component.title}
-          </Typography>
+          </h2>
         )}
 
         <div className="flex w-auto flex-col-reverse items-start gap-3 md:flex-row md:items-end">

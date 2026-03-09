@@ -1,14 +1,11 @@
 import type React from "react"
 
-import {
-  Typography,
-  type Variant as TypographyVariant,
-} from "@/components/typography"
+import { cn } from "@/lib/styles"
 
-const sizeVariantMap: Record<"sm" | "default" | "lg", TypographyVariant> = {
-  sm: "subtitle2",
-  default: "subtitle1",
-  lg: "header3",
+const sizeVariantMap: Record<"sm" | "default" | "lg", string> = {
+  sm: "text-xl",
+  default: "text-2xl",
+  lg: "text-3xl tracking-tight",
 }
 
 export interface FeatureCardTitleProps {
@@ -30,34 +27,24 @@ export function FeatureCardTitle({
     return null
   }
 
-  const variant = sizeVariantMap[size]
+  const titleClassName = cn(
+    sizeVariantMap[size],
+    "text-foreground font-bold",
+    className
+  )
 
   if (icon) {
+    const Tag = as
+
     return (
       <div data-slot="feature-card-title" className="flex items-center gap-3">
         <div className="shrink-0">{icon}</div>
-        <Typography
-          tag={as}
-          variant={variant}
-          fontWeight="bold"
-          textColor="primary"
-          className={className}
-        >
-          {children}
-        </Typography>
+        <Tag className={titleClassName}>{children}</Tag>
       </div>
     )
   }
 
-  return (
-    <Typography
-      tag={as}
-      variant={variant}
-      fontWeight="bold"
-      textColor="primary"
-      className={className}
-    >
-      {children}
-    </Typography>
-  )
+  const Tag = as
+
+  return <Tag className={titleClassName}>{children}</Tag>
 }

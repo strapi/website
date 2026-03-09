@@ -32,6 +32,10 @@ export const env = createEnv({
 
     RECAPTCHA_SECRET_KEY: z.string().optional(),
 
+    GTM_ID: z.string().optional(),
+    HUBSPOT_PORTAL_ID: z.string().optional(),
+    HOTJAR_ID: z.string().optional(),
+
     BASIC_AUTH_ENABLED: optionalZodBoolean(),
     BASIC_AUTH_USERNAME: z.string().optional(),
     BASIC_AUTH_PASSWORD: z.string().optional(),
@@ -83,6 +87,10 @@ export const env = createEnv({
       process.env.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING,
 
     RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
+
+    GTM_ID: process.env.GTM_ID,
+    HUBSPOT_PORTAL_ID: process.env.HUBSPOT_PORTAL_ID,
+    HOTJAR_ID: process.env.HOTJAR_ID,
 
     BASIC_AUTH_ENABLED: process.env.BASIC_AUTH_ENABLED,
     BASIC_AUTH_USERNAME: process.env.BASIC_AUTH_USERNAME,

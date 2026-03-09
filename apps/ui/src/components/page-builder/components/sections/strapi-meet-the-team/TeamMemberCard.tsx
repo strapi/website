@@ -17,10 +17,11 @@ export function TeamMemberCard({ item, onClick }: TeamMemberCardProps) {
       <CardImage className="bg-strapi-neutral-100 aspect-[241/286]">
         <StrapiBasicImage
           component={item.image}
-          fill
+          mode="fill"
           className="object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           hideWhenMissing
+          decorative
         />
       </CardImage>
 

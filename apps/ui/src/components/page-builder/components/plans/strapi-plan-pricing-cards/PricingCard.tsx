@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl"
 
-import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 import { PricingCardPrice } from "./PricingCardPrice"
@@ -44,19 +43,18 @@ export function PricingCard({
     >
       {highlight && (
         <div className="bg-primary rounded-strapi-sm absolute -top-4 left-1/2 -translate-x-1/2">
-          <Typography
-            textColor="white"
-            variant="smallText1"
-            fontWeight="semiBold"
-            className="px-3 py-1"
-          >
+          <p className="px-3 py-1 text-sm font-semibold text-white">
             {t("bestValue")}
-          </Typography>
+          </p>
         </div>
       )}
 
       <div className="flex flex-col gap-2">
-        {label && <Typography variant="label">{label}</Typography>}
+        {label && (
+          <p className="text-foreground text-sm font-semibold tracking-[0.5px] uppercase">
+            {label}
+          </p>
+        )}
         <PricingCardPrice
           price={price}
           yearlyPrice={yearlyPrice}

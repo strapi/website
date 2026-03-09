@@ -210,7 +210,7 @@ export function StrapiHeroHomeFeatures({
     <div
       ref={rootRef}
       className={cn(
-        "hero-content-cascade-delayed flex flex-col-reverse lg:flex-col",
+        "animate-reveal-cascade flex flex-col-reverse [--reveal-delay:680ms] lg:flex-col",
         className
       )}
       {...restProps}

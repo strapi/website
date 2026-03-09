@@ -11,11 +11,19 @@ interface DynamicZoneItem {
   [key: string]: unknown
 }
 
+export interface DynamicZoneRenderContext {
+  readonly index: number
+  readonly isFirst: boolean
+  readonly surface: "footer" | "header" | "page"
+  readonly total: number
+}
+
 interface DynamicZoneRendererProps {
   readonly content: DynamicZoneItem[]
   readonly registry?: Partial<Record<UID.Component, React.ComponentType<any>>>
   readonly itemClassName?: string
   readonly extraProps?: Record<string, unknown>
+  readonly surface?: DynamicZoneRenderContext["surface"]
 }
 
 export function DynamicZoneRenderer({
@@ -23,35 +31,46 @@ export function DynamicZoneRenderer({
   registry = ContentComponents,
   itemClassName,
   extraProps,
+  surface = "page",
 }: DynamicZoneRendererProps) {
-  return content
-    .filter((comp) => comp != null)
-    .map((comp) => {
-      const name = comp.__component as UID.Component
-      const id = comp.id
-      const key = `${name}-${id}`
-      const Component = registry[name]
+  const filteredContent = content.filter((comp) => comp != null)
 
-      if (Component == null) {
-        console.warn(`Unknown component "${name}" with id "${id}".`)
+  return filteredContent.map((comp, index) => {
+    const name = comp.__component as UID.Component
+    const id = comp.id
+    const key = `${name}-${id}`
+    const Component = registry[name]
+    const renderContext: DynamicZoneRenderContext = {
+      index,
+      isFirst: index === 0,
+      surface,
+      total: filteredContent.length,
+    }
+    const componentProps = {
+      ...extraProps,
+      renderContext,
+    }
 
-        return (
-          <div key={key} className="font-medium text-red-500">
-            Component &quot;{key}&quot; is not implemented on the frontend.
-          </div>
-        )
-      }
+    if (Component == null) {
+      console.warn(`Unknown component "${name}" with id "${id}".`)
 
       return (
-        <ErrorBoundary key={key}>
-          {itemClassName ? (
-            <div className={cn(itemClassName)}>
-              <Component component={comp} {...extraProps} />
-            </div>
-          ) : (
-            <Component component={comp} {...extraProps} />
-          )}
-        </ErrorBoundary>
+        <div key={key} className="font-medium text-red-500">
+          Component &quot;{key}&quot; is not implemented on the frontend.
+        </div>
       )
-    })
+    }
+
+    return (
+      <ErrorBoundary key={key}>
+        {itemClassName ? (
+          <div className={cn(itemClassName)}>
+            <Component component={comp} {...componentProps} />
+          </div>
+        ) : (
+          <Component component={comp} {...componentProps} />
+        )}
+      </ErrorBoundary>
+    )
+  })
 }

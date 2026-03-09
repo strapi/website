@@ -3,6 +3,7 @@ import type { Data } from "@repo/strapi-types"
 import { HeroContainer } from "@/components/elementary/HeroContainer"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
+import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
 import { TypingAnimation } from "@/components/ui/typing-animation"
 import { cn } from "@/lib/styles"
 
@@ -17,13 +18,19 @@ const DEFAULT_ROTATING_PHRASES = [
   "LMS",
 ]
 
+interface StrapiHeroHomeProps {
+  readonly component: Data.Component<"sections.hero-home">
+  readonly renderContext?: DynamicZoneRenderContext
+}
+
 export function StrapiHeroHome({
   component,
-}: {
-  readonly component: Data.Component<"sections.hero-home">
-}) {
+  renderContext,
+}: StrapiHeroHomeProps) {
   const hasTopRow = Boolean(component.cta)
   const hasFeatures = Boolean(component.features?.length)
+  const affectsNavbarTheme =
+    renderContext?.surface === "page" && renderContext.isFirst
   const rotatingPhrases =
     (component.rotatingPhrases
       ?.map((phrase) => phrase.text?.trim())
@@ -34,11 +41,11 @@ export function StrapiHeroHome({
   }
 
   return (
-    <HeroContainer>
+    <HeroContainer affectsNavbarTheme={affectsNavbarTheme}>
       <div className="border-strapi-gray-700/50 rounded-strapi-xl overflow-hidden md:border">
         {hasTopRow ? (
-          <div className="hero-border-cascade md:bg-strapi-gray-950 rounded-strapi-xl flex w-full flex-col md:flex-row">
-            <div className="hero-content-cascade border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-center px-0 py-6 text-center md:items-start md:border-r md:px-14 md:py-16 md:text-left">
+          <div className="animate-border-reveal md:bg-strapi-gray-950 rounded-strapi-xl flex w-full flex-col md:flex-row">
+            <div className="animate-reveal-cascade border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-center px-0 py-6 text-center md:items-start md:border-r md:px-14 md:py-16 md:text-left">
               <h1 className="text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
                 {component.title}
               </h1>
@@ -79,7 +86,7 @@ export function StrapiHeroHome({
             </div>
 
             {component.testimonials ? (
-              <div className="hero-content-cascade border-strapi-gray-700/50 rounded-strapi-xl grid grow-0 grid-cols-1 grid-rows-[1fr_auto] max-md:border">
+              <div className="animate-reveal-cascade border-strapi-gray-700/50 rounded-strapi-xl grid grow-0 grid-cols-1 grid-rows-[1fr_auto] max-md:border">
                 {component.testimonials.title ? (
                   <div className="border-strapi-gray-700/50 flex items-center justify-center border-b px-8 py-5 sm:px-16 sm:py-12">
                     <p className="text-strapi-gray-400 px-6 text-center text-base">
@@ -123,7 +130,7 @@ export function StrapiHeroHome({
       </div>
 
       {hasFeatures ? (
-        <div className="hero-border-cascade-delayed border-strapi-gray-700/50 rounded-strapi-xl overflow-hidden border">
+        <div className="animate-border-reveal border-strapi-gray-700/50 rounded-strapi-xl overflow-hidden border [--reveal-delay:680ms]">
           <StrapiHeroHomeFeatures features={component.features} />
         </div>
       ) : null}

@@ -49,6 +49,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
         <DynamicZoneRenderer
           content={content}
           itemClassName="mb-6 md:mb-10 lg:mb-14"
+          surface="page"
           extraProps={{
             pageParams: params,
             page: restPageData,

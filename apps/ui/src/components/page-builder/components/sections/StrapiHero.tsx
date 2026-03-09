@@ -10,17 +10,22 @@ import {
 } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
+import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
 
-export function StrapiHero({
-  component,
-}: {
+interface StrapiHeroProps {
   readonly component: Data.Component<"sections.hero">
-}) {
+  readonly renderContext?: DynamicZoneRenderContext
+}
+
+export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
+  const affectsNavbarTheme =
+    renderContext?.surface === "page" && renderContext.isFirst
+
   return (
-    <HeroContainer>
+    <HeroContainer affectsNavbarTheme={affectsNavbarTheme}>
       <div className="border-strapi-gray-700/50 rounded-strapi-lg flex flex-col items-end overflow-hidden md:flex-row md:border md:pl-10 lg:gap-12">
         <SectionHeader
-          className="hero-content-cascade px-8 py-8 md:py-16 lg:pr-0 lg:pl-12"
+          className="animate-reveal-cascade px-8 py-8 md:py-16 lg:pr-0 lg:pl-12"
           layout="left"
           size="xl"
         >

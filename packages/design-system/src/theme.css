@@ -353,6 +353,7 @@
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: linear(
     0,
     0.048,
@@ -524,9 +525,6 @@
   --color-strapi-cyan-900: oklch(0.254 0.038 258.285); /* #172335 */
 
   /* Hero accents */
-  --color-hero-surface: var(--color-strapi-gray-950);
-  --color-hero-accent-primary: var(--color-strapi-blue-600);
-  --color-hero-accent-secondary: var(--color-strapi-purple-500);
   --color-hero-accent-primary-transparent: rgb(73 69 255 / 0);
   --color-hero-progress-end: rgb(2 7 18 / 1);
   --color-hero-grid-dot: rgb(37 37 64 / 0.75);
@@ -536,21 +534,21 @@
   --color-hero-shine-4: rgb(194 112 255 / 0.88);
   --gradient-hero-glow: radial-gradient(
     50% 50% at 50% 50%,
-    var(--color-hero-accent-secondary) 73.08%,
-    var(--color-hero-accent-primary) 86.54%,
+    var(--color-strapi-purple-500) 73.08%,
+    var(--color-strapi-blue-600) 86.54%,
     var(--color-hero-accent-primary-transparent) 100%
   );
   --gradient-hero-code-overlay: linear-gradient(
     165deg,
-    var(--color-hero-surface) 0%,
+    var(--color-strapi-gray-950) 0%,
     var(--color-hero-accent-primary-transparent) 33%,
-    var(--color-hero-accent-primary) 65%,
-    var(--color-hero-accent-secondary) 100%
+    var(--color-strapi-blue-600) 65%,
+    var(--color-strapi-purple-500) 100%
   );
   --gradient-hero-progress: linear-gradient(
     -90deg,
-    var(--color-hero-accent-secondary) 0%,
-    var(--color-hero-accent-primary) 20%,
+    var(--color-strapi-purple-500) 0%,
+    var(--color-strapi-blue-600) 20%,
     var(--color-hero-progress-end) 100%
   );
 

@@ -101,7 +101,14 @@
           "logoImage.image.height",
           "logoImage.link.href",
           "logoImage.link.newTab",
-          "logoImage.link.label"
+          "logoImage.link.label",
+          "logoImageLight.image.media",
+          "logoImageLight.image.alt",
+          "logoImageLight.image.width",
+          "logoImageLight.image.height",
+          "logoImageLight.link.href",
+          "logoImageLight.link.newTab",
+          "logoImageLight.link.label"
         ]
       },
       "conditions": [],
@@ -123,7 +130,14 @@
           "logoImage.image.height",
           "logoImage.link.href",
           "logoImage.link.newTab",
-          "logoImage.link.label"
+          "logoImage.link.label",
+          "logoImageLight.image.media",
+          "logoImageLight.image.alt",
+          "logoImageLight.image.width",
+          "logoImageLight.image.height",
+          "logoImageLight.link.href",
+          "logoImageLight.link.newTab",
+          "logoImageLight.link.label"
         ]
       },
       "conditions": [],
@@ -145,11 +159,51 @@
           "logoImage.image.height",
           "logoImage.link.href",
           "logoImage.link.newTab",
-          "logoImage.link.label"
+          "logoImage.link.label",
+          "logoImageLight.image.media",
+          "logoImageLight.image.alt",
+          "logoImageLight.image.width",
+          "logoImageLight.image.height",
+          "logoImageLight.link.href",
+          "logoImageLight.link.newTab",
+          "logoImageLight.link.label"
         ]
       },
       "conditions": [],
       "documentId": "bv2bbvfglhjum6ghxu6j7z7u",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {
+        "fields": ["name", "portalId", "formId", "placeholderHeight"]
+      },
+      "conditions": [],
+      "documentId": "gr2b1k59hv8a7n2xp0u6cjmd",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {
+        "fields": ["name", "portalId", "formId", "placeholderHeight"]
+      },
+      "conditions": [],
+      "documentId": "af9w3m4q1z6s2kn8t7xv0pcy",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {
+        "fields": ["name", "portalId", "formId", "placeholderHeight"]
+      },
+      "conditions": [],
+      "documentId": "kq5u8yn2h7m4c1r9x0p6vtwb",
       "locale": null
     },
     {

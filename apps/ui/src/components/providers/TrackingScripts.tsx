@@ -66,7 +66,9 @@ export function TrackingScripts() {
       {env.GTM_ID && (
         <Script id="button-click-tracking" strategy="afterInteractive">
           {`document.addEventListener('click',function(e){
-              var btn=e.target.closest('[data-slot="button"]');
+              var target=e.target;
+              if(!(target instanceof Element)){return;}
+              var btn=target.closest('[data-slot="button"]');
               if(btn&&btn.innerText){
                 window.dataLayer=window.dataLayer||[];
                 window.dataLayer.push({event:'button_click',button_text:btn.innerText});

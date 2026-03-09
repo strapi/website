@@ -1,10 +1,11 @@
 "use client"
 
 import type { Data } from "@repo/strapi-types"
-import { useEffect, useId, useState } from "react"
+import { useEffect, useId } from "react"
 
 import { Container } from "@/components/elementary/Container"
 import { Spinner } from "@/components/elementary/Spinner"
+import { logNonBlockingError } from "@/lib/logging"
 
 import { useHubSpotForm } from "./useHubSpotForm"
 
@@ -21,22 +22,22 @@ function HubSpotFormEmbed({
 }) {
   const id = useId()
   const stableId = `hsform${id.replaceAll(":", "")}`
-  const { containerRef, isLoaded } = useHubSpotForm(portalId, formId)
-  const [showSpinner, setShowSpinner] = useState(true)
+  const { containerRef, status } = useHubSpotForm(portalId, formId)
 
   useEffect(() => {
-    if (!isLoaded) {
+    if (status !== "error") {
       return
     }
 
-    const timeout = setTimeout(() => setShowSpinner(false), 300)
-
-    return () => clearTimeout(timeout)
-  }, [isLoaded])
+    logNonBlockingError("HubSpot form failed to render.", {
+      formId,
+      portalId,
+    })
+  }, [formId, portalId, status])
 
   return (
     <div className="relative" style={{ minHeight: placeholderHeight }}>
-      {showSpinner && (
+      {status === "loading" && (
         <div className="absolute inset-0 flex items-center justify-center">
           <Spinner size="sm" />
         </div>
@@ -46,7 +47,7 @@ function HubSpotFormEmbed({
         ref={containerRef}
         id={stableId}
         className="relative bg-white transition-opacity duration-300"
-        style={{ opacity: isLoaded ? 1 : 0 }}
+        style={{ opacity: status === "ready" ? 1 : 0 }}
       />
     </div>
   )
@@ -70,6 +71,7 @@ export function StrapiHubSpotForm({
       <Container>
         <div className="rounded-strapi-lg mx-auto max-w-xl bg-white p-8 shadow-lg lg:p-12">
           <HubSpotFormEmbed
+            key={`${form.portalId}:${form.formId}`}
             portalId={form.portalId}
             formId={form.formId}
             placeholderHeight={placeholderHeight}

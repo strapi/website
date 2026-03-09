@@ -62,14 +62,14 @@ export const HeroFeatureVideo = memo(
     useEffect(() => {
       const video = videoRef.current
 
-      if (!video || !isActive) {
+      if (!video) {
         return
       }
 
-      if (!paused) {
-        video.play().catch(() => {})
-      } else {
+      if (!isActive || paused) {
         video.pause()
+      } else {
+        video.play().catch(() => {})
       }
     }, [isActive, paused])
 

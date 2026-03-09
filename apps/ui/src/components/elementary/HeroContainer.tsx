@@ -2,16 +2,19 @@ import { cn } from "@/lib/styles"
 
 import { Container } from "./Container"
 
-export interface HeroContainerProps extends React.ComponentProps<"div"> {}
+export interface HeroContainerProps extends React.ComponentProps<"div"> {
+  readonly affectsNavbarTheme?: boolean
+}
 
 export function HeroContainer({
+  affectsNavbarTheme = false,
   className,
   children,
   ...restProps
 }: HeroContainerProps) {
   return (
     <section
-      data-dark-hero
+      data-dark-hero={affectsNavbarTheme ? "true" : undefined}
       className="bg-strapi-gray-950 max max-lg:bg-dot-grid relative -mt-20 overflow-hidden pt-20"
     >
       <Container className="relative z-10 hidden lg:block">

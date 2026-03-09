@@ -52,7 +52,7 @@ export function DesktopNavbar({
             sizes="140px"
             className={cn(
               logoClassName,
-              "opacity-[var(--nav-logo-default-opacity)]"
+              "opacity-[var(--nav-logo-default-opacity)] transition-opacity duration-300"
             )}
           />
         )}
@@ -64,7 +64,7 @@ export function DesktopNavbar({
             sizes="140px"
             className={cn(
               logoClassName,
-              "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"
+              "absolute inset-0 opacity-[var(--nav-logo-light-opacity)] transition-opacity duration-300"
             )}
           />
         )}

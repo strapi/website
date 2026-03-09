@@ -177,7 +177,14 @@
           "logoImage.image.height",
           "logoImage.link.label",
           "logoImage.link.href",
-          "logoImage.link.newTab"
+          "logoImage.link.newTab",
+          "logoImageLight.image.media",
+          "logoImageLight.image.alt",
+          "logoImageLight.image.width",
+          "logoImageLight.image.height",
+          "logoImageLight.link.label",
+          "logoImageLight.link.href",
+          "logoImageLight.link.newTab"
         ],
         "locales": ["en"]
       },
@@ -222,7 +229,14 @@
           "logoImage.image.height",
           "logoImage.link.label",
           "logoImage.link.href",
-          "logoImage.link.newTab"
+          "logoImage.link.newTab",
+          "logoImageLight.image.media",
+          "logoImageLight.image.alt",
+          "logoImageLight.image.width",
+          "logoImageLight.image.height",
+          "logoImageLight.link.label",
+          "logoImageLight.link.href",
+          "logoImageLight.link.newTab"
         ],
         "locales": ["en"]
       },
@@ -245,12 +259,70 @@
           "logoImage.image.height",
           "logoImage.link.label",
           "logoImage.link.href",
-          "logoImage.link.newTab"
+          "logoImage.link.newTab",
+          "logoImageLight.image.media",
+          "logoImageLight.image.alt",
+          "logoImageLight.image.width",
+          "logoImageLight.image.height",
+          "logoImageLight.link.label",
+          "logoImageLight.link.href",
+          "logoImageLight.link.newTab"
         ],
         "locales": ["en"]
       },
       "conditions": [],
       "documentId": "mmlpxhkojga647v5xn527gsn",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {
+        "fields": ["name", "portalId", "formId", "placeholderHeight"]
+      },
+      "conditions": [],
+      "documentId": "yv4k2x8p1m6n0q3t9c5hrwba",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {},
+      "conditions": [],
+      "documentId": "x5m9p2q7v1h4t8c0n6rykbwa",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.publish",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {},
+      "conditions": [],
+      "documentId": "n8t3v6p1m4q9x2c0h5rykwba",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {
+        "fields": ["name", "portalId", "formId", "placeholderHeight"]
+      },
+      "conditions": [],
+      "documentId": "q1v5m8x2p4t7c0h9n6rykawb",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "actionParameters": {},
+      "subject": "api::hubspot-form.hubspot-form",
+      "properties": {
+        "fields": ["name", "portalId", "formId", "placeholderHeight"]
+      },
+      "conditions": [],
+      "documentId": "h2x6p9m3q5v8t1c0n4rykwba",
       "locale": null
     },
     {

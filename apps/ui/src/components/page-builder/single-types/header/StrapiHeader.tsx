@@ -12,5 +12,5 @@ export function StrapiHeader({ locale }: { readonly locale: Locale }) {
     return null
   }
 
-  return <DynamicZoneRenderer content={content} />
+  return <DynamicZoneRenderer content={content} surface="header" />
 }

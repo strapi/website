@@ -1,0 +1,192 @@
+/* ── Theme animations ── */
+
+@theme inline {
+  --animate-shine: shine var(--duration) infinite linear;
+
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
+  }
+
+  --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
+  @keyframes blink-cursor {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  --animate-char-fade-out: char-fade-out 110ms ease-in forwards;
+  @keyframes char-fade-out {
+    to {
+      opacity: 0;
+      transform: translateY(0.25em);
+    }
+  }
+}
+
+/* ── Reveal animations (generic) ── */
+
+@keyframes reveal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes border-fade-in {
+  from {
+    border-color: transparent;
+  }
+}
+
+@utility animate-reveal-cascade {
+  & > * {
+    opacity: 0;
+    animation: reveal-fade-in 1000ms var(--ease-reveal) forwards;
+  }
+
+  & > *:nth-child(1) {
+    animation-delay: var(--reveal-delay, 180ms);
+  }
+
+  & > *:nth-child(2) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 200ms);
+  }
+
+  & > *:nth-child(3) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 400ms);
+  }
+
+  & > *:nth-child(4) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 600ms);
+  }
+
+  & > *:nth-child(5) {
+    animation-delay: calc(var(--reveal-delay, 180ms) + 800ms);
+  }
+}
+
+@utility animate-border-reveal {
+  animation: border-fade-in 1000ms var(--ease-reveal) var(--reveal-delay, 180ms)
+    both;
+}
+
+/* ── Progress animations ── */
+
+@keyframes feature-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="feature-progress"] {
+    animation: none !important;
+    width: 100% !important;
+  }
+}
+
+/* ── Navigation animations ── */
+
+@property --nav-scrolled {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: true;
+}
+
+@keyframes mobile-menu-open {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes nav-scroll-detect {
+  to {
+    --nav-scrolled: 1;
+    color: var(--nav-text-scrolled);
+    --nav-link-hover: var(--nav-link-hover-scrolled);
+    --nav-logo-default-opacity: 1;
+    --nav-logo-light-opacity: 0;
+  }
+}
+
+/* ── Spinner ── */
+
+@keyframes spinner-move {
+  0% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
+    width: var(--_s);
+    height: var(--_s);
+  }
+  33% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
+    width: var(--_expanded);
+    height: var(--_expanded);
+  }
+  66% {
+    background-position:
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0;
+    width: var(--_expanded);
+    height: var(--_expanded);
+  }
+  100% {
+    background-position:
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0;
+    width: var(--_s);
+    height: var(--_s);
+  }
+}
+
+.spinner-container {
+  --_s: var(--spinner-size, 40px);
+  --_expanded: calc(var(--_s) * 1.5);
+  display: inline-grid;
+  place-items: center;
+  width: var(--_expanded);
+  height: var(--_expanded);
+}
+
+.spinner {
+  --_s: inherit;
+  --_expanded: inherit;
+  --_dot: calc(var(--_s) * 0.525);
+  --_bg: no-repeat linear-gradient(currentColor 0 0);
+  display: inline-block;
+  background: var(--_bg), var(--_bg), var(--_bg), var(--_bg);
+  background-size: var(--_dot) var(--_dot);
+  animation: spinner-move 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+}

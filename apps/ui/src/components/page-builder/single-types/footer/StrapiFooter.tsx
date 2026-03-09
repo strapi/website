@@ -14,7 +14,7 @@ export function StrapiFooter({ locale }: { readonly locale: Locale }) {
 
   return (
     <footer>
-      <DynamicZoneRenderer content={content} />
+      <DynamicZoneRenderer content={content} surface="footer" />
     </footer>
   )
 }

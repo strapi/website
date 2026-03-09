@@ -21,13 +21,7 @@ export function StrapiFooterMain({
   const sectionCount = component.sections?.length ?? 0
 
   return (
-    <div
-      className="bg-white"
-      style={{
-        backgroundImage:
-          "linear-gradient(359.75deg, rgb(242, 244, 255) -63.96%, rgb(255, 255, 255) 55.16%)",
-      }}
-    >
+    <div className="bg-white">
       <Container className="py-8 sm:py-15">
         <div
           className="grid grid-cols-1 gap-8 pb-12 sm:grid-cols-2 sm:gap-y-10 sm:pb-30 md:grid-cols-3 lg:grid-cols-[2fr_repeat(var(--section-count),1fr)]"

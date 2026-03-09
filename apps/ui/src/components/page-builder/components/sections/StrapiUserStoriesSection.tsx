@@ -120,7 +120,7 @@ export function StrapiUserStoriesSection({
               <CardFooter>
                 <a
                   href="#"
-                  className="text-strapi-green-600 hover:text-strapi-green-700 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                  className="text-strapi-blue-600 hover:text-strapi-blue-700 inline-flex items-center gap-1 text-sm font-medium transition-colors"
                 >
                   Read a story
                   <ArrowRightIcon className="size-4" />

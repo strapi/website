@@ -12,12 +12,7 @@ import {
   FeatureCardTitle,
 } from "@/components/elementary/feature-card"
 import { PillGroup, PillGroupItem } from "@/components/elementary/PillGroup"
-import {
-  Quote,
-  QuoteAuthor,
-  QuoteText,
-  QuoteTriangle,
-} from "@/components/elementary/quote"
+import { Quote, QuoteAuthor, QuoteText } from "@/components/elementary/quote"
 import {
   SectionHeader,
   SectionTitle,
@@ -285,11 +280,6 @@ const twoColumnGridDefaultExample = {
     },
   ],
   background: "none",
-} as Data.Component<"sections.two-column-grid">
-
-const twoColumnGridGradientExample = {
-  ...twoColumnGridDefaultExample,
-  background: "gradient",
 } as Data.Component<"sections.two-column-grid">
 
 const twoColumnGridLightExample = {
@@ -1095,7 +1085,6 @@ export default function ComponentLibraryPage() {
 
           <Variant label="Image quote pattern (as used in StrapiQuote image variant)">
             <div className="bg-strapi-blue-100 relative overflow-hidden rounded-xl p-10">
-              <QuoteTriangle />
               <div className="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-center">
                 <Placeholder className="aspect-square w-64 shrink-0 rounded-lg" />
                 <Quote size="lg">
@@ -1156,10 +1145,6 @@ export default function ComponentLibraryPage() {
         <div className="-mx-6 space-y-10">
           <Variant label="Default (no background)">
             <StrapiTwoColumnGrid component={twoColumnGridDefaultExample} />
-          </Variant>
-
-          <Variant label="Gradient background">
-            <StrapiTwoColumnGrid component={twoColumnGridGradientExample} />
           </Variant>
 
           <Variant label="Light background">
@@ -1242,30 +1227,27 @@ export default function ComponentLibraryPage() {
         <div className="space-y-6">
           <Variant label="All variants">
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-              {(
-                [
-                  "none",
-                  "light",
-                  "dark",
-                  "darker",
-                  "green",
-                  "gradient",
-                ] as const
-              ).map((variant) => (
-                <Box key={variant} variant={variant} className="rounded-lg p-8">
-                  <p
-                    className={`relative z-10 text-center text-sm font-medium ${
-                      variant === "dark" ||
-                      variant === "darker" ||
-                      variant === "green"
-                        ? "text-white"
-                        : "text-strapi-neutral-800"
-                    }`}
+              {(["none", "light", "dark", "darker", "green"] as const).map(
+                (variant) => (
+                  <Box
+                    key={variant}
+                    variant={variant}
+                    className="rounded-lg p-8"
                   >
-                    {variant}
-                  </p>
-                </Box>
-              ))}
+                    <p
+                      className={`relative z-10 text-center text-sm font-medium ${
+                        variant === "dark" ||
+                        variant === "darker" ||
+                        variant === "green"
+                          ? "text-white"
+                          : "text-strapi-neutral-800"
+                      }`}
+                    >
+                      {variant}
+                    </p>
+                  </Box>
+                )
+              )}
             </div>
           </Variant>
         </div>
@@ -1276,50 +1258,6 @@ export default function ComponentLibraryPage() {
       {/* ----------------------------------------------------------------- */}
       <Section id="triangle-mask" title="TriangleMask">
         <div className="space-y-6">
-          <Variant label="All positions (fill=blue)">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-              {(
-                [
-                  "top-left",
-                  "top-right",
-                  "bottom-left",
-                  "bottom-right",
-                ] as const
-              ).map((position) => (
-                <div key={position} className="aspect-square w-full">
-                  <TriangleMask position={position} fill="blue">
-                    <div className="flex size-full items-center justify-center text-xs font-medium text-white">
-                      {position}
-                    </div>
-                  </TriangleMask>
-                </div>
-              ))}
-            </div>
-          </Variant>
-
-          <Variant label="All fill colors (position=top-left)">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-              {(["none", "blue", "green", "purple"] as const).map((fill) => (
-                <div
-                  key={fill}
-                  className="bg-strapi-neutral-100 aspect-square w-full"
-                >
-                  <TriangleMask position="top-left" fill={fill}>
-                    <div
-                      className={`flex size-full items-center justify-center text-xs font-medium ${
-                        fill === "none"
-                          ? "text-strapi-neutral-500"
-                          : "text-white"
-                      }`}
-                    >
-                      {fill}
-                    </div>
-                  </TriangleMask>
-                </div>
-              ))}
-            </div>
-          </Variant>
-
           <Variant label="With image content">
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {(
@@ -1344,45 +1282,9 @@ export default function ComponentLibraryPage() {
             </div>
           </Variant>
 
-          <Variant label="Custom sizes (non-square)">
-            <div className="flex flex-wrap items-end gap-4">
-              <div className="h-32 w-48">
-                <TriangleMask position="top-right" fill="purple">
-                  <div className="flex size-full items-center justify-center text-xs text-white">
-                    48 x 32
-                  </div>
-                </TriangleMask>
-              </div>
-
-              <div className="h-48 w-32">
-                <TriangleMask position="bottom-left" fill="green">
-                  <div className="flex size-full items-center justify-center text-xs text-white">
-                    32 x 48
-                  </div>
-                </TriangleMask>
-              </div>
-
-              <div className="h-24 w-64">
-                <TriangleMask position="top-left" fill="dark">
-                  <div className="flex size-full items-center justify-center text-xs text-white">
-                    64 x 24
-                  </div>
-                </TriangleMask>
-              </div>
-
-              <div className="size-16">
-                <TriangleMask position="bottom-right" fill="blue">
-                  <div className="flex size-full items-center justify-center text-[10px] text-white">
-                    16
-                  </div>
-                </TriangleMask>
-              </div>
-            </div>
-          </Variant>
-
           <Variant label="Layered triangle masks (background + offset overlay)">
             <div className="relative size-120">
-              <TriangleMask position="bottom-left" fill="blue">
+              <TriangleMask position="bottom-left">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://picsum.photos/seed/layered/600/600"
@@ -1390,12 +1292,6 @@ export default function ComponentLibraryPage() {
                   className="size-full object-cover"
                 />
               </TriangleMask>
-
-              <div className="absolute bottom-[150px] left-[150px] size-80">
-                <TriangleMask position="bottom-left" fill="green">
-                  <div className="size-full" />
-                </TriangleMask>
-              </div>
             </div>
           </Variant>
         </div>

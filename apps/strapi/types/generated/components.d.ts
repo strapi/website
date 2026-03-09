@@ -897,7 +897,7 @@ export interface SectionsTwoColumnGrid extends Struct.ComponentSchema {
     icon: "dashboard"
   }
   attributes: {
-    background: Schema.Attribute.Enumeration<["none", "light", "gradient"]> &
+    background: Schema.Attribute.Enumeration<["none", "light"]> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: false

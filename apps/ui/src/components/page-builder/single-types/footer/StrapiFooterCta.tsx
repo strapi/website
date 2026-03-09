@@ -20,13 +20,7 @@ export function StrapiFooterCta({
   }
 
   return (
-    <section
-      className="w-full"
-      style={{
-        background:
-          "linear-gradient(359.75deg, #f2f4ff -63.96%, #ffffff 55.16%)",
-      }}
-    >
+    <section className="w-full">
       <Container className="py-30">
         <div className="flex flex-col gap-14 lg:flex-row lg:gap-20">
           <div className="flex flex-1 flex-col items-start gap-14">

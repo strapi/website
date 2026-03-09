@@ -34,7 +34,7 @@ export function StrapiAuthorBanner({
           )}
 
           <div className="min-w-0 flex-1">
-            <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="mb-3 flex flex-col">
               {component.authorUrl ? (
                 isAppLink(component.authorUrl) ? (
                   <Link href={formatHref(component.authorUrl)}>

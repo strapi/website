@@ -1,7 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 
 import { ImageWithBlur } from "@/components/elementary/ImageWithBlur"
-import { logNonBlockingError } from "@/lib/logging"
+import { logNonBlockingError, logNonBlockingWarning } from "@/lib/logging"
 import { formatStrapiMediaUrl } from "@/lib/strapi-helpers"
 import { cn } from "@/lib/styles"
 import type { StrapiImageMedia, StrapiImageMediaFormat } from "@/types/api"
@@ -58,7 +58,7 @@ function emitDimensionWarnings(
   sizes?: string
 ) {
   if (hasPartialCms) {
-    logNonBlockingError(
+    logNonBlockingWarning(
       "StrapiBasicImage ignored partial CMS dimensions. Set both width and height or neither."
     )
   }

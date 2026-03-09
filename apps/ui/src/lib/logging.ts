@@ -12,3 +12,15 @@ export const logNonBlockingError = (...args: unknown[]) => {
     console.error(...args)
   }
 }
+
+/**
+ * Logs non-blocking warnings (CMS data quality issues, etc.) using console.warn.
+ * Same gating as logNonBlockingError but won't trigger the Next.js error overlay.
+ */
+export const logNonBlockingWarning = (...args: unknown[]) => {
+  const showErrors = getEnvVar("SHOW_NON_BLOCKING_ERRORS")
+
+  if (showErrors) {
+    console.warn(...args)
+  }
+}

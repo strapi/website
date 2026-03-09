@@ -110,6 +110,21 @@ export interface ElementsHeroHomeCta extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsHeroHomeFeature extends Struct.ComponentSchema {
+  collectionName: "components_elements_hero_home_features"
+  info: {
+    description: ""
+    displayName: "HeroHomeFeature"
+    icon: "picture"
+  }
+  attributes: {
+    icon: Schema.Attribute.Component<"utilities.basic-image", false>
+    media: Schema.Attribute.Media<"images" | "videos"> &
+      Schema.Attribute.Required
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
 export interface ElementsHeroHomeTestimonials extends Struct.ComponentSchema {
   collectionName: "components_elements_hero_home_testimonials"
   info: {
@@ -766,6 +781,8 @@ export interface SectionsHeroHome extends Struct.ComponentSchema {
   }
   attributes: {
     cta: Schema.Attribute.Component<"elements.hero-home-cta", false>
+    features: Schema.Attribute.Component<"elements.hero-home-feature", true>
+    rotatingPhrases: Schema.Attribute.Component<"utilities.text", true>
     testimonials: Schema.Attribute.Component<
       "elements.hero-home-testimonials",
       false
@@ -1244,6 +1261,7 @@ declare module "@strapi/strapi" {
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
       "elements.footer-item": ElementsFooterItem
       "elements.hero-home-cta": ElementsHeroHomeCta
+      "elements.hero-home-feature": ElementsHeroHomeFeature
       "elements.hero-home-testimonials": ElementsHeroHomeTestimonials
       "elements.how-it-works-item": ElementsHowItWorksItem
       "elements.team-member-item": ElementsTeamMemberItem

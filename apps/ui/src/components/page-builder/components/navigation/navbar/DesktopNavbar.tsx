@@ -49,6 +49,7 @@ export function DesktopNavbar({
             component={logoImage}
             imageMode="responsive"
             transparentPlaceholder
+            sizes="140px"
             className={cn(
               logoClassName,
               "opacity-[var(--nav-logo-default-opacity)]"
@@ -60,6 +61,7 @@ export function DesktopNavbar({
             component={logoImageLight}
             imageMode="responsive"
             transparentPlaceholder
+            sizes="140px"
             className={cn(
               logoClassName,
               "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"

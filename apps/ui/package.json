@@ -38,6 +38,7 @@
     "dayjs": "^1.11.19",
     "embla-carousel-react": "^8.6.0",
     "lodash": "catalog:",
+    "motion": "^12.35.2",
     "next": "16.1.6",
     "next-intl": "4.8.3",
     "next-recaptcha-v3": "1.5.3",

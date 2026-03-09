@@ -20,7 +20,7 @@ export function StrapiHero({
     <HeroContainer>
       <div className="border-strapi-gray-700/50 rounded-strapi-lg flex flex-col items-end overflow-hidden md:flex-row md:border md:pl-10 lg:gap-12">
         <SectionHeader
-          className="px-8 py-8 md:py-16 lg:pr-0 lg:pl-12"
+          className="hero-content-cascade px-8 py-8 md:py-16 lg:pr-0 lg:pl-12"
           layout="left"
           size="xl"
         >

@@ -48,6 +48,7 @@ export function MobileNavbar({
             component={logoImage}
             imageMode="responsive"
             transparentPlaceholder
+            sizes="120px"
             className={cn(
               logoClassName,
               "opacity-[var(--nav-logo-default-opacity)]"
@@ -59,6 +60,7 @@ export function MobileNavbar({
             component={logoImageLight}
             imageMode="responsive"
             transparentPlaceholder
+            sizes="120px"
             className={cn(
               logoClassName,
               "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"

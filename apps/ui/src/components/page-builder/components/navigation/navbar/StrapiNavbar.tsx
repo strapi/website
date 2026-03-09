@@ -16,7 +16,7 @@ export async function StrapiNavbar({
   return (
     <nav
       data-navbar
-      className="sticky top-0 z-40 flex h-16 w-full [animation:nav-scroll-shadow_linear_both,nav-scroll-snap_ease-out_both] items-center [--nav-logo-default-opacity:1] [--nav-logo-light-opacity:0] [--nav-text-initial:inherit] [--nav-text-scrolled:inherit] [animation-range:0px_80px,0px_40px] [animation-timeline:scroll(),scroll()] lg:h-20 lg:text-[var(--nav-text-initial)]"
+      className="sticky top-0 z-40 flex h-16 w-full [animation:nav-scroll-shadow_linear_both,nav-scroll-snap_ease-out_both] items-center [--nav-link-hover:var(--nav-link-hover-initial)] [--nav-link-hover-initial:var(--color-strapi-blue-600)] [--nav-link-hover-scrolled:var(--color-strapi-blue-600)] [--nav-logo-default-opacity:1] [--nav-logo-light-opacity:0] [--nav-text-initial:inherit] [--nav-text-scrolled:inherit] [animation-range:0px_80px,0px_40px] [animation-timeline:scroll(),scroll()] lg:h-20 lg:text-[var(--nav-text-initial)]"
     >
       <Container>
         <DesktopNavbar

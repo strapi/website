@@ -26,7 +26,7 @@ export function HeroContainer({
       <div className="bg-dot-grid relative h-full w-full">
         <Container
           className={cn(
-            "border-strapi-gray-700/50 lg:bg-strapi-gray-950 relative top-0 z-10 flex h-full flex-col gap-4 border-r border-l p-4",
+            "border-strapi-gray-700/50 lg:bg-strapi-gray-950 relative top-0 z-10 flex h-full flex-col gap-4 border-r border-l p-6 md:p-4",
             className
           )}
           {...restProps}

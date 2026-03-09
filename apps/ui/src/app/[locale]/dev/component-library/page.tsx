@@ -65,11 +65,21 @@ import { Button } from "@/components/ui/button"
 const PLACEHOLDER_IMG = "https://picsum.photos/seed/strapi/800/600"
 const PLACEHOLDER_AVATAR = "https://picsum.photos/seed/avatar/200/200"
 const PLACEHOLDER_LOGO = "/images/logo/strapi-monogram-logo.svg"
+const PLACEHOLDER_VIDEO =
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
 const DEFAULT_MOCK_MEDIA_SIZE = { width: 800, height: 600 }
+
+interface MockMediaOverrides {
+  readonly alternativeText?: string
+  readonly caption?: string
+  readonly mime?: string
+  readonly name?: string
+}
 
 function mockMedia(
   url: string,
-  size: { width: number; height: number } = DEFAULT_MOCK_MEDIA_SIZE
+  size: { width: number; height: number } = DEFAULT_MOCK_MEDIA_SIZE,
+  overrides?: MockMediaOverrides
 ) {
   const seed = Array.from(url).reduce(
     (total, character) => total + (character.codePointAt(0) ?? 0),
@@ -83,6 +93,10 @@ function mockMedia(
     width: size.width,
     height: size.height,
     formats: null,
+    mime: overrides?.mime ?? "image/jpeg",
+    alternativeText: overrides?.alternativeText,
+    caption: overrides?.caption,
+    name: overrides?.name,
   }
 }
 
@@ -1850,6 +1864,13 @@ export default function ComponentLibraryPage() {
                       },
                     },
                   },
+                  rotatingPhrases: [
+                    { id: 7001, text: "Websites" },
+                    { id: 7002, text: "Web Apps" },
+                    { id: 7003, text: "Mobile Apps" },
+                    { id: 7004, text: "Intranets" },
+                    { id: 7005, text: "LMS" },
+                  ],
                   testimonials: {
                     id: 414,
                     title:
@@ -1863,6 +1884,55 @@ export default function ComponentLibraryPage() {
                       mockBasicImage(PLACEHOLDER_LOGO, "Beacon"),
                     ],
                   },
+                  features: [
+                    {
+                      id: 415,
+                      title: "Create APIs",
+                      icon: mockBasicImage(PLACEHOLDER_LOGO, "Create APIs", {
+                        width: 40,
+                        height: 40,
+                      }),
+                      media: mockMedia(
+                        "https://picsum.photos/seed/hero-feature-1/1280/720",
+                        { width: 1280, height: 720 },
+                        {
+                          alternativeText: "Create APIs feature preview",
+                        }
+                      ),
+                    },
+                    {
+                      id: 416,
+                      title: "Content Management",
+                      icon: mockBasicImage(
+                        PLACEHOLDER_LOGO,
+                        "Content Management",
+                        { width: 40, height: 40 }
+                      ),
+                      media: mockMedia(
+                        PLACEHOLDER_VIDEO,
+                        { width: 1280, height: 720 },
+                        {
+                          mime: "video/mp4",
+                          name: "flower.mp4",
+                        }
+                      ),
+                    },
+                    {
+                      id: 417,
+                      title: "Customization",
+                      icon: mockBasicImage(PLACEHOLDER_LOGO, "Customization", {
+                        width: 40,
+                        height: 40,
+                      }),
+                      media: mockMedia(
+                        "https://picsum.photos/seed/hero-feature-3/1280/720",
+                        { width: 1280, height: 720 },
+                        {
+                          alternativeText: "Customization feature preview",
+                        }
+                      ),
+                    },
+                  ],
                 } as Data.Component<"sections.hero-home">
               }
             />

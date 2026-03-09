@@ -10,9 +10,16 @@ export default {
         cta: linkPopulate,
       },
     },
+    rotatingPhrases: true,
     testimonials: {
       populate: {
         logos: basicImagePopulate,
+      },
+    },
+    features: {
+      populate: {
+        icon: basicImagePopulate,
+        media: true,
       },
     },
   },

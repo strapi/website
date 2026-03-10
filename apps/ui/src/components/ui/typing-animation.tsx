@@ -1,6 +1,13 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  type ComponentProps,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 
 import { cn } from "@/lib/styles"
 
@@ -10,9 +17,10 @@ interface Char {
   exiting: boolean
 }
 
-interface TypingAnimationProps {
+type Phase = "waiting" | "typing" | "deleting"
+
+interface TypingAnimationProps extends ComponentProps<"span"> {
   words: string[]
-  className?: string
   typeSpeed?: number
   deleteSpeed?: number
   pauseDelay?: number
@@ -28,31 +36,34 @@ export function TypingAnimation({
   pauseDelay = 1500,
   startDelay = 0,
   startTyped = false,
+  ...props
 }: TypingAnimationProps) {
+  const hasWords = words.length > 0
+  const firstWord = words[0] ?? ""
+  const initialPhase: Phase =
+    startTyped && startDelay > 0 ? "waiting" : "typing"
   const initialChars = useMemo(
     () =>
       startTyped
-        ? Array.from(words[0] ?? "").map((char, index) => ({
+        ? Array.from(firstWord).map((char, index) => ({
             key: index,
             char,
             exiting: false,
           }))
         : [],
-    [startTyped, words]
+    [firstWord, startTyped]
   )
   const [wordIndex, setWordIndex] = useState(0)
-  const [phase, setPhase] = useState<"waiting" | "typing" | "deleting">(
-    startTyped && startDelay > 0 ? "waiting" : "typing"
-  )
+  const [phase, setPhase] = useState<Phase>(initialPhase)
   const [chars, setChars] = useState<Char[]>(initialChars)
   const nextKey = useRef(initialChars.length)
   const typingIndex = useRef(startTyped ? initialChars.length : 0)
 
-  const currentWord = words[wordIndex] ?? ""
+  const currentWord = hasWords ? (words[wordIndex] ?? firstWord) : ""
   const graphemes = useMemo(() => Array.from(currentWord), [currentWord])
 
   useEffect(() => {
-    if (phase !== "waiting") {
+    if (!hasWords || phase !== "waiting") {
       return
     }
 
@@ -61,7 +72,7 @@ export function TypingAnimation({
     }, startDelay)
 
     return () => clearTimeout(timeout)
-  }, [phase, startDelay])
+  }, [hasWords, phase, startDelay])
 
   // Reset typing cursor when word changes
   useEffect(() => {
@@ -70,7 +81,7 @@ export function TypingAnimation({
 
   // Typing: add one character at a time
   useEffect(() => {
-    if (phase !== "typing") {
+    if (!hasWords || phase !== "typing") {
       return
     }
 
@@ -90,11 +101,11 @@ export function TypingAnimation({
     }, typeSpeed)
 
     return () => clearTimeout(t)
-  }, [phase, chars.length, graphemes, typeSpeed, pauseDelay])
+  }, [chars.length, graphemes, hasWords, pauseDelay, phase, typeSpeed])
 
   // Deleting: mark characters for exit on a steady interval
   useEffect(() => {
-    if (phase !== "deleting") {
+    if (!hasWords || phase !== "deleting") {
       return
     }
 
@@ -110,30 +121,67 @@ export function TypingAnimation({
     }, deleteSpeed)
 
     return () => clearInterval(interval)
-  }, [phase, deleteSpeed])
+  }, [deleteSpeed, hasWords, phase])
 
   // Remove character from DOM when its exit animation finishes
   const handleAnimationEnd = useCallback(
     (key: number) => {
-      let isEmpty = false
-
       setChars((prev) => {
-        const next = prev.filter((c) => c.key !== key)
-        isEmpty = next.length === 0
+        const nextChars = prev.filter((c) => c.key !== key)
 
-        return next
+        if (hasWords && phase === "deleting" && nextChars.length === 0) {
+          queueMicrotask(() => {
+            setWordIndex((index) => (index + 1) % words.length)
+            setPhase("typing")
+          })
+        }
+
+        return nextChars
       })
-
-      if (isEmpty) {
-        setWordIndex((i) => (i + 1) % words.length)
-        setPhase("typing")
-      }
     },
-    [words.length]
+    [hasWords, phase, words.length]
   )
 
+  // Force-clear stuck exiting chars when tab regains visibility
+  // (browsers pause CSS animations in hidden tabs, so animationend may never fire)
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== "visible") {
+        return
+      }
+
+      // Give browser a moment to fire pending animationend events
+      timeoutId = setTimeout(() => {
+        setChars((prev) => {
+          if (prev.length > 0 && prev.every((c) => c.exiting)) {
+            return []
+          }
+
+          return prev
+        })
+      }, 200)
+    }
+
+    document.addEventListener("visibilitychange", onVisibilityChange)
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange)
+      clearTimeout(timeoutId)
+    }
+  }, [])
+
+  if (words.length === 0) {
+    return null
+  }
+
   return (
-    <span className={cn("inline-block", className)} aria-label={currentWord}>
+    <span
+      {...props}
+      className={cn("inline-block", className)}
+      aria-label={props["aria-label"] ?? currentWord}
+    >
       {chars.map(({ key, char, exiting }) => (
         <span
           key={key}

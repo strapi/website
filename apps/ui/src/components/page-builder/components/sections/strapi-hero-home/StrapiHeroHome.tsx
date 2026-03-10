@@ -54,7 +54,7 @@ export function StrapiHeroHome({
                 <div className="relative">
                   <TypingAnimation
                     className="text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl"
-                    startDelay={3000}
+                    startDelay={3500}
                     startTyped
                     words={rotatingPhrases}
                   />

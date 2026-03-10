@@ -42,31 +42,33 @@ export function MobileNavbar({
       className={cn("relative flex justify-between lg:hidden", className)}
       {...restProps}
     >
-      <div className="relative shrink-0">
-        {logoImage && (
-          <StrapiLinkImage
-            component={logoImage}
-            imageMode="responsive"
-            transparentPlaceholder
-            sizes="120px"
-            className={cn(
-              logoClassName,
-              "opacity-[var(--nav-logo-default-opacity)] transition-opacity duration-300"
-            )}
-          />
-        )}
-        {logoImageLight && (
-          <StrapiLinkImage
-            component={logoImageLight}
-            imageMode="responsive"
-            transparentPlaceholder
-            sizes="120px"
-            className={cn(
-              logoClassName,
-              "absolute inset-0 opacity-[var(--nav-logo-light-opacity)] transition-opacity duration-300"
-            )}
-          />
-        )}
+      <div className="flex shrink-0 items-center">
+        <div className="relative">
+          {logoImage && (
+            <StrapiLinkImage
+              component={logoImage}
+              imageMode="responsive"
+              transparentPlaceholder
+              sizes="120px"
+              className={cn(
+                logoClassName,
+                "opacity-[var(--nav-logo-default-opacity)] transition-opacity duration-300"
+              )}
+            />
+          )}
+          {logoImageLight && (
+            <StrapiLinkImage
+              component={logoImageLight}
+              imageMode="responsive"
+              transparentPlaceholder
+              sizes="120px"
+              className={cn(
+                logoClassName,
+                "absolute inset-0 opacity-[var(--nav-logo-light-opacity)] transition-opacity duration-300"
+              )}
+            />
+          )}
+        </div>
       </div>
 
       <Button variant="secondary" size="icon" onClick={() => setIsOpen(true)}>

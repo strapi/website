@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cms_comparisons",
+  "info": {
+    "singularName": "cms-comparison",
+    "pluralName": "cms-comparisons",
+    "displayName": "CMS Comparison",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "showTable": {
+      "type": "boolean",
+      "default": false
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo-utilities.seo",
+      "repeatable": false
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.feature-card",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
+        "forms.hubspot-form"
+      ]
+    }
+  }
+}

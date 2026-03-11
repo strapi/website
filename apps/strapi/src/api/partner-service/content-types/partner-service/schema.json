@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "partner_services",
+  "info": {
+    "singularName": "partner-service",
+    "pluralName": "partner-services",
+    "displayName": "Partner Service",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    }
+  }
+}

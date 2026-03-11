@@ -69,6 +69,21 @@ export interface CardsFeatureCard extends Struct.ComponentSchema {
   }
 }
 
+export interface CmsFieldEntry extends Struct.ComponentSchema {
+  collectionName: "components_cms_field_entries"
+  info: {
+    description: ""
+    displayName: "Field Entry"
+    icon: "check"
+  }
+  attributes: {
+    category: Schema.Attribute.String
+    mark: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    text: Schema.Attribute.String
+  }
+}
+
 export interface ElementsBrandLogoGridItem extends Struct.ComponentSchema {
   collectionName: "components_elements_brand_logo_grid_items"
   info: {
@@ -1229,6 +1244,22 @@ export interface UtilitiesSectionHeader extends Struct.ComponentSchema {
   }
 }
 
+export interface UtilitiesSocialLink extends Struct.ComponentSchema {
+  collectionName: "components_utilities_social_links"
+  info: {
+    description: ""
+    displayName: "Social Link"
+    icon: "link"
+  }
+  attributes: {
+    platform: Schema.Attribute.Enumeration<
+      ["linkedin", "twitter", "github", "email", "website"]
+    > &
+      Schema.Attribute.Required
+    url: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
 export interface UtilitiesText extends Struct.ComponentSchema {
   collectionName: "components_utilities_texts"
   info: {
@@ -1258,6 +1289,7 @@ declare module "@strapi/strapi" {
       "cards.case-study-card": CardsCaseStudyCard
       "cards.content-card": CardsContentCard
       "cards.feature-card": CardsFeatureCard
+      "cms.field-entry": CmsFieldEntry
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
       "elements.footer-item": ElementsFooterItem
       "elements.hero-home-cta": ElementsHeroHomeCta
@@ -1317,6 +1349,7 @@ declare module "@strapi/strapi" {
       "utilities.link-text": UtilitiesLinkText
       "utilities.links-with-title": UtilitiesLinksWithTitle
       "utilities.section-header": UtilitiesSectionHeader
+      "utilities.social-link": UtilitiesSocialLink
       "utilities.text": UtilitiesText
       "utilities.tooltip": UtilitiesTooltip
     }

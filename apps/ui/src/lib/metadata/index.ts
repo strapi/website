@@ -17,7 +17,7 @@ import {
   preprocessSocialMetadata,
   seoMergeCustomizer,
 } from "@/lib/metadata/helpers"
-import { fetchSeo } from "@/lib/strapi-api/content/server"
+import { fetchGlobalSeo, fetchSeo } from "@/lib/strapi-api/content/server"
 import type { SocialMetadata } from "@/types/general"
 
 export async function getMetadataFromStrapi({
@@ -40,15 +40,44 @@ export async function getMetadataFromStrapi({
     return null
   }
 
-  const defaultMeta: Metadata = getDefaultMetadata(siteUrl, t)
-  const defaultOgMeta: Metadata["openGraph"] = getDefaultOgMeta(
+  const translationMeta: Metadata = getDefaultMetadata(siteUrl, t)
+  const translationOgMeta: Metadata["openGraph"] = getDefaultOgMeta(
     locale,
     fullPath,
     t
   )
-  const defaultTwitterMeta: Metadata["twitter"] = getDefaultTwitterMeta(t)
+  const translationTwitterMeta: Metadata["twitter"] = getDefaultTwitterMeta(t)
 
-  // skip strapi fetching and return SEO from translations
+  // Merge Global SEO from Strapi on top of translation defaults
+  const globalRes = await fetchGlobalSeo()
+  const globalSeo = globalRes?.data?.defaultSeo
+
+  const globalStrapiMeta: Metadata = {
+    title: globalSeo?.metaTitle,
+    description: globalSeo?.metaDescription,
+    keywords: globalSeo?.keywords,
+    robots: globalSeo?.metaRobots,
+    applicationName: globalSeo?.applicationName,
+  }
+  const globalSocialMeta = preprocessSocialMetadata(globalSeo)
+
+  const defaultMeta = mergeWith(
+    translationMeta,
+    globalStrapiMeta,
+    seoMergeCustomizer
+  )
+  const defaultOgMeta = mergeWith(
+    translationOgMeta,
+    globalSocialMeta.openGraph,
+    seoMergeCustomizer
+  )
+  const defaultTwitterMeta = mergeWith(
+    translationTwitterMeta,
+    globalSocialMeta.twitter,
+    seoMergeCustomizer
+  )
+
+  // skip page-level strapi fetching and return merged defaults
   if (!fullPath) {
     return {
       ...defaultMeta,

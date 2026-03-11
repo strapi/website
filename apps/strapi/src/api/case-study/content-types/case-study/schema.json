@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "case_studies",
+  "info": {
+    "singularName": "case-study",
+    "pluralName": "case-studies",
+    "displayName": "Case Study",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "slug": {
+      "type": "uid",
+      "required": true
+    },
+    "coverImage": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "logoImage": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo-utilities.seo",
+      "repeatable": false
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::case-study-category.case-study-category"
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.hero",
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "sections.testimonies",
+        "forms.newsletter",
+        "forms.hubspot-form"
+      ]
+    }
+  }
+}

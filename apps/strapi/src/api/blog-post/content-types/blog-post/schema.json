@@ -1,0 +1,84 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog_posts",
+  "info": {
+    "singularName": "blog-post",
+    "pluralName": "blog-posts",
+    "displayName": "Blog Post",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true,
+      "regex": "^[a-z0-9-]+$"
+    },
+    "description": {
+      "type": "text"
+    },
+    "level": {
+      "type": "enumeration",
+      "enum": ["beginner", "intermediate", "advanced"]
+    },
+    "image": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "coauthors": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post-category.post-category",
+      "inversedBy": "blogPosts"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::post-tag.post-tag",
+      "mappedBy": "blogPosts"
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo-utilities.seo",
+      "repeatable": false
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "blog.author-banner",
+        "forms.newsletter",
+        "forms.hubspot-form"
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_utilities_social_links",
+  "info": {
+    "displayName": "Social Link",
+    "icon": "link",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "platform": {
+      "type": "enumeration",
+      "enum": ["linkedin", "twitter", "github", "email", "website"],
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

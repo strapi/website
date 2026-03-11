@@ -104,6 +104,24 @@ export async function fetchSeo(
   }
 }
 
+export async function fetchGlobalSeo() {
+  try {
+    return await PublicStrapiClient.fetchOne("api::global.global", undefined, {
+      populate: {
+        defaultSeo: seoPopulate,
+      },
+    })
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: "Error fetching global SEO defaults",
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
 export async function fetchHeader(locale: Locale) {
   try {
     return await PublicStrapiClient.fetchOne("api::header.header", undefined, {

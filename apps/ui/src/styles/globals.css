@@ -3,6 +3,14 @@
 @import "@repo/design-system/custom-styles.css";
 
 @import "tw-animate-css";
+@import "./animations.css";
+@import "../components/elementary/hero.css";
+
+/*
+  ---break---
+*/
+
+@custom-variant dark (&:is(.dark *));
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -21,6 +29,14 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  * {
+    @apply border-gray-300 outline-purple-500/50;
+  }
+
+  body {
+    @apply bg-gray-100 text-gray-900;
+  }
+
   ul {
     list-style-type: disc;
     list-style-position: inside;
@@ -29,6 +45,18 @@
   ol {
     list-style-type: decimal;
     list-style-position: inside;
+  }
+
+  /* Navbar scroll bg + shadow via ::before so we can transition opacity */
+  nav[data-navbar]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-background);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+    opacity: var(--nav-scrolled, 0);
+    transition: opacity 300ms ease-out;
   }
 }
 
@@ -51,60 +79,16 @@
   padding-inline: clamp(1rem, 3vw, 2rem);
 }
 
-@layer base {
-  * {
-    @apply border-gray-300;
-  }
-  body {
-    @apply bg-gray-100 text-blue-900;
-  }
+/* When a dark hero is present, swap to light logo on all sizes */
+body:has([data-dark-hero]) nav[data-navbar] {
+  --nav-logo-default-opacity: 0;
+  --nav-logo-light-opacity: 1;
 }
 
-@keyframes mobile-menu-open {
-  from {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-}
-
-@keyframes nav-shadow {
-  to {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08);
-  }
-}
-
-@keyframes scrollHorizontal {
-  to {
-    transform: translate(calc(-50% - 1.75rem));
-  }
-}
-
-.infinite-scroll-container-horizontal {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.infinite-scroll-horizontal {
-  width: max-content;
-  flex-wrap: nowrap;
-  animation: scrollHorizontal 30s linear infinite;
-}
-
-.bg-gradient-slider {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0) 31%,
-    rgba(255, 255, 255, 0) 69.5%,
-    rgba(255, 255, 255, 0.8) 100%
-  ) !important;
-}
-
-@layer base {
-  * {
-    @apply border-gray-300 outline-purple-500/50;
-  }
-  body {
-    @apply bg-gray-100 text-gray-900;
+/* White nav text only on desktop */
+@media (width >= 1024px) {
+  body:has([data-dark-hero]) nav[data-navbar] {
+    --nav-text-initial: rgb(255 255 255);
+    --nav-link-hover-initial: rgb(255 255 255 / 0.6);
   }
 }

@@ -59,8 +59,14 @@ export function StrapiSectionHeader({
         >
           <StrapiBasicImage
             component={component.sectionImage}
-            fill
+            mode="fill"
             className="object-cover"
+            sizes={
+              isCenter
+                ? "(max-width: 1280px) 100vw, 1024px"
+                : "(max-width: 1024px) 100vw, 50vw"
+            }
+            decorative
           />
         </div>
       )}

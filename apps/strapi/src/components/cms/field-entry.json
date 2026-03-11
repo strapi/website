@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_cms_field_entries",
+  "info": {
+    "displayName": "Field Entry",
+    "icon": "check",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "category": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "mark": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -5,12 +5,12 @@ import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { cn } from "@/lib/styles"
 
 export const sectionDescriptionVariants = cva(
-  "text-strapi-body-1 text-strapi-neutral-700 leading-relaxed",
+  "text-lg leading-relaxed text-strapi-neutral-700",
   {
     variants: {
       variant: {
         default: "",
-        inverse: "text-strapi-neutral-400",
+        inverse: "text-background/60",
         purple: "",
       },
       size: {

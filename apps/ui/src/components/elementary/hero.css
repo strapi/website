@@ -1,0 +1,53 @@
+/* ── Hero utilities ── */
+
+@utility bg-dot-grid {
+  background-image: radial-gradient(
+    circle,
+    var(--color-hero-grid-dot) 1px,
+    transparent 1px
+  );
+  background-size: 8px 8px;
+}
+
+@utility gradient-hero-glow {
+  background: var(--gradient-hero-glow);
+}
+
+@utility gradient-hero-code-overlay {
+  background-image: var(--gradient-hero-code-overlay);
+}
+
+@utility gradient-hero-progress {
+  background-image: var(--gradient-hero-progress);
+}
+
+/* ── Hero animations ── */
+
+@keyframes hero-glow-drift {
+  to {
+    translate: 360px -120px;
+  }
+}
+
+@keyframes hero-border-expand {
+  from {
+    opacity: 0;
+    width: 0%;
+    height: 0%;
+  }
+  to {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@utility animate-hero-border-expand {
+  opacity: 0;
+  animation: hero-border-expand 700ms var(--ease-reveal) 3000ms forwards;
+}
+
+@utility animate-hero-use-case-reveal {
+  opacity: 0;
+  animation: reveal-fade-in 1000ms var(--ease-reveal) 2500ms forwards;
+}

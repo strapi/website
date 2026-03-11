@@ -1,6 +1,5 @@
 import type { Data } from "@repo/strapi-types"
 
-import { Typography } from "@/components/typography"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/styles"
 
@@ -28,22 +27,18 @@ export function PricingCardSso({
       {...restProps}
     >
       <div className="flex items-center gap-2">
-        <Typography variant="label">{title}</Typography>
+        <p className="text-foreground text-sm font-semibold tracking-[0.5px] uppercase">
+          {title}
+        </p>
         <Badge className="uppercase" variant="purple" size="sm">
           Add-on
         </Badge>
       </div>
       <div className="flex items-baseline">
-        <Typography variant="subtitle1" fontWeight="semiBold">
-          {price}
-        </Typography>
-        <Typography variant="smallText1" textColor="muted">
-          {subtext}
-        </Typography>
+        <p className="text-foreground text-2xl font-semibold">{price}</p>
+        <p className="text-strapi-neutral-600 text-sm">{subtext}</p>
       </div>
-      <Typography variant="smallText1" textColor="neutral">
-        {description}
-      </Typography>
+      <p className="text-strapi-neutral-700 text-sm">{description}</p>
     </div>
   )
 }

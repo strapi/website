@@ -2,7 +2,6 @@ import { CheckIcon } from "@phosphor-icons/react/ssr"
 import type { VariantProps } from "class-variance-authority"
 
 import { Tooltip } from "@/components/elementary/Tooltip"
-import { Typography } from "@/components/typography"
 import { type badgeVariants, Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/styles"
 
@@ -27,9 +26,12 @@ export function PricingFeature({
   const output = (
     <div className="inline-flex items-center gap-1" {...restProps}>
       <CheckIcon className="text-strapi-green-500" weight="bold" />
-      <Typography variant="body2" className="inline-flex items-center gap-2">
+      <span
+        data-slot="pricing-feature-label"
+        className="text-foreground inline-flex items-center gap-2 text-base"
+      >
         <span>{children}</span>
-      </Typography>
+      </span>
       {badge && (
         <Badge size="sm" className="ml-1" variant={badgeStyle}>
           {badge}
@@ -41,7 +43,7 @@ export function PricingFeature({
   return (
     <div
       className={cn("flex items-center gap-1", {
-        "[&_p]:decoration-strapi-purple-400 [&_p]:underline [&_p]:decoration-dotted [&_p]:decoration-2 [&_p]:underline-offset-4":
+        "[&_[data-slot=pricing-feature-label]]:decoration-strapi-purple-400 [&_[data-slot=pricing-feature-label]]:underline [&_[data-slot=pricing-feature-label]]:decoration-dotted [&_[data-slot=pricing-feature-label]]:decoration-2 [&_[data-slot=pricing-feature-label]]:underline-offset-4":
           !!tooltip,
       })}
     >
@@ -66,14 +68,7 @@ export function PricingFeatures({
   return (
     <div {...restProps}>
       {title && (
-        <Typography
-          variant="body2"
-          fontWeight="medium"
-          tag="h4"
-          className="mb-2"
-        >
-          {title}
-        </Typography>
+        <h4 className="text-foreground mb-2 text-base font-medium">{title}</h4>
       )}
       <div className="flex flex-col gap-1.5">{children}</div>
     </div>

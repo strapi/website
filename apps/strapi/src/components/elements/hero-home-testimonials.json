@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_elements_hero_home_testimonials",
+  "info": {
+    "displayName": "HeroHomeTestimonials",
+    "icon": "star",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "logos": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": true
+    }
+  }
+}

@@ -51,9 +51,10 @@ export function StrapiImageGallery({
               <div className="rounded-strapi-sm relative h-48 overflow-hidden md:h-64 lg:h-72">
                 <StrapiBasicImage
                   component={image}
-                  fill
+                  mode="fill"
                   className="object-cover"
                   sizes="(max-width: 768px) 50vw, 33vw"
+                  decorative
                 />
               </div>
             </div>

@@ -20,7 +20,13 @@ export function StrapiImage({
   const alignment = component.alignment ?? "center"
   const linkHref = getStrapiLinkHref(component.link)
 
-  const image = <StrapiBasicImage component={component.image} autoHeight />
+  const image = (
+    <StrapiBasicImage
+      component={component.image}
+      mode="responsive"
+      sizes="(max-width: 768px) 100vw, 1200px"
+    />
+  )
 
   const wrappedImage = linkHref ? (
     <ImageLink href={linkHref} newTab={component.link?.newTab ?? false}>

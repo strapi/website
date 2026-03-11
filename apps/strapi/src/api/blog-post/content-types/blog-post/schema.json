@@ -5,129 +5,80 @@
     "singularName": "blog-post",
     "pluralName": "blog-posts",
     "displayName": "Blog Post",
-    "description": "Blog articles with dynamic zone content"
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "title": {
       "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
       "required": true
     },
     "slug": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "type": "uid",
+      "targetField": "title",
       "required": true,
-      "unique": true,
       "regex": "^[a-z0-9-]+$"
     },
     "description": {
-      "type": "text",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "coverImage": {
-      "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
-      "component": "media.image",
-      "repeatable": false
-    },
-    "version": {
-      "type": "enumeration",
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
-      "enum": ["v3", "v4", "v5"]
+      "type": "text"
     },
     "level": {
       "type": "enumeration",
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
       "enum": ["beginner", "intermediate", "advanced"]
     },
-    "content": {
-      "type": "dynamiczone",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "components": [
-        "sections.faq-section",
-        "sections.integrations-section",
-        "sections.user-stories-section",
-        "sections.how-it-works",
-        "sections.section-header",
-        "sections.two-columns-benefits",
-        "sections.two-column-grid",
-        "cards.feature-card",
-        "cards.content-card",
-        "cards.case-study-card",
-        "media.image",
-        "media.image-gallery",
-        "media.brand-logo-grid",
-        "testimonials.quote",
-        "blog.author-banner",
-        "forms.newsletter",
-        "sections.testimonies",
-        "sections.meet-the-team",
-        "media.video"
-      ]
+    "image": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
     },
     "author": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::author.author",
-      "inversedBy": "blogPosts"
+      "target": "plugin::users-permissions.user"
+    },
+    "coauthors": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
     },
     "category": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::blog-category.blog-category",
+      "target": "api::post-category.post-category",
       "inversedBy": "blogPosts"
     },
     "tags": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::blog-tag.blog-tag",
-      "inversedBy": "blogPosts"
+      "target": "api::post-tag.post-tag",
+      "mappedBy": "blogPosts"
     },
     "seo": {
       "type": "component",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
       "component": "seo-utilities.seo",
       "repeatable": false
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "blog.author-banner",
+        "forms.newsletter",
+        "forms.hubspot-form"
+      ]
     }
   }
 }

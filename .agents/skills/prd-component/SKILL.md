@@ -119,12 +119,12 @@ For stories that copy/migrate components from strapi.io, the `/copy-component` s
 
 ### Required fields
 
-- `data.copyComponentInput` — single source of truth for `/copy-component` execution params (snake_case keys: `component_name`, `source_url`, `selector`, `prd_goal`, `content_constraints`, `reuse_mode`, `shadcn_mode`, `acceptance_profile`, `category`).
+- `data.copyComponentInput` — single source of truth for `/copy-component` execution params. See the "Inputs (Intake Contract)" section in `copy-component/SKILL.md` for the full contract schema and field definitions.
 - `metadata.executionSkill = "copy-component"` — **required for deterministic skill routing**. The ralph runner uses this to inject a mandatory skill invocation instruction into the executor prompt. Without it, the LLM may attempt manual implementation.
 
 ### Story description guidance
 
-The story `description` must explicitly reference the skill. This is what the LLM reads first and plans around:
+The story `description` must explicitly reference the skill — this is what the LLM reads first and plans around:
 
 **Good**: "Use /copy-component skill to extract, map, and generate the pricing hero section. Pass data.copyComponentInput as the intake contract."
 
@@ -132,18 +132,12 @@ The story `description` must explicitly reference the skill. This is what the LL
 
 ### Acceptance criteria
 
-Always include these skill-specific criteria:
-
-- `/copy-component skill was invoked with data.copyComponentInput`
-- `Computed styles were extracted via browser_evaluate (not guessed from screenshots)`
-- `All CSS values are mapped to design tokens from packages/design-system/src/theme.css`
-- `Populate config exists at apps/strapi/src/populateDynamicZone/{category}/{name}.ts`
+Always include `/copy-component skill was invoked with data.copyComponentInput` plus the quality checks from `copy-component/references/quality-checks.md` as applicable.
 
 ### Other conventions
 
-Do not duplicate `copyComponentInput` fields as top-level `data.*` camelCase keys — `copyComponentInput` is the authoritative execution payload.
-
-Use `metadata.checkpoints` for restart/write/review requirements.
+- Do not duplicate `copyComponentInput` fields as top-level `data.*` camelCase keys — `copyComponentInput` is the authoritative execution payload.
+- Use `metadata.checkpoints` for restart/write/review requirements.
 
 ### URL/Selector Auto-Detection
 
@@ -154,7 +148,7 @@ When the user provides a source URL (e.g. `strapi.io/*`, or any URL pointing to 
    - `source_url`: the URL the user provided (verbatim)
    - `selector`: the CSS selector or XPath the user provided (verbatim)
    - `component_name`: derive from selector context or user description (kebab-case)
-   - `prd_goal`: derive from user description
+   - `goal`: derive from user description
    - `content_constraints`: from user notes, or `"none"`
    - `reuse_mode`: from user input, default `"balanced"`
    - `shadcn_mode`: default `"prefer-existing"`

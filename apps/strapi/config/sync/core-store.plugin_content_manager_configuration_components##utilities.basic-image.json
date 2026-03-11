@@ -74,29 +74,10 @@
           "searchable": true,
           "sortable": true
         }
-      },
-      "fallbackSrc": {
-        "edit": {
-          "label": "fallbackSrc",
-          "description": "",
-          "placeholder": "",
-          "visible": true,
-          "editable": true
-        },
-        "list": {
-          "label": "fallbackSrc",
-          "searchable": true,
-          "sortable": true
-        }
       }
     },
     "layouts": {
-      "list": [
-        "id",
-        "media",
-        "alt",
-        "width"
-      ],
+      "list": ["id", "media", "alt", "width"],
       "edit": [
         [
           {
@@ -116,12 +97,6 @@
           {
             "name": "height",
             "size": 4
-          }
-        ],
-        [
-          {
-            "name": "fallbackSrc",
-            "size": 6
           }
         ]
       ]

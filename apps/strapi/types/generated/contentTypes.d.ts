@@ -566,10 +566,54 @@ export interface ApiBlogCategoryBlogCategory
   }
 }
 
+export interface ApiBlogLayoutBlogLayout extends Struct.SingleTypeSchema {
+  collectionName: "blog_layouts"
+  info: {
+    description: ""
+    displayName: "Blog Layout"
+    pluralName: "blog-layouts"
+    singularName: "blog-layout"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    content: Schema.Attribute.DynamicZone<
+      [
+        "sections.hero",
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "blog.author-banner",
+        "forms.newsletter",
+        "forms.hubspot-form",
+      ]
+    >
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-layout.blog-layout"
+    > &
+      Schema.Attribute.Private
+    publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   collectionName: "blog_posts"
   info: {
-    description: "Blog articles with dynamic zone content"
+    description: ""
     displayName: "Blog Post"
     pluralName: "blog-posts"
     singularName: "blog-post"
@@ -577,105 +621,57 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true
   }
-  pluginOptions: {
-    i18n: {
-      localized: true
-    }
-  }
   attributes: {
-    author: Schema.Attribute.Relation<"manyToOne", "api::author.author">
+    author: Schema.Attribute.Relation<
+      "manyToOne",
+      "plugin::users-permissions.user"
+    >
     category: Schema.Attribute.Relation<
       "manyToOne",
-      "api::blog-category.blog-category"
+      "api::post-category.post-category"
     >
-    content: Schema.Attribute.DynamicZone<
-      [
-        "sections.faq-section",
-        "sections.integrations-section",
-        "sections.user-stories-section",
-        "sections.how-it-works",
-        "sections.section-header",
-        "sections.two-columns-benefits",
-        "sections.two-column-grid",
-        "cards.feature-card",
-        "cards.content-card",
-        "cards.case-study-card",
-        "media.image",
-        "media.image-gallery",
-        "media.brand-logo-grid",
-        "testimonials.quote",
-        "blog.author-banner",
-        "forms.newsletter",
-        "sections.testimonies",
-        "sections.meet-the-team",
-        "media.video",
-      ]
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    coverImage: Schema.Attribute.Component<"media.image", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false
-        }
-      }>
+    coauthors: Schema.Attribute.Relation<
+      "oneToMany",
+      "plugin::users-permissions.user"
+    >
+    content: Schema.Attribute.RichText
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    description: Schema.Attribute.Text &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
+    description: Schema.Attribute.Text
+    image: Schema.Attribute.Component<"media.image", false>
     level: Schema.Attribute.Enumeration<
       ["beginner", "intermediate", "advanced"]
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false
-        }
-      }>
-    locale: Schema.Attribute.String
+    >
+    locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       "oneToMany",
       "api::blog-post.blog-post"
-    >
+    > &
+      Schema.Attribute.Private
     publishedAt: Schema.Attribute.DateTime
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    slug: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    tags: Schema.Attribute.Relation<"manyToMany", "api::blog-tag.blog-tag">
-    title: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
+    sections: Schema.Attribute.DynamicZone<
+      [
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "blog.author-banner",
+        "forms.newsletter",
+        "forms.hubspot-form",
+      ]
+    >
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
+    tags: Schema.Attribute.Relation<"manyToMany", "api::post-tag.post-tag">
+    title: Schema.Attribute.String & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    version: Schema.Attribute.Enumeration<["v3", "v4", "v5"]> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false
-        }
-      }>
   }
 }
 
@@ -730,6 +726,257 @@ export interface ApiBlogTagBlogTag extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiCaseStudyCategoryCaseStudyCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: "case_study_categories"
+  info: {
+    description: ""
+    displayName: "Case Study Category"
+    pluralName: "case-study-categories"
+    singularName: "case-study-category"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::case-study-category.case-study-category"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
+  collectionName: "case_studies"
+  info: {
+    description: ""
+    displayName: "Case Study"
+    pluralName: "case-studies"
+    singularName: "case-study"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    categories: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::case-study-category.case-study-category"
+    >
+    content: Schema.Attribute.DynamicZone<
+      [
+        "sections.hero",
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "sections.testimonies",
+        "forms.newsletter",
+        "forms.hubspot-form",
+      ]
+    >
+    coverImage: Schema.Attribute.Component<"media.image", false>
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::case-study.case-study"
+    > &
+      Schema.Attribute.Private
+    logoImage: Schema.Attribute.Component<"media.image", false>
+    publishedAt: Schema.Attribute.DateTime
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    slug: Schema.Attribute.UID & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiCityCity extends Struct.CollectionTypeSchema {
+  collectionName: "cities"
+  info: {
+    description: ""
+    displayName: "City"
+    pluralName: "cities"
+    singularName: "city"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    country: Schema.Attribute.Relation<"manyToOne", "api::country.country">
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::city.city"> &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiCmsComparisonCmsComparison
+  extends Struct.CollectionTypeSchema {
+  collectionName: "cms_comparisons"
+  info: {
+    description: ""
+    displayName: "CMS Comparison"
+    pluralName: "cms-comparisons"
+    singularName: "cms-comparison"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    content: Schema.Attribute.DynamicZone<
+      [
+        "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.feature-card",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
+        "forms.hubspot-form",
+      ]
+    >
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.RichText
+    label: Schema.Attribute.String
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::cms-comparison.cms-comparison"
+    > &
+      Schema.Attribute.Private
+    publishedAt: Schema.Attribute.DateTime
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    showTable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
+    title: Schema.Attribute.String & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiCmsCms extends Struct.CollectionTypeSchema {
+  collectionName: "cmses"
+  info: {
+    description: ""
+    displayName: "CMS"
+    pluralName: "cmses"
+    singularName: "cms"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    content: Schema.Attribute.RichText
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.RichText
+    fields: Schema.Attribute.Component<"cms.field-entry", true>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::cms.cms"> &
+      Schema.Attribute.Private
+    logo: Schema.Attribute.Media<"images">
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    sections: Schema.Attribute.DynamicZone<
+      [
+        "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.feature-card",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.brand-logo-grid",
+        "testimonials.quote",
+        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
+        "forms.hubspot-form",
+      ]
+    >
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
+  collectionName: "countries"
+  info: {
+    description: ""
+    displayName: "Country"
+    pluralName: "countries"
+    singularName: "country"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    cities: Schema.Attribute.Relation<"oneToMany", "api::city.city">
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::country.country"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   collectionName: "footers"
   info: {
@@ -755,6 +1002,35 @@ export interface ApiFooterFooter extends Struct.SingleTypeSchema {
       Schema.Attribute.Private
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::footer.footer">
+    publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
+  collectionName: "globals"
+  info: {
+    description: ""
+    displayName: "Global"
+    pluralName: "globals"
+    singularName: "global"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    defaultSeo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::global.global"
+    > &
+      Schema.Attribute.Private
     publishedAt: Schema.Attribute.DateTime
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -788,6 +1064,129 @@ export interface ApiHeaderHeader extends Struct.SingleTypeSchema {
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::header.header">
     publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiHubspotFormHubspotForm extends Struct.CollectionTypeSchema {
+  collectionName: "hubspot_forms"
+  info: {
+    displayName: "HubSpot Form"
+    pluralName: "hubspot-forms"
+    singularName: "hubspot-form"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    formId: Schema.Attribute.String & Schema.Attribute.Required
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::hubspot-form.hubspot-form"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    placeholderHeight: Schema.Attribute.Integer &
+      Schema.Attribute.DefaultTo<300>
+    portalId: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiIntegrationCategoryIntegrationCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: "integration_categories"
+  info: {
+    description: ""
+    displayName: "Integration Category"
+    pluralName: "integration-categories"
+    singularName: "integration-category"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::integration-category.integration-category"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiIntegrationIntegration extends Struct.CollectionTypeSchema {
+  collectionName: "integrations"
+  info: {
+    description: ""
+    displayName: "Integration"
+    pluralName: "integrations"
+    singularName: "integration"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    author: Schema.Attribute.Relation<
+      "manyToOne",
+      "plugin::users-permissions.user"
+    >
+    content: Schema.Attribute.RichText
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.RichText
+    image: Schema.Attribute.Component<"media.image", false>
+    integrationCategories: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::integration-category.integration-category"
+    >
+    isExternal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    link: Schema.Attribute.Component<"utilities.link", false>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::integration.integration"
+    > &
+      Schema.Attribute.Private
+    logo: Schema.Attribute.Component<"media.image", false>
+    publishedAt: Schema.Attribute.DateTime
+    sections: Schema.Attribute.DynamicZone<
+      [
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "cards.feature-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "forms.newsletter",
+        "forms.hubspot-form",
+      ]
+    >
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    slug: Schema.Attribute.UID<"title">
+    title: Schema.Attribute.String & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -828,6 +1227,37 @@ export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<"pending">
     targetLocale: Schema.Attribute.String
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiNewsItemNewsItem extends Struct.CollectionTypeSchema {
+  collectionName: "news_items"
+  info: {
+    description: ""
+    displayName: "News Item"
+    pluralName: "news-items"
+    singularName: "news-item"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    date: Schema.Attribute.Date
+    link: Schema.Attribute.Component<"utilities.link", false>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::news-item.news-item"
+    > &
+      Schema.Attribute.Private
+    publishedAt: Schema.Attribute.DateTime
+    thumbnail: Schema.Attribute.Component<"media.image", false>
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -881,6 +1311,9 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.testimonies",
         "sections.meet-the-team",
         "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "forms.hubspot-form",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -922,6 +1355,103 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
           localized: true
         }
       }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiPartnerServicePartnerService
+  extends Struct.CollectionTypeSchema {
+  collectionName: "partner_services"
+  info: {
+    description: ""
+    displayName: "Partner Service"
+    pluralName: "partner-services"
+    singularName: "partner-service"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::partner-service.partner-service"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
+  collectionName: "partners"
+  info: {
+    description: ""
+    displayName: "Partner"
+    pluralName: "partners"
+    singularName: "partner"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    city: Schema.Attribute.Relation<"manyToOne", "api::city.city">
+    content: Schema.Attribute.RichText
+    country: Schema.Attribute.Relation<"manyToOne", "api::country.country">
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    cta: Schema.Attribute.Component<"utilities.link", false>
+    description: Schema.Attribute.RichText
+    label: Schema.Attribute.String
+    level: Schema.Attribute.Enumeration<["community", "business", "enterprise"]>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::partner.partner"
+    > &
+      Schema.Attribute.Private
+    logo: Schema.Attribute.Component<"media.image", false>
+    publishedAt: Schema.Attribute.DateTime
+    sections: Schema.Attribute.DynamicZone<
+      [
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-columns-benefits",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "sections.testimonies",
+        "forms.newsletter",
+        "forms.hubspot-form",
+      ]
+    >
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    services: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::partner-service.partner-service"
+    >
+    slug: Schema.Attribute.UID<"title">
+    techStacks: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::tech-stack.tech-stack"
+    >
+    title: Schema.Attribute.String & Schema.Attribute.Required
+    type: Schema.Attribute.Enumeration<
+      ["solution-partner", "technology-partner"]
+    >
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -1030,6 +1560,86 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiPostCategoryPostCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: "post_categories"
+  info: {
+    description: ""
+    displayName: "Post Category"
+    pluralName: "post-categories"
+    singularName: "post-category"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    blogPosts: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-post.blog-post"
+    >
+    children: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::post-category.post-category"
+    >
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.RichText
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::post-category.post-category"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    parent: Schema.Attribute.Relation<
+      "manyToOne",
+      "api::post-category.post-category"
+    >
+    publishedAt: Schema.Attribute.DateTime
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    slug: Schema.Attribute.UID<"name">
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiPostTagPostTag extends Struct.CollectionTypeSchema {
+  collectionName: "post_tags"
+  info: {
+    description: ""
+    displayName: "Post Tag"
+    pluralName: "post-tags"
+    singularName: "post-tag"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    blogPosts: Schema.Attribute.Relation<
+      "manyToMany",
+      "api::blog-post.blog-post"
+    >
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::post-tag.post-tag"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    slug: Schema.Attribute.UID<"name"> & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiRedirectRedirect extends Struct.CollectionTypeSchema {
   collectionName: "redirects"
   info: {
@@ -1054,6 +1664,70 @@ export interface ApiRedirectRedirect extends Struct.CollectionTypeSchema {
     permanent: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
     publishedAt: Schema.Attribute.DateTime
     source: Schema.Attribute.String & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiReviewReview extends Struct.CollectionTypeSchema {
+  collectionName: "reviews"
+  info: {
+    description: ""
+    displayName: "Review"
+    pluralName: "reviews"
+    singularName: "review"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    authorAvatar: Schema.Attribute.Media<"images">
+    authorName: Schema.Attribute.String
+    authorRole: Schema.Attribute.String
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    link: Schema.Attribute.Component<"utilities.link", false>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::review.review"
+    > &
+      Schema.Attribute.Private
+    logo: Schema.Attribute.Media<"images">
+    publishedAt: Schema.Attribute.DateTime
+    quote: Schema.Attribute.Text & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiTechStackTechStack extends Struct.CollectionTypeSchema {
+  collectionName: "tech_stacks"
+  info: {
+    description: ""
+    displayName: "Tech Stack"
+    pluralName: "tech-stacks"
+    singularName: "tech-stack"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::tech-stack.tech-stack"
+    > &
+      Schema.Attribute.Private
+    name: Schema.Attribute.String & Schema.Attribute.Required
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<"name">
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -1508,28 +2182,32 @@ export interface PluginUsersPermissionsUser
   extends Struct.CollectionTypeSchema {
   collectionName: "up_users"
   info: {
-    description: ""
     displayName: "User"
-    name: "user"
+    name: "User"
     pluralName: "users"
     singularName: "user"
   }
   options: {
     draftAndPublish: false
-    timestamps: true
   }
   attributes: {
+    avatar: Schema.Attribute.Component<"media.image", false>
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    city: Schema.Attribute.Relation<"manyToOne", "api::city.city">
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+    description: Schema.Attribute.Text
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6
       }>
+    isTeam: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+    job: Schema.Attribute.String
+    joinedDate: Schema.Attribute.Date
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       "oneToMany",
@@ -1541,6 +2219,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6
       }>
+    profilePicture: Schema.Attribute.Component<"media.image", false>
+    pronouns: Schema.Attribute.String
     provider: Schema.Attribute.String
     publishedAt: Schema.Attribute.DateTime
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private
@@ -1548,6 +2228,8 @@ export interface PluginUsersPermissionsUser
       "manyToOne",
       "plugin::users-permissions.role"
     >
+    slug: Schema.Attribute.UID<"username">
+    socials: Schema.Attribute.Component<"utilities.social-link", true>
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -1573,15 +2255,33 @@ declare module "@strapi/strapi" {
       "admin::user": AdminUser
       "api::author.author": ApiAuthorAuthor
       "api::blog-category.blog-category": ApiBlogCategoryBlogCategory
+      "api::blog-layout.blog-layout": ApiBlogLayoutBlogLayout
       "api::blog-post.blog-post": ApiBlogPostBlogPost
       "api::blog-tag.blog-tag": ApiBlogTagBlogTag
+      "api::case-study-category.case-study-category": ApiCaseStudyCategoryCaseStudyCategory
+      "api::case-study.case-study": ApiCaseStudyCaseStudy
+      "api::city.city": ApiCityCity
+      "api::cms-comparison.cms-comparison": ApiCmsComparisonCmsComparison
+      "api::cms.cms": ApiCmsCms
+      "api::country.country": ApiCountryCountry
       "api::footer.footer": ApiFooterFooter
+      "api::global.global": ApiGlobalGlobal
       "api::header.header": ApiHeaderHeader
+      "api::hubspot-form.hubspot-form": ApiHubspotFormHubspotForm
+      "api::integration-category.integration-category": ApiIntegrationCategoryIntegrationCategory
+      "api::integration.integration": ApiIntegrationIntegration
       "api::internal-job.internal-job": ApiInternalJobInternalJob
+      "api::news-item.news-item": ApiNewsItemNewsItem
       "api::page.page": ApiPagePage
+      "api::partner-service.partner-service": ApiPartnerServicePartnerService
+      "api::partner.partner": ApiPartnerPartner
       "api::plan-feature.plan-feature": ApiPlanFeaturePlanFeature
       "api::plan.plan": ApiPlanPlan
+      "api::post-category.post-category": ApiPostCategoryPostCategory
+      "api::post-tag.post-tag": ApiPostTagPostTag
       "api::redirect.redirect": ApiRedirectRedirect
+      "api::review.review": ApiReviewReview
+      "api::tech-stack.tech-stack": ApiTechStackTechStack
       "plugin::content-releases.release": PluginContentReleasesRelease
       "plugin::content-releases.release-action": PluginContentReleasesReleaseAction
       "plugin::i18n.locale": PluginI18NLocale

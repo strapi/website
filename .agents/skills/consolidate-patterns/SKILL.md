@@ -17,22 +17,25 @@ Review recently created components, identify reusable patterns that appear in 2+
 
 ## Inputs
 
-From PRD story `data`:
-
 ```yaml
-batch_story_ids: ["US-001", "US-002", "US-003"] # story IDs to review
-min_occurrences: 2 # pattern must appear in N+ components
+components: ["StrapiPricingHero", "StrapiFeatureGrid", "StrapiTestimonials"] # component names or file paths
+min_occurrences: 2 # pattern must appear in N+ components (default: 2)
 ```
 
-If `batch_story_ids` is empty or missing, BLOCK the story — nothing to review.
+Resolve names to file paths using the naming convention: `apps/ui/src/components/page-builder/components/**/**/Strapi{Name}.tsx`. If paths are provided directly, use them as-is.
+
+If `components` is not provided, fall back to scanning recent git history:
+
+1. Run `git log --oneline --diff-filter=A --name-only -20 -- 'apps/ui/src/components/page-builder/components/**/Strapi*.tsx'`
+2. Use the resulting file list as input.
+3. If no recent component files found, report "No components to review" and stop.
 
 ## Steps
 
-### Step 1: Identify files from batch
+### Step 1: Identify files
 
-1. Read the PRD file to find completed stories matching `batch_story_ids`.
-2. For each story, find the React component file path from the story's `data.copyComponentInput.component_name` and `category`, using the naming convention: `apps/ui/src/components/page-builder/components/{category}/Strapi{PascalCase}.tsx`
-3. Read each file in full.
+1. Resolve component names/paths to absolute file paths as described in Inputs. If no components provided, use the git fallback.
+2. Read each file in full.
 
 ### Step 2: Detect repeated patterns
 
@@ -51,7 +54,7 @@ For each detected pattern, record:
 
 ### Step 3: Filter by min_occurrences
 
-Discard any pattern appearing fewer than `min_occurrences` times. If no patterns remain, report "No consolidation needed — all patterns are unique or appear only once" and mark the story as passed.
+Discard any pattern appearing fewer than `min_occurrences` times. If no patterns remain, report "No consolidation needed — all patterns are unique or appear only once" and stop.
 
 ### Step 4: Extract elementary components
 
@@ -112,7 +115,7 @@ If either fails, fix the issues before proceeding.
 
 ```bash
 git add apps/ui/src/components/elementary/ apps/ui/src/components/page-builder/ docs/component-registry.md apps/ui/src/app/\[locale\]/dev/component-library/
-git commit -m "refactor: extract reusable patterns from batch {story_ids}"
+git commit -m "refactor: extract reusable patterns from {component_names}"
 ```
 
 Report:

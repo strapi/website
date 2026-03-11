@@ -8,6 +8,7 @@ import linkTextPopulate from "../utilities/link-text"
 export default {
   populate: {
     logoImage: linkImagePopulate,
+    logoImageLight: linkImagePopulate,
     navItems: {
       populate: {
         link: linkTextPopulate,

@@ -16,8 +16,10 @@ export function QuoteAuthorBlock({
         component.authorAvatar && (
           <StrapiBasicImage
             component={component.authorAvatar}
-            fill
+            mode="fill"
             className="object-cover"
+            sizes="64px"
+            decorative
           />
         )
       }
@@ -25,8 +27,9 @@ export function QuoteAuthorBlock({
         component.companyLogo && (
           <StrapiBasicImage
             component={component.companyLogo}
-            autoHeight
+            mode="responsive"
             className="max-h-5 w-auto"
+            sizes="80px"
           />
         )
       }

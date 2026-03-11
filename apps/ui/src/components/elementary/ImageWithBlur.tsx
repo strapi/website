@@ -4,6 +4,11 @@ import Image from "next/image"
 
 import type { ImageExtendedProps } from "@/types/next"
 
+const TRANSPARENT_PIXEL =
+  "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+
+const DEFAULT_GRAY: [number, number, number] = [229, 231, 235]
+
 const keyStr =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
 
@@ -18,20 +23,17 @@ const rgbDataURL = (r: number, g: number, b: number) =>
     triplet(0, r, g) + triplet(b, 255, 255)
   }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`
 
-// More info about the blurEffect check
-// https://png-pixel.com
-
 export function ImageWithBlur({
-  blurRgb = [255, 255, 255],
+  blurRgb,
+  transparentPlaceholder,
   ...imgProps
 }: ImageExtendedProps & {
   blurRgb?: [number, number, number]
+  transparentPlaceholder?: boolean
 }) {
-  return (
-    <Image
-      placeholder="blur"
-      blurDataURL={rgbDataURL(...blurRgb)}
-      {...imgProps}
-    />
-  )
+  const blurDataURL = transparentPlaceholder
+    ? TRANSPARENT_PIXEL
+    : rgbDataURL(...(blurRgb ?? DEFAULT_GRAY))
+
+  return <Image placeholder="blur" blurDataURL={blurDataURL} {...imgProps} />
 }

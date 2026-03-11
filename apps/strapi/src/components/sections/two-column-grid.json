@@ -30,11 +30,7 @@
     },
     "background": {
       "type": "enumeration",
-      "enum": [
-        "none",
-        "light",
-        "gradient"
-      ],
+      "enum": ["none", "light"],
       "default": "none",
       "pluginOptions": {
         "i18n": {
@@ -44,10 +40,7 @@
     },
     "variant": {
       "type": "enumeration",
-      "enum": [
-        "default",
-        "purple"
-      ],
+      "enum": ["default", "purple"],
       "default": "default",
       "pluginOptions": {
         "i18n": {
@@ -57,10 +50,7 @@
     },
     "size": {
       "type": "enumeration",
-      "enum": [
-        "default",
-        "lg"
-      ],
+      "enum": ["default", "lg"],
       "default": "default",
       "pluginOptions": {
         "i18n": {

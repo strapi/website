@@ -25,14 +25,16 @@ export function StrapiAuthorBanner({
             <div className="relative mb-4 size-16 shrink-0 overflow-hidden rounded-full lg:mr-7 lg:mb-0">
               <StrapiBasicImage
                 component={component.authorAvatar}
-                fill
+                mode="fill"
                 className="object-cover"
+                sizes="64px"
+                decorative
               />
             </div>
           )}
 
           <div className="min-w-0 flex-1">
-            <div className="mb-3 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="mb-3 flex flex-col">
               {component.authorUrl ? (
                 isAppLink(component.authorUrl) ? (
                   <Link href={formatHref(component.authorUrl)}>

@@ -3,7 +3,6 @@
 import { useState } from "react"
 
 import { AppLink } from "@/components/elementary/AppLink"
-import { Typography } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 
 export function ComponentsList({
@@ -31,7 +30,9 @@ export function ComponentsList({
       <div className="flex flex-col gap-6">
         {components?.map((component) => (
           <div key={component}>
-            <Typography variant="header1">{component}</Typography>
+            <h2 className="text-foreground text-5xl font-bold tracking-tight">
+              {component}
+            </h2>
 
             {show && (
               <div className="pl-4">

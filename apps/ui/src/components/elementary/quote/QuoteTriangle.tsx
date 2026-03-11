@@ -16,9 +16,7 @@ export function QuoteTriangle({
       className={cn("absolute top-0 left-0 aspect-square w-[389px]", className)}
       {...props}
     >
-      <TriangleMask position="top-left" fill="blue">
-        {children}
-      </TriangleMask>
+      <TriangleMask position="top-left">{children}</TriangleMask>
     </div>
   )
 }

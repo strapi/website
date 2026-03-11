@@ -5,7 +5,6 @@ import {
   StrapiLink,
   getStrapiLinkHref,
 } from "@/components/page-builder/components/utilities/StrapiLink"
-import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 interface NavMenuLinkProps {
@@ -35,24 +34,19 @@ export function NavMenuLink({ component, className }: NavMenuLinkProps) {
       <div className="flex items-center gap-2">
         {component.icon && (
           <div className="relative shrink-0">
-            <StrapiBasicImage component={component.icon} />
+            <StrapiBasicImage component={component.icon} mode="intrinsic" />
           </div>
         )}
 
-        <p className="strapi-body-1 group-hover/nav-link:text-strapi-blue-500 text-foreground text-sm font-medium md:text-base">
+        <p className="group-hover/nav-link:text-strapi-blue-500 text-foreground text-base font-medium">
           {component.link?.label}
         </p>
       </div>
 
       {component.description && (
-        <Typography
-          variant="smallText2"
-          textColor="neutral"
-          tag="p"
-          className="hidden md:block"
-        >
+        <p className="text-strapi-neutral-700 hidden text-xs md:block">
           {component.description}
-        </Typography>
+        </p>
       )}
     </StrapiLink>
   )

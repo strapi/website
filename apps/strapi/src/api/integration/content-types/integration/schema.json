@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "integrations",
+  "info": {
+    "singularName": "integration",
+    "pluralName": "integrations",
+    "displayName": "Integration",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    },
+    "logo": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "image": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
+    "link": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "integrationCategories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::integration-category.integration-category"
+    },
+    "seo": {
+      "type": "component",
+      "component": "seo-utilities.seo",
+      "repeatable": false
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "cards.feature-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "forms.newsletter",
+        "forms.hubspot-form"
+      ]
+    }
+  }
+}

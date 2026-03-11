@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_elements_hero_home_ctas",
+  "info": {
+    "displayName": "HeroHomeCta",
+    "icon": "code",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "code": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false
+    }
+  }
+}

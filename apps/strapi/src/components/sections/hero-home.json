@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_sections_hero_homes",
+  "info": {
+    "displayName": "HeroHome",
+    "icon": "house",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "cta": {
+      "type": "component",
+      "component": "elements.hero-home-cta",
+      "repeatable": false
+    },
+    "rotatingPhrases": {
+      "type": "component",
+      "component": "utilities.text",
+      "repeatable": true
+    },
+    "testimonials": {
+      "type": "component",
+      "component": "elements.hero-home-testimonials",
+      "repeatable": false
+    },
+    "features": {
+      "type": "component",
+      "component": "elements.hero-home-feature",
+      "repeatable": true
+    }
+  }
+}

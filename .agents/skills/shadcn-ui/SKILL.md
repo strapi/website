@@ -35,14 +35,27 @@ Current repo conventions to preserve:
 1. Confirm target component(s) and whether this is add vs. refactor.
 2. Run shadcn CLI from `apps/ui`:
    - `pnpm dlx shadcn@latest add <component>`
-3. Review generated files and normalize to repo conventions:
-   - Use `@/lib/styles` for `cn`.
-   - Respect existing import and naming style.
-   - Keep/align primitive imports with current repo strategy (`radix-ui`) unless explicitly migrating.
+3. Run the post-install fixup checklist (see below).
 4. Integrate component usage where requested.
 5. Validate:
    - `pnpm --filter @repo/ui typecheck`
    - `pnpm --filter @repo/ui lint`
+
+## Post-Install Fixup Checklist
+
+After `shadcn add`, review generated files for these common issues:
+
+1. **`cn()` import path**: The CLI should generate `@/lib/styles` (aliased in `components.json`). If it generates `@/lib/utils`, fix the import. This is the most common issue after shadcn upgrades.
+2. **Radix imports**: This repo uses the unified `radix-ui` package. If generated code imports from `@radix-ui/react-*` (scoped packages), convert to `radix-ui` imports unless both coexist in `package.json`.
+3. **Tailwind v4 CSS variables**: Shadcn v4 components use CSS custom properties (`--radius`, `--primary`, etc.) defined in `apps/ui/src/styles/globals.css`. Verify new components reference variables that exist in globals.css — add missing ones if needed.
+4. **`"use client"` directive**: Shadcn components with interactivity include `"use client"`. Keep it — this is a React Server Components project.
+5. **Naming conflicts**: Check `apps/ui/src/components/ui/` for existing files before adding. If a component already exists, diff and merge rather than overwrite.
+
+## Common Pitfalls
+
+- **Don't use `tailwind.config.js`**: This project uses Tailwind v4 with CSS-based config (`src/styles/globals.css`). Theme tokens live in `packages/design-system/src/theme.css`. Never create or reference a JS config file.
+- **Don't install duplicate primitives**: Before adding a shadcn component that depends on a Radix primitive, check if that primitive is already installed. Run `pnpm --filter @repo/ui list radix-ui` to check.
+- **Don't override design system tokens**: Shadcn components may define their own color/spacing variables. Always prefer existing tokens from `packages/design-system/src/theme.css` over shadcn defaults.
 
 ## Guardrails
 

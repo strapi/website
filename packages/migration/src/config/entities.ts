@@ -330,4 +330,357 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       flattenV4,
     ],
   },
+
+  // ─── Case Studies ───
+
+  "case-studies": {
+    sourceEndpoint: "case-studies",
+    sourcePopulate: DEEP_DZ_POPULATE,
+    targetEndpoint: "case-studies",
+    dedupField: "slug",
+    sourceUid: "api::case-study.case-study",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      // TODO: map v4 whiteHero, coverImage, case_study_use_cases → v5 fields
+      // TODO: remap slices → content dynamic zone
+      remapDynamicZone("slices", "content"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "case-study-categories": {
+    sourceEndpoint: "case-study-use-cases",
+    sourcePopulate: "*",
+    targetEndpoint: "case-study-categories",
+    dedupField: "name",
+    sourceUid: "api::case-study-use-case.case-study-use-case",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+      // TODO: map v4 case-study-use-case fields → v5 case-study-category (name, slug)
+    ],
+  },
+
+  // ─── Integrations ───
+
+  integrations: {
+    sourceEndpoint: "integrations",
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      logo: { populate: "*" },
+      image: { populate: "*" },
+      link: { populate: "*" },
+      integration_topics: { populate: "*" },
+      integration_tags: { populate: "*" },
+    },
+    targetEndpoint: "integrations",
+    dedupField: "slug",
+    sourceUid: "api::integration.integration",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        // v4-only relation fields — need id mapping
+        "integration_topics",
+        "integration_tags",
+        "user"
+      ),
+      // TODO: map v4 fields → v5 (logo, image, link components; content richtext)
+      // TODO: remap slices → sections dynamic zone
+      remapDynamicZone("slices", "sections"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "integration-categories": {
+    sourceEndpoint: "integration-tags",
+    sourcePopulate: "*",
+    targetEndpoint: "integration-categories",
+    dedupField: "name",
+    sourceUid: "api::integration-tag.integration-tag",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+      // TODO: map v4 integration-tag fields → v5 integration-category (name, slug)
+    ],
+  },
+
+  // ─── Partners ───
+
+  partners: {
+    sourceEndpoint: "partners",
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      hero: { populate: "*" },
+      intro: { populate: "*" },
+      logo: { populate: "*" },
+      services: { populate: "*" },
+      techStacks: { populate: "*" },
+    },
+    targetEndpoint: "partners",
+    dedupField: "slug",
+    sourceUid: "api::partner.partner",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        // v4-only relation fields — need id mapping
+        "services",
+        "techStacks",
+        "location"
+      ),
+      // TODO: map v4 hero, intro, logo → v5 fields
+      // TODO: map v4 location → v5 city/country relations
+      // TODO: remap slices → sections dynamic zone
+      remapDynamicZone("slices", "sections"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "partner-services": {
+    sourceEndpoint: "partner-services",
+    sourcePopulate: "*",
+    targetEndpoint: "partner-services",
+    dedupField: "name",
+    sourceUid: "api::partner-service.partner-service",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+    ],
+  },
+
+  // ─── Taxonomy / lookup tables ───
+
+  countries: {
+    sourceEndpoint: "countries",
+    sourcePopulate: "*",
+    targetEndpoint: "countries",
+    dedupField: "name",
+    sourceUid: "api::country.country",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "flag",
+        "cities"
+      ),
+    ],
+  },
+
+  cities: {
+    sourceEndpoint: "cities",
+    sourcePopulate: {
+      country: { populate: "*" },
+    },
+    targetEndpoint: "cities",
+    dedupField: "name",
+    sourceUid: "api::city.city",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "users",
+        "country"
+      ),
+      // TODO: map v4 country relation → v5 country relation (needs id mapping)
+    ],
+  },
+
+  "tech-stacks": {
+    sourceEndpoint: "tech-stacks",
+    sourcePopulate: "*",
+    targetEndpoint: "tech-stacks",
+    dedupField: "name",
+    sourceUid: "api::tech-stack.tech-stack",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+    ],
+  },
+
+  // ─── Reviews ───
+
+  reviews: {
+    sourceEndpoint: "reviews",
+    sourcePopulate: {
+      author: { populate: "*" },
+      logo: { populate: "*" },
+      link: { populate: "*" },
+    },
+    targetEndpoint: "reviews",
+    dedupField: "quote",
+    sourceUid: "api::review.review",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+      // TODO: map v4 author (person component) → v5 authorName, authorRole, authorAvatar
+      // TODO: map v4 logo → v5 logo media
+      // TODO: map v4 link → v5 link component
+      uploadMedia,
+    ],
+  },
+
+  // ─── News ───
+
+  "news-items": {
+    sourceEndpoint: "news-items",
+    sourcePopulate: {
+      link: { populate: "*" },
+      thumbnail: { populate: "*" },
+    },
+    targetEndpoint: "news-items",
+    dedupField: "date",
+    sourceUid: "api::news-item.news-item",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+      // TODO: map v4 link → v5 link component
+      // TODO: map v4 thumbnail → v5 thumbnail component
+      uploadMedia,
+    ],
+  },
+
+  // ─── CMS pages ───
+
+  "cms-pages": {
+    sourceEndpoint: "cms",
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      logo: { populate: "*" },
+      field: { populate: "*" },
+    },
+    targetEndpoint: "cmses",
+    dedupField: "slug",
+    sourceUid: "api::cm.cm",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+      // TODO: map v4 field → v5 fields (cms.field-entry)
+      // TODO: map v4 logo → v5 logo media
+      // TODO: remap slices → sections dynamic zone
+      remapDynamicZone("slices", "sections"),
+      uploadMedia,
+    ],
+  },
+
+  "cms-comparisons": {
+    sourceEndpoint: "comparators",
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      cms: { populate: { logo: { populate: "*" }, field: { populate: "*" } } },
+      SEO: { populate: "*" },
+    },
+    targetEndpoint: "cms-comparisons",
+    dedupField: "slug",
+    sourceUid: "api::comparator.comparator",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        // v4-only relation fields — need id mapping
+        "cms"
+      ),
+      // TODO: map v4 SEO → v5 seo, map v4 upperContent → v5 content
+      // TODO: remap slices → content dynamic zone
+      remapDynamicZone("slices", "content"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  // ─── Post categories & tags (v5 references from blog-post) ───
+
+  "post-categories": {
+    sourceEndpoint: "post-categories",
+    sourcePopulate: {
+      seo: { populate: "*" },
+      post_sub_categories: { populate: "*" },
+    },
+    targetEndpoint: "post-categories",
+    dedupField: "slug",
+    sourceUid: "api::post-category.post-category",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "blogPosts",
+        "post_sub_categories"
+      ),
+      // TODO: map v4 sub-categories → v5 parent/children hierarchy
+      transformSeo,
+    ],
+  },
+
+  "post-tags": {
+    sourceEndpoint: "post-tags",
+    sourcePopulate: {
+      seo: { populate: "*" },
+    },
+    targetEndpoint: "post-tags",
+    dedupField: "slug",
+    sourceUid: "api::post-tag.post-tag",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "blogPosts"
+      ),
+      transformSeo,
+    ],
+  },
+
+  // ─── HubSpot forms (no v4 equivalent — manual/seed only) ───
+
+  "hubspot-forms": {
+    sourceEndpoint: "hubspot-forms",
+    sourcePopulate: "*",
+    targetEndpoint: "hubspot-forms",
+    dedupField: "name",
+    sourceUid: "api::hubspot-form.hubspot-form",
+    transforms: [
+      flattenV4,
+      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
+    ],
+  },
 }

@@ -19,8 +19,10 @@ export function ImageQuote({
             {component.image?.media && (
               <StrapiBasicImage
                 component={component.image}
-                fill
+                mode="fill"
                 className="object-cover"
+                sizes="(min-width: 1024px) 470px, 100vw"
+                decorative
               />
             )}
           </QuoteTriangle>

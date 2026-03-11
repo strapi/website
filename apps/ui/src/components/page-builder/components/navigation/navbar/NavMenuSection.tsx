@@ -1,6 +1,5 @@
 import type { Data } from "@repo/strapi-types"
 
-import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 import { NavMenuLink } from "./NavMenuLink"
@@ -22,9 +21,9 @@ export function NavMenuSection({ section, className }: NavMenuSectionProps) {
   return (
     <div className={cn("flex flex-col px-8 pt-14 pb-8", className)}>
       {section.title && (
-        <Typography variant="label" textColor="muted" className="mb-6 px-6">
+        <p className="text-strapi-neutral-600 mb-6 px-6 text-sm font-semibold tracking-[0.5px] uppercase">
           {section.title}
-        </Typography>
+        </p>
       )}
 
       <div

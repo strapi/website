@@ -81,7 +81,10 @@
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
-        "media.video"
+        "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "forms.hubspot-form"
       ]
     },
     "children": {

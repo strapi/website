@@ -11,17 +11,9 @@ export const triangleMaskVariants = cva("relative size-full", {
       "bottom-right": "[clip-path:polygon(100%_0,100%_100%,0_100%)]",
       "bottom-left": "[clip-path:polygon(0_0,100%_100%,0_100%)]",
     },
-    fill: {
-      none: "",
-      blue: "bg-strapi-blue-600",
-      green: "bg-emerald-600",
-      dark: "bg-strapi-blue-900",
-      purple: "bg-strapi-purple-500",
-    },
   },
   defaultVariants: {
     position: "top-left",
-    fill: "none",
   },
 })
 
@@ -32,7 +24,6 @@ export interface TriangleMaskProps
 
 export function TriangleMask({
   position = "top-left",
-  fill = "none",
   className,
   children,
   ...props
@@ -40,7 +31,7 @@ export function TriangleMask({
   return (
     <div
       data-slot="triangle-mask"
-      className={cn(triangleMaskVariants({ position, fill }), className)}
+      className={cn(triangleMaskVariants({ position }), className)}
       {...props}
     >
       {children}

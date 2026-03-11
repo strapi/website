@@ -1,0 +1,33 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_layouts",
+  "info": {
+    "singularName": "blog-layout",
+    "pluralName": "blog-layouts",
+    "displayName": "Blog Layout",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.hero",
+        "sections.section-header",
+        "sections.faq-section",
+        "sections.two-column-grid",
+        "cards.content-card",
+        "media.image",
+        "media.image-gallery",
+        "media.video",
+        "testimonials.quote",
+        "blog.author-banner",
+        "forms.newsletter",
+        "forms.hubspot-form"
+      ]
+    }
+  }
+}

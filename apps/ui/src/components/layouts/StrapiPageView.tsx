@@ -38,7 +38,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
     <>
       <StrapiStructuredData structuredData={data?.seo?.structuredData} />
 
-      <main className={cn("flex w-full flex-col overflow-hidden")}>
+      <main className={cn("flex w-full flex-col")}>
         <Container>
           <Breadcrumbs
             breadcrumbs={response?.meta?.breadcrumbs}
@@ -49,6 +49,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
         <DynamicZoneRenderer
           content={content}
           itemClassName="mb-6 md:mb-10 lg:mb-14"
+          surface="page"
           extraProps={{
             pageParams: params,
             page: restPageData,

@@ -10,6 +10,7 @@ Monorepo starter with Strapi v5 CMS and Next.js 16 frontend. Uses pnpm workspace
 ## Code style
 
 - Always use `interface` for prop types with `extend ComponentProps<"div">` where applicable
+- Never use one-line ifs, always wrap it in curly braces
 
 ## Workspaces
 

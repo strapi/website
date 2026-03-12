@@ -659,6 +659,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
         "blog.author-banner",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
@@ -781,6 +782,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
         "sections.testimonies",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     coverImage: Schema.Attribute.Component<"media.image", false>
@@ -862,6 +864,7 @@ export interface ApiCmsComparisonCmsComparison
         "sections.meet-the-team",
         "media.video",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     createdAt: Schema.Attribute.DateTime
@@ -928,6 +931,7 @@ export interface ApiCmsCms extends Struct.CollectionTypeSchema {
         "sections.meet-the-team",
         "media.video",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
@@ -1174,6 +1178,7 @@ export interface ApiIntegrationIntegration extends Struct.CollectionTypeSchema {
         "testimonials.quote",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
@@ -1306,6 +1311,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.hero",
         "sections.hero-home",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -1428,6 +1434,7 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
         "sections.testimonies",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>

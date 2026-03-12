@@ -172,6 +172,22 @@ function buildSectionHeader(opts: {
   return section
 }
 
+/** Extract v4 intro component and wrap as v5 section-header */
+function introToSectionHeader(
+  entry: Record<string, unknown>
+): Record<string, unknown> {
+  const intro = asIntro(entry["intro"])
+
+  return {
+    section: buildSectionHeader({
+      label: intro.label,
+      title: intro.title,
+      description: intro.text,
+      buttons: intro.button,
+    }),
+  }
+}
+
 /** Append a link URL to description text */
 function appendLinkText(
   description: string | undefined,
@@ -316,7 +332,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         }),
         items: benefits.map((b) => ({
           title: (b["title"] as string) ?? "",
-          description: appendLinkText(b["description"] as string, b["link"]),
+          description: appendLinkText(b["text"] as string, b["link"]),
           icon: wrapBasicImage(b["icon"] ?? b["image"]),
         })),
       }
@@ -574,8 +590,14 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     }),
   },
 
-  // v4 featured-video: relation-based, drop
-  { source: "slices.featured-video", target: null },
+  // v4 featured-video: video relation → placeholder video
+  {
+    source: "slices.featured-video",
+    target: "media.video",
+    transform: () => ({
+      url: "", // relation-based — needs manual entry
+    }),
+  },
 
   // =============================================
   // TESTIMONIALS
@@ -720,13 +742,50 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   { source: "slices.chili-piper", target: null },
   { source: "slices.embed-tweets", target: null },
   { source: "slices.twitter-feed", target: null },
-  { source: "slices.embed-form", target: null },
-  { source: "slices.embed-form-next-to-cards", target: null },
+
+  // v4 embed-form: gradientHeader + intro + embedForm → hubspot-form placeholder
+  {
+    source: "slices.embed-form",
+    target: "forms.hubspot-form",
+    transform: () => ({}), // relation-based — needs manual HubSpot form link
+  },
+
+  // v4 embed-form-next-to-cards: formIntro + cards + embedForm → hubspot-form
+  {
+    source: "slices.embed-form-next-to-cards",
+    target: "forms.hubspot-form",
+    transform: () => ({}),
+  },
+
   { source: "slices.embed-guide-flow", target: null },
   { source: "slices.spacer", target: null },
-  { source: "slices.dark-cli", target: null },
-  { source: "slices.video-thumbnail", target: null },
-  { source: "shared.embed-form", target: null },
+
+  // v4 dark-cli: title + CLI command text → content-card
+  {
+    source: "slices.dark-cli",
+    target: "cards.content-card",
+    transform: (entry) => ({
+      label: "",
+      title: (entry["title"] as string) ?? "",
+      content: (entry["cli"] as string) ?? "",
+    }),
+  },
+
+  // v4 video-thumbnail: image + videoUrl → video
+  {
+    source: "slices.video-thumbnail",
+    target: "media.video",
+    transform: (entry) => ({
+      url: (entry["videoUrl"] as string) ?? "",
+    }),
+  },
+
+  // v4 shared.embed-form: form embed sub-component → hubspot-form
+  {
+    source: "shared.embed-form",
+    target: "forms.hubspot-form",
+    transform: () => ({}),
+  },
 
   // Hero variants → section-header
   {
@@ -813,39 +872,303 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       }
     },
   },
-  { source: "shared.newsletter-hero", target: null },
+  // v4 newsletter-hero: newsletter + hero → section-header
+  {
+    source: "shared.newsletter-hero",
+    target: "sections.section-header",
+    transform: (entry) => {
+      const hero = asRecord(entry["hero"])
+      const intro = asIntro(hero["intro"])
 
-  // Relation-based list/grid components (fetch data dynamically)
-  { source: "slices.automated-related-blog-post", target: null },
-  { source: "slices.related-blog-posts", target: null },
-  { source: "slices.related-posts", target: null },
-  { source: "slices.related-case-studies", target: null },
-  { source: "slices.related-tutorials", target: null },
-  { source: "slices.related-showcases", target: null },
-  { source: "slices.related-resources", target: null },
-  { source: "slices.resource-cards-list", target: null },
-  { source: "slices.resource-links", target: null },
-  { source: "slices.changelogs-list", target: null },
-  { source: "slices.changelogs-timeline", target: null },
-  { source: "slices.content-videos-list", target: null },
-  { source: "slices.news-list", target: null },
-  { source: "slices.media-resources-list", target: null },
-  { source: "slices.stories-grid", target: null },
-  { source: "slices.integration-cards-grid", target: null },
-  { source: "slices.integrations", target: null },
-  { source: "slices.contributors-slice", target: null },
-  { source: "slices.editor-s-picks", target: null },
+      return {
+        section: buildSectionHeader({
+          label: intro.label,
+          title: intro.title,
+          description: intro.text,
+          buttons: intro.button,
+        }),
+      }
+    },
+  },
 
-  // Layout/interactive components without v5 equivalent
-  { source: "slices.toggle-animations", target: null },
-  { source: "slices.single-animation", target: null },
-  { source: "slices.stacking-cards", target: null },
-  { source: "slices.image-slider", target: null },
-  { source: "slices.reviews-slider", target: null },
-  { source: "slices.dark-reviews-slider", target: null },
-  { source: "slices.event-slider", target: null },
-  { source: "slices.capabilities-dynamic-cards", target: null },
-  { source: "slices.capability-cards", target: null },
+  // ─── Relation-based lists → section-header (content fetched dynamically) ───
+
+  // v4 automated-related-blog-post: keyword filter only
+  {
+    source: "slices.automated-related-blog-post",
+    target: "sections.section-header",
+    transform: () => ({
+      section: buildSectionHeader({}),
+    }),
+  },
+
+  // v4 related-blog-posts: intro + blog post relations
+  {
+    source: "slices.related-blog-posts",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 related-posts: blog post + category relations
+  {
+    source: "slices.related-posts",
+    target: "sections.section-header",
+    transform: () => ({
+      section: buildSectionHeader({}),
+    }),
+  },
+
+  // v4 related-case-studies: title + case study relations
+  {
+    source: "slices.related-case-studies",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        title: entry["title"] as string,
+      }),
+    }),
+  },
+
+  // v4 related-tutorials: intro + topic filter
+  {
+    source: "slices.related-tutorials",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 related-showcases: intro + category filter
+  {
+    source: "slices.related-showcases",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 related-resources: intro + resource relations
+  {
+    source: "slices.related-resources",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 resource-cards-list: intro + resource cards
+  {
+    source: "slices.resource-cards-list",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 resource-links: intro + link cards
+  {
+    source: "slices.resource-links",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 changelogs-list: intro only
+  {
+    source: "slices.changelogs-list",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 changelogs-timeline: intro + changelog relations
+  {
+    source: "slices.changelogs-timeline",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 content-videos-list: intro + video category relation
+  {
+    source: "slices.content-videos-list",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 news-list: intro only
+  {
+    source: "slices.news-list",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 media-resources-list: intro + media resources
+  {
+    source: "slices.media-resources-list",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 stories-grid: buttonText + case study relations
+  {
+    source: "slices.stories-grid",
+    target: "sections.section-header",
+    transform: () => ({
+      section: buildSectionHeader({}),
+    }),
+  },
+
+  // v4 integration-cards-grid: intro + integration relations
+  {
+    source: "slices.integration-cards-grid",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 integrations: description + buttons
+  {
+    source: "slices.integrations",
+    target: "sections.section-header",
+    transform: (entry) => {
+      const buttons = asArray(entry["buttons"])
+
+      return {
+        section: buildSectionHeader({
+          description: `${(entry["boldDescription"] as string) ?? ""}\n${(entry["description"] as string) ?? ""}`.trim(),
+          buttons: buttons as V4Button[],
+        }),
+      }
+    },
+  },
+
+  // v4 contributors-slice: intro only
+  {
+    source: "slices.contributors-slice",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 editor-s-picks: title + blog post relations
+  {
+    source: "slices.editor-s-picks",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        title: entry["title"] as string,
+      }),
+    }),
+  },
+
+  // ─── Interactive/animated components ───
+
+  // v4 toggle-animations: GraphQL/REST API animation toggles → image placeholder
+  {
+    source: "slices.toggle-animations",
+    target: "media.image",
+    transform: () => ({
+      alignment: "center",
+    }),
+  },
+
+  // v4 single-animation: desktop + mobile animations → image placeholder
+  {
+    source: "slices.single-animation",
+    target: "media.image",
+    transform: () => ({
+      alignment: "center",
+    }),
+  },
+
+  // v4 stacking-cards: title + cards[] → feature cards (multi-emit)
+  {
+    source: "slices.stacking-cards",
+    target: "cards.feature-card",
+    transform: (entry) => {
+      const cards = asArray(entry["cards"])
+
+      if (cards.length === 0) {
+        return { title: "", description: "", variant: "bordered" }
+      }
+
+      return cards.map((card) => ({
+        variant: "bordered",
+        title: (card["title"] as string) ?? "",
+        description: (card["text"] as string) ?? "",
+        icon: wrapBasicImage(card["icon"]),
+      }))
+    },
+  },
+
+  // v4 image-slider: multiple images → image gallery
+  {
+    source: "slices.image-slider",
+    target: "media.image-gallery",
+    transform: (entry) => ({
+      images: asArray(entry["images"]).map(wrapBasicImage).filter(Boolean),
+    }),
+  },
+
+  // v4 reviews-slider: intro + review relations → section-header
+  {
+    source: "slices.reviews-slider",
+    target: "sections.section-header",
+    transform: (entry) => {
+      const intro = asIntro(entry["intro"])
+
+      return {
+        section: buildSectionHeader({
+          label: (entry["upperTitle"] as string) ?? intro.label,
+          title: (entry["title"] as string) ?? intro.title,
+          description: intro.text,
+          buttons: intro.button,
+        }),
+      }
+    },
+  },
+
+  // v4 dark-reviews-slider: intro + review relations → section-header
+  {
+    source: "slices.dark-reviews-slider",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 event-slider: intro + events → section-header
+  {
+    source: "slices.event-slider",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 capabilities-dynamic-cards: upperTitle, title, text, cards[] → two-column-grid
+  {
+    source: "slices.capabilities-dynamic-cards",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const cards = asArray(entry["cards"])
+
+      return {
+        section: buildSectionHeader({
+          label: entry["upperTitle"] as string,
+          title: entry["title"] as string,
+          description: entry["text"] as string,
+        }),
+        items: cards.map((card) => ({
+          title: (card["title"] as string) ?? "",
+          description: (card["text"] as string) ?? "",
+          icon: wrapBasicImage(card["icon"] ?? card["image"]),
+        })),
+      }
+    },
+  },
+
+  // v4 capability-cards: capabilityCards[] → two-column-grid
+  {
+    source: "slices.capability-cards",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const cards = asArray(entry["capabilityCards"])
+
+      return {
+        section: buildSectionHeader({}),
+        items: cards.map((card) => ({
+          title: (card["title"] as string) ?? "",
+          description: (card["text"] as string) ?? "",
+          icon: wrapBasicImage(card["icon"] ?? card["image"]),
+        })),
+      }
+    },
+  },
 
   // =============================================
   // TEXT / CONTENT SECTIONS
@@ -1023,7 +1346,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     },
   },
 
-  // v4 text-with-cards: intro, cardsIntro, cards[]
+  // v4 text-with-cards: intro, cardsIntro, cards[] (card-with-link: { link, card: shared.card, theme })
   // v5: two-column-grid (section + items)
   {
     source: "slices.text-with-cards",
@@ -1039,11 +1362,15 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           description: intro.text,
           buttons: intro.button,
         }),
-        items: cards.map((card) => ({
-          title: (card["title"] as string) ?? "",
-          description: (card["description"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"] ?? card["image"]),
-        })),
+        items: cards.map((wrapper) => {
+          const inner = asRecord(wrapper["card"])
+
+          return {
+            title: (inner["title"] as string) ?? "",
+            description: (inner["text"] as string) ?? "",
+            icon: wrapBasicImage(inner["icon"]),
+          }
+        }),
       }
     },
   },
@@ -1097,23 +1424,24 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         }),
         items: cards.map((card) => ({
           title: (card["title"] as string) ?? "",
-          description: (card["description"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"] ?? card["image"]),
+          description: (card["text"] as string) ?? "",
+          icon: wrapBasicImage(card["icon"]),
         })),
       }
     },
   },
 
-  // v4 large-features-slice: intro, mainFeatures[], extraFeatures[]
+  // v4 large-features-slice: intro, mainFeatures (single features-slice), extraFeatures (single features-slice)
+  // Each features-slice has title + cards[] (shared.card: icon, title, text)
   // v5: two-column-grid
   {
     source: "slices.large-features-slice",
     target: "sections.two-column-grid",
     transform: (entry) => {
       const intro = asIntro(entry["intro"])
-      const mainFeatures = asArray(entry["mainFeatures"])
-      const extraFeatures = asArray(entry["extraFeatures"])
-      const allFeatures = [...mainFeatures, ...extraFeatures]
+      const main = asRecord(entry["mainFeatures"])
+      const extra = asRecord(entry["extraFeatures"])
+      const allCards = [...asArray(main["cards"]), ...asArray(extra["cards"])]
 
       return {
         section: buildSectionHeader({
@@ -1122,10 +1450,10 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           description: intro.text,
           buttons: intro.button,
         }),
-        items: allFeatures.map((f) => ({
-          title: (f["title"] as string) ?? "",
-          description: (f["description"] as string) ?? "",
-          icon: wrapBasicImage(f["icon"] ?? f["image"]),
+        items: allCards.map((card) => ({
+          title: (card["title"] as string) ?? "",
+          description: (card["text"] as string) ?? "",
+          icon: wrapBasicImage(card["icon"]),
         })),
       }
     },
@@ -1149,14 +1477,14 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         }),
         items: features.map((f) => ({
           title: (f["title"] as string) ?? "",
-          description: (f["description"] as string) ?? "",
-          icon: wrapBasicImage(f["icon"] ?? f["image"]),
+          description: (f["text"] as string) ?? "",
+          icon: wrapBasicImage(f["icon"]),
         })),
       }
     },
   },
 
-  // v4 icon-cards: cards[]
+  // v4 icon-cards: cards[] (card-with-link: { link, card: shared.card, theme })
   // v5: two-column-grid
   {
     source: "slices.icon-cards",
@@ -1166,11 +1494,15 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
       return {
         section: buildSectionHeader({}),
-        items: cards.map((card) => ({
-          title: (card["title"] as string) ?? "",
-          description: (card["description"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"] ?? card["image"]),
-        })),
+        items: cards.map((wrapper) => {
+          const inner = asRecord(wrapper["card"])
+
+          return {
+            title: (inner["title"] as string) ?? "",
+            description: (inner["text"] as string) ?? "",
+            icon: wrapBasicImage(inner["icon"]),
+          }
+        }),
       }
     },
   },
@@ -1191,16 +1523,59 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         }),
         items: benefits.map((b) => ({
           title: (b["title"] as string) ?? "",
-          description: (b["description"] as string) ?? "",
-          icon: wrapBasicImage(b["icon"] ?? b["image"]),
+          description: (b["text"] as string) ?? "",
+          icon: wrapBasicImage(b["icon"]),
         })),
       }
     },
   },
 
-  { source: "slices.benefits-header", target: null },
+  // v4 benefits-header: title/description + multiple card groups → two-columns-benefits
+  {
+    source: "slices.benefits-header",
+    target: "sections.two-columns-benefits",
+    transform: (entry) => {
+      const allCards = [
+        ...asArray(entry["certificationCards"]),
+        ...asArray(entry["benefitsCards"]),
+        ...asArray(entry["impactCards"]),
+      ]
+
+      return {
+        section: buildSectionHeader({
+          label: entry["upperTitle"] as string,
+          title: entry["title"] as string,
+          description: entry["description"] as string,
+        }),
+        items: allCards.map((card) => ({
+          title: (card["title"] as string) ?? "",
+          description: (card["text"] as string) ?? "",
+          icon: wrapBasicImage(card["icon"]),
+        })),
+      }
+    },
+  },
+
   { source: "slices.icon-with-tooltip", target: null },
-  { source: "slices.themed-cards", target: null },
+
+  // v4 themed-cards: intro + themed card details → feature-card multi-emit
+  {
+    source: "slices.themed-cards",
+    target: "cards.feature-card",
+    transform: (entry) => {
+      const cards = asArray(entry["cards"])
+
+      if (cards.length === 0) {
+        return { title: "", description: "", variant: "bordered" }
+      }
+
+      return cards.map((card) => ({
+        variant: "bordered",
+        title: (card["title"] as string) ?? "",
+        description: (card["text"] as string) ?? "",
+      }))
+    },
+  },
 
   // =============================================
   // CTA / BANNER SECTIONS
@@ -1275,34 +1650,296 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     }),
   },
 
-  // Plan variants
-  { source: "slices.large-plan-card", target: null },
+  // v4 large-plan-card: plan relation + title/label → content-card
+  {
+    source: "slices.large-plan-card",
+    target: "cards.content-card",
+    transform: (entry) => ({
+      label: (entry["label"] as string) ?? "",
+      title: (entry["title"] as string) ?? "",
+      content: "", // plan details are relation-based
+    }),
+  },
+
   { source: "slices.plan-type-selector", target: null },
 
-  // Contact/demo/form layouts
-  { source: "slices.get-demo-info", target: null },
-  { source: "slices.get-demo-layout", target: null },
-  { source: "slices.next-to-form-section", target: null },
-  { source: "slices.contact-header", target: null },
-  { source: "slices.contact-form-section", target: null },
-  { source: "slices.contact-sales-layout", target: null },
+  // ─── Contact/demo/form layouts ───
 
-  // Grid/list sections
-  { source: "slices.getting-started-grid", target: null },
-  { source: "slices.info-cta-grid", target: null },
-  { source: "slices.socials-grid", target: null },
-  { source: "slices.tech-stack-icon-list", target: null },
+  // v4 get-demo-info: step cards + demo highlights → section-header
+  {
+    source: "slices.get-demo-info",
+    target: "sections.section-header",
+    transform: () => ({
+      section: buildSectionHeader({}),
+    }),
+  },
 
-  // Misc sections
-  { source: "slices.interview", target: null },
-  { source: "slices.community-section", target: null },
-  { source: "slices.company-stat-list", target: null },
-  { source: "slices.company-stat", target: null },
-  { source: "slices.event-section", target: null },
-  { source: "slices.awards-launch-section", target: null },
-  { source: "slices.issues-header", target: null },
-  { source: "slices.launch-event", target: null },
-  { source: "slices.perk-group", target: null },
-  { source: "slices.perk-lists", target: null },
-  { source: "slices.perk", target: null },
+  // v4 get-demo-layout: form layout → hubspot-form placeholder
+  {
+    source: "slices.get-demo-layout",
+    target: "forms.hubspot-form",
+    transform: () => ({}),
+  },
+
+  // v4 next-to-form-section: header + demo info → section-header
+  {
+    source: "slices.next-to-form-section",
+    target: "sections.section-header",
+    transform: () => ({
+      section: buildSectionHeader({}),
+    }),
+  },
+
+  // v4 contact-header: title/description + benefit cards → section-header
+  {
+    source: "slices.contact-header",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        label: entry["upperTitle"] as string,
+        title: entry["title"] as string,
+        description: entry["description"] as string,
+      }),
+    }),
+  },
+
+  // v4 contact-form-section: title + form embed → hubspot-form
+  {
+    source: "slices.contact-form-section",
+    target: "forms.hubspot-form",
+    transform: () => ({}),
+  },
+
+  // v4 contact-sales-layout: form layout → hubspot-form
+  {
+    source: "slices.contact-sales-layout",
+    target: "forms.hubspot-form",
+    transform: () => ({}),
+  },
+
+  // ─── Grid/list sections ───
+
+  // v4 getting-started-grid: starting-point cards → two-column-grid
+  {
+    source: "slices.getting-started-grid",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const cards = asArray(entry["cards"])
+
+      return {
+        section: buildSectionHeader({}),
+        items: cards.map((card) => ({
+          title: (card["title"] as string) ?? "",
+          description: (card["description"] as string) ?? "",
+          icon: wrapBasicImage(card["logo"]),
+        })),
+      }
+    },
+  },
+
+  // v4 info-cta-grid: info-cta items → two-column-grid
+  {
+    source: "slices.info-cta-grid",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const items = asArray(entry["items"])
+
+      return {
+        section: buildSectionHeader({}),
+        items: items.map((item) => ({
+          title: (item["title"] as string) ?? "",
+          description: (item["text"] as string) ?? "",
+          icon: wrapBasicImage(item["icon"]),
+        })),
+      }
+    },
+  },
+
+  // v4 socials-grid: intro + social links + cards → section-header
+  {
+    source: "slices.socials-grid",
+    target: "sections.section-header",
+    transform: introToSectionHeader,
+  },
+
+  // v4 tech-stack-icon-list: icons with tooltips → brand-logo-grid
+  {
+    source: "slices.tech-stack-icon-list",
+    target: "media.brand-logo-grid",
+    transform: (entry) => {
+      const icons = asArray(entry["icons"])
+
+      return {
+        items: icons.map((icon) => ({
+          image: wrapBasicImage(icon["icon"]),
+        })),
+      }
+    },
+  },
+
+  // ─── Misc sections ───
+
+  // v4 interview: Q&A format → faq-section
+  {
+    source: "slices.interview",
+    target: "sections.faq-section",
+    transform: (entry) => {
+      const questions = asArray(entry["questionAnswer"])
+
+      return {
+        sectionLabel: "",
+        heading: "",
+        description: "",
+        items: questions.map((qa) => ({
+          question: (qa["question"] as string) ?? "",
+          answer: (qa["answer"] as string) ?? "",
+        })),
+      }
+    },
+  },
+
+  // v4 community-section: title + description + cards → section-header
+  {
+    source: "slices.community-section",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        title: entry["title"] as string,
+        description: entry["description"] as string,
+      }),
+    }),
+  },
+
+  // v4 company-stat-list: stats[] → two-column-grid
+  {
+    source: "slices.company-stat-list",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const stats = asArray(entry["stats"])
+
+      return {
+        section: buildSectionHeader({}),
+        items: stats.map((stat) => ({
+          title: (stat["boldTitle"] as string) ?? "",
+          description: (stat["title"] as string) ?? "",
+        })),
+      }
+    },
+  },
+
+  // v4 company-stat: boldTitle + title + text → content-card
+  {
+    source: "slices.company-stat",
+    target: "cards.content-card",
+    transform: (entry) => ({
+      label: "",
+      title: (entry["boldTitle"] as string) ?? "",
+      content: (entry["title"] as string) ?? "",
+    }),
+  },
+
+  // v4 event-section: title + description + events → section-header
+  {
+    source: "slices.event-section",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        title: entry["title"] as string,
+        description: entry["description"] as string,
+      }),
+    }),
+  },
+
+  // v4 awards-launch-section: title + description + image → section-header
+  {
+    source: "slices.awards-launch-section",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        title: entry["title"] as string,
+        description: entry["description"] as string,
+      }),
+    }),
+  },
+
+  // v4 issues-header: title/description + feature cards → section-header
+  {
+    source: "slices.issues-header",
+    target: "sections.section-header",
+    transform: (entry) => ({
+      section: buildSectionHeader({
+        label: entry["upperTitle"] as string,
+        title: entry["title"] as string,
+        description: entry["description"] as string,
+      }),
+    }),
+  },
+
+  // v4 launch-event: title + date + link → content-card
+  {
+    source: "slices.launch-event",
+    target: "cards.content-card",
+    transform: (entry) => ({
+      label: "",
+      title: (entry["title"] as string) ?? "",
+      content: (entry["youtubeUrl"] as string) ?? "",
+    }),
+  },
+
+  // v4 perk-group: groupName + perks[] → two-column-grid
+  {
+    source: "slices.perk-group",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const perks = asArray(entry["perks"])
+
+      return {
+        section: buildSectionHeader({
+          title: entry["groupName"] as string,
+        }),
+        items: perks.map((perk) => ({
+          title: (perk["title"] as string) ?? "",
+          description: (perk["text"] as string) ?? "",
+          icon: wrapBasicImage(perk["image"]),
+        })),
+      }
+    },
+  },
+
+  // v4 perk-lists: intro + perk groups → two-column-grid (flattened)
+  {
+    source: "slices.perk-lists",
+    target: "sections.two-column-grid",
+    transform: (entry) => {
+      const introComp = asRecord(entry["intro"])
+      const content = asIntro(introComp["content"])
+      const groups = asArray(entry["groups"])
+      const allPerks = groups.flatMap((g) => asArray(g["perks"]))
+
+      return {
+        section: buildSectionHeader({
+          label: content.label,
+          title: content.title,
+          description: content.text,
+        }),
+        items: allPerks.map((perk) => ({
+          title: (perk["title"] as string) ?? "",
+          description: (perk["text"] as string) ?? "",
+          icon: wrapBasicImage(perk["image"]),
+        })),
+      }
+    },
+  },
+
+  // v4 perk: title + text + image → feature-card
+  {
+    source: "slices.perk",
+    target: "cards.feature-card",
+    transform: (entry) => ({
+      variant: "bordered",
+      title: (entry["title"] as string) ?? "",
+      description: (entry["text"] as string) ?? "",
+      image: wrapBasicImage(entry["image"]),
+    }),
+  },
 ]

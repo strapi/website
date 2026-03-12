@@ -102,6 +102,89 @@ const DEEP_DZ_POPULATE = {
   },
 }
 
+// ─── Helpers for entity-level hero → DZ entry ───
+
+const asRecord = (v: unknown): Record<string, unknown> =>
+  v != null && typeof v === "object" && !Array.isArray(v)
+    ? (v as Record<string, unknown>)
+    : {}
+
+/**
+ * Convert a v4 text.label-title-text-links component to a v5 sections.hero DZ entry.
+ * Extracts: label, title, text→description, button[]→ctas[]
+ */
+function introToHeroDzEntry(
+  introData: Record<string, unknown>
+): Record<string, unknown> {
+  const buttons = Array.isArray(introData["button"])
+    ? (introData["button"] as Record<string, unknown>[])
+    : []
+
+  return {
+    __component: "sections.hero",
+    label: (introData["label"] as string) ?? "",
+    title: (introData["title"] as string) ?? "",
+    description: (introData["text"] as string) ?? "",
+    ctas: buttons.map((btn) => ({
+      type: "external",
+      label: (btn["label"] as string) ?? "",
+      newTab: (btn["newTab"] as boolean) ?? false,
+      href: (btn["url"] as string) ?? (btn["href"] as string) ?? "",
+    })),
+  }
+}
+
+/**
+ * Convert a v4 text.label-title-text-links to a v5 sections.section-header DZ entry.
+ */
+function introToSectionHeaderDzEntry(
+  introData: Record<string, unknown>
+): Record<string, unknown> {
+  const buttons = Array.isArray(introData["button"])
+    ? (introData["button"] as Record<string, unknown>[])
+    : []
+
+  return {
+    __component: "sections.section-header",
+    section: {
+      label: (introData["label"] as string) ?? "",
+      title: (introData["title"] as string) ?? "",
+      description: (introData["text"] as string) ?? "",
+      ctaLinks: buttons.map((btn) => ({
+        type: "external",
+        label: (btn["label"] as string) ?? "",
+        newTab: (btn["newTab"] as boolean) ?? false,
+        href: (btn["url"] as string) ?? (btn["href"] as string) ?? "",
+      })),
+    },
+  }
+}
+
+/** Prepend DZ entries to the content array */
+function prependToContent(
+  entity: Record<string, unknown>,
+  ...entries: Record<string, unknown>[]
+): Record<string, unknown> {
+  const content = Array.isArray(entity["content"])
+    ? (entity["content"] as unknown[])
+    : []
+
+  return { ...entity, content: [...entries, ...content] }
+}
+
+/** Set a hardcoded slug for single-type entities */
+function setSlug(slug: string): TransformFn {
+  return (entity) => ({ ...entity, slug })
+}
+
+/** Populate config for hero components that nest text.label-title-text-links */
+const INTRO_POPULATE = {
+  populate: {
+    button: { populate: "*" },
+    smallTextWithLink: { populate: "*" },
+  },
+}
+
 /** Derive a title from slug if title is missing or null. "headless-cms" → "Headless Cms" */
 const ensureTitle: TransformFn = (entity) => {
   const existing = entity["title"]
@@ -131,6 +214,8 @@ export interface EntityMigrationConfig {
   sourceUid: string
   /** Ordered transform functions */
   transforms: TransformFn[]
+  /** Whether this is a v4 single type (fetched without pagination/ID) */
+  singleType?: boolean
 }
 
 // ─── Entity configs ordered by dependency ───
@@ -1099,6 +1184,658 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       ),
       ensureTitle,
       remapDynamicZone("slices", "content"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  // ═════════════════════════════════════════
+  // V4 SINGLE-TYPE PAGES → V5 PAGES
+  // ═════════════════════════════════════════
+
+  "page-career": {
+    sourceEndpoint: "career",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      careersHero: {
+        populate: {
+          intro: {
+            populate: {
+              content: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+      careersPositions: { populate: "*" },
+      alertForm: { populate: "*" },
+      aboveReviews: { populate: "*" },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::career.career",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        "careersPositions",
+        "alertForm",
+        "reviews",
+        "aboveReviews"
+      ),
+      setSlug("careers"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from careersHero → intro.content (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["careersHero"])
+        delete result["careersHero"]
+
+        const intro = asRecord(asRecord(hero["intro"])["content"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-community": {
+    sourceEndpoint: "community",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      communityHero: {
+        populate: {
+          whiteHero: {
+            populate: {
+              intro: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::community.community",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("community"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from communityHero → whiteHero.intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["communityHero"])
+        delete result["communityHero"]
+
+        const intro = asRecord(asRecord(hero["whiteHero"])["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-content-architecture": {
+    sourceEndpoint: "content-architecture",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      useCaseHero: {
+        populate: {
+          hero: {
+            populate: {
+              intro: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::content-architecture.content-architecture",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("content-architecture"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from useCaseHero → hero.intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["useCaseHero"])
+        delete result["useCaseHero"]
+
+        const intro = asRecord(asRecord(hero["hero"])["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-enterprise": {
+    sourceEndpoint: "entreprise-program",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      useCaseHero: {
+        populate: {
+          hero: {
+            populate: {
+              intro: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::entreprise-program.entreprise-program",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("enterprise-program"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from useCaseHero → hero.intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["useCaseHero"])
+        delete result["useCaseHero"]
+
+        const intro = asRecord(asRecord(hero["hero"])["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-features": {
+    sourceEndpoint: "feature",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      featuresHero: {
+        populate: {
+          intro: INTRO_POPULATE,
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::feature.feature",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("features"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from featuresHero → intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["featuresHero"])
+        delete result["featuresHero"]
+
+        const intro = asRecord(hero["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-headless-cms": {
+    sourceEndpoint: "headless-cms",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      intro: INTRO_POPULATE,
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::headless-cms.headless-cms",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        "decoration"
+      ),
+      setSlug("headless-cms"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend section-header from intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const intro = asRecord(result["intro"])
+        delete result["intro"]
+
+        if (intro["title"]) {
+          return prependToContent(result, introToSectionHeaderDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-home": {
+    sourceEndpoint: "homepage",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      homeHero: {
+        populate: {
+          hero: {
+            populate: {
+              intro: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::homepage.homepage",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("home"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from homeHero → hero.intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["homeHero"])
+        delete result["homeHero"]
+
+        const intro = asRecord(asRecord(hero["hero"])["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-launch-week": {
+    sourceEndpoint: "launch-week",
+    singleType: true,
+    sourcePopulate: DEEP_DZ_POPULATE,
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::launch-week.launch-week",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("launch-week"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-why-strapi": {
+    sourceEndpoint: "why-strapi",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      useCaseHero: {
+        populate: {
+          hero: {
+            populate: {
+              intro: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::why-strapi.why-strapi",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      setSlug("why-strapi"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from useCaseHero → hero.intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["useCaseHero"])
+        delete result["useCaseHero"]
+
+        const intro = asRecord(asRecord(hero["hero"])["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-showcase": {
+    sourceEndpoint: "showcase",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      intro: INTRO_POPULATE,
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::showcase.showcase",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        "decorationPosition"
+      ),
+      setSlug("showcase"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend section-header from intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const intro = asRecord(result["intro"])
+        delete result["intro"]
+
+        if (intro["title"]) {
+          return prependToContent(result, introToSectionHeaderDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-starters": {
+    sourceEndpoint: "starter",
+    singleType: true,
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      intro: INTRO_POPULATE,
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::starter.starter",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        "decorationPosition",
+        "previewButtonText",
+        "authorPrefix"
+      ),
+      setSlug("starters"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend section-header from intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const intro = asRecord(result["intro"])
+        delete result["intro"]
+
+        if (intro["title"]) {
+          return prependToContent(result, introToSectionHeaderDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "page-resource-center": {
+    sourceEndpoint: "resource-center",
+    singleType: true,
+    sourcePopulate: DEEP_DZ_POPULATE,
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::resource-center.resource-center",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        "navigation"
+      ),
+      setSlug("resource-center"),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  // ═════════════════════════════════════════
+  // V4 COLLECTION-TYPE PAGES → V5 PAGES
+  // ═════════════════════════════════════════
+
+  "use-cases": {
+    sourceEndpoint: "use-cases",
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      useCaseHero: {
+        populate: {
+          hero: {
+            populate: {
+              intro: INTRO_POPULATE,
+            },
+          },
+        },
+      },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::use-case.use-case",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend hero from useCaseHero → hero.intro (label-title-text-links)
+      ((entity) => {
+        const result = { ...entity }
+        const hero = asRecord(result["useCaseHero"])
+        delete result["useCaseHero"]
+
+        const intro = asRecord(asRecord(hero["hero"])["intro"])
+
+        if (intro["title"]) {
+          return prependToContent(result, introToHeroDzEntry(intro))
+        }
+
+        return result
+      }) as TransformFn,
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "strapi-features": {
+    sourceEndpoint: "strapi-features",
+    sourcePopulate: DEEP_DZ_POPULATE,
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::strapi-feature.strapi-feature",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings"
+      ),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      transformSeo,
+      uploadMedia,
+    ],
+  },
+
+  "integration-topics": {
+    sourceEndpoint: "integration-topics",
+    sourcePopulate: {
+      ...DEEP_DZ_POPULATE,
+      image: { populate: "*" },
+    },
+    targetEndpoint: "pages",
+    dedupField: "slug",
+    sourceUid: "api::integration-topic.integration-topic",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "settings",
+        "image",
+        "integration"
+      ),
+      ensureTitle,
+      remapDynamicZone("slices", "content"),
+      // Prepend section-header from flat title/description fields
+      ((entity) => {
+        const result = { ...entity }
+        const title = (result["title"] as string) ?? ""
+        const description = (result["description"] as string) ?? ""
+        delete result["description"]
+
+        if (title) {
+          return prependToContent(result, {
+            __component: "sections.section-header",
+            section: { title, description },
+          })
+        }
+
+        return result
+      }) as TransformFn,
       transformSeo,
       uploadMedia,
     ],

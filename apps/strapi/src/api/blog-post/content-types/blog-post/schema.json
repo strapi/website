@@ -77,7 +77,8 @@
         "testimonials.quote",
         "blog.author-banner",
         "forms.newsletter",
-        "forms.hubspot-form"
+        "forms.hubspot-form",
+        "migration.data-sink"
       ]
     }
   }

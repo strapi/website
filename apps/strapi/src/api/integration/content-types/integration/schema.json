@@ -73,7 +73,8 @@
         "media.video",
         "testimonials.quote",
         "forms.newsletter",
-        "forms.hubspot-form"
+        "forms.hubspot-form",
+        "migration.data-sink"
       ]
     }
   }

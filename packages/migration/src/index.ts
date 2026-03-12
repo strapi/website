@@ -11,6 +11,7 @@ import {
 } from "./state/migration-state.ts"
 import { createTransformContext } from "./transforms/base.ts"
 import { createLogger, formatDuration } from "./utils/logger.ts"
+import { writeReport } from "./utils/report.ts"
 
 const program = new Command()
 
@@ -68,6 +69,13 @@ program
 
     const result = await runEntityMigration(config, ctx, entity)
     printEntitySummary(entity, result, result.stats, logger)
+
+    const reportPath = await writeReport(
+      entity,
+      result.stats,
+      opts.dryRun ?? false
+    )
+    logger.info(chalk.gray(`Report: ${reportPath}`))
 
     await idMap.save()
 
@@ -137,6 +145,13 @@ program
         chalk.gray(`Total time: ${formatDuration(allStats.durationMs)}`)
       )
     }
+
+    const reportPath = await writeReport(
+      "all",
+      allStats,
+      opts.dryRun ?? false
+    )
+    logger.info(chalk.gray(`Report: ${reportPath}`))
 
     await idMap.save()
   })

@@ -472,6 +472,21 @@ export interface MediaVideo extends Struct.ComponentSchema {
   }
 }
 
+export interface MigrationDataSink extends Struct.ComponentSchema {
+  collectionName: "components_migration_data_sinks"
+  info: {
+    description: "Stores unmapped v4 component data for future re-migration"
+    displayName: "Data Sink (Migration)"
+    icon: "archive"
+  }
+  attributes: {
+    data: Schema.Attribute.JSON & Schema.Attribute.Private
+    sourceComponent: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private
+  }
+}
+
 export interface NavbarNavItem extends Struct.ComponentSchema {
   collectionName: "components_navbar_nav_items"
   info: {
@@ -1309,6 +1324,7 @@ declare module "@strapi/strapi" {
       "media.image": MediaImage
       "media.image-gallery": MediaImageGallery
       "media.video": MediaVideo
+      "migration.data-sink": MigrationDataSink
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection

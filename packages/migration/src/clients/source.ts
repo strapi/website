@@ -127,6 +127,40 @@ export class SourceClient {
     return entity
   }
 
+  /**
+   * Fetch a single type entity with full populate.
+   * Single types don't support /{id} URLs — uses /api/{endpoint} directly.
+   */
+  async fetchSingleType(
+    endpoint: string,
+    populate: Record<string, unknown> | string = "*"
+  ): Promise<V4Entity> {
+    const params: Record<string, unknown> = {
+      populate,
+      publicationState: "preview",
+      locale: "en",
+    }
+
+    const query = qs.stringify(params, { encodeValuesOnly: true })
+    const url = `${this.baseUrl}/api/${endpoint}?${query}`
+
+    this.logger.debug(`Fetching single type: ${url}`)
+
+    const response = await withRetry(() => this.request<V4Response>(url), {
+      logger: this.logger,
+    })
+
+    const entity = Array.isArray(response.data)
+      ? response.data[0]
+      : response.data
+
+    if (!entity) {
+      throw new Error(`Single type not found: ${endpoint}`)
+    }
+
+    return entity
+  }
+
   private async request<T>(url: string): Promise<T> {
     const res = await fetch(url, {
       headers: {

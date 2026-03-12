@@ -62,7 +62,8 @@
         "sections.testimonies",
         "sections.meet-the-team",
         "media.video",
-        "forms.hubspot-form"
+        "forms.hubspot-form",
+        "migration.data-sink"
       ]
     }
   }

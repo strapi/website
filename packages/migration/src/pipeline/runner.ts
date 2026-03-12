@@ -107,11 +107,17 @@ export async function runEntityMigration(
 
     try {
       // Fetch full entity data with deep populate (one-by-one to avoid API overload)
-      const entity = await ctx.sourceClient.fetchOne(
-        config.sourceEndpoint,
-        v4Id,
-        config.sourcePopulate
-      )
+      // Single types don't support /{id} URLs — use fetchSingleType instead
+      const entity = config.singleType
+        ? await ctx.sourceClient.fetchSingleType(
+            config.sourceEndpoint,
+            config.sourcePopulate
+          )
+        : await ctx.sourceClient.fetchOne(
+            config.sourceEndpoint,
+            v4Id,
+            config.sourcePopulate
+          )
 
       const flat: Record<string, unknown> = {
         ...entity.attributes,

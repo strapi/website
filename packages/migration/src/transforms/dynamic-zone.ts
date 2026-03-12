@@ -1,6 +1,8 @@
 import type { TransformFn, TransformContext } from "./base.ts"
 import type { ComponentMapping } from "../config/components.ts"
 
+const DATA_SINK_COMPONENT = "migration.data-sink"
+
 interface DynamicZoneEntry {
   __component: string
   [key: string]: unknown
@@ -13,7 +15,8 @@ interface DynamicZoneEntry {
  * - Uses full-component `transform` when available, otherwise `fieldMap`
  * - Supports multi-emit: a transform returning an array expands into
  *   multiple entries in the target dynamic zone
- * - Drops components with no mapping (target: null)
+ * - Routes unmapped/dropped components to the data-sink component
+ *   so their content is preserved for future re-migration
  */
 export function remapDynamicZone(
   sourceField: string,
@@ -35,13 +38,15 @@ export function remapDynamicZone(
 
       if (!mapping) {
         ctx.logger.warn(
-          `No mapping for component: ${entry.__component} — dropping`
+          `No mapping for component: ${entry.__component} — routing to data-sink`
         )
+        mapped.push(toDataSink(entry))
         continue
       }
 
       if (mapping.target === null) {
-        ctx.logger.debug(`Dropping component: ${entry.__component}`)
+        ctx.logger.debug(`Sinking component: ${entry.__component}`)
+        mapped.push(toDataSink(entry))
         continue
       }
 
@@ -160,4 +165,15 @@ function setNestedValue(
   }
 
   current[parts.at(-1)!] = value
+}
+
+/** Wrap a v4 entry into a data-sink component preserving all original data */
+function toDataSink(entry: DynamicZoneEntry): DynamicZoneEntry {
+  const { __component, id: _, ...fields } = entry
+
+  return {
+    __component: DATA_SINK_COMPONENT,
+    sourceComponent: __component,
+    data: fields,
+  }
 }

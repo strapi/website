@@ -72,8 +72,9 @@ async function uploadAndLink(
 
   if (cachedId) {
     ctx.logger.debug(`Media cache hit: ${fallbackSrc} → ${cachedId}`)
+    const { fallbackSrc: _, ...rest } = basicImage
 
-    return { ...basicImage, media: cachedId }
+    return { ...rest, media: cachedId }
   }
 
   // In dry-run mode, skip actual upload
@@ -101,8 +102,9 @@ async function uploadAndLink(
   }
 
   ctx.logger.debug(`Uploaded media: ${fallbackSrc} → ${mediaId}`)
+  const { fallbackSrc: _, ...rest } = basicImage
 
-  return { ...basicImage, media: mediaId }
+  return { ...rest, media: mediaId }
 }
 
 /** Check if value is a v4 media relation: { data: { id, attributes: { url } } } */

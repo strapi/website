@@ -526,10 +526,6 @@ export interface ApiBlogCategoryBlogCategory
     }
   }
   attributes: {
-    blogPosts: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::blog-post.blog-post"
-    >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -692,10 +688,6 @@ export interface ApiBlogTagBlogTag extends Struct.CollectionTypeSchema {
     }
   }
   attributes: {
-    blogPosts: Schema.Attribute.Relation<
-      "manyToMany",
-      "api::blog-post.blog-post"
-    >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private

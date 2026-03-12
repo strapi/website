@@ -39,7 +39,9 @@ export async function runEntityMigration(
   partialCtx: Omit<
     TransformContext,
     "sourceClient" | "targetClient" | "componentMap" | "mediaCache"
-  >
+  >,
+  /** Key used for persisting migration state. Defaults to config.sourceEndpoint. */
+  stateKey?: string
 ): Promise<EntityMigrationResult & { stats: RunStats }> {
   const mediaCache = new MediaCache()
   await mediaCache.load()
@@ -61,7 +63,8 @@ export async function runEntityMigration(
   const migrationState = new MigrationState()
   await migrationState.load()
 
-  const state = migrationState.getEntityState(config.sourceEndpoint)
+  const entityStateKey = stateKey ?? config.sourceEndpoint
+  const state = migrationState.getEntityState(entityStateKey)
   const stats: RunStats = {
     componentCounts: {},
     droppedComponents: {},
@@ -124,7 +127,9 @@ export async function runEntityMigration(
       transformed = await runTransforms(flat, config.transforms, ctx)
 
       // Capture target dynamic zone components after transform
-      const targetComponents = extractComponentNames(transformed["content"])
+      const targetComponents = extractComponentNames(
+        transformed["content"] ?? transformed["sections"]
+      )
       const droppedInEntity = sourceComponents.filter(
         (c) =>
           !targetComponents.some((t) =>
@@ -220,7 +225,7 @@ export async function runEntityMigration(
     state.lastProcessedId = v4Id
 
     if ((state.migrated + state.skipped + state.failed) % 10 === 0) {
-      migrationState.setEntityState(config.sourceEndpoint, state)
+      migrationState.setEntityState(entityStateKey, state)
       await migrationState.save()
       await mediaCache.save()
     }
@@ -234,7 +239,7 @@ export async function runEntityMigration(
     )
   }
 
-  migrationState.setEntityState(config.sourceEndpoint, state)
+  migrationState.setEntityState(entityStateKey, state)
   await migrationState.save()
   await mediaCache.save()
 

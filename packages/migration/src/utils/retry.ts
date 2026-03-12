@@ -17,13 +17,23 @@ export async function withRetry<T>(
     try {
       return await fn()
     } catch (err) {
-      const isRetryable =
+      const isHttpRetryable =
         err instanceof Error &&
         "status" in err &&
         typeof (err as Record<string, unknown>)["status"] === "number" &&
         [429, 500, 502, 503, 504].includes(
           (err as Record<string, unknown>)["status"] as number
         )
+
+      // Also retry network-level errors (TypeError: fetch failed, ECONNRESET, etc.)
+      const isNetworkError =
+        err instanceof TypeError ||
+        (err instanceof Error &&
+          /fetch failed|ECONNRESET|ECONNREFUSED|ETIMEDOUT|socket hang up/i.test(
+            err.message
+          ))
+
+      const isRetryable = isHttpRetryable || isNetworkError
 
       if (!isRetryable || attempt === maxRetries) {
         throw err

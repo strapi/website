@@ -66,7 +66,7 @@ program
       `Migrating: ${entity}${flags.length > 0 ? ` (${flags.join(", ")})` : ""}`
     )
 
-    const result = await runEntityMigration(config, ctx)
+    const result = await runEntityMigration(config, ctx, entity)
     printEntitySummary(entity, result, result.stats, logger)
 
     await idMap.save()
@@ -106,7 +106,7 @@ program
 
       logger.header(`Migrating: ${name}`)
 
-      const result = await runEntityMigration(config, ctx)
+      const result = await runEntityMigration(config, ctx, name)
       printEntitySummary(name, result, result.stats, logger)
 
       // Merge stats

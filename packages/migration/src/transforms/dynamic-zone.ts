@@ -77,13 +77,141 @@ export function remapDynamicZone(
       mapped.push(transformed)
     }
 
+    const postProcessed = postProcessDynamicZone(mapped, ctx)
     const { [sourceField]: _, ...rest } = entity
 
-    if (mapped.length > 0) {
-      return { ...rest, [targetField]: mapped }
+    if (postProcessed.length > 0) {
+      return { ...rest, [targetField]: postProcessed }
     }
 
     return rest
+  }
+}
+
+/**
+ * Post-process the mapped dynamic zone entries:
+ * 1. Merge standalone section-headers into the following component's `section` field
+ *    when the next component has an empty/default section
+ * 2. Filter out components with empty required arrays (items, images)
+ */
+function postProcessDynamicZone(
+  entries: DynamicZoneEntry[],
+  ctx: TransformContext
+): DynamicZoneEntry[] {
+  const merged: DynamicZoneEntry[] = []
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i]!
+
+    // 1. Merge section-header into next component's section field
+    if (entry.__component === "sections.section-header") {
+      const next = entries[i + 1]
+      const section = entry["section"] as Record<string, unknown> | undefined
+
+      if (next && hasEmptySection(next) && section) {
+        // Transfer section data into the next component
+        ;(next as Record<string, unknown>)["section"] = section
+        ctx.logger.debug(
+          `Merged section-header into ${next.__component}`
+        )
+        continue // skip this standalone section-header
+      }
+    }
+
+    // 2. Filter out components with empty required arrays/fields
+    if (hasEmptyRequiredArray(entry)) {
+      ctx.logger.debug(
+        `Dropped ${entry.__component} — empty required field`
+      )
+      continue
+    }
+
+    merged.push(entry)
+  }
+
+  // 3. Alternate imagePosition on consecutive feature cards
+  alternateFeatureCardPositions(merged, ctx)
+
+  return merged
+}
+
+/** Check if a DZ entry has an empty/default section field that can receive a merged header */
+function hasEmptySection(entry: DynamicZoneEntry): boolean {
+  const section = entry["section"] as Record<string, unknown> | undefined
+  if (!section) return false
+
+  const title = section["title"] as string | undefined
+  const description = section["description"] as string | undefined
+
+  return (!title || title === "") && (!description || description === "")
+}
+
+/** Check if a component has empty required fields that would make it useless */
+function hasEmptyRequiredArray(entry: DynamicZoneEntry): boolean {
+  const comp = entry.__component
+
+  if (comp === "sections.two-column-grid") {
+    return !Array.isArray(entry["items"]) || (entry["items"] as unknown[]).length === 0
+  }
+
+  if (comp === "media.brand-logo-grid") {
+    return !Array.isArray(entry["items"]) || (entry["items"] as unknown[]).length === 0
+  }
+
+  if (comp === "sections.feature-card-grid") {
+    return !Array.isArray(entry["items"]) || (entry["items"] as unknown[]).length === 0
+  }
+
+  if (comp === "media.image-gallery") {
+    return !Array.isArray(entry["images"]) || (entry["images"] as unknown[]).length === 0
+  }
+
+  // Content cards with empty title AND content are useless
+  if (comp === "cards.content-card") {
+    const title = entry["title"] as string | undefined
+    const content = entry["content"] as string | undefined
+
+    return (!title || title === "") && (!content || content === "")
+  }
+
+  return false
+}
+
+/**
+ * Alternate imagePosition on consecutive feature cards.
+ * First card keeps its position (or defaults to "right"),
+ * subsequent consecutive cards alternate.
+ */
+function alternateFeatureCardPositions(
+  entries: DynamicZoneEntry[],
+  ctx: TransformContext
+): void {
+  let lastPosition: string | undefined
+
+  for (const entry of entries) {
+    if (entry.__component !== "cards.feature-card") {
+      lastPosition = undefined
+      continue
+    }
+
+    // Only alternate for "lg" sized cards (full-width with image beside text)
+    if (entry["size"] !== "lg") {
+      lastPosition = undefined
+      continue
+    }
+
+    if (lastPosition === undefined) {
+      // First in a consecutive run — keep existing or default to "right"
+      lastPosition = (entry["imagePosition"] as string) ?? "right"
+      entry["imagePosition"] = lastPosition
+    } else {
+      // Alternate from previous
+      lastPosition = lastPosition === "right" ? "left" : "right"
+      entry["imagePosition"] = lastPosition
+      ctx.logger.debug(
+        `Alternated feature-card image position → ${lastPosition}`
+      )
+    }
   }
 }
 

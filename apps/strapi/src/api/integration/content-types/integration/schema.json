@@ -66,6 +66,7 @@
         "sections.section-header",
         "sections.faq-section",
         "sections.two-column-grid",
+        "sections.feature-card-grid",
         "cards.content-card",
         "cards.feature-card",
         "media.image",

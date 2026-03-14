@@ -39,4 +39,9 @@ export class MediaCache {
     await mkdir(STATE_DIR, { recursive: true })
     await writeFile(CACHE_FILE, JSON.stringify(this.data, null, 2))
   }
+
+  async reset(): Promise<void> {
+    this.data = {}
+    await this.save()
+  }
 }

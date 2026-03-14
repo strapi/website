@@ -5,6 +5,7 @@ import { ENTITY_CONFIGS } from "./config/entities.ts"
 import { loadEnv } from "./config/env.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
 import { IdMap } from "./state/id-map.ts"
+import { MediaCache } from "./state/media-cache.ts"
 import {
   MigrationState,
   type EntityMigrationResult,
@@ -173,6 +174,8 @@ program
     await state.reset()
     const idMap = new IdMap()
     await idMap.reset()
+    const mediaCache = new MediaCache()
+    await mediaCache.reset()
     console.log("Migration state cleared.")
   })
 

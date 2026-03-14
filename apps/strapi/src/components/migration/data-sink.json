@@ -9,7 +9,6 @@
   "attributes": {
     "sourceComponent": {
       "type": "string",
-      "required": true,
       "private": true
     },
     "data": {

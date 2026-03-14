@@ -1,173 +1,45 @@
 {
   "entities": {
-    "countries": {
-      "total": 43,
-      "migrated": 3,
-      "skipped": 40,
-      "failed": 0,
-      "lastProcessedId": 48,
-      "errors": []
-    },
-    "cities": {
-      "total": 89,
-      "migrated": 3,
-      "skipped": 85,
-      "failed": 0,
-      "lastProcessedId": 92,
-      "errors": []
-    },
-    "tech-stacks": {
-      "total": 34,
+    "navbar": {
+      "total": 1,
       "migrated": 1,
-      "skipped": 31,
+      "skipped": 0,
       "failed": 0,
-      "lastProcessedId": 37,
+      "lastProcessedId": 1,
       "errors": []
     },
-    "partner-services": {
-      "total": 10,
-      "migrated": 2,
-      "skipped": 8,
-      "failed": 0,
-      "lastProcessedId": 12,
-      "errors": []
-    },
-    "case-study-categories": {
-      "total": 6,
-      "migrated": 2,
-      "skipped": 4,
-      "failed": 0,
-      "lastProcessedId": 8,
-      "errors": []
-    },
-    "integration-categories": {
-      "total": 18,
-      "migrated": 2,
-      "skipped": 16,
-      "failed": 0,
-      "lastProcessedId": 18,
-      "errors": []
-    },
-    "blog-categories": {
-      "total": 10,
-      "migrated": 2,
-      "skipped": 8,
-      "failed": 0,
-      "lastProcessedId": 26,
-      "errors": []
-    },
-    "blog-tags": {
-      "total": 100,
-      "migrated": 40,
-      "skipped": 60,
-      "failed": 0,
-      "lastProcessedId": 140,
-      "errors": []
-    },
-    "post-categories": {
-      "total": 10,
-      "migrated": 9,
-      "skipped": 1,
-      "failed": 0,
-      "lastProcessedId": 26,
-      "errors": []
-    },
-    "post-tags": {
-      "total": 100,
-      "migrated": 0,
-      "skipped": 21,
-      "failed": 0,
-      "lastProcessedId": 140,
-      "errors": []
-    },
-    "reviews": {
-      "total": 13,
-      "migrated": 3,
-      "skipped": 1,
-      "failed": 0,
-      "lastProcessedId": 17,
-      "errors": []
-    },
-    "news-items": {
-      "total": 25,
-      "migrated": 21,
-      "skipped": 4,
-      "failed": 0,
-      "lastProcessedId": 32,
-      "errors": []
-    },
-    "redirects": {
-      "total": 100,
-      "migrated": 0,
-      "skipped": 86,
-      "failed": 0,
-      "lastProcessedId": 124,
-      "errors": []
-    },
-    "plans": {
-      "total": 12,
+    "footer": {
+      "total": 1,
       "migrated": 1,
-      "skipped": 11,
-      "failed": 0,
-      "lastProcessedId": 16,
-      "errors": []
-    },
-    "integrations": {
-      "total": 200,
-      "migrated": 26,
       "skipped": 0,
       "failed": 0,
-      "lastProcessedId": 280,
+      "lastProcessedId": 1,
       "errors": []
     },
-    "partners": {
-      "total": 54,
-      "migrated": 41,
-      "skipped": 1,
-      "failed": 0,
-      "lastProcessedId": 58,
-      "errors": []
-    },
-    "case-studies": {
-      "total": 35,
-      "migrated": 13,
+    "page-career": {
+      "total": 1,
+      "migrated": 1,
       "skipped": 0,
       "failed": 0,
-      "lastProcessedId": 36,
+      "lastProcessedId": 1,
       "errors": []
     },
-    "blog-posts": {
-      "total": 200,
-      "migrated": 9,
+    "page-enterprise": {
+      "total": 1,
+      "migrated": 1,
       "skipped": 0,
       "failed": 0,
-      "lastProcessedId": 1409,
+      "lastProcessedId": 1,
       "errors": []
     },
-    "cms-pages": {
-      "total": 25,
-      "migrated": 6,
-      "skipped": 1,
-      "failed": 0,
-      "lastProcessedId": 40,
-      "errors": []
-    },
-    "cms-comparisons": {
-      "total": 100,
-      "migrated": 78,
+    "page-content-architecture": {
+      "total": 1,
+      "migrated": 1,
       "skipped": 0,
       "failed": 0,
-      "lastProcessedId": 164,
-      "errors": []
-    },
-    "pages": {
-      "total": 117,
-      "migrated": 5,
-      "skipped": 3,
-      "failed": 0,
-      "lastProcessedId": 129,
+      "lastProcessedId": 1,
       "errors": []
     }
   },
-  "lastRun": "2026-03-12T00:08:44.311Z"
+  "lastRun": "2026-03-13T17:45:28.838Z"
 }

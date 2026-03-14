@@ -22,6 +22,7 @@ import { StrapiHero } from "@/components/page-builder/components/sections/Strapi
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
 import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
+import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sections/StrapiFeatureCardGrid"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
 import { StrapiUserStoriesSection } from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
@@ -57,6 +58,7 @@ export const ContentComponents: Partial<
   "sections.how-it-works": StrapiHowItWorks,
   "sections.integrations-section": StrapiIntegrationsSection,
   "sections.section-header": StrapiSectionHeader,
+  "sections.feature-card-grid": StrapiFeatureCardGrid,
   "sections.two-column-grid": StrapiTwoColumnGrid,
   "sections.two-columns-benefits": StrapiTwoColumnsBenefits,
   "sections.user-stories-section": StrapiUserStoriesSection,

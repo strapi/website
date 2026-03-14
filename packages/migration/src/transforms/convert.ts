@@ -352,3 +352,79 @@ export function extractRelationIds(value: unknown): number[] {
     )
     .map((item) => (item as Record<string, unknown>)["_v4Id"] as number)
 }
+
+/**
+ * Convert v4 media.image component → v5 utilities.basic-image format.
+ * v4: { media: { data: { attributes: { url, alternativeText, width, height } } } }
+ * v5: { fallbackSrc, alt, width, height } (uploadMedia will replace fallbackSrc → media ID)
+ */
+export function convertV4BasicImage(
+  v4Media: unknown
+): Record<string, unknown> | null {
+  if (!v4Media || typeof v4Media !== "object") return null
+  const m = v4Media as Record<string, unknown>
+
+  // Try extracting from media.image component (has nested .media field)
+  const mediaInfo = extractMediaUrl(m["media"] ?? m)
+  if (!mediaInfo) return null
+
+  return {
+    fallbackSrc: absoluteUrl(mediaInfo.url),
+    alt: mediaInfo.alt ?? "",
+    width: mediaInfo.width ?? null,
+    height: mediaInfo.height ?? null,
+  }
+}
+
+/**
+ * Convert v4 links.link → v5 utilities.link-text format.
+ * v4: { href, target, text, summary }
+ * v5: { type, label, newTab, href }
+ */
+export function convertV4LinkText(
+  v4Link: unknown
+): Record<string, unknown> | null {
+  if (!v4Link || typeof v4Link !== "object") return null
+  const link = v4Link as Record<string, unknown>
+
+  const href =
+    (link["href"] as string) ?? (link["url"] as string) ?? ""
+  if (!href) return null
+
+  return {
+    type: "external",
+    label: (link["text"] as string) ?? (link["label"] as string) ?? "",
+    newTab: link["target"] === "_blank",
+    href,
+  }
+}
+
+/**
+ * Convert v4 links.link → v5 utilities.link-image format.
+ * v4: { href, target, text, summary, icons: media.image[] }
+ * v5: { type, label, newTab, href, image: basic-image }
+ */
+export function convertV4LinkImage(
+  v4Link: unknown
+): Record<string, unknown> | null {
+  if (!v4Link || typeof v4Link !== "object") return null
+  const link = v4Link as Record<string, unknown>
+
+  const href =
+    (link["href"] as string) ?? (link["url"] as string) ?? ""
+
+  const icons = link["icons"] as Record<string, unknown>[] | undefined
+  let image: Record<string, unknown> | null = null
+
+  if (Array.isArray(icons) && icons.length > 0) {
+    image = convertV4BasicImage(icons[0])
+  }
+
+  return {
+    type: "external",
+    label: (link["text"] as string) ?? (link["label"] as string) ?? "",
+    newTab: link["target"] === "_blank",
+    href: href || "/",
+    image,
+  }
+}

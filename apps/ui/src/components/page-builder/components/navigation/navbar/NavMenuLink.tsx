@@ -33,8 +33,8 @@ export function NavMenuLink({ component, className }: NavMenuLinkProps) {
     >
       <div className="flex items-center gap-2">
         {component.icon && (
-          <div className="relative shrink-0">
-            <StrapiBasicImage component={component.icon} mode="intrinsic" />
+          <div className="relative size-4 shrink-0">
+            <StrapiBasicImage component={component.icon} mode="fill" />
           </div>
         )}
 

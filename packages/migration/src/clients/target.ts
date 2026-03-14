@@ -172,6 +172,27 @@ export class TargetClient {
     }
   }
 
+  async updateSingleType(
+    endpoint: string,
+    data: Record<string, unknown>
+  ): Promise<V5Entity> {
+    const url = `${this.baseUrl}/api/${endpoint}`
+    const payload = { data: stripIds(data) }
+
+    this.logger.debug(`Updating single type: ${endpoint}`)
+
+    const response = await withRetry(
+      () =>
+        this.request<V5SingleResponse>(url, {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        }),
+      { logger: this.logger }
+    )
+
+    return response.data
+  }
+
   async publish(endpoint: string, documentId: string): Promise<void> {
     const url = `${this.baseUrl}/api/${endpoint}/${documentId}`
 

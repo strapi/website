@@ -12,6 +12,7 @@ export interface FeatureCardTitleProps {
   readonly as?: "h2" | "h3" | "h4" | "h5" | "h6" | "p"
   readonly size?: "sm" | "default" | "lg"
   readonly icon?: React.ReactNode
+  readonly iconPosition?: "inline" | "top"
   readonly className?: string
   readonly children?: React.ReactNode
 }
@@ -20,6 +21,7 @@ export function FeatureCardTitle({
   as = "h3",
   size = "default",
   icon,
+  iconPosition = "inline",
   className,
   children,
 }: FeatureCardTitleProps) {
@@ -37,7 +39,14 @@ export function FeatureCardTitle({
     const Tag = as
 
     return (
-      <div data-slot="feature-card-title" className="flex items-center gap-3">
+      <div
+        data-slot="feature-card-title"
+        className={
+          iconPosition === "top"
+            ? "flex flex-col gap-3"
+            : "flex items-center gap-3"
+        }
+      >
         <div className="shrink-0">{icon}</div>
         <Tag className={titleClassName}>{children}</Tag>
       </div>

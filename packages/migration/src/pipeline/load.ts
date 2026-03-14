@@ -11,6 +11,16 @@ export async function loadEntity(
   config: EntityMigrationConfig,
   ctx: TransformContext
 ): Promise<LoadResult> {
+  // Single type targets: always PUT directly (no dedup/create)
+  if (config.targetSingleType) {
+    const result = await ctx.targetClient.updateSingleType(
+      config.targetEndpoint,
+      entity
+    )
+
+    return { action: "updated", documentId: result.documentId }
+  }
+
   const dedupValue = entity[config.dedupField]
 
   if (dedupValue == null) {

@@ -481,9 +481,7 @@ export interface MigrationDataSink extends Struct.ComponentSchema {
   }
   attributes: {
     data: Schema.Attribute.JSON & Schema.Attribute.Private
-    sourceComponent: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Private
+    sourceComponent: Schema.Attribute.String & Schema.Attribute.Private
   }
 }
 
@@ -783,6 +781,24 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
           localized: true
         }
       }>
+  }
+}
+
+export interface SectionsFeatureCardGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_feature_card_grid"
+  info: {
+    description: ""
+    displayName: "FeatureCardGrid"
+    icon: "apps"
+  }
+  attributes: {
+    background: Schema.Attribute.Enumeration<["none", "light"]> &
+      Schema.Attribute.DefaultTo<"none">
+    columns: Schema.Attribute.Enumeration<["2", "3"]> &
+      Schema.Attribute.DefaultTo<"3">
+    items: Schema.Attribute.Component<"cards.feature-card", true> &
+      Schema.Attribute.Required
+    section: Schema.Attribute.Component<"utilities.section-header", false>
   }
 }
 
@@ -1254,7 +1270,7 @@ export interface UtilitiesSectionHeader extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<"center">
     size: Schema.Attribute.Enumeration<["xs", "sm", "default", "lg", "xl"]> &
       Schema.Attribute.DefaultTo<"default">
-    title: Schema.Attribute.Text & Schema.Attribute.Required
+    title: Schema.Attribute.Text
     variant: Schema.Attribute.Enumeration<["default", "purple", "inverse"]>
   }
 }
@@ -1342,6 +1358,7 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.faq-section": SectionsFaqSection
+      "sections.feature-card-grid": SectionsFeatureCardGrid
       "sections.hero": SectionsHero
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks

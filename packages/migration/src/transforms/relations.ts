@@ -63,11 +63,7 @@ export function resolveRelations(
           })
           .filter(Boolean) as string[]
 
-        if (resolved.length > 0) {
-          result[field] = { set: resolved }
-        } else {
-          result[field] = null
-        }
+        result[field] = resolved.length > 0 ? { set: resolved } : null
       }
     }
 

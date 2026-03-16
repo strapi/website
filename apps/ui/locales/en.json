@@ -92,6 +92,12 @@
     "noData": "No data"
   },
 
+  "sections": {
+    "faq": {
+      "title": "Frequently Asked Questions"
+    }
+  },
+
   "comps": {
     "fileInput": {
       "label": "Select file",

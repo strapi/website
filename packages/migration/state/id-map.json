@@ -1,14 +1,6 @@
 {
-  "api::global.global": {
-    "1": "gnzc9zukw1zu011lwyseo61q"
-  },
-  "api::career.career": {
-    "1": "a38xry6ghq6iqyrsq4dg2jti"
-  },
-  "api::entreprise-program.entreprise-program": {
-    "1": "sgi8yk59zbarrk091hx3354z"
-  },
-  "api::content-architecture.content-architecture": {
-    "1": "nznuse2veozah4z0cmyxzqfy"
+  "api::universal.universal": {
+    "105": "sjyqxp3jtsk0ynrh0u18n4ju",
+    "109": "j7bbg9q8mmkgj1sd2clshsi6"
   }
 }

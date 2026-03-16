@@ -1,11 +1,11 @@
 import { writeFile, mkdir } from "node:fs/promises"
-import { join, dirname } from "node:path"
+import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 import type { RunStats } from "../pipeline/runner.ts"
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const REPORTS_DIR = join(__dirname, "../../reports")
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const REPORTS_DIR = path.join(__dirname, "../../reports")
 
 export interface MigrationReport {
   timestamp: string
@@ -35,9 +35,9 @@ export async function writeReport(
   await mkdir(REPORTS_DIR, { recursive: true })
 
   const now = new Date()
-  const ts = now.toISOString().replace(/[:.]/g, "-")
+  const ts = now.toISOString().replaceAll(/[:.]/g, "-")
   const filename = `${entity}-${ts}.json`
-  const filepath = join(REPORTS_DIR, filename)
+  const filepath = path.join(REPORTS_DIR, filename)
 
   const details = stats.entityDetails
 
@@ -73,9 +73,7 @@ export async function writeReport(
 }
 
 function sortByValue(obj: Record<string, number>): Record<string, number> {
-  return Object.fromEntries(
-    Object.entries(obj).sort(([, a], [, b]) => b - a)
-  )
+  return Object.fromEntries(Object.entries(obj).sort(([, a], [, b]) => b - a))
 }
 
 function formatMs(ms: number): string {

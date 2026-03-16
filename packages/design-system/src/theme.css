@@ -539,7 +539,7 @@
     var(--color-hero-accent-primary-transparent) 100%
   );
   --gradient-hero-code-overlay: linear-gradient(
-    165deg,
+    155deg,
     var(--color-strapi-gray-950) 0%,
     var(--color-hero-accent-primary-transparent) 33%,
     var(--color-strapi-blue-600) 65%,

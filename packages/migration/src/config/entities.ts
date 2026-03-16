@@ -1,3 +1,4 @@
+import { normalizePageSlug, resolvePageParent } from "../entities/page.ts"
 import type { TransformFn } from "../transforms/base.ts"
 import {
   convertLinkFields,
@@ -9,7 +10,6 @@ import {
   extractNestedRelationId,
   extractRelationIds,
   extractV4Person,
-  slugify,
   uploadDirectMediaFields,
   convertV4BasicImage,
   convertV4LinkText,
@@ -78,6 +78,7 @@ const DEEP_DZ_POPULATE = {
           image: { populate: "*" },
           icon: { populate: "*" },
           link: { populate: "*" },
+          button: { populate: "*" },
           card: { populate: "*" },
         },
       },
@@ -92,17 +93,22 @@ const DEEP_DZ_POPULATE = {
       // Intro component field (slices.intro uses "content" as component field)
       content: { populate: { button: { populate: "*" } } },
 
+      // v4 section-with-image has button (links.button → links.link) at slice level
+      button: { populate: { link: { populate: "*" } } },
+
       // Stats / icons / images / groups (various career/page slices)
       stats: { populate: "*" },
       icons: { populate: { icon: { populate: "*" } } },
       images: { populate: "*" },
       groups: { populate: { perks: { populate: "*" } } },
 
-      // Case study card relation (singular)
+      // Case study card relation (singular) — case study has coverImage + whiteHero
       card: {
         populate: {
           image: { populate: "*" },
           backgroundImage: { populate: "*" },
+          coverImage: { populate: { media: { populate: "*" } } },
+          whiteHero: { populate: { intro: { populate: "*" } } },
         },
       },
 
@@ -294,6 +300,7 @@ const ensureTitle: TransformFn = (entity) => {
  * Finds DZ entries with _hubspotFormId, creates/finds the hubspot-form entity,
  * and links it via the `form` relation.
  */
+// eslint-disable-next-line sonarjs/no-invariant-returns
 const resolveHubspotForms: TransformFn = async (entity, ctx) => {
   const content = entity["content"] as Record<string, unknown>[] | undefined
   if (!content || !Array.isArray(content)) return entity
@@ -326,7 +333,9 @@ const resolveHubspotForms: TransformFn = async (entity, ctx) => {
         })
 
         entry["form"] = created.documentId
-        ctx.logger.debug(`Created hubspot-form: ${formId} → ${created.documentId}`)
+        ctx.logger.debug(
+          `Created hubspot-form: ${formId} → ${created.documentId}`
+        )
       }
     } catch (e) {
       ctx.logger.warn(
@@ -342,6 +351,7 @@ const resolveHubspotForms: TransformFn = async (entity, ctx) => {
  * Enrich case-study-card DZ entries by fetching the full case study
  * from v4 to get title, company name, and cover image.
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity, sonarjs/no-invariant-returns
 const enrichCaseStudyCards: TransformFn = async (entity, ctx) => {
   const content = entity["content"] as Record<string, unknown>[] | undefined
   if (!content || !Array.isArray(content)) return entity
@@ -833,17 +843,9 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
     ],
   },
 
-  "hubspot-forms": {
-    sourceEndpoint: "hubspot-forms",
-    sourcePopulate: "*",
-    targetEndpoint: "hubspot-forms",
-    dedupField: "name",
-    sourceUid: "api::hubspot-form.hubspot-form",
-    transforms: [
-      flattenV4,
-      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
-    ],
-  },
+  // hubspot-forms: v4 doesn't expose this as a collection type (404).
+  // HubSpot forms are created on-the-fly by resolveHubspotForms when
+  // encountered inside page dynamic zones.
 
   // ═════════════════════════════════════════
   // ENTITIES WITH RELATION DEPENDENCIES
@@ -899,9 +901,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
                 return v5DocId
               }
 
-              ctx.logger.warn(
-                `Unresolved integration category: v4Id=${v4Id}`
-              )
+              ctx.logger.warn(`Unresolved integration category: v4Id=${v4Id}`)
 
               return null
             })
@@ -966,7 +966,9 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         // title from intro.title (required in v5)
         if (!result["title"] || typeof result["title"] !== "string") {
           result["title"] =
-            (intro["title"] as string) ?? (result["slug"] as string) ?? "Untitled"
+            (intro["title"] as string) ??
+            (result["slug"] as string) ??
+            "Untitled"
         }
 
         // label from intro.label
@@ -980,9 +982,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         }
 
         // CTA from first button
-        const buttons = intro["button"] as
-          | Record<string, unknown>[]
-          | undefined
+        const buttons = intro["button"] as Record<string, unknown>[] | undefined
         if (buttons && buttons.length > 0) {
           const btn = buttons[0]!
           result["cta"] = {
@@ -1076,9 +1076,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         const techIds = extractRelationIds(result["techStacks"])
         if (techIds.length > 0) {
           const resolved = techIds
-            .map((v4Id) =>
-              ctx.idMap.get("api::tech-stack.tech-stack", v4Id)
-            )
+            .map((v4Id) => ctx.idMap.get("api::tech-stack.tech-stack", v4Id))
             .filter(Boolean) as string[]
 
           if (resolved.length > 0) {
@@ -1248,9 +1246,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
           if (docId) {
             result["category"] = { set: [docId] }
           } else {
-            ctx.logger.warn(
-              `Unresolved blog category: v4Id=${cat["_v4Id"]}`
-            )
+            ctx.logger.warn(`Unresolved blog category: v4Id=${cat["_v4Id"]}`)
           }
         }
 
@@ -1263,9 +1259,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
 
         if (tagIds.length > 0) {
           const resolved = tagIds
-            .map((v4Id) =>
-              ctx.idMap.get("api::post-tag.post-tag", v4Id)
-            )
+            .map((v4Id) => ctx.idMap.get("api::post-tag.post-tag", v4Id))
             .filter(Boolean) as string[]
 
           if (resolved.length > 0) {
@@ -1375,7 +1369,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
     sourceEndpoint: "universals",
     sourcePopulate: DEEP_DZ_POPULATE,
     targetEndpoint: "pages",
-    dedupField: "slug",
+    dedupField: "fullPath",
     sourceUid: "api::universal.universal",
     transforms: [
       flattenV4,
@@ -1388,10 +1382,13 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "settings",
         "darkMode"
       ),
+      normalizePageSlug(),
       ensureTitle,
       remapDynamicZone("slices", "content"),
+      resolveHubspotForms,
       transformSeo,
       uploadMedia,
+      resolvePageParent(),
     ],
   },
 
@@ -1964,6 +1961,8 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
               intro: INTRO_POPULATE,
             },
           },
+          asideImage: { populate: { media: { populate: "*" } } },
+          image: { populate: "*" },
         },
       },
     },
@@ -1981,17 +1980,35 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "settings"
       ),
       ensureTitle,
+      // Set fullPath: use-cases live at /solutions/{slug}
+      ((entity) => ({
+        ...entity,
+        fullPath: `/solutions/${entity["slug"] as string}`,
+      })) as TransformFn,
       remapDynamicZone("slices", "content"),
-      // Prepend hero from useCaseHero → hero.intro (label-title-text-links)
+      // Prepend hero from useCaseHero → hero.intro (label-title-text-links + image)
       ((entity) => {
         const result = { ...entity }
-        const hero = asRecord(result["useCaseHero"])
+        const useCaseHero = asRecord(result["useCaseHero"])
         delete result["useCaseHero"]
 
-        const intro = asRecord(asRecord(hero["hero"])["intro"])
+        const heroBlock = asRecord(useCaseHero["hero"])
+        const intro = asRecord(heroBlock["intro"])
 
         if (intro["title"]) {
-          return prependToContent(result, introToHeroDzEntry(intro))
+          const heroEntry = introToHeroDzEntry(intro)
+
+          const heroImage =
+            useCaseHero["asideImage"] ??
+            heroBlock["image"] ??
+            useCaseHero["image"]
+
+          const wrappedImage = wrapV4Media(heroImage)
+          if (wrappedImage) {
+            heroEntry.image = wrappedImage
+          }
+
+          return prependToContent(result, heroEntry)
         }
 
         return result
@@ -2093,10 +2110,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
                 return {
                   link: convertV4LinkText(link),
                   description: (link["summary"] as string) ?? "",
-                  icon:
-                    icons.length > 0
-                      ? convertV4BasicImage(icons[0])
-                      : null,
+                  icon: icons.length > 0 ? convertV4BasicImage(icons[0]) : null,
                 }
               }),
             })),
@@ -2175,7 +2189,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
     targetEndpoint: "footer",
     targetSingleType: true,
     dedupField: "content",
-    sourceUid: "api::global.global",
+    sourceUid: "api::global.global:footer",
     transforms: [
       flattenV4,
       // Extract footer component and build v5 footer dynamic zone

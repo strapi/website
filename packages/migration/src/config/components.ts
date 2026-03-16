@@ -38,6 +38,16 @@ interface V4Button {
   label?: string
   url?: string
   style?: string
+  link?: { href?: string; text?: string; target?: string }
+}
+
+/** Check if a v4 button-like object has any meaningful data.
+ *  v4 uses two button formats: { label, url } and { theme, link: { href, text } } */
+function isV4Button(value: unknown): value is V4Button {
+  if (!value || typeof value !== "object") return false
+  const obj = value as Record<string, unknown>
+
+  return !!(obj["label"] || obj["url"] || obj["link"])
 }
 
 interface V4Person {
@@ -80,15 +90,14 @@ function asArray(value: unknown): Record<string, unknown>[] {
 }
 
 /** Extract array from v4 relation format { data: [{ id, attributes }, ...] } */
-function extractV4RelationArray(
-  value: unknown
-): Record<string, unknown>[] {
+function extractV4RelationArray(value: unknown): Record<string, unknown>[] {
   if (!value || typeof value !== "object") return []
 
   const v = value as Record<string, unknown>
   if (Array.isArray(v["data"])) {
     return (v["data"] as Record<string, unknown>[]).map((item) => {
       const attrs = item["attributes"] as Record<string, unknown> | undefined
+
       return attrs ? { ...attrs, _v4Id: item["id"] } : item
     })
   }
@@ -150,7 +159,7 @@ function wrapBasicImage(media: unknown): Record<string, unknown> | undefined {
 
 /** Default link decorations for v5 utilities.link */
 const DEFAULT_LINK_DECORATIONS = {
-  variant: "default",
+  variant: "secondary",
   size: "default",
   hasIcons: false,
 }
@@ -272,25 +281,46 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     },
   },
 
-  // v4 side-hero-with-image: upperTitle, title, description, primaryButton, secondaryButton, features[]
+  // v4 side-hero-with-image: upperTitle, title, description, image, primaryButton, secondaryButton, features[]
+  // v5: sections.hero + optional sections.feature-card-grid (multi-emit)
   {
     source: "slices.side-hero-with-image",
-    target: "sections.section-header",
+    target: "sections.hero",
     transform: (entry) => {
       const buttons: V4Button[] = []
-      const primary = asRecord(entry["primaryButton"])
-      if (primary["label"]) buttons.push(primary as V4Button)
-      const secondary = asRecord(entry["secondaryButton"])
-      if (secondary["label"]) buttons.push(secondary as V4Button)
+      const primary = entry["primaryButton"]
+      if (isV4Button(primary)) buttons.push(primary as V4Button)
+      const secondary = entry["secondaryButton"]
+      if (isV4Button(secondary)) buttons.push(secondary as V4Button)
 
-      return {
-        section: buildSectionHeader({
-          label: entry["upperTitle"] as string,
-          title: entry["title"] as string,
-          description: entry["description"] as string,
-          buttons,
-        }),
+      const hero: Record<string, unknown> = {
+        label: entry["upperTitle"] as string,
+        title: entry["title"] as string,
+        description: entry["description"] as string,
+        image: wrapBasicImage(entry["image"]),
       }
+
+      const ctas = buttons
+        .map(buttonToLink)
+        .filter((l) => l.label !== "" || l.href !== "")
+      if (ctas.length) hero.ctas = ctas
+
+      const features = asArray(entry["features"])
+      if (features.length === 0) return hero
+
+      // Multi-emit: hero + feature-card-grid from features[]
+      return [
+        hero,
+        {
+          __component: "sections.feature-card-grid",
+          items: features.map((f) => ({
+            title: (f["title"] as string) ?? "",
+            description: (f["text"] as string) ?? "",
+            icon: wrapBasicImage(f["icon"]),
+            image: wrapBasicImage(f["image"]),
+          })),
+        },
+      ]
     },
   },
 
@@ -354,7 +384,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
   // --- Text With Cards → Feature Card Grid ---
   // v4: intro (label-title-text), cards[] ({ theme, link: { href }, card: { title, text } })
-  // v5: feature-card-grid with section + items
+  // v5: section-header (from intro) + feature-card-grid with items
   {
     source: "slices.text-with-cards",
     target: "sections.feature-card-grid",
@@ -362,14 +392,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       const intro = asIntro(entry["intro"])
       const cards = asArray(entry["cards"])
 
-      return {
-        section: buildSectionHeader({
-          label: intro.label,
-          title: intro.title,
-          description: intro.text,
-          buttons: intro.button,
-        }),
-        columns: cards.length <= 2 ? "2" : "3",
+      const grid: Record<string, unknown> = {
         items: cards.map((rawCard) => {
           const card = asRecord(rawCard["card"])
           const link = asRecord(rawCard["link"])
@@ -396,23 +419,37 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           return result
         }),
       }
+
+      if (intro.title || intro.text) {
+        return [
+          {
+            __component: "sections.section-header",
+            section: buildSectionHeader({
+              label: intro.label,
+              title: intro.title,
+              description: intro.text,
+              buttons: intro.button,
+            }),
+          },
+          grid,
+        ]
+      }
+
+      return grid
     },
   },
 
   // --- Features Slice → Feature Card Grid ---
   // v4: cards[] (title, text), layout, iconLayout
-  // v5: feature-card-grid section with cards as items
+  // v5: section-header (from title) + feature-card-grid with items
   {
     source: "slices.features-slice",
     target: "sections.feature-card-grid",
     transform: (entry) => {
       const cards = asArray(entry["cards"])
+      const title = entry["title"] as string
 
-      return {
-        section: buildSectionHeader({
-          title: entry["title"] as string,
-        }),
-        columns: cards.length <= 2 ? "2" : "3",
+      const grid: Record<string, unknown> = {
         items: cards.map((card) => ({
           variant: "bordered",
           title: (card["title"] as string) ?? "",
@@ -421,17 +458,28 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           icon: wrapBasicImage(card["icon"] ?? card["image"]),
         })),
       }
+
+      if (title) {
+        return [
+          {
+            __component: "sections.section-header",
+            section: buildSectionHeader({ title }),
+          },
+          grid,
+        ]
+      }
+
+      return grid
     },
   },
 
   // --- FAQ ---
   // v4: intro (label-title-text-links), categories[] → questions[]
-  // v5: sectionLabel, heading, description, items[] (flat accordions)
+  // v5: faq-section with items only (title is hardcoded on frontend)
   {
     source: "slices.faq",
     target: "sections.faq-section",
     transform: (entry) => {
-      const intro = asIntro(entry["intro"])
       const categories = asArray(entry["categories"])
 
       // Flatten all questions from all categories
@@ -446,12 +494,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         }
       }
 
-      return {
-        sectionLabel: intro.label ?? "",
-        heading: intro.title ?? "",
-        description: intro.text ?? "",
-        items,
-      }
+      return { items }
     },
   },
 
@@ -503,36 +546,98 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
   // --- Features Grid → Feature Card Grid ---
   // v4: upperTitle, title, description, cards[] (title, text, icon, image, link, cardConfig)
-  // v5: feature-card-grid section with cards as items
+  // v5: feature-card-grid with per-card layout (full/half/third) from v4 cardConfig
   {
     source: "slices.features-grid",
     target: "sections.feature-card-grid",
     transform: (entry) => {
       const cards = asArray(entry["cards"])
+      const title = entry["title"] as string
+      const description = entry["description"] as string
 
-      return {
-        section: buildSectionHeader({
+      let fullWidthIndex = 0
+
+      const items = cards.map((card) => {
+        const cardConfig = (card["cardConfig"] as string) ?? "fullWidth"
+        const isFullWidth =
+          cardConfig === "fullWidth" || cardConfig === "fullWidthReverseImage"
+        const layout =
+          cardConfig === "halfWidth"
+            ? "half"
+            : cardConfig === "thirdWidth"
+              ? "third"
+              : "full"
+
+        // Alternate image position for full-width cards
+        // fullWidthReverseImage explicitly means left, otherwise alternate
+        let imagePosition: string | undefined
+        if (isFullWidth) {
+          imagePosition =
+            cardConfig === "fullWidthReverseImage"
+              ? "left"
+              : fullWidthIndex % 2 === 0
+                ? "right"
+                : "left"
+          fullWidthIndex++
+        }
+
+        const result: Record<string, unknown> = {
+          variant: "bordered",
+          layout,
+          size: "default",
+          title: (card["title"] as string) ?? "",
+          description:
+            (card["text"] as string) ?? (card["description"] as string) ?? "",
+          icon: wrapBasicImage(card["icon"]),
+          image: wrapBasicImage(card["image"]),
+        }
+
+        if (imagePosition) result.imagePosition = imagePosition
+
+        // Extract CTA from button, link field, or icon.href
+        const button = card["button"] as Record<string, unknown> | undefined
+        const link = linkToV5Link(card["link"])
+        const iconRecord = card["icon"] as Record<string, unknown> | undefined
+        const iconHref = iconRecord?.["href"] as string | undefined
+
+        if (button?.["href"]) {
+          result.ctaLinks = [
+            {
+              type: "external",
+              label: (button["text"] as string) ?? "Learn more",
+              newTab: button["target"] === "_blank",
+              href: button["href"] as string,
+              decorations: { ...DEFAULT_LINK_DECORATIONS },
+            },
+          ]
+        } else if (link) {
+          result.ctaLinks = [link]
+        } else if (iconHref) {
+          result.ctaLinks = [
+            {
+              type: "external",
+              label: (card["title"] as string) ?? "Learn more",
+              newTab: false,
+              href: iconHref,
+              decorations: { ...DEFAULT_LINK_DECORATIONS },
+            },
+          ]
+        }
+
+        return result
+      })
+
+      const grid: Record<string, unknown> = { items }
+
+      if (title || description) {
+        grid.section = buildSectionHeader({
           label: entry["upperTitle"] as string,
-          title: entry["title"] as string,
-          description: entry["description"] as string,
-        }),
-        columns: cards.length <= 2 ? "2" : "3",
-        items: cards.map((card) => {
-          const result: Record<string, unknown> = {
-            variant: "bordered",
-            title: (card["title"] as string) ?? "",
-            description:
-              (card["text"] as string) ?? (card["description"] as string) ?? "",
-            icon: wrapBasicImage(card["icon"]),
-            image: wrapBasicImage(card["image"]),
-          }
-
-          const link = linkToV5Link(card["link"])
-          if (link) result.ctaLinks = [link]
-
-          return result
-        }),
+          title,
+          description,
+        })
       }
+
+      return grid
     },
   },
 
@@ -610,7 +715,10 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
       if (rightTitle && features.length > 0) {
         const featureNames = features
-          .map((f) => `- **${f["name"] as string}**: ${(f["tooltip"] as string) ?? ""}`)
+          .map(
+            (f) =>
+              `- **${f["name"] as string}**: ${(f["tooltip"] as string) ?? ""}`
+          )
           .join("\n")
 
         items.push({
@@ -621,47 +729,47 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       }
 
       return {
-        columns: items.length <= 2 ? "2" : "3",
         items,
       }
     },
   },
 
   // --- Case Study Card ---
-  // v4: triangleImage, card (relation → case-study), buttonText
+  // v4: triangleImage, card (relation → case-study with coverImage, whiteHero), buttonText
   // v5: companyName, title, image, ctaLink, backgroundImage
   {
     source: "slices.case-study-card",
     target: "cards.case-study-card",
     transform: (entry) => {
-      // card is a v4 relation: { data: { id, attributes: { slug, ... } } }
-      // The relation typically only exposes slug — derive companyName from it
+      // card is a v4 relation: { data: { id, attributes: { slug, coverImage, whiteHero, ... } } }
       const cardRaw = asRecord(entry["card"])
       const cardData = asRecord(cardRaw["data"])
       const card = asRecord(cardData["attributes"] ?? cardData)
 
-      const slug =
-        (card["slug"] as string) ?? (cardRaw["slug"] as string) ?? ""
+      const slug = (card["slug"] as string) ?? (cardRaw["slug"] as string) ?? ""
 
-      // Derive companyName from slug: "tesco" → "Tesco", "my-company" → "My Company"
+      // Extract company name + title from whiteHero.intro
+      const whiteHero = asRecord(card["whiteHero"])
+      const heroIntro = asRecord(whiteHero["intro"])
+
       const companyName =
+        (heroIntro["label"] as string) ??
         (card["companyName"] as string) ??
-        (cardRaw["companyName"] as string) ??
         slug
           .split("-")
           .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
           .join(" ")
 
       const title =
+        (heroIntro["title"] as string) ??
         (card["title"] as string) ??
-        (cardRaw["title"] as string) ??
         (entry["buttonText"] as string) ??
         ""
 
       return {
         companyName,
         title,
-        image: wrapBasicImage(card["image"] ?? cardRaw["image"]),
+        image: wrapBasicImage(card["coverImage"] ?? card["image"]),
         backgroundImage: wrapBasicImage(entry["triangleImage"]),
         ctaLink: {
           type: "external",
@@ -755,6 +863,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   },
 
   // v4 brands-with-intro: adds intro section + topIntegrations on top of brands
+  // v5: section-header (from intro) + brand-logo-grid (multi-emit when intro has content)
   {
     source: "slices.brands-with-intro",
     target: "media.brand-logo-grid",
@@ -762,9 +871,8 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       const intro = asIntro(entry["intro"])
       const brands = asArray(entry["brands"])
 
-      return {
+      const grid: Record<string, unknown> = {
         variant: "bordered",
-        title: intro.title ?? "",
         items: brands.map((brand) => {
           const item: Record<string, unknown> = {
             image: wrapBasicImage(brand["image"] ?? brand["logo"]),
@@ -784,18 +892,55 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           return item
         }),
       }
+
+      if (intro.title || intro.text) {
+        return [
+          {
+            __component: "sections.section-header",
+            section: buildSectionHeader({
+              label: intro.label,
+              title: intro.title,
+              description: intro.text,
+              buttons: intro.button,
+            }),
+          },
+          grid,
+        ]
+      }
+
+      return grid
     },
   },
 
   // --- Video ---
-  // v4 large-video: intro, url, darkMode, size
-  // v5: url, thumbnail, link, alignment
+  // v4 large-video: intro (title, text, button[]), url, darkMode, size
+  // v5: section-header (from intro) + video (multi-emit when intro has content)
   {
     source: "slices.large-video",
     target: "media.video",
-    transform: (entry) => ({
-      url: (entry["url"] as string) ?? "",
-    }),
+    transform: (entry) => {
+      const intro = asIntro(entry["intro"])
+      const video: Record<string, unknown> = {
+        url: (entry["url"] as string) ?? "",
+      }
+
+      if (intro.title || intro.text) {
+        return [
+          {
+            __component: "sections.section-header",
+            section: buildSectionHeader({
+              label: intro.label,
+              title: intro.title,
+              description: intro.text,
+              buttons: intro.button,
+            }),
+          },
+          video,
+        ]
+      }
+
+      return video
+    },
   },
 
   // v4 featured-video: video relation → placeholder video
@@ -960,13 +1105,9 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       // portalId/formId can be at top level or nested in embedForm sub-component
       const embedForm = asRecord(entry["embedForm"])
       const portalId =
-        (entry["portalId"] as string) ??
-        (embedForm["portalId"] as string) ??
-        ""
+        (entry["portalId"] as string) ?? (embedForm["portalId"] as string) ?? ""
       const formId =
-        (entry["formId"] as string) ??
-        (embedForm["formId"] as string) ??
-        ""
+        (entry["formId"] as string) ?? (embedForm["formId"] as string) ?? ""
 
       return {
         _hubspotPortalId: portalId,
@@ -982,13 +1123,9 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     transform: (entry) => {
       const embedForm = asRecord(entry["embedForm"])
       const portalId =
-        (entry["portalId"] as string) ??
-        (embedForm["portalId"] as string) ??
-        ""
+        (entry["portalId"] as string) ?? (embedForm["portalId"] as string) ?? ""
       const formId =
-        (entry["formId"] as string) ??
-        (embedForm["formId"] as string) ??
-        ""
+        (entry["formId"] as string) ?? (embedForm["formId"] as string) ?? ""
 
       return {
         _hubspotPortalId: portalId,
@@ -1264,7 +1401,8 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
       return {
         section: buildSectionHeader({
-          description: `${(entry["boldDescription"] as string) ?? ""}\n${(entry["description"] as string) ?? ""}`.trim(),
+          description:
+            `${(entry["boldDescription"] as string) ?? ""}\n${(entry["description"] as string) ?? ""}`.trim(),
           buttons: buttons as V4Button[],
         }),
       }
@@ -1309,18 +1447,15 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     }),
   },
 
-  // v4 stacking-cards: title + cards[] → feature-card-grid
+  // v4 stacking-cards: title + cards[] → section-header + feature-card-grid
   {
     source: "slices.stacking-cards",
     target: "sections.feature-card-grid",
     transform: (entry) => {
       const cards = asArray(entry["cards"])
+      const title = entry["title"] as string
 
-      return {
-        section: buildSectionHeader({
-          title: entry["title"] as string,
-        }),
-        columns: cards.length <= 2 ? "2" : "3",
+      const grid: Record<string, unknown> = {
         items: cards.map((card) => ({
           variant: "bordered",
           title: (card["title"] as string) ?? "",
@@ -1328,6 +1463,18 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           icon: wrapBasicImage(card["icon"]),
         })),
       }
+
+      if (title) {
+        return [
+          {
+            __component: "sections.section-header",
+            section: buildSectionHeader({ title }),
+          },
+          grid,
+        ]
+      }
+
+      return grid
     },
   },
 
@@ -1374,10 +1521,10 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     transform: introToSectionHeader,
   },
 
-  // v4 capabilities-dynamic-cards: upperTitle, title, text, cards[] → two-column-grid
+  // v4 capabilities-dynamic-cards: upperTitle, title, text, cards[] → feature-card-grid
   {
     source: "slices.capabilities-dynamic-cards",
-    target: "sections.two-column-grid",
+    target: "sections.feature-card-grid",
     transform: (entry) => {
       const cards = asArray(entry["cards"])
 
@@ -1387,11 +1534,37 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           title: entry["title"] as string,
           description: entry["text"] as string,
         }),
-        items: cards.map((card) => ({
-          title: (card["title"] as string) ?? "",
-          description: (card["text"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"] ?? card["image"]),
-        })),
+        items: cards.map((card) => {
+          const result: Record<string, unknown> = {
+            variant: "bordered",
+            layout: "third",
+            size: "sm",
+            title: (card["title"] as string) ?? "",
+            description: (card["text"] as string) ?? "",
+            icon: wrapBasicImage(card["icon"]),
+            image: wrapBasicImage(card["image"]),
+          }
+
+          const link = linkToV5Link(card["link"])
+          const iconRecord = card["icon"] as Record<string, unknown> | undefined
+          const iconHref = iconRecord?.["href"] as string | undefined
+
+          if (link) {
+            result.ctaLinks = [link]
+          } else if (iconHref) {
+            result.ctaLinks = [
+              {
+                type: "external",
+                label: (card["title"] as string) ?? "Learn more",
+                newTab: false,
+                href: iconHref,
+                decorations: { ...DEFAULT_LINK_DECORATIONS },
+              },
+            ]
+          }
+
+          return result
+        }),
       }
     },
   },
@@ -1418,7 +1591,6 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   // TEXT / CONTENT SECTIONS
   // =============================================
 
-
   // v4 universal-rich-text: gradientHeader, richText
   // v5: content-card (label, title, content)
   {
@@ -1436,21 +1608,26 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   },
 
   // v4 intro: content (label-title-text-links), decoration, center
-  // v5: section-header with section
+  // v5: hero (intro sections typically appear at the top of pages)
   {
     source: "slices.intro",
-    target: "sections.section-header",
+    target: "sections.hero",
     transform: (entry) => {
       const content = asIntro(entry["content"])
+      const buttons = asArray(content.button) as V4Button[]
+      const ctas = buttons
+        .map(buttonToLink)
+        .filter((l) => l.label !== "" || l.href !== "")
 
-      return {
-        section: buildSectionHeader({
-          label: content.label,
-          title: content.title,
-          description: content.text,
-          buttons: content.button,
-        }),
+      const result: Record<string, unknown> = {
+        label: content.label ?? "",
+        title: content.title ?? "",
+        description: content.text ?? "",
       }
+
+      if (ctas.length > 0) result.ctas = ctas
+
+      return result
     },
   },
 
@@ -1460,8 +1637,8 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     source: "slices.new-intro",
     target: "sections.section-header",
     transform: (entry) => {
-      const btn = asRecord(entry["button"])
-      const buttons: V4Button[] = btn["label"] ? [btn as V4Button] : []
+      const btn = entry["button"]
+      const buttons: V4Button[] = isV4Button(btn) ? [btn as V4Button] : []
 
       return {
         section: buildSectionHeader({
@@ -1471,7 +1648,6 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       }
     },
   },
-
 
   // v4 text-next-to-big-image: image, theme, content, title, text, layout
   // v5: feature-card
@@ -1512,8 +1688,8 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     source: "slices.simple-text-next-to-image",
     target: "cards.feature-card",
     transform: (entry) => {
-      const btn = asRecord(entry["button"])
-      const buttons: V4Button[] = btn["label"] ? [btn as V4Button] : []
+      const btn = entry["button"]
+      const buttons: V4Button[] = isV4Button(btn) ? [btn as V4Button] : []
       const ctaLinks = buttons.map(buttonToLink)
 
       return {
@@ -1557,7 +1733,6 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     },
   },
 
-
   // v4 text-with-key-numbers → content-card (flatten stats into content)
   {
     source: "slices.text-with-key-numbers",
@@ -1574,18 +1749,30 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   },
 
   // v4 section-with-image → feature-card
+  // v4 fields: title, text, textPosition, button (links.button), image (media.image)
   {
     source: "slices.section-with-image",
     target: "cards.feature-card",
     transform: (entry) => {
-      const content = asIntro(entry["content"])
+      const textPos = (entry["textPosition"] as string) ?? "left"
+      const btn = entry["button"] as V4Button | undefined
 
-      return {
+      const result: Record<string, unknown> = {
         variant: "bordered",
-        title: content.title ?? "",
-        description: content.text ?? "",
+        title: (entry["title"] as string) ?? "",
+        description: (entry["text"] as string) ?? "",
         image: wrapBasicImage(entry["image"]),
+        imagePosition: textPos === "left" ? "right" : "left",
       }
+
+      if (btn) {
+        const link = buttonToLink(btn)
+        if (link.label || link.href) {
+          result.ctaLinks = [link]
+        }
+      }
+
+      return result
     },
   },
 
@@ -1720,7 +1907,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
   { source: "slices.icon-with-tooltip", target: null },
 
-  // v4 themed-cards: intro + themed card details → feature-card-grid
+  // v4 themed-cards: intro + themed card details → section-header + feature-card-grid
   {
     source: "slices.themed-cards",
     target: "sections.feature-card-grid",
@@ -1728,19 +1915,29 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       const intro = asIntro(entry["intro"])
       const cards = asArray(entry["cards"])
 
-      return {
-        section: buildSectionHeader({
-          label: intro.label,
-          title: intro.title,
-          description: intro.text,
-        }),
-        columns: cards.length <= 2 ? "2" : "3",
+      const grid: Record<string, unknown> = {
         items: cards.map((card) => ({
           variant: "bordered",
           title: (card["title"] as string) ?? "",
           description: (card["text"] as string) ?? "",
         })),
       }
+
+      if (intro.title || intro.text) {
+        return [
+          {
+            __component: "sections.section-header",
+            section: buildSectionHeader({
+              label: intro.label,
+              title: intro.title,
+              description: intro.text,
+            }),
+          },
+          grid,
+        ]
+      }
+
+      return grid
     },
   },
 
@@ -1773,8 +1970,8 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     source: "slices.dark-cta-banner",
     target: "sections.section-header",
     transform: (entry) => {
-      const btn = asRecord(entry["button"])
-      const buttons: V4Button[] = btn["label"] ? [btn as V4Button] : []
+      const btn = entry["button"]
+      const buttons: V4Button[] = isV4Button(btn) ? [btn as V4Button] : []
 
       return {
         section: buildSectionHeader({
@@ -1792,8 +1989,8 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     source: "slices.new-cta",
     target: "sections.section-header",
     transform: (entry) => {
-      const btn = asRecord(entry["button"])
-      const buttons: V4Button[] = btn["label"] ? [btn as V4Button] : []
+      const btn = entry["button"]
+      const buttons: V4Button[] = isV4Button(btn) ? [btn as V4Button] : []
 
       return {
         section: buildSectionHeader({

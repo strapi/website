@@ -1,16 +1,25 @@
+import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
 import { cn } from "@/lib/styles"
 
-const sizeVariantMap: Record<"sm" | "default" | "lg", string> = {
-  sm: "text-xl",
-  default: "text-2xl",
-  lg: "text-3xl tracking-tight",
-}
+const featureCardTitleVariants = cva("text-foreground font-bold", {
+  variants: {
+    size: {
+      sm: "text-xl",
+      default: "text-2xl",
+      lg: "text-3xl tracking-tight",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+})
 
-export interface FeatureCardTitleProps {
+export interface FeatureCardTitleProps extends VariantProps<
+  typeof featureCardTitleVariants
+> {
   readonly as?: "h2" | "h3" | "h4" | "h5" | "h6" | "p"
-  readonly size?: "sm" | "default" | "lg"
   readonly icon?: React.ReactNode
   readonly iconPosition?: "inline" | "top"
   readonly className?: string
@@ -19,7 +28,7 @@ export interface FeatureCardTitleProps {
 
 export function FeatureCardTitle({
   as = "h3",
-  size = "default",
+  size,
   icon,
   iconPosition = "inline",
   className,
@@ -29,11 +38,7 @@ export function FeatureCardTitle({
     return null
   }
 
-  const titleClassName = cn(
-    sizeVariantMap[size],
-    "text-foreground font-bold",
-    className
-  )
+  const titleClassName = cn(featureCardTitleVariants({ size }), className)
 
   if (icon) {
     const Tag = as

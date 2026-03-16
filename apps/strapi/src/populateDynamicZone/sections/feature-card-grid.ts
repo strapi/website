@@ -1,5 +1,5 @@
-import sectionHeaderPopulate from "../utilities/section-header"
 import featureCardPopulate from "../cards/feature-card"
+import sectionHeaderPopulate from "../utilities/section-header"
 
 export default {
   populate: {

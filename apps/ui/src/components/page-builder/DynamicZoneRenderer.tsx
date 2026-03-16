@@ -64,7 +64,7 @@ export function DynamicZoneRenderer({
     return (
       <ErrorBoundary key={key}>
         {itemClassName ? (
-          <div className={cn(itemClassName)}>
+          <div className={cn(itemClassName)} data-component={name}>
             <Component component={comp} {...componentProps} />
           </div>
         ) : (

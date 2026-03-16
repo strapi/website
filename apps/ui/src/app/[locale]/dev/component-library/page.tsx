@@ -1083,29 +1083,34 @@ export default function ComponentLibraryPage() {
           <Variant label="3-column grid on light background">
             <Box variant="light" className="rounded-lg p-8">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {["Deploy", "Scale", "Monitor", "Secure", "Integrate", "Extend"].map(
-                  (title) => (
-                    <FeatureCard
-                      key={title}
-                      variant="plain"
-                      layout="stacked"
-                      size="sm"
-                    >
-                      <FeatureCardContent size="sm">
-                        <FeatureCardTitle
-                          size="sm"
-                          iconPosition="top"
-                          icon={<Placeholder className="size-10" />}
-                        >
-                          {title}
-                        </FeatureCardTitle>
-                        <FeatureCardDescription size="sm">
-                          Feature description text.
-                        </FeatureCardDescription>
-                      </FeatureCardContent>
-                    </FeatureCard>
-                  )
-                )}
+                {[
+                  "Deploy",
+                  "Scale",
+                  "Monitor",
+                  "Secure",
+                  "Integrate",
+                  "Extend",
+                ].map((title) => (
+                  <FeatureCard
+                    key={title}
+                    variant="plain"
+                    layout="stacked"
+                    size="sm"
+                  >
+                    <FeatureCardContent size="sm">
+                      <FeatureCardTitle
+                        size="sm"
+                        iconPosition="top"
+                        icon={<Placeholder className="size-10" />}
+                      >
+                        {title}
+                      </FeatureCardTitle>
+                      <FeatureCardDescription size="sm">
+                        Feature description text.
+                      </FeatureCardDescription>
+                    </FeatureCardContent>
+                  </FeatureCard>
+                ))}
               </div>
             </Box>
           </Variant>

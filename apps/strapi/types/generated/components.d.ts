@@ -61,6 +61,8 @@ export interface CardsFeatureCard extends Struct.ComponentSchema {
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     imagePosition: Schema.Attribute.Enumeration<["left", "right"]> &
       Schema.Attribute.DefaultTo<"right">
+    layout: Schema.Attribute.Enumeration<["full", "half", "third"]> &
+      Schema.Attribute.DefaultTo<"full">
     size: Schema.Attribute.Enumeration<["sm", "default", "lg"]> &
       Schema.Attribute.DefaultTo<"default">
     title: Schema.Attribute.String & Schema.Attribute.Required
@@ -401,6 +403,7 @@ export interface FormsNewsletter extends Struct.ComponentSchema {
     consentText: Schema.Attribute.Text
     description: Schema.Attribute.Text
     emailPlaceholder: Schema.Attribute.String
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
     submitLabel: Schema.Attribute.String
     title: Schema.Attribute.String & Schema.Attribute.Required
   }
@@ -756,26 +759,7 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
     icon: "question"
   }
   attributes: {
-    description: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    heading: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     items: Schema.Attribute.Component<"utilities.accordions", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    sectionLabel: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -794,8 +778,6 @@ export interface SectionsFeatureCardGrid extends Struct.ComponentSchema {
   attributes: {
     background: Schema.Attribute.Enumeration<["none", "light"]> &
       Schema.Attribute.DefaultTo<"none">
-    columns: Schema.Attribute.Enumeration<["2", "3"]> &
-      Schema.Attribute.DefaultTo<"3">
     items: Schema.Attribute.Component<"cards.feature-card", true> &
       Schema.Attribute.Required
     section: Schema.Attribute.Component<"utilities.section-header", false>

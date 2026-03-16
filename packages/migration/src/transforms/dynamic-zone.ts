@@ -100,29 +100,12 @@ function postProcessDynamicZone(
 ): DynamicZoneEntry[] {
   const merged: DynamicZoneEntry[] = []
 
-  for (let i = 0; i < entries.length; i++) {
-    const entry = entries[i]!
+  for (const entry_ of entries) {
+    const entry = entry_!
 
-    // 1. Merge section-header into next component's section field
-    if (entry.__component === "sections.section-header") {
-      const next = entries[i + 1]
-      const section = entry["section"] as Record<string, unknown> | undefined
-
-      if (next && hasEmptySection(next) && section) {
-        // Transfer section data into the next component
-        ;(next as Record<string, unknown>)["section"] = section
-        ctx.logger.debug(
-          `Merged section-header into ${next.__component}`
-        )
-        continue // skip this standalone section-header
-      }
-    }
-
-    // 2. Filter out components with empty required arrays/fields
+    // 1. Filter out components with empty required arrays/fields
     if (hasEmptyRequiredArray(entry)) {
-      ctx.logger.debug(
-        `Dropped ${entry.__component} — empty required field`
-      )
+      ctx.logger.debug(`Dropped ${entry.__component} — empty required field`)
       continue
     }
 
@@ -135,35 +118,36 @@ function postProcessDynamicZone(
   return merged
 }
 
-/** Check if a DZ entry has an empty/default section field that can receive a merged header */
-function hasEmptySection(entry: DynamicZoneEntry): boolean {
-  const section = entry["section"] as Record<string, unknown> | undefined
-  if (!section) return false
-
-  const title = section["title"] as string | undefined
-  const description = section["description"] as string | undefined
-
-  return (!title || title === "") && (!description || description === "")
-}
-
 /** Check if a component has empty required fields that would make it useless */
 function hasEmptyRequiredArray(entry: DynamicZoneEntry): boolean {
   const comp = entry.__component
 
   if (comp === "sections.two-column-grid") {
-    return !Array.isArray(entry["items"]) || (entry["items"] as unknown[]).length === 0
+    return (
+      !Array.isArray(entry["items"]) ||
+      (entry["items"] as unknown[]).length === 0
+    )
   }
 
   if (comp === "media.brand-logo-grid") {
-    return !Array.isArray(entry["items"]) || (entry["items"] as unknown[]).length === 0
+    return (
+      !Array.isArray(entry["items"]) ||
+      (entry["items"] as unknown[]).length === 0
+    )
   }
 
   if (comp === "sections.feature-card-grid") {
-    return !Array.isArray(entry["items"]) || (entry["items"] as unknown[]).length === 0
+    return (
+      !Array.isArray(entry["items"]) ||
+      (entry["items"] as unknown[]).length === 0
+    )
   }
 
   if (comp === "media.image-gallery") {
-    return !Array.isArray(entry["images"]) || (entry["images"] as unknown[]).length === 0
+    return (
+      !Array.isArray(entry["images"]) ||
+      (entry["images"] as unknown[]).length === 0
+    )
   }
 
   // Content cards with empty title AND content are useless

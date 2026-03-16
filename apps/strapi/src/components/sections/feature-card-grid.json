@@ -18,11 +18,6 @@
       "component": "cards.feature-card",
       "required": true
     },
-    "columns": {
-      "type": "enumeration",
-      "enum": ["2", "3"],
-      "default": "3"
-    },
     "background": {
       "type": "enumeration",
       "enum": ["none", "light"],

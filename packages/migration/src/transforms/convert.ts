@@ -12,7 +12,7 @@ export function slugify(str: string): string {
 }
 
 /** Ensure entity has a slug field, generating from sourceField if missing */
-export function ensureSlug(sourceField: string = "name"): TransformFn {
+export function ensureSlug(sourceField = "name"): TransformFn {
   return (entity) => {
     if (
       entity["slug"] &&
@@ -39,12 +39,14 @@ function absoluteUrl(url: string): string {
 }
 
 /** Extract URL + metadata from various v4 media formats */
-export function extractMediaUrl(media: unknown): {
-  url: string
-  alt?: string
-  width?: number
-  height?: number
-} | undefined {
+export function extractMediaUrl(media: unknown):
+  | {
+      url: string
+      alt?: string
+      width?: number
+      height?: number
+    }
+  | undefined {
   if (!media || typeof media !== "object") return undefined
   const m = media as Record<string, unknown>
 
@@ -118,14 +120,11 @@ export function convertV4MediaImage(
  * v4: { href, target, text, summary, icons[] }
  * v5: { type, label, newTab, href }
  */
-export function convertV4Link(
-  v4Link: unknown
-): Record<string, unknown> | null {
+export function convertV4Link(v4Link: unknown): Record<string, unknown> | null {
   if (!v4Link || typeof v4Link !== "object") return null
   const link = v4Link as Record<string, unknown>
 
-  const href =
-    (link["href"] as string) ?? (link["url"] as string) ?? ""
+  const href = (link["href"] as string) ?? (link["url"] as string) ?? ""
   if (!href) return null
 
   return {
@@ -387,8 +386,7 @@ export function convertV4LinkText(
   if (!v4Link || typeof v4Link !== "object") return null
   const link = v4Link as Record<string, unknown>
 
-  const href =
-    (link["href"] as string) ?? (link["url"] as string) ?? ""
+  const href = (link["href"] as string) ?? (link["url"] as string) ?? ""
   if (!href) return null
 
   return {
@@ -410,8 +408,7 @@ export function convertV4LinkImage(
   if (!v4Link || typeof v4Link !== "object") return null
   const link = v4Link as Record<string, unknown>
 
-  const href =
-    (link["href"] as string) ?? (link["url"] as string) ?? ""
+  const href = (link["href"] as string) ?? (link["url"] as string) ?? ""
 
   const icons = link["icons"] as Record<string, unknown>[] | undefined
   let image: Record<string, unknown> | null = null

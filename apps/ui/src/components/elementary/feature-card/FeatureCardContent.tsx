@@ -8,9 +8,9 @@ export const featureCardContentVariants = cva(
   {
     variants: {
       size: {
-        sm: "gap-1 p-6",
-        default: "gap-1 p-8",
-        lg: "gap-2 p-10 lg:p-16",
+        sm: "gap-1 p-6 lg:p-10",
+        default: "gap-2 p-8 lg:p-20",
+        lg: "gap-3 p-10 lg:p-20",
       },
     },
     defaultVariants: {

@@ -39,6 +39,11 @@
       "enum": ["sm", "default", "lg"],
       "default": "default"
     },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["full", "half", "third"],
+      "default": "full"
+    },
     "ctaLinks": {
       "type": "component",
       "repeatable": true,

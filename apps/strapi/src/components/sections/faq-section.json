@@ -7,31 +7,6 @@
   },
   "options": {},
   "attributes": {
-    "sectionLabel": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "heading": {
-      "type": "string",
-      "required": true,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "description": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "items": {
       "type": "component",
       "repeatable": true,

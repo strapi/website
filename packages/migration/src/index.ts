@@ -1,8 +1,12 @@
 import chalk from "chalk"
 import { Command } from "commander"
 
+import { SourceClient } from "./clients/source.ts"
+import { TargetClient } from "./clients/target.ts"
+import { COMPONENT_MAP } from "./config/components.ts"
 import { ENTITY_CONFIGS } from "./config/entities.ts"
 import { loadEnv } from "./config/env.ts"
+import { setPageParents } from "./entities/page.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
@@ -89,12 +93,27 @@ program
   .command("run-all")
   .description("Run migration for all configured entity types")
   .option("--dry-run", "Log what would be written without making changes")
+  .option("--exclude <entities>", "Comma-separated entity names to skip")
   .option("--verbose", "Debug-level logging")
   .action(async (opts) => {
     const env = loadEnv()
     const logger = createLogger(opts.verbose)
     const idMap = new IdMap()
     await idMap.load()
+
+    const excludeSet = new Set(
+      opts.exclude
+        ? (opts.exclude as string).split(",").map((s: string) => s.trim())
+        : []
+    )
+
+    const entries = Object.entries(ENTITY_CONFIGS).filter(
+      ([name]) => !excludeSet.has(name)
+    )
+
+    if (excludeSet.size > 0) {
+      logger.info(`Excluding: ${[...excludeSet].join(", ")}`)
+    }
 
     const totalStart = Date.now()
     const allStats: RunStats = {
@@ -104,7 +123,7 @@ program
       durationMs: 0,
     }
 
-    for (const [name, config] of Object.entries(ENTITY_CONFIGS)) {
+    for (const [name, config] of entries) {
       const ctx = createTransformContext({
         env,
         idMap,
@@ -139,7 +158,7 @@ program
     allStats.durationMs = Date.now() - totalStart
 
     // Grand summary
-    if (Object.keys(ENTITY_CONFIGS).length > 1) {
+    if (entries.length > 1) {
       logger.header("Grand Total")
       printComponentStats(allStats, logger)
       logger.info(
@@ -147,14 +166,57 @@ program
       )
     }
 
-    const reportPath = await writeReport(
-      "all",
-      allStats,
-      opts.dryRun ?? false
-    )
+    const reportPath = await writeReport("all", allStats, opts.dryRun ?? false)
     logger.info(chalk.gray(`Report: ${reportPath}`))
 
     await idMap.save()
+  })
+
+program
+  .command("set-parents")
+  .description(
+    "Set parent relations for migrated pages (run after all pages are migrated)"
+  )
+  .option("--dry-run", "Log what would be updated without making changes")
+  .option("--verbose", "Debug-level logging")
+  .action(async (opts) => {
+    const env = loadEnv()
+    const logger = createLogger(opts.verbose)
+    const idMap = new IdMap()
+    await idMap.load()
+    const mediaCache = new MediaCache()
+    await mediaCache.load()
+
+    const ctx = {
+      ...createTransformContext({
+        env,
+        idMap,
+        logger,
+        dryRun: opts.dryRun ?? false,
+        force: false,
+      }),
+      sourceClient: new SourceClient({ env, logger }),
+      targetClient: new TargetClient({ env, logger }),
+      componentMap: COMPONENT_MAP,
+      mediaCache,
+    }
+
+    logger.header("Setting page parent relations")
+
+    const result = await setPageParents(ctx)
+
+    logger.info(
+      chalk.green(`Updated ${result.updated} pages with parent relations`)
+    )
+
+    if (result.unresolved.length > 0) {
+      console.log()
+      logger.warn(chalk.bold(`${result.unresolved.length} unresolved parents:`))
+
+      for (const msg of result.unresolved) {
+        logger.warn(`  ${msg}`)
+      }
+    }
   })
 
 program

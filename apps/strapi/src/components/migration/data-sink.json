@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_migration_data_sinks",
+  "info": {
+    "displayName": "Data Sink (Migration)",
+    "icon": "archive",
+    "description": "Stores unmapped v4 component data for future re-migration"
+  },
+  "options": {},
+  "attributes": {
+    "sourceComponent": {
+      "type": "string",
+      "private": true
+    },
+    "data": {
+      "type": "json",
+      "private": true
+    }
+  }
+}

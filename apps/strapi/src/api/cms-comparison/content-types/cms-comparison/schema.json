@@ -53,8 +53,10 @@
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
+        "sections.feature-card-grid",
         "media.video",
-        "forms.hubspot-form"
+        "forms.hubspot-form",
+        "migration.data-sink"
       ]
     }
   }

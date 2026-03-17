@@ -430,6 +430,138 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
+  collectionName: "authors"
+  info: {
+    description: "Blog post authors"
+    displayName: "Author"
+    pluralName: "authors"
+    singularName: "author"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    avatar: Schema.Attribute.Component<"media.image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    bio: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    blogPosts: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-post.blog-post"
+    >
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    github: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::author.author">
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    twitter: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    website: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+  }
+}
+
+export interface ApiBlogCategoryBlogCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: "blog_categories"
+  info: {
+    description: "Blog post categories"
+    displayName: "Blog Category"
+    pluralName: "blog-categories"
+    singularName: "blog-category"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-category.blog-category"
+    >
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiBlogLayoutBlogLayout extends Struct.SingleTypeSchema {
   collectionName: "blog_layouts"
   info: {
@@ -527,12 +659,60 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
         "blog.author-banner",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
     slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
     tags: Schema.Attribute.Relation<"manyToMany", "api::post-tag.post-tag">
     title: Schema.Attribute.String & Schema.Attribute.Required
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiBlogTagBlogTag extends Struct.CollectionTypeSchema {
+  collectionName: "blog_tags"
+  info: {
+    description: "Blog post tags"
+    displayName: "Blog Tag"
+    pluralName: "blog-tags"
+    singularName: "blog-tag"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-tag.blog-tag"
+    >
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -602,6 +782,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
         "sections.testimonies",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     coverImage: Schema.Attribute.Component<"media.image", false>
@@ -681,8 +862,10 @@ export interface ApiCmsComparisonCmsComparison
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
+        "sections.feature-card-grid",
         "media.video",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     createdAt: Schema.Attribute.DateTime
@@ -747,8 +930,10 @@ export interface ApiCmsCms extends Struct.CollectionTypeSchema {
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
+        "sections.feature-card-grid",
         "media.video",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
@@ -987,6 +1172,7 @@ export interface ApiIntegrationIntegration extends Struct.CollectionTypeSchema {
         "sections.section-header",
         "sections.faq-section",
         "sections.two-column-grid",
+        "sections.feature-card-grid",
         "cards.content-card",
         "cards.feature-card",
         "media.image",
@@ -995,6 +1181,7 @@ export interface ApiIntegrationIntegration extends Struct.CollectionTypeSchema {
         "testimonials.quote",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
@@ -1126,7 +1313,9 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "media.video",
         "sections.hero",
         "sections.hero-home",
+        "sections.feature-card-grid",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -1249,6 +1438,7 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
         "sections.testimonies",
         "forms.newsletter",
         "forms.hubspot-form",
+        "migration.data-sink",
       ]
     >
     seo: Schema.Attribute.Component<"seo-utilities.seo", false>
@@ -2066,8 +2256,11 @@ declare module "@strapi/strapi" {
       "admin::transfer-token": AdminTransferToken
       "admin::transfer-token-permission": AdminTransferTokenPermission
       "admin::user": AdminUser
+      "api::author.author": ApiAuthorAuthor
+      "api::blog-category.blog-category": ApiBlogCategoryBlogCategory
       "api::blog-layout.blog-layout": ApiBlogLayoutBlogLayout
       "api::blog-post.blog-post": ApiBlogPostBlogPost
+      "api::blog-tag.blog-tag": ApiBlogTagBlogTag
       "api::case-study-category.case-study-category": ApiCaseStudyCategoryCaseStudyCategory
       "api::case-study.case-study": ApiCaseStudyCaseStudy
       "api::city.city": ApiCityCity

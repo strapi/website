@@ -84,7 +84,9 @@
         "media.video",
         "sections.hero",
         "sections.hero-home",
-        "forms.hubspot-form"
+        "sections.feature-card-grid",
+        "forms.hubspot-form",
+        "migration.data-sink"
       ]
     },
     "children": {

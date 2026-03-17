@@ -22,6 +22,11 @@
     },
     "consentText": {
       "type": "text"
+    },
+    "image": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
     }
   }
 }

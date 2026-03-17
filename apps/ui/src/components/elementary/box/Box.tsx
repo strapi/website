@@ -10,7 +10,7 @@ export const boxVariants = cva("relative overflow-hidden", {
     variant: {
       none: "",
       light: "bg-strapi-blue-100",
-      dark: "bg-strapi-blue-800",
+      dark: " bg-strapi-gray-950",
       darker: "bg-strapi-blue-900",
       darkest: "bg-strapi-gray-950",
       green: "bg-emerald-600",

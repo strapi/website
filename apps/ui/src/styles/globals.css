@@ -70,13 +70,21 @@
   scrollbar-width: none; /* Firefox */
 }
 
-@utility strapi-container {
-  width: 100%;
-  margin-inline: auto;
-  max-inline-size: calc(
-    1200px + clamp(1rem, 3vw, 2rem) + clamp(1rem, 3vw, 2rem)
-  );
-  padding-inline: clamp(1rem, 3vw, 2rem);
+/* Consecutive feature cards: collapse gap to 24px */
+[data-component="cards.feature-card"]:has(
+  + [data-component="cards.feature-card"]
+) {
+  margin-bottom: 0;
+
+  & > section > .mx-auto {
+    padding-bottom: 0;
+  }
+}
+
+[data-component="cards.feature-card"] + [data-component="cards.feature-card"] {
+  & > section > .mx-auto {
+    padding-top: 1.5rem;
+  }
 }
 
 /* When a dark hero is present, swap to light logo on all sizes */

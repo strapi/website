@@ -30,15 +30,15 @@ export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
           size="xl"
         >
           {component.label ? (
-            <SectionLabel variant="inverse">{component.label}</SectionLabel>
+            <SectionLabel variant="default">{component.label}</SectionLabel>
           ) : null}
 
-          <SectionTitle variant="inverse" as="h1" size="xl">
+          <SectionTitle variant="inverse" as="h1" size="lg">
             {component.title}
           </SectionTitle>
 
           {component.description ? (
-            <SectionDescription variant="inverse">
+            <SectionDescription variant="inverse" size="lg">
               {component.description}
             </SectionDescription>
           ) : null}

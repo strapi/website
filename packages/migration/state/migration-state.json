@@ -1,0 +1,309 @@
+{
+  "entities": {
+    "pages": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 109,
+      "errors": []
+    },
+    "countries": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "cities": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "tech-stacks": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 3,
+      "errors": []
+    },
+    "partner-services": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "case-study-categories": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 3,
+      "errors": []
+    },
+    "integration-categories": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "blog-categories": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 4,
+      "errors": []
+    },
+    "blog-tags": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "post-categories": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 4,
+      "errors": []
+    },
+    "post-tags": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "reviews": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 13,
+      "errors": []
+    },
+    "news-items": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "redirects": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 16,
+      "errors": []
+    },
+    "plans": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "integrations": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 97,
+      "errors": []
+    },
+    "partners": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 6,
+      "errors": []
+    },
+    "case-studies": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 2,
+      "errors": []
+    },
+    "cms-pages": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 24,
+      "errors": []
+    },
+    "cms-comparisons": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 37,
+      "errors": []
+    },
+    "page-career": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-community": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-content-architecture": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-enterprise": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-features": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-headless-cms": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-home": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-launch-week": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-why-strapi": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-showcase": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-starters": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "page-resource-center": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "use-cases": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 12,
+      "errors": []
+    },
+    "strapi-features": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 6,
+      "errors": []
+    },
+    "integration-topics": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "navbar": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "footer": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 1,
+      "errors": []
+    },
+    "blog-posts": {
+      "total": 1,
+      "migrated": 1,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 715,
+      "errors": []
+    }
+  },
+  "lastRun": "2026-03-15T23:54:54.576Z"
+}

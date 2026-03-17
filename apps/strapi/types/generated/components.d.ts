@@ -61,6 +61,8 @@ export interface CardsFeatureCard extends Struct.ComponentSchema {
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     imagePosition: Schema.Attribute.Enumeration<["left", "right"]> &
       Schema.Attribute.DefaultTo<"right">
+    layout: Schema.Attribute.Enumeration<["full", "half", "third"]> &
+      Schema.Attribute.DefaultTo<"full">
     size: Schema.Attribute.Enumeration<["sm", "default", "lg"]> &
       Schema.Attribute.DefaultTo<"default">
     title: Schema.Attribute.String & Schema.Attribute.Required
@@ -401,6 +403,7 @@ export interface FormsNewsletter extends Struct.ComponentSchema {
     consentText: Schema.Attribute.Text
     description: Schema.Attribute.Text
     emailPlaceholder: Schema.Attribute.String
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
     submitLabel: Schema.Attribute.String
     title: Schema.Attribute.String & Schema.Attribute.Required
   }
@@ -469,6 +472,19 @@ export interface MediaVideo extends Struct.ComponentSchema {
     link: Schema.Attribute.Component<"utilities.link", false>
     thumbnail: Schema.Attribute.Component<"utilities.basic-image", false>
     url: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface MigrationDataSink extends Struct.ComponentSchema {
+  collectionName: "components_migration_data_sinks"
+  info: {
+    description: "Stores unmapped v4 component data for future re-migration"
+    displayName: "Data Sink (Migration)"
+    icon: "archive"
+  }
+  attributes: {
+    data: Schema.Attribute.JSON & Schema.Attribute.Private
+    sourceComponent: Schema.Attribute.String & Schema.Attribute.Private
   }
 }
 
@@ -743,31 +759,28 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
     icon: "question"
   }
   attributes: {
-    description: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    heading: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
     items: Schema.Attribute.Component<"utilities.accordions", true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
         }
       }>
-    sectionLabel: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
+  }
+}
+
+export interface SectionsFeatureCardGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_feature_card_grid"
+  info: {
+    description: ""
+    displayName: "FeatureCardGrid"
+    icon: "apps"
+  }
+  attributes: {
+    background: Schema.Attribute.Enumeration<["none", "light"]> &
+      Schema.Attribute.DefaultTo<"none">
+    items: Schema.Attribute.Component<"cards.feature-card", true> &
+      Schema.Attribute.Required
+    section: Schema.Attribute.Component<"utilities.section-header", false>
   }
 }
 
@@ -1239,7 +1252,7 @@ export interface UtilitiesSectionHeader extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<"center">
     size: Schema.Attribute.Enumeration<["xs", "sm", "default", "lg", "xl"]> &
       Schema.Attribute.DefaultTo<"default">
-    title: Schema.Attribute.Text & Schema.Attribute.Required
+    title: Schema.Attribute.Text
     variant: Schema.Attribute.Enumeration<["default", "purple", "inverse"]>
   }
 }
@@ -1309,6 +1322,7 @@ declare module "@strapi/strapi" {
       "media.image": MediaImage
       "media.image-gallery": MediaImageGallery
       "media.video": MediaVideo
+      "migration.data-sink": MigrationDataSink
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
@@ -1326,6 +1340,7 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.faq-section": SectionsFaqSection
+      "sections.feature-card-grid": SectionsFeatureCardGrid
       "sections.hero": SectionsHero
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks

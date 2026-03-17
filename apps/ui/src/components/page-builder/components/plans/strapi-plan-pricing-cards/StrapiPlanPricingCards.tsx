@@ -1,4 +1,5 @@
 import type { Data } from "@repo/strapi-types"
+import { cva } from "class-variance-authority"
 
 import { Container } from "@/components/elementary/Container"
 import { PricingCard } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/PricingCard"
@@ -6,7 +7,6 @@ import {
   PricingFeature,
   PricingFeatures,
 } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/PricingFeatures"
-import { cn } from "@/lib/styles"
 
 import {
   type PricingBillingPeriod,
@@ -30,12 +30,22 @@ type PlanCardItemWithPlan = PlanCardItemType & {
  * - "Separated" = individual card borders + gap (below merge point)
  * - "Merged" = shared container border + dividers (at merge point, all cards in one row)
  */
-const GRID_CLASSES: Record<number, string> = {
-  1: "grid-cols-1 gap-6 *:border *:rounded-strapi-lg",
-  2: "grid-cols-1 max-sm:gap-6 max-sm:*:border max-sm:*:rounded-strapi-lg sm:grid-cols-2 sm:divide-x sm:divide-border sm:border",
-  3: "grid-cols-1 max-lg:gap-6 max-lg:*:border max-lg:*:rounded-strapi-lg md:grid-cols-2 lg:grid-cols-3 lg:divide-x lg:divide-border lg:border",
-  4: "grid-cols-1 max-xl:gap-6 max-xl:*:border max-xl:*:rounded-strapi-lg md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:divide-x xl:divide-border xl:border",
-}
+const pricingGridVariants = cva(
+  "border-border *:border-border rounded-strapi-lg mx-auto grid w-full",
+  {
+    variants: {
+      cols: {
+        1: "grid-cols-1 gap-6 *:border *:rounded-strapi-lg",
+        2: "grid-cols-1 max-sm:gap-6 max-sm:*:border max-sm:*:rounded-strapi-lg sm:grid-cols-2 sm:divide-x sm:divide-border sm:border",
+        3: "grid-cols-1 max-lg:gap-6 max-lg:*:border max-lg:*:rounded-strapi-lg md:grid-cols-2 lg:grid-cols-3 lg:divide-x lg:divide-border lg:border",
+        4: "grid-cols-1 max-xl:gap-6 max-xl:*:border max-xl:*:rounded-strapi-lg md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:divide-x xl:divide-border xl:border",
+      },
+    },
+    defaultVariants: {
+      cols: 1,
+    },
+  }
+)
 
 export function StrapiPlanPricingCards({
   component,
@@ -58,10 +68,9 @@ export function StrapiPlanPricingCards({
         <PricingSwitcher className="mb-15" component={component.switcher} />
 
         <div
-          className={cn(
-            "border-border *:border-border rounded-strapi-lg mx-auto grid w-full",
-            GRID_CLASSES[Math.min(cols, 4)] ?? GRID_CLASSES[1]!
-          )}
+          className={pricingGridVariants({
+            cols: (Math.min(cols, 4) as 1 | 2 | 3 | 4) || 1,
+          })}
           style={{
             maxWidth: cols > 0 && cols < 3 ? `${cols * 400}px` : undefined,
           }}

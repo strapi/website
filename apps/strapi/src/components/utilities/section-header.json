@@ -7,8 +7,7 @@
   "options": {},
   "attributes": {
     "title": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "description": {
       "type": "richtext"

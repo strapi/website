@@ -1,11 +1,10 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
+import { useTranslations } from "next-intl"
 
 import { Container } from "@/components/elementary/Container"
 import {
-  SectionDescription,
   SectionHeader,
-  SectionLabel,
   SectionTitle,
 } from "@/components/elementary/section-header"
 import {
@@ -20,14 +19,14 @@ export function StrapiFaqSection({
 }: {
   readonly component: Data.Component<"sections.faq-section">
 }) {
+  const t = useTranslations("sections.faq")
+
   return (
     <section className="py-16 lg:py-24">
       <Container>
         <div className="mx-auto max-w-3xl">
           <SectionHeader>
-            <SectionLabel>{component.sectionLabel}</SectionLabel>
-            <SectionTitle as="h2">{component.heading}</SectionTitle>
-            <SectionDescription>{component.description}</SectionDescription>
+            <SectionTitle as="h2">{t("title")}</SectionTitle>
           </SectionHeader>
         </div>
 

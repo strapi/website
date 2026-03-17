@@ -23,7 +23,7 @@ Source code for the [strapi.io](https://strapi.io/) website. Monorepo with Strap
 
    ```sh
    git clone <repo-url>
-   cd strapi-website
+   cd website
    ```
 
 2. Install dependencies

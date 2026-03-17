@@ -177,6 +177,7 @@ const TOC = [
   { id: "section-header", label: "SectionHeader" },
   { id: "section-header-container", label: "SectionHeaderContainer" },
   { id: "feature-card", label: "FeatureCard" },
+  { id: "feature-card-grid", label: "FeatureCardGrid" },
   { id: "quote", label: "Quote" },
   { id: "newsletter-banner", label: "NewsletterBanner" },
   { id: "command-cta", label: "CommandCTA" },
@@ -319,10 +320,6 @@ const contentCardNoLabelExample = {
 } as Data.Component<"cards.content-card">
 
 const faqSectionDefaultExample = {
-  sectionLabel: "FAQ",
-  heading: "Frequently Asked Questions",
-  description:
-    "Find answers to common questions about Strapi, our pricing, and how to get started.",
   items: [
     {
       id: 1,
@@ -1009,6 +1006,109 @@ export default function ComponentLibraryPage() {
               <FeatureCardTitle as="h2">As h2</FeatureCardTitle>
               <FeatureCardTitle as="h4">As h4</FeatureCardTitle>
             </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* FeatureCardGrid                                                   */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="feature-card-grid" title="FeatureCardGrid">
+        <div className="space-y-12">
+          <Variant label="3-column grid (icon top)">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {["Content Modeling", "API Generation", "Media Library"].map(
+                (title) => (
+                  <FeatureCard
+                    key={title}
+                    variant="bordered"
+                    layout="stacked"
+                    size="sm"
+                  >
+                    <FeatureCardContent size="sm">
+                      <FeatureCardTitle
+                        size="sm"
+                        iconPosition="top"
+                        icon={<Placeholder className="size-10" />}
+                      >
+                        {title}
+                      </FeatureCardTitle>
+                      <FeatureCardDescription size="sm">
+                        A short description of this feature and what it enables
+                        for the user.
+                      </FeatureCardDescription>
+                    </FeatureCardContent>
+                  </FeatureCard>
+                )
+              )}
+            </div>
+          </Variant>
+
+          <Variant label="2-column grid (icon inline)">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+              {["Customizable Admin", "Role-Based Access"].map((title) => (
+                <FeatureCard
+                  key={title}
+                  variant="bordered"
+                  layout="stacked"
+                  size="sm"
+                >
+                  <FeatureCardContent size="sm">
+                    <FeatureCardTitle
+                      size="sm"
+                      iconPosition="inline"
+                      icon={<Placeholder className="size-10" />}
+                    >
+                      {title}
+                    </FeatureCardTitle>
+                    <FeatureCardDescription size="sm">
+                      A longer description with more details about the feature.
+                      Supports **markdown** formatting for emphasis.
+                    </FeatureCardDescription>
+                    <FeatureCardCTA spacing="sm">
+                      <Button variant="outline" size="sm">
+                        Learn More
+                      </Button>
+                    </FeatureCardCTA>
+                  </FeatureCardContent>
+                </FeatureCard>
+              ))}
+            </div>
+          </Variant>
+
+          <Variant label="3-column grid on light background">
+            <Box variant="light" className="rounded-lg p-8">
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {[
+                  "Deploy",
+                  "Scale",
+                  "Monitor",
+                  "Secure",
+                  "Integrate",
+                  "Extend",
+                ].map((title) => (
+                  <FeatureCard
+                    key={title}
+                    variant="plain"
+                    layout="stacked"
+                    size="sm"
+                  >
+                    <FeatureCardContent size="sm">
+                      <FeatureCardTitle
+                        size="sm"
+                        iconPosition="top"
+                        icon={<Placeholder className="size-10" />}
+                      >
+                        {title}
+                      </FeatureCardTitle>
+                      <FeatureCardDescription size="sm">
+                        Feature description text.
+                      </FeatureCardDescription>
+                    </FeatureCardContent>
+                  </FeatureCard>
+                ))}
+              </div>
+            </Box>
           </Variant>
         </div>
       </Section>

@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_sections_feature_card_grid",
+  "info": {
+    "displayName": "FeatureCardGrid",
+    "icon": "apps",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.section-header"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "cards.feature-card",
+      "required": true
+    },
+    "background": {
+      "type": "enumeration",
+      "enum": ["none", "light"],
+      "default": "none"
+    }
+  }
+}

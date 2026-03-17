@@ -38,7 +38,7 @@
     "@strapi/provider-email-mailgun": "5.36.0",
     "@strapi/provider-email-nodemailer": "5.36.0",
     "@strapi/provider-upload-aws-s3": "5.36.0",
-    "@strapi/strapi": "catalog:",
+    "@strapi/strapi": "5.36.0",
     "@strapi/utils": "5.36.0",
     "jsonwebtoken": "9.0.3",
     "lodash": "catalog:",

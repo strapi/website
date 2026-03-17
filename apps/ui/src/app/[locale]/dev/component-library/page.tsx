@@ -320,10 +320,6 @@ const contentCardNoLabelExample = {
 } as Data.Component<"cards.content-card">
 
 const faqSectionDefaultExample = {
-  sectionLabel: "FAQ",
-  heading: "Frequently Asked Questions",
-  description:
-    "Find answers to common questions about Strapi, our pricing, and how to get started.",
   items: [
     {
       id: 1,

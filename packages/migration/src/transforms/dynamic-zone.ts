@@ -92,7 +92,7 @@ export function remapDynamicZone(
  * Post-process the mapped dynamic zone entries:
  * 1. Merge standalone section-headers into the following component's `section` field
  *    when the next component has an empty/default section
- * 2. Filter out components with empty required arrays (items, images)
+ * 2. Route components with empty required arrays (items, images) to data-sink
  */
 function postProcessDynamicZone(
   entries: DynamicZoneEntry[],
@@ -105,7 +105,8 @@ function postProcessDynamicZone(
 
     // 1. Filter out components with empty required arrays/fields
     if (hasEmptyRequiredArray(entry)) {
-      ctx.logger.debug(`Dropped ${entry.__component} — empty required field`)
+      ctx.logger.debug(`Sinking ${entry.__component} — empty required field`)
+      merged.push(toDataSink(entry))
       continue
     }
 

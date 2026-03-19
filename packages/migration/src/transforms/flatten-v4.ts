@@ -9,10 +9,17 @@ import type { TransformFn } from "./base.ts"
 /** Fields injected by Strapi Cloud that don't exist in self-hosted v5 */
 const STRAPI_CLOUD_FIELDS = ["strapi_stage", "strapi_assignee"]
 
+/** Internal fields that must never reach the target API */
+const INTERNAL_FIELDS = ["_hubspotPortalId", "_hubspotFormId"]
+
 export const flattenV4: TransformFn = (entity) => {
   const flat = flattenRelations(entity)
 
   for (const field of STRAPI_CLOUD_FIELDS) {
+    delete flat[field]
+  }
+
+  for (const field of INTERNAL_FIELDS) {
     delete flat[field]
   }
 

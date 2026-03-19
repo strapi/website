@@ -12,7 +12,7 @@
       "target": "api::plan.plan"
     },
     "footnote": {
-      "type": "text"
+      "type": "richtext"
     }
   },
   "config": {}

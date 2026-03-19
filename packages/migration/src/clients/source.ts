@@ -161,6 +161,72 @@ export class SourceClient {
     return entity
   }
 
+  /**
+   * Fetch all users-permissions users (flat array format, no content API wrapper).
+   */
+  async fetchUsers(populate?: string): Promise<V4Entity[]> {
+    const params: Record<string, unknown> = {}
+    if (populate) params["populate"] = populate
+
+    const query = qs.stringify(params, { encodeValuesOnly: true })
+    const url = `${this.baseUrl}/api/users?${query}`
+
+    this.logger.debug(`Fetching users: ${url}`)
+
+    const users = await withRetry(
+      () => this.request<Record<string, unknown>[]>(url),
+      { logger: this.logger }
+    )
+
+    return users.map((user) => {
+      const { id, ...attributes } = user
+
+      return {
+        id: id as number,
+        attributes: {
+          ...attributes,
+          createdAt:
+            (attributes["createdAt"] as string) ?? new Date().toISOString(),
+          updatedAt:
+            (attributes["updatedAt"] as string) ?? new Date().toISOString(),
+          publishedAt: null,
+        },
+      } as V4Entity
+    })
+  }
+
+  /**
+   * Fetch a single users-permissions user by ID (flat object format).
+   */
+  async fetchUser(id: number, populate?: string): Promise<V4Entity> {
+    const params: Record<string, unknown> = {}
+    if (populate) params["populate"] = populate
+
+    const query = qs.stringify(params, { encodeValuesOnly: true })
+    const url = `${this.baseUrl}/api/users/${id}?${query}`
+
+    this.logger.debug(`Fetching user: ${url}`)
+
+    const user = await withRetry(
+      () => this.request<Record<string, unknown>>(url),
+      { logger: this.logger }
+    )
+
+    const { id: userId, ...attributes } = user
+
+    return {
+      id: userId as number,
+      attributes: {
+        ...attributes,
+        createdAt:
+          (attributes["createdAt"] as string) ?? new Date().toISOString(),
+        updatedAt:
+          (attributes["updatedAt"] as string) ?? new Date().toISOString(),
+        publishedAt: null,
+      },
+    } as V4Entity
+  }
+
   private async request<T>(url: string): Promise<T> {
     const res = await fetch(url, {
       headers: {

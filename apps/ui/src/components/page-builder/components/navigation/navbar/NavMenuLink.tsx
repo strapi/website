@@ -33,18 +33,18 @@ export function NavMenuLink({ component, className }: NavMenuLinkProps) {
     >
       <div className="flex items-center gap-2">
         {component.icon && (
-          <div className="relative size-4 shrink-0">
+          <div className="relative size-5 shrink-0">
             <StrapiBasicImage component={component.icon} mode="fill" />
           </div>
         )}
 
-        <p className="group-hover/nav-link:text-strapi-blue-500 text-foreground text-base font-medium">
+        <p className="group-hover/nav-link:text-strapi-blue-500 text-foreground text-sm font-medium sm:text-lg">
           {component.link?.label}
         </p>
       </div>
 
       {component.description && (
-        <p className="text-strapi-neutral-700 hidden text-xs md:block">
+        <p className="text-strapi-neutral-700 hidden text-xs sm:block">
           {component.description}
         </p>
       )}

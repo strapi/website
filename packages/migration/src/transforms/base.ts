@@ -18,6 +18,7 @@ export interface TransformContext {
   force: boolean
   slugFilter?: string
   limit?: number
+  noResume?: boolean
 }
 
 export type TransformFn = (
@@ -33,6 +34,7 @@ export interface CreateContextOptions {
   force: boolean
   slugFilter?: string
   limit?: number
+  noResume?: boolean
 }
 
 export function createTransformContext(opts: CreateContextOptions): Omit<
@@ -55,5 +57,6 @@ export function createTransformContext(opts: CreateContextOptions): Omit<
     force: opts.force,
     slugFilter: opts.slugFilter,
     limit: opts.limit,
+    noResume: opts.noResume,
   }
 }

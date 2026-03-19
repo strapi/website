@@ -3,7 +3,7 @@ packages: ["packages/*", "apps/*", "qa/**"]
 catalog:
   "@strapi/strapi": 5.36.0
   "@tailwindcss/postcss": ^4.1.18
-  "@types/node": ^22
+  "@types/node": ^24
   class-variance-authority: ^0.7.1
   eslint-plugin-jsx-a11y: ^6.10.2
   lodash: ^4.17.23
@@ -11,4 +11,4 @@ catalog:
   qs: ^6.14.1
   tailwindcss: ^4.1.18
   typescript: ^5
-  vitest: ^4.0.18
+  vitest: ~4.0.18

@@ -157,6 +157,13 @@ function wrapBasicImage(media: unknown): Record<string, unknown> | undefined {
   }
 }
 
+/** Strip keys with `undefined` values so they don't serialize as `null`. */
+function compact<T extends Record<string, unknown>>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v !== undefined)
+  ) as T
+}
+
 /** Default link decorations for v5 utilities.link */
 const DEFAULT_LINK_DECORATIONS = {
   variant: "secondary",
@@ -313,12 +320,14 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         hero,
         {
           __component: "sections.feature-card-grid",
-          items: features.map((f) => ({
-            title: (f["title"] as string) ?? "",
-            description: (f["text"] as string) ?? "",
-            icon: wrapBasicImage(f["icon"]),
-            image: wrapBasicImage(f["image"]),
-          })),
+          items: features.map((f) =>
+            compact({
+              title: (f["title"] as string) ?? "",
+              description: (f["text"] as string) ?? "",
+              icon: wrapBasicImage(f["icon"]),
+              image: wrapBasicImage(f["image"]),
+            })
+          ),
         },
       ]
     },
@@ -450,13 +459,15 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       const title = entry["title"] as string
 
       const grid: Record<string, unknown> = {
-        items: cards.map((card) => ({
-          variant: "bordered",
-          title: (card["title"] as string) ?? "",
-          description:
-            (card["text"] as string) ?? (card["description"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"] ?? card["image"]),
-        })),
+        items: cards.map((card) =>
+          compact({
+            variant: "bordered",
+            title: (card["title"] as string) ?? "",
+            description:
+              (card["text"] as string) ?? (card["description"] as string) ?? "",
+            icon: wrapBasicImage(card["icon"] ?? card["image"]),
+          })
+        ),
       }
 
       if (title) {
@@ -535,11 +546,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           title: entry["title"] as string,
           description: entry["description"] as string,
         }),
-        items: benefits.map((b) => ({
-          title: (b["title"] as string) ?? "",
-          description: appendLinkText(b["text"] as string, b["link"]),
-          icon: wrapBasicImage(b["icon"] ?? b["image"]),
-        })),
+        items: benefits.map((b) =>
+          compact({
+            title: (b["title"] as string) ?? "",
+            description: appendLinkText(b["text"] as string, b["link"]),
+            icon: wrapBasicImage(b["icon"] ?? b["image"]),
+          })
+        ),
       }
     },
   },
@@ -581,7 +594,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           fullWidthIndex++
         }
 
-        const result: Record<string, unknown> = {
+        const result: Record<string, unknown> = compact({
           variant: "bordered",
           layout,
           size: "default",
@@ -590,7 +603,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
             (card["text"] as string) ?? (card["description"] as string) ?? "",
           icon: wrapBasicImage(card["icon"]),
           image: wrapBasicImage(card["image"]),
-        }
+        })
 
         if (imagePosition) result.imagePosition = imagePosition
 
@@ -680,12 +693,16 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     transform: (entry) => {
       const thumbnails = asArray(entry["thumbnails"])
 
-      return {
-        items: thumbnails.map((t) => ({
-          image: wrapBasicImage(t["image"]),
-          videoUrl: (t["videoUrl"] as string) ?? "",
-        })),
-      }
+      const items = thumbnails
+        .map((t) => {
+          const image = wrapBasicImage(t["image"])
+          if (!image) return
+
+          return { image, videoUrl: (t["videoUrl"] as string) ?? "" }
+        })
+        .filter(Boolean)
+
+      return { items }
     },
   },
 
@@ -838,12 +855,12 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     transform: (entry) => {
       const brands = asArray(entry["brands"])
 
-      return {
-        variant: "bordered",
-        items: brands.map((brand) => {
-          const item: Record<string, unknown> = {
-            image: wrapBasicImage(brand["image"] ?? brand["logo"]),
-          }
+      const items = brands
+        .map((brand) => {
+          const image = wrapBasicImage(brand["image"] ?? brand["logo"])
+          if (!image) return
+
+          const item: Record<string, unknown> = { image }
 
           const link = brand["url"] ?? brand["link"]
           if (link && typeof link === "string") {
@@ -857,7 +874,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           }
 
           return item
-        }),
+        })
+        .filter(Boolean)
+
+      return {
+        title: (entry["title"] as string) ?? "Brands",
+        variant: "bordered",
+        items,
       }
     },
   },
@@ -871,12 +894,12 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       const intro = asIntro(entry["intro"])
       const brands = asArray(entry["brands"])
 
-      const grid: Record<string, unknown> = {
-        variant: "bordered",
-        items: brands.map((brand) => {
-          const item: Record<string, unknown> = {
-            image: wrapBasicImage(brand["image"] ?? brand["logo"]),
-          }
+      const items = brands
+        .map((brand) => {
+          const image = wrapBasicImage(brand["image"] ?? brand["logo"])
+          if (!image) return
+
+          const item: Record<string, unknown> = { image }
 
           const link = brand["url"] ?? brand["link"]
           if (link && typeof link === "string") {
@@ -890,7 +913,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           }
 
           return item
-        }),
+        })
+        .filter(Boolean)
+
+      const grid: Record<string, unknown> = {
+        title: intro.title ?? (entry["title"] as string) ?? "Brands",
+        variant: "bordered",
+        items,
       }
 
       if (intro.title || intro.text) {
@@ -1456,12 +1485,14 @@ export const COMPONENT_MAP: ComponentMapping[] = [
       const title = entry["title"] as string
 
       const grid: Record<string, unknown> = {
-        items: cards.map((card) => ({
-          variant: "bordered",
-          title: (card["title"] as string) ?? "",
-          description: (card["text"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"]),
-        })),
+        items: cards.map((card) =>
+          compact({
+            variant: "bordered",
+            title: (card["title"] as string) ?? "",
+            description: (card["text"] as string) ?? "",
+            icon: wrapBasicImage(card["icon"]),
+          })
+        ),
       }
 
       if (title) {
@@ -1535,7 +1566,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           description: entry["text"] as string,
         }),
         items: cards.map((card) => {
-          const result: Record<string, unknown> = {
+          const result: Record<string, unknown> = compact({
             variant: "bordered",
             layout: "third",
             size: "sm",
@@ -1543,7 +1574,7 @@ export const COMPONENT_MAP: ComponentMapping[] = [
             description: (card["text"] as string) ?? "",
             icon: wrapBasicImage(card["icon"]),
             image: wrapBasicImage(card["image"]),
-          }
+          })
 
           const link = linkToV5Link(card["link"])
           const iconRecord = card["icon"] as Record<string, unknown> | undefined
@@ -1799,11 +1830,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           description: intro.text,
           buttons: intro.button,
         }),
-        items: allCards.map((card) => ({
-          title: (card["title"] as string) ?? "",
-          description: (card["text"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"]),
-        })),
+        items: allCards.map((card) =>
+          compact({
+            title: (card["title"] as string) ?? "",
+            description: (card["text"] as string) ?? "",
+            icon: wrapBasicImage(card["icon"]),
+          })
+        ),
       }
     },
   },
@@ -1824,11 +1857,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           description: intro.text,
           buttons: intro.button,
         }),
-        items: features.map((f) => ({
-          title: (f["title"] as string) ?? "",
-          description: (f["text"] as string) ?? "",
-          icon: wrapBasicImage(f["icon"]),
-        })),
+        items: features.map((f) =>
+          compact({
+            title: (f["title"] as string) ?? "",
+            description: (f["text"] as string) ?? "",
+            icon: wrapBasicImage(f["icon"]),
+          })
+        ),
       }
     },
   },
@@ -1846,11 +1881,11 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         items: cards.map((wrapper) => {
           const inner = asRecord(wrapper["card"])
 
-          return {
+          return compact({
             title: (inner["title"] as string) ?? "",
             description: (inner["text"] as string) ?? "",
             icon: wrapBasicImage(inner["icon"]),
-          }
+          })
         }),
       }
     },
@@ -1870,11 +1905,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           title: (entry["title"] as string) ?? intro?.title ?? "",
           description: intro?.text,
         }),
-        items: benefits.map((b) => ({
-          title: (b["title"] as string) ?? "",
-          description: (b["text"] as string) ?? "",
-          icon: wrapBasicImage(b["icon"]),
-        })),
+        items: benefits.map((b) =>
+          compact({
+            title: (b["title"] as string) ?? "",
+            description: (b["text"] as string) ?? "",
+            icon: wrapBasicImage(b["icon"]),
+          })
+        ),
       }
     },
   },
@@ -1896,11 +1933,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           title: entry["title"] as string,
           description: entry["description"] as string,
         }),
-        items: allCards.map((card) => ({
-          title: (card["title"] as string) ?? "",
-          description: (card["text"] as string) ?? "",
-          icon: wrapBasicImage(card["icon"]),
-        })),
+        items: allCards.map((card) =>
+          compact({
+            title: (card["title"] as string) ?? "",
+            description: (card["text"] as string) ?? "",
+            icon: wrapBasicImage(card["icon"]),
+          })
+        ),
       }
     },
   },
@@ -2262,11 +2301,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
         section: buildSectionHeader({
           title: entry["groupName"] as string,
         }),
-        items: perks.map((perk) => ({
-          title: (perk["title"] as string) ?? "",
-          description: (perk["text"] as string) ?? "",
-          icon: wrapBasicImage(perk["image"]),
-        })),
+        items: perks.map((perk) =>
+          compact({
+            title: (perk["title"] as string) ?? "",
+            description: (perk["text"] as string) ?? "",
+            icon: wrapBasicImage(perk["image"]),
+          })
+        ),
       }
     },
   },
@@ -2287,11 +2328,13 @@ export const COMPONENT_MAP: ComponentMapping[] = [
           title: content.title,
           description: content.text,
         }),
-        items: allPerks.map((perk) => ({
-          title: (perk["title"] as string) ?? "",
-          description: (perk["text"] as string) ?? "",
-          icon: wrapBasicImage(perk["image"]),
-        })),
+        items: allPerks.map((perk) =>
+          compact({
+            title: (perk["title"] as string) ?? "",
+            description: (perk["text"] as string) ?? "",
+            icon: wrapBasicImage(perk["image"]),
+          })
+        ),
       }
     },
   },
@@ -2300,11 +2343,12 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   {
     source: "slices.perk",
     target: "cards.feature-card",
-    transform: (entry) => ({
-      variant: "bordered",
-      title: (entry["title"] as string) ?? "",
-      description: (entry["text"] as string) ?? "",
-      image: wrapBasicImage(entry["image"]),
-    }),
+    transform: (entry) =>
+      compact({
+        variant: "bordered",
+        title: (entry["title"] as string) ?? "",
+        description: (entry["text"] as string) ?? "",
+        image: wrapBasicImage(entry["image"]),
+      }),
   },
 ]

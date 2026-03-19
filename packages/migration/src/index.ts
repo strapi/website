@@ -1,6 +1,11 @@
+import { writeFile, mkdir } from "node:fs/promises"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
 import chalk from "chalk"
 import { Command } from "commander"
 
+import { auditSinks } from "./audit/audit-sinks.ts"
 import { SourceClient } from "./clients/source.ts"
 import { TargetClient } from "./clients/target.ts"
 import { COMPONENT_MAP } from "./config/components.ts"
@@ -32,6 +37,7 @@ program
   .option("--slug <pattern>", "Filter by slug glob pattern")
   .option("--limit <n>", "Max entities to process", Number.parseInt)
   .option("--force", "Overwrite existing entries (bypass dedup)")
+  .option("--no-resume", "Ignore resume state, re-process all entities")
   .option("--verbose", "Debug-level logging")
   .action(async (entity: string, opts) => {
     const config = ENTITY_CONFIGS[entity]
@@ -59,11 +65,13 @@ program
       force: opts.force ?? false,
       slugFilter: opts.slug,
       limit: opts.limit,
+      noResume: opts.resume === false,
     })
 
     const flags = [
       opts.dryRun && "dry-run",
       opts.force && "force",
+      opts.resume === false && "no-resume",
       opts.slug && `slug=${opts.slug}`,
       opts.limit && `limit=${opts.limit}`,
     ].filter(Boolean)
@@ -94,6 +102,12 @@ program
   .description("Run migration for all configured entity types")
   .option("--dry-run", "Log what would be written without making changes")
   .option("--exclude <entities>", "Comma-separated entity names to skip")
+  .option(
+    "--include <entities>",
+    "Comma-separated entity names to run (only these)"
+  )
+  .option("--force", "Overwrite existing entries (bypass dedup)")
+  .option("--no-resume", "Ignore resume state, re-process all entities")
   .option("--verbose", "Debug-level logging")
   .action(async (opts) => {
     const env = loadEnv()
@@ -107,11 +121,21 @@ program
         : []
     )
 
-    const entries = Object.entries(ENTITY_CONFIGS).filter(
-      ([name]) => !excludeSet.has(name)
+    const includeSet = new Set(
+      opts.include
+        ? (opts.include as string).split(",").map((s: string) => s.trim())
+        : []
     )
 
-    if (excludeSet.size > 0) {
+    const entries = Object.entries(ENTITY_CONFIGS).filter(([name]) => {
+      if (includeSet.size > 0) return includeSet.has(name)
+
+      return !excludeSet.has(name)
+    })
+
+    if (includeSet.size > 0) {
+      logger.info(`Including only: ${[...includeSet].join(", ")}`)
+    } else if (excludeSet.size > 0) {
       logger.info(`Excluding: ${[...excludeSet].join(", ")}`)
     }
 
@@ -129,7 +153,8 @@ program
         idMap,
         logger,
         dryRun: opts.dryRun ?? false,
-        force: false,
+        force: opts.force ?? false,
+        noResume: opts.resume === false,
       })
 
       logger.header(`Migrating: ${name}`)
@@ -239,6 +264,91 @@ program
     const mediaCache = new MediaCache()
     await mediaCache.reset()
     console.log("Migration state cleared.")
+  })
+
+program
+  .command("audit-sinks")
+  .description("Scan v5 entities for migration.data-sink components")
+  .option("--verbose", "Debug-level logging")
+  .option("--include <entities>", "Comma-separated entity names to scan")
+  .action(async (opts) => {
+    const env = loadEnv()
+    const logger = createLogger(opts.verbose)
+    const targetClient = new TargetClient({ env, logger })
+
+    const include = opts.include
+      ? (opts.include as string).split(",").map((s: string) => s.trim())
+      : undefined
+
+    logger.header("Data Sink Audit")
+
+    const report = await auditSinks({
+      targetClient,
+      logger,
+      include,
+      verbose: opts.verbose,
+    })
+
+    // Console summary
+    console.log()
+    logger.info(
+      `Scanned ${chalk.bold(String(report.totalEntitiesScanned))} entities across ${chalk.bold(String(Object.keys(report.byEntityType).length))} types`
+    )
+
+    // By source component
+    const componentEntries = Object.entries(report.bySourceComponent).sort(
+      ([, a], [, b]) => b.count - a.count
+    )
+
+    if (componentEntries.length > 0) {
+      console.log()
+      logger.info(chalk.bold("By source component:"))
+
+      for (const [comp, info] of componentEntries) {
+        const entityTypes = [...new Set(info.entities.map((e) => e.type))].join(
+          ", "
+        )
+
+        logger.warn(
+          `  ${chalk.white(comp.padEnd(40))} ×${String(info.count).padStart(4)}  across ${info.entities.length} entities (${entityTypes})`
+        )
+      }
+    }
+
+    // By entity type
+    const typeEntries = Object.entries(report.byEntityType).sort(
+      ([, a], [, b]) => b.sinkCount - a.sinkCount
+    )
+
+    if (typeEntries.length > 0) {
+      console.log()
+      logger.info(chalk.bold("By entity type:"))
+
+      for (const [type, info] of typeEntries) {
+        if (info.sinkCount === 0) continue
+
+        logger.info(
+          `  ${chalk.white(type.padEnd(25))} ${String(info.totalEntities).padStart(4)} entities, ${chalk.yellow(String(info.entitiesWithSinks))} with sinks (${chalk.red(String(info.sinkCount))} total sinks)`
+        )
+      }
+    }
+
+    if (report.totalSinks === 0) {
+      console.log()
+      logger.success("No data sinks found!")
+    }
+
+    // Write JSON report
+    const __dirname = path.dirname(fileURLToPath(import.meta.url))
+    const reportsDir = path.join(__dirname, "../../reports")
+    await mkdir(reportsDir, { recursive: true })
+
+    const ts = new Date().toISOString().replaceAll(/[:.]/g, "-")
+    const reportPath = path.join(reportsDir, `audit-sinks-${ts}.json`)
+    await writeFile(reportPath, JSON.stringify(report, null, 2) + "\n")
+
+    console.log()
+    logger.info(chalk.gray(`Report: ${reportPath}`))
   })
 
 program.parse()

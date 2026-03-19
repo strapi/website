@@ -67,14 +67,22 @@ async function uploadAndLink(
 ): Promise<Record<string, unknown>> {
   const fallbackSrc = basicImage["fallbackSrc"] as string
 
-  // Check cache first
-  const cachedId = ctx.mediaCache.get(fallbackSrc)
+  // Check cache — verify the entry still exists in v5 before reusing
+  const cached = ctx.mediaCache.get(fallbackSrc)
 
-  if (cachedId) {
-    ctx.logger.debug(`Media cache hit: ${fallbackSrc} → ${cachedId}`)
-    const { fallbackSrc: _, ...rest } = basicImage
+  if (cached && cached.hash) {
+    const valid = await ctx.targetClient.verifyMedia(cached.id, cached.hash)
 
-    return { ...rest, media: cachedId }
+    if (valid) {
+      ctx.logger.debug(`Media cache hit: ${fallbackSrc} → ${cached.id}`)
+      const { fallbackSrc: _, ...rest } = basicImage
+
+      return { ...rest, media: cached.id }
+    }
+
+    ctx.logger.warn(
+      `Stale media cache for ${fallbackSrc} (id=${cached.id}), re-uploading`
+    )
   }
 
   // In dry-run mode, skip actual upload
@@ -84,9 +92,9 @@ async function uploadAndLink(
     return basicImage
   }
 
-  const mediaId = await ctx.targetClient.uploadMedia(fallbackSrc)
+  const result = await ctx.targetClient.uploadMedia(fallbackSrc)
 
-  if (!mediaId) {
+  if (!result) {
     ctx.logger.warn(
       `Failed to upload media, keeping fallbackSrc: ${fallbackSrc}`
     )
@@ -94,17 +102,17 @@ async function uploadAndLink(
     return basicImage
   }
 
-  ctx.mediaCache.set(fallbackSrc, mediaId)
+  ctx.mediaCache.set(fallbackSrc, result)
 
   // Periodically save cache
   if (ctx.mediaCache.size % 20 === 0) {
     await ctx.mediaCache.save()
   }
 
-  ctx.logger.debug(`Uploaded media: ${fallbackSrc} → ${mediaId}`)
+  ctx.logger.debug(`Uploaded media: ${fallbackSrc} → ${result.id}`)
   const { fallbackSrc: _, ...rest } = basicImage
 
-  return { ...rest, media: mediaId }
+  return { ...rest, media: result.id }
 }
 
 /** Check if value is a v4 media relation: { data: { id, attributes: { url } } } */

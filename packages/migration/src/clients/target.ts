@@ -114,14 +114,13 @@ export class TargetClient {
 
   /**
    * Download an image from a URL and upload it to the v5 media library.
-   * Returns the media entity ID on success, or undefined if the upload fails.
+   * Returns { id, hash } on success, or undefined if the upload fails.
    */
   async uploadMedia(
     sourceUrl: string,
     fileName?: string
-  ): Promise<number | undefined> {
+  ): Promise<{ id: number; hash: string } | undefined> {
     try {
-      // Download the image
       const imageRes = await fetch(sourceUrl)
 
       if (!imageRes.ok) {
@@ -135,7 +134,6 @@ export class TargetClient {
       const contentType = imageRes.headers.get("content-type") ?? "image/jpeg"
       const blob = await imageRes.blob()
 
-      // Derive filename from URL or use provided name
       const name =
         fileName ?? sourceUrl.split("/").pop()?.split("?")[0] ?? "image.jpg"
 
@@ -154,15 +152,18 @@ export class TargetClient {
       if (!res.ok) {
         const body = await res.text().catch(() => "")
         this.logger.warn(
-          `Failed to upload media: ${res.status} ${res.statusText} - ${body.slice(0, 200)}`
+          `Failed to upload media: ${res.status} ${res.statusText} - ${body.slice(0, 500)}`
         )
 
         return undefined
       }
 
-      const data = (await res.json()) as { id: number }[]
+      const data = (await res.json()) as { id: number; hash: string }[]
+      const entry = data[0]
 
-      return data[0]?.id
+      if (!entry) return undefined
+
+      return { id: entry.id, hash: entry.hash }
     } catch (error) {
       this.logger.warn(
         `Media upload error for ${sourceUrl}: ${error instanceof Error ? error.message : String(error)}`
@@ -170,6 +171,86 @@ export class TargetClient {
 
       return undefined
     }
+  }
+
+  /**
+   * Verify a cached media entry still exists in v5 and matches the expected hash.
+   * Returns true if valid, false if stale/missing.
+   */
+  async verifyMedia(id: number, expectedHash: string): Promise<boolean> {
+    try {
+      const url = `${this.baseUrl}/api/upload/files/${id}`
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${this.token}` },
+      })
+
+      if (!res.ok) return false
+
+      const data = (await res.json()) as { id: number; hash: string }
+
+      return data.hash === expectedHash
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Create a users-permissions user (flat payload, no { data } wrapper).
+   */
+  async createUser(data: Record<string, unknown>): Promise<V5Entity> {
+    const url = `${this.baseUrl}/api/users`
+
+    this.logger.debug(`Creating user: ${data["email"]}`)
+
+    return withRetry(
+      () =>
+        this.request<V5Entity>(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+        }),
+      { logger: this.logger }
+    )
+  }
+
+  /**
+   * Update a users-permissions user by numeric ID (flat payload).
+   */
+  async updateUser(
+    id: number,
+    data: Record<string, unknown>
+  ): Promise<V5Entity> {
+    const url = `${this.baseUrl}/api/users/${id}`
+
+    this.logger.debug(`Updating user: ${id}`)
+
+    return withRetry(
+      () =>
+        this.request<V5Entity>(url, {
+          method: "PUT",
+          body: JSON.stringify(data),
+        }),
+      { logger: this.logger }
+    )
+  }
+
+  /**
+   * Find a users-permissions user by field (flat array response).
+   */
+  async findUserByField(
+    field: string,
+    value: unknown
+  ): Promise<V5Entity | undefined> {
+    const params = { filters: { [field]: { $eq: value } } }
+    const query = qs.stringify(params, { encodeValuesOnly: true })
+    const url = `${this.baseUrl}/api/users?${query}`
+
+    this.logger.debug(`Finding user by ${field}: ${url}`)
+
+    const response = await withRetry(() => this.request<V5Entity[]>(url), {
+      logger: this.logger,
+    })
+
+    return response[0]
   }
 
   async updateSingleType(
@@ -191,6 +272,42 @@ export class TargetClient {
     )
 
     return response.data
+  }
+
+  async list(
+    endpoint: string,
+    populate: Record<string, unknown> = {}
+  ): Promise<V5Entity[]> {
+    const all: V5Entity[] = []
+    let page = 1
+
+    while (true) {
+      const params: Record<string, unknown> = {
+        populate,
+        pagination: { pageSize: 100, page },
+        status: "draft",
+        locale: "en",
+      }
+
+      const query = qs.stringify(params, { encodeValuesOnly: true })
+      const url = `${this.baseUrl}/api/${endpoint}?${query}`
+
+      this.logger.debug(`List ${endpoint} page ${page}: ${url}`)
+
+      const response = await withRetry(
+        () => this.request<V5ListResponse>(url),
+        { logger: this.logger }
+      )
+
+      all.push(...response.data)
+
+      const pagination = response.meta.pagination
+      if (!pagination || page >= pagination.pageCount) break
+
+      page++
+    }
+
+    return all
   }
 
   async publish(endpoint: string, documentId: string): Promise<void> {
@@ -221,7 +338,7 @@ export class TargetClient {
     if (!res.ok) {
       const body = await res.text().catch(() => "")
       const error = new Error(
-        `Target API error: ${res.status} ${res.statusText} - ${body.slice(0, 200)}`
+        `Target API error: ${res.status} ${res.statusText} - ${body.slice(0, 500)}`
       ) as Error & { status: number }
       error.status = res.status
       throw error

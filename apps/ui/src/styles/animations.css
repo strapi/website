@@ -55,6 +55,12 @@
   }
 }
 
+@keyframes ring-fade-in {
+  from {
+    --tw-ring-color: transparent;
+  }
+}
+
 @utility animate-reveal-cascade {
   & > * {
     opacity: 0;
@@ -84,6 +90,11 @@
 
 @utility animate-border-reveal {
   animation: border-fade-in 1000ms var(--ease-reveal) var(--reveal-delay, 180ms)
+    both;
+}
+
+@utility animate-ring-reveal {
+  animation: ring-fade-in 1000ms var(--ease-reveal) var(--reveal-delay, 180ms)
     both;
 }
 

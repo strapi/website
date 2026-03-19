@@ -1,6 +1,9 @@
+import type { V4Entity } from "../clients/source.ts"
 import { normalizePageSlug, resolvePageParent } from "../entities/page.ts"
-import type { TransformFn } from "../transforms/base.ts"
+import type { LoadResult } from "../pipeline/load.ts"
+import type { TransformContext, TransformFn } from "../transforms/base.ts"
 import {
+  absoluteUrl,
   convertLinkFields,
   convertMediaImageFields,
   convertV4FieldEntries,
@@ -302,8 +305,15 @@ const ensureTitle: TransformFn = (entity) => {
  */
 // eslint-disable-next-line sonarjs/no-invariant-returns
 const resolveHubspotForms: TransformFn = async (entity, ctx) => {
-  const content = entity["content"] as Record<string, unknown>[] | undefined
-  if (!content || !Array.isArray(content)) return entity
+  const dzField = Array.isArray(entity["content"])
+    ? "content"
+    : Array.isArray(entity["sections"])
+      ? "sections"
+      : undefined
+
+  if (!dzField) return entity
+
+  const content = entity[dzField] as Record<string, unknown>[]
 
   for (const entry of content) {
     if (entry["__component"] !== "forms.hubspot-form") continue
@@ -432,6 +442,52 @@ export interface EntityMigrationConfig {
   singleType?: boolean
   /** Whether the v5 target is a single type (PUT without documentId) */
   targetSingleType?: boolean
+  /** Custom extract function (overrides default fetchAll) */
+  customExtract?: (ctx: TransformContext) => Promise<V4Entity[]>
+  /** Custom fetchOne function (overrides default fetchOne per entity) */
+  customFetchOne?: (id: number, ctx: TransformContext) => Promise<V4Entity>
+  /** Custom load function (overrides default create/update via content API) */
+  customLoad?: (
+    entity: Record<string, unknown>,
+    ctx: TransformContext
+  ) => Promise<LoadResult>
+}
+
+// ─── Helpers ───
+
+let _authenticatedRoleId: number | undefined
+
+async function fetchAuthenticatedRoleId(
+  ctx: TransformContext
+): Promise<number> {
+  const url = `${ctx.env.target.baseUrl}/api/users-permissions/roles`
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${ctx.env.target.token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch roles: ${res.status} ${res.statusText}`)
+  }
+
+  const data = (await res.json()) as {
+    roles: { id: number; name: string; type: string }[]
+  }
+
+  const role = data.roles.find((r) => r.type === "authenticated")
+
+  if (!role) {
+    throw new Error(
+      "Authenticated role not found in v5. Available: " +
+        data.roles.map((r) => r.type).join(", ")
+    )
+  }
+
+  ctx.logger.debug(`Resolved Authenticated role: id=${role.id}`)
+
+  return role.id
 }
 
 // ─── Entity configs ordered by dependency ───
@@ -488,6 +544,216 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       resolveRelations({ country: "api::country.country" }),
     ],
   },
+
+  // ═════════════════════════════════════════
+  // USERS (depends on cities)
+  // ═════════════════════════════════════════
+
+  users: {
+    sourceEndpoint: "users",
+    sourcePopulate: "*",
+    targetEndpoint: "users",
+    dedupField: "email",
+    sourceUid: "plugin::users-permissions.user",
+
+    customExtract: async (ctx) => {
+      ctx.logger.info("Extracting IDs from: users")
+      let users = await ctx.sourceClient.fetchUsers()
+
+      if (ctx.limit) {
+        users = users.slice(0, ctx.limit)
+      }
+
+      ctx.logger.info(`Found ${users.length} entities to process`)
+
+      return users
+    },
+
+    customFetchOne: async (id, ctx) =>
+      ctx.sourceClient.fetchUser(id, "avatar.media,profilePicture.media,city"),
+
+    customLoad: async (entity, ctx) => {
+      // Look up Authenticated role ID (cached after first call)
+      if (!_authenticatedRoleId) {
+        _authenticatedRoleId = await fetchAuthenticatedRoleId(ctx)
+      }
+
+      entity["role"] = _authenticatedRoleId
+
+      const existing = await ctx.targetClient.findUserByField(
+        "email",
+        entity["email"]
+      )
+
+      if (existing && !ctx.force) {
+        return { action: "skipped", documentId: existing.documentId }
+      }
+
+      if (existing) {
+        const updated = await ctx.targetClient.updateUser(existing.id, entity)
+
+        return { action: "updated", documentId: updated.documentId }
+      }
+
+      const created = await ctx.targetClient.createUser(entity)
+
+      return { action: "created", documentId: created.documentId }
+    },
+
+    transforms: [
+      // No flattenV4 — users-permissions returns flat objects
+      dropFields(
+        "id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "provider",
+        "confirmed",
+        "blocked",
+        "role",
+        "password",
+        "resetPasswordToken",
+        "confirmationToken",
+        "_v4Id",
+        // v4 relation fields we handle separately
+        "blog_posts",
+        "blogPosts",
+        // v4-only fields not in v5
+        "showEmail",
+        "job_category",
+        "second_job_category",
+        "profileLinks",
+        "resource",
+        "strapi_stage",
+        "strapi_assignee"
+      ),
+      ensureSlug("username"),
+
+      // Convert v4 avatar/profilePicture components → v5 media.image component
+      // v4 shape: { id, href, media: { url, alternativeText, width, height, ... } }
+      // v5 shape: media.image → { image: { alt, width, height, fallbackSrc } }
+      //   then uploadMedia replaces fallbackSrc with media: <v5_id>
+      ((entity) => {
+        const result = { ...entity }
+
+        for (const field of ["avatar", "profilePicture"] as const) {
+          const component = result[field] as Record<string, unknown> | undefined
+
+          if (component && typeof component === "object") {
+            const mediaInfo = extractMediaUrl(component["media"])
+
+            if (mediaInfo) {
+              result[field] = {
+                image: {
+                  alt: mediaInfo.alt ?? "",
+                  width: mediaInfo.width ?? null,
+                  height: mediaInfo.height ?? null,
+                  fallbackSrc: absoluteUrl(mediaInfo.url),
+                },
+              }
+              continue
+            }
+          }
+
+          result[field] = null
+        }
+
+        return result
+      }) as TransformFn,
+
+      // Convert flat social fields → repeatable socials component
+      ((entity) => {
+        const result = { ...entity }
+        const socials: { platform: string; url: string }[] = []
+
+        const socialFields: Record<string, string> = {
+          twitter: "twitter",
+          github: "github",
+          linkedin: "linkedin",
+          website: "website",
+        }
+
+        for (const [v4Field, platform] of Object.entries(socialFields)) {
+          const value = result[v4Field] as string | undefined
+
+          if (value && typeof value === "string" && value.trim()) {
+            socials.push({ platform, url: value.trim() })
+          }
+
+          delete result[v4Field]
+        }
+
+        result["socials"] = socials.length > 0 ? socials : null
+
+        return result
+      }) as TransformFn,
+
+      // Map v4 joined (datetime) → v5 joinedDate (date)
+      ((entity) => {
+        const result = { ...entity }
+        const joined = result["joined"] as string | undefined
+        delete result["joined"]
+
+        if (joined) {
+          result["joinedDate"] = joined.split("T")[0]
+        }
+
+        return result
+      }) as TransformFn,
+
+      // Resolve city: users-permissions API expects numeric ID, not { set: [documentId] }
+      (async (entity, ctx) => {
+        const result = { ...entity }
+        const city = result["city"] as Record<string, unknown> | undefined
+
+        if (city && typeof city === "object" && city["id"]) {
+          const v4Id = city["id"] as number
+          const v5DocId = ctx.idMap.get("api::city.city", v4Id)
+
+          if (v5DocId) {
+            const v5City = await ctx.targetClient.findByField(
+              "cities",
+              "documentId",
+              v5DocId
+            )
+
+            if (v5City) {
+              result["city"] = v5City.id
+            } else {
+              ctx.logger.warn(`City not found in v5: documentId=${v5DocId}`)
+              result["city"] = null
+            }
+          } else {
+            ctx.logger.warn(`Unresolved city: v4Id=${v4Id}`)
+            result["city"] = null
+          }
+        } else {
+          result["city"] = null
+        }
+
+        return result
+      }) as TransformFn,
+
+      // Set required v5 defaults
+      ((entity) => {
+        const result = {
+          ...entity,
+          ["confirmed"]: true,
+          ["blocked"]: false,
+          ["provider"]: "local",
+          ["password"]: crypto.randomUUID() + "Aa1!",
+        }
+
+        return result
+      }) as TransformFn,
+
+      uploadMedia,
+    ],
+  },
+
+  // ═════════════════════════════════════════
+  // TAXONOMY (continued)
+  // ═════════════════════════════════════════
 
   "tech-stacks": {
     sourceEndpoint: "tech-stacks",
@@ -711,16 +977,16 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
           if (ctx.dryRun) {
             result["authorAvatar"] = null
           } else {
-            const cachedId = ctx.mediaCache.get(avatarUrl)
+            const cachedAvatar = ctx.mediaCache.get(avatarUrl)
 
-            if (cachedId) {
-              result["authorAvatar"] = cachedId
+            if (cachedAvatar) {
+              result["authorAvatar"] = cachedAvatar.id
             } else {
-              const mediaId = await ctx.targetClient.uploadMedia(avatarUrl)
+              const uploaded = await ctx.targetClient.uploadMedia(avatarUrl)
 
-              if (mediaId) {
-                ctx.mediaCache.set(avatarUrl, mediaId)
-                result["authorAvatar"] = mediaId
+              if (uploaded) {
+                ctx.mediaCache.set(avatarUrl, uploaded)
+                result["authorAvatar"] = uploaded.id
               } else {
                 result["authorAvatar"] = null
               }
@@ -736,16 +1002,16 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
           if (ctx.dryRun) {
             result["logo"] = null
           } else {
-            const cachedId = ctx.mediaCache.get(logoUrl)
+            const cachedLogo = ctx.mediaCache.get(logoUrl)
 
-            if (cachedId) {
-              result["logo"] = cachedId
+            if (cachedLogo) {
+              result["logo"] = cachedLogo.id
             } else {
-              const mediaId = await ctx.targetClient.uploadMedia(logoUrl)
+              const uploaded = await ctx.targetClient.uploadMedia(logoUrl)
 
-              if (mediaId) {
-                ctx.mediaCache.set(logoUrl, mediaId)
-                result["logo"] = mediaId
+              if (uploaded) {
+                ctx.mediaCache.set(logoUrl, uploaded)
+                result["logo"] = uploaded.id
               } else {
                 result["logo"] = null
               }
@@ -858,6 +1124,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       logo: { populate: "*" },
       image: { populate: "*" },
       link: { populate: "*" },
+      user: { populate: "*" },
       integration_topics: { populate: "*" },
       integration_tags: { populate: "*" },
       slices: DEEP_DZ_POPULATE["slices"],
@@ -875,10 +1142,31 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "locale",
         "settings",
         // No v5 equivalent for topics
-        "integration_topics",
-        // User relation can't be mapped
-        "user"
+        "integration_topics"
       ),
+      // Resolve v4 user → v5 author
+      ((entity, ctx) => {
+        const result = { ...entity }
+        const user = result["user"] as Record<string, unknown> | undefined
+        delete result["user"]
+
+        if (user?.["_v4Id"]) {
+          const docId = ctx.idMap.get(
+            "plugin::users-permissions.user",
+            user["_v4Id"] as number
+          )
+
+          if (docId) {
+            result["author"] = { set: [docId] }
+          } else {
+            ctx.logger.warn(
+              `Unresolved integration author: v4Id=${user["_v4Id"]}`
+            )
+          }
+        }
+
+        return result
+      }) as TransformFn,
       // Convert v4 link → v5 utilities.link
       convertLinkFields("link"),
       // Convert v4 media.image components → v5 format with fallbackSrc
@@ -916,6 +1204,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       // Dynamic zone: slices → sections
       remapDynamicZone("slices", "sections"),
+      resolveHubspotForms,
       transformSeo,
       uploadMedia,
     ],
@@ -1092,6 +1381,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       convertMediaImageFields("logo"),
       // Dynamic zone: slices → sections
       remapDynamicZone("slices", "sections"),
+      resolveHubspotForms,
       transformSeo,
       uploadMedia,
     ],
@@ -1127,7 +1417,8 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "updatedAt",
         "publishedAt",
         "locale",
-        "settings"
+        "settings",
+        "sectionLabel"
       ),
       // Extract logoImage from whiteHero component
       ((entity) => {
@@ -1182,6 +1473,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       seo: { populate: "*" },
       featuredCategory: { populate: "*" },
       user: { populate: "*" },
+      coauthors: { populate: "*" },
       slices: DEEP_DZ_POPULATE["slices"],
     },
     targetEndpoint: "blog-posts",
@@ -1199,11 +1491,50 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         // v4-only fields not in v5
         "card",
         "version",
-        // User relations can't be mapped (users-permissions)
-        "user",
-        "coauthors",
         "postSubCategory"
       ),
+      // Resolve v4 user → v5 author, coauthors
+      ((entity, ctx) => {
+        const result = { ...entity }
+
+        const user = result["user"] as Record<string, unknown> | undefined
+        delete result["user"]
+
+        if (user?.["_v4Id"]) {
+          const docId = ctx.idMap.get(
+            "plugin::users-permissions.user",
+            user["_v4Id"] as number
+          )
+
+          if (docId) {
+            result["author"] = { set: [docId] }
+          } else {
+            ctx.logger.warn(`Unresolved blog author: v4Id=${user["_v4Id"]}`)
+          }
+        }
+
+        const coauthors = result["coauthors"] as
+          | Record<string, unknown>[]
+          | undefined
+        delete result["coauthors"]
+
+        if (coauthors?.length) {
+          const resolved = coauthors
+            .map((c) =>
+              ctx.idMap.get(
+                "plugin::users-permissions.user",
+                c["_v4Id"] as number
+              )
+            )
+            .filter(Boolean) as string[]
+
+          if (resolved.length > 0) {
+            result["coauthors"] = { set: resolved }
+          }
+        }
+
+        return result
+      }) as TransformFn,
       // Normalize slug
       ((entity) => {
         const result = { ...entity }

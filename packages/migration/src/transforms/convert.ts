@@ -34,7 +34,7 @@ export function ensureSlug(sourceField = "name"): TransformFn {
 
 const MEDIA_CDN = "https://delicate-dawn-ac25646e6d.media.strapiapp.com"
 
-function absoluteUrl(url: string): string {
+export function absoluteUrl(url: string): string {
   return url.startsWith("http") ? url : `${MEDIA_CDN}${url}`
 }
 
@@ -227,17 +227,17 @@ export function uploadDirectMediaFields(...fields: string[]): TransformFn {
         continue
       }
 
-      const cachedId = ctx.mediaCache.get(url)
-      if (cachedId) {
-        result[field] = cachedId
+      const cached = ctx.mediaCache.get(url)
+      if (cached) {
+        result[field] = cached.id
         continue
       }
 
-      const mediaId = await ctx.targetClient.uploadMedia(url)
+      const uploaded = await ctx.targetClient.uploadMedia(url)
 
-      if (mediaId) {
-        ctx.mediaCache.set(url, mediaId)
-        result[field] = mediaId
+      if (uploaded) {
+        ctx.mediaCache.set(url, uploaded)
+        result[field] = uploaded.id
       } else {
         ctx.logger.warn(`Failed to upload direct media ${field}: ${url}`)
         result[field] = null

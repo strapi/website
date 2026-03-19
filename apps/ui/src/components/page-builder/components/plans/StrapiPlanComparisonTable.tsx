@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl"
 import { Fragment } from "react"
 
 import { Container } from "@/components/elementary/Container"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { Tooltip } from "@/components/elementary/Tooltip"
 
 type PlanType = Data.ContentType<"api::plan.plan">
@@ -34,7 +35,7 @@ function renderDescription(description: string | null | undefined) {
   const parts = description.split(/(\*\*.*?\*\*)/)
 
   return (
-    <span className="text-strapi-neutral-700 text-sm">
+    <span className="text-strapi-neutral-700 text-sm font-normal">
       {parts.map((part, i) =>
         part.startsWith("**") && part.endsWith("**") ? (
           <span key={i} className="text-strapi-blue-500">
@@ -214,7 +215,7 @@ export function StrapiPlanComparisonTable({
                       >
                         <div className="flex flex-col gap-3">
                           <span className="flex items-center">
-                            <span className="text-foreground text-sm">
+                            <span className="text-foreground text-sm font-normal">
                               {feature.name}
                             </span>
                             {feature?.tooltip?.content && (
@@ -224,7 +225,6 @@ export function StrapiPlanComparisonTable({
                                   className:
                                     "bg-strapi-blue-800 text-white [&_[data-slot=tooltip-arrow]]:fill-strapi-blue-800",
                                 }}
-                                // TODO fixme with markdown renderer or rich text editor
                                 content={feature?.tooltip?.content}
                               >
                                 <button
@@ -281,9 +281,9 @@ export function StrapiPlanComparisonTable({
       </div>
 
       {component.footnote && (
-        <p className="text-strapi-neutral-700 mt-4 px-4 text-sm">
-          {component.footnote}
-        </p>
+        <div className="text-strapi-neutral-700 mt-4 px-4 text-sm">
+          <InlineMarkdown>{component.footnote}</InlineMarkdown>
+        </div>
       )}
     </Container>
   )

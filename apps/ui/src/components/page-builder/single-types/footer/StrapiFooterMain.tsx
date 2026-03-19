@@ -24,10 +24,10 @@ export function StrapiFooterMain({
     <div className="bg-white">
       <Container className="py-8 sm:py-15">
         <div
-          className="grid grid-cols-1 gap-8 pb-12 sm:grid-cols-2 sm:gap-y-10 sm:pb-30 md:grid-cols-3 lg:grid-cols-[2fr_repeat(var(--section-count),1fr)]"
+          className="grid grid-cols-2 gap-8 pb-12 sm:grid-cols-2 sm:gap-y-10 sm:pb-30 md:grid-cols-3 lg:grid-cols-[2fr_repeat(var(--section-count),1fr)]"
           style={{ "--section-count": sectionCount } as React.CSSProperties}
         >
-          <div className="flex flex-col gap-5 sm:gap-10">
+          <div className="col-span-2 flex flex-col gap-5 sm:col-span-1 sm:gap-10">
             <StrapiLinkImage
               component={component.logoImage}
               className="h-8 w-28"
@@ -39,7 +39,7 @@ export function StrapiFooterMain({
 
             {component.tagline && (
               <>
-                <p className="w-full text-xs leading-relaxed sm:max-w-xs">
+                <p className="w-full text-xs leading-relaxed">
                   {component.tagline}
                 </p>
 
@@ -73,7 +73,7 @@ export function StrapiFooterMain({
           ))}
         </div>
 
-        <div className="border-border flex flex-col gap-4 border-t pt-8 text-sm md:flex-row md:items-center md:justify-between">
+        <div className="border-border flex flex-col-reverse gap-4 border-t pt-8 text-sm md:flex-row md:items-center md:justify-between">
           <div className="text-foreground flex flex-wrap items-center gap-x-8">
             {copyRight && <span className="text-foreground">{copyRight}</span>}
 
@@ -85,7 +85,7 @@ export function StrapiFooterMain({
           </div>
 
           {component.socials && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {component.socials.title && (
                 <span className="text-strapi-neutral-500">
                   {component.socials.title}

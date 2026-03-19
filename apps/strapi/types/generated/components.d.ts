@@ -562,7 +562,7 @@ export interface PlansPlanComparisonTable extends Struct.ComponentSchema {
     icon: "bulletList"
   }
   attributes: {
-    footnote: Schema.Attribute.Text
+    footnote: Schema.Attribute.RichText
     plans: Schema.Attribute.Relation<"oneToMany", "api::plan.plan">
   }
 }
@@ -649,6 +649,7 @@ export interface PlansPlanPricingCards extends Struct.ComponentSchema {
   attributes: {
     cards: Schema.Attribute.Component<"plans.plan-pricing-card-item", true>
     extraBox: Schema.Attribute.Component<"plans.plan-pricing-extra-box", false>
+    footnote: Schema.Attribute.RichText
     switcher: Schema.Attribute.Component<"plans.pricing-switcher", false>
   }
 }

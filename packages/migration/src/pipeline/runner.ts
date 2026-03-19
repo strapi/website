@@ -64,7 +64,16 @@ export async function runEntityMigration(
   await migrationState.load()
 
   const entityStateKey = stateKey ?? config.sourceEndpoint
-  const state = migrationState.getEntityState(entityStateKey)
+  const state = ctx.noResume
+    ? {
+        total: 0,
+        migrated: 0,
+        skipped: 0,
+        failed: 0,
+        lastProcessedId: 0,
+        errors: [],
+      }
+    : migrationState.getEntityState(entityStateKey)
   const stats: RunStats = {
     componentCounts: {},
     droppedComponents: {},
@@ -73,7 +82,9 @@ export async function runEntityMigration(
   }
 
   const startTime = Date.now()
-  const entities = await extractAll(config, ctx)
+  const entities = config.customExtract
+    ? await config.customExtract(ctx)
+    : await extractAll(config, ctx)
 
   // Sort ascending by ID — v4 API may return descending, and resume logic relies on ascending order
   entities.sort((a, b) => a.id - b.id)
@@ -90,7 +101,7 @@ export async function runEntityMigration(
       (stub.attributes["name"] as string) ??
       `id:${v4Id}`
 
-    if (v4Id <= state.lastProcessedId) {
+    if (!ctx.noResume && v4Id <= state.lastProcessedId) {
       resumedCount++
       stats.entityDetails.push({
         slug,
@@ -107,17 +118,18 @@ export async function runEntityMigration(
 
     try {
       // Fetch full entity data with deep populate (one-by-one to avoid API overload)
-      // Single types don't support /{id} URLs — use fetchSingleType instead
-      const entity = config.singleType
-        ? await ctx.sourceClient.fetchSingleType(
-            config.sourceEndpoint,
-            config.sourcePopulate
-          )
-        : await ctx.sourceClient.fetchOne(
-            config.sourceEndpoint,
-            v4Id,
-            config.sourcePopulate
-          )
+      const entity = config.customFetchOne
+        ? await config.customFetchOne(v4Id, ctx)
+        : config.singleType
+          ? await ctx.sourceClient.fetchSingleType(
+              config.sourceEndpoint,
+              config.sourcePopulate
+            )
+          : await ctx.sourceClient.fetchOne(
+              config.sourceEndpoint,
+              v4Id,
+              config.sourcePopulate
+            )
 
       const flat: Record<string, unknown> = {
         ...entity.attributes,
@@ -171,7 +183,10 @@ export async function runEntityMigration(
         })
         state.migrated++
       } else {
-        const result = await loadEntity(transformed, config, ctx)
+        const result = config.customLoad
+          ? await config.customLoad(transformed, ctx)
+          : await loadEntity(transformed, config, ctx)
+
         ctx.idMap.set(config.sourceUid, v4Id, result.documentId)
 
         const actionLabel = formatAction(result.action)
@@ -208,15 +223,19 @@ export async function runEntityMigration(
         timestamp: new Date().toISOString(),
       })
 
+      const errMsg = error instanceof Error ? error.message : String(error)
+
       ctx.logger.progress(
         processedIndex,
         entities.length - resumedCount,
-        `${chalk.red("FAIL")} ${chalk.white(slug)} — ${chalk.red(error instanceof Error ? error.message : String(error))}`
+        `${chalk.red("FAIL")} ${chalk.white(slug)} — ${chalk.red(errMsg)}`
       )
 
       if (transformed) {
-        ctx.logger.debug(
-          `Failed payload for ${slug}:\n${JSON.stringify(transformed, null, 2).slice(0, 2000)}`
+        console.log(
+          chalk.gray(
+            `  · Payload: ${JSON.stringify(transformed, null, 2).slice(0, 2000)}`
+          )
         )
       }
 

@@ -1,23 +1,36 @@
+import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
 import { cn } from "@/lib/styles"
 
-export interface ContainerProps extends React.ComponentProps<"div"> {
-  readonly hideDefaultPadding?: boolean
+export const containerVariants = cva("mx-auto", {
+  variants: {
+    variant: {
+      default:
+        "w-full max-w-312 px-6 sm:px-10 md:px-14 lg:px-20 xl:px-0 2xl:px-0",
+      hero: "w-full max-w-312 px-0 sm:px-4 md:px-10 lg:px-16 xl:px-0 2xl:px-0", // Specially padded for hero and navbar sections
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+})
+
+export type ContainerVariant = VariantProps<typeof containerVariants>["variant"]
+
+export interface ContainerProps
+  extends React.ComponentProps<"div">, VariantProps<typeof containerVariants> {
+  readonly variant?: ContainerVariant
 }
 
 export function Container({
   className,
-  hideDefaultPadding,
+  variant,
   ...restProps
 }: ContainerProps) {
   return (
     <div
-      className={cn(
-        "mx-auto w-full",
-        hideDefaultPadding ? "max-w-screen-default" : "max-w-312 px-6",
-        className
-      )}
+      className={cn(containerVariants({ variant }), className)}
       {...restProps}
     />
   )

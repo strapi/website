@@ -1,14 +1,13 @@
 import type { Data } from "@repo/strapi-types"
 
 import { HeroContainer } from "@/components/elementary/HeroContainer"
-import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
 import { TypingAnimation } from "@/components/ui/typing-animation"
-import { cn } from "@/lib/styles"
 
 import { StrapiHeroHomeCodeCta } from "./StrapiHeroHomeCodeCta"
 import { StrapiHeroHomeFeatures } from "./StrapiHeroHomeFeatures"
+import { TestimonialLogosGrid } from "./TestimonialLogosGrid"
 
 const DEFAULT_ROTATING_PHRASES = [
   "Websites",
@@ -42,10 +41,10 @@ export function StrapiHeroHome({
 
   return (
     <HeroContainer affectsNavbarTheme={affectsNavbarTheme}>
-      <div className="border-strapi-gray-700/50 rounded-strapi-xl overflow-hidden md:border">
+      <div className="animate-ring-reveal ring-strapi-gray-700/50 rounded-strapi-xl overflow-hidden md:ring">
         {hasTopRow ? (
-          <div className="animate-border-reveal md:bg-strapi-gray-950 rounded-strapi-xl flex w-full flex-col md:flex-row">
-            <div className="animate-reveal-cascade border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-center px-0 py-6 text-center md:items-start md:border-r md:px-14 md:py-16 md:text-left">
+          <div className="md:bg-strapi-gray-950 rounded-strapi-xl flex w-full flex-col md:flex-row">
+            <div className="animate-reveal-cascade animate-border-reveal border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-center justify-center px-0 py-6 text-center md:items-start md:border-r md:px-14 md:py-16 md:text-left">
               <h1 className="text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
                 {component.title}
               </h1>
@@ -86,7 +85,7 @@ export function StrapiHeroHome({
             </div>
 
             {component.testimonials ? (
-              <div className="animate-reveal-cascade border-strapi-gray-700/50 rounded-strapi-xl grid grow-0 grid-cols-1 grid-rows-[1fr_auto] max-md:border">
+              <div className="animate-border-reveal animate-reveal-cascade border-strapi-gray-700/50 rounded-strapi-xl grid grow-0 grid-cols-1 grid-rows-[1fr_auto] max-md:border">
                 {component.testimonials.title ? (
                   <div className="border-strapi-gray-700/50 flex items-center justify-center border-b px-8 py-5 sm:px-16 sm:py-12">
                     <p className="text-strapi-gray-400 px-6 text-center text-base">
@@ -96,32 +95,7 @@ export function StrapiHeroHome({
                 ) : null}
 
                 {component.testimonials.logos?.length ? (
-                  <div
-                    className={cn(
-                      "*:border-strapi-gray-700/50 grid flex-1 grid-cols-3 *:border-r *:border-b md:grid-cols-2 lg:grid-cols-3",
-                      "max-md:[&>*:nth-child(3n)]:border-r-0 max-md:[&>*:nth-last-child(-n+3)]:border-b-0",
-                      "md:max-md:[&>*:nth-child(2n)]:border-r-0",
-                      "lg:[&>*:nth-child(3n)]:border-r-0 lg:[&>*:nth-last-child(-n+3)]:border-b-0"
-                    )}
-                  >
-                    {component.testimonials.logos.map((logo) => (
-                      <div
-                        key={logo.id}
-                        className="flex items-center justify-center p-5 sm:p-12"
-                      >
-                        <div className="relative size-[72px] md:size-[78px]">
-                          <StrapiBasicImage
-                            component={logo}
-                            transparentPlaceholder
-                            mode="fill"
-                            sizes="(max-width: 767px) 72px, 78px"
-                            className="object-contain"
-                            decorative
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <TestimonialLogosGrid logos={component.testimonials.logos} />
                 ) : null}
               </div>
             ) : null}
@@ -130,7 +104,7 @@ export function StrapiHeroHome({
       </div>
 
       {hasFeatures ? (
-        <div className="animate-border-reveal border-strapi-gray-700/50 rounded-strapi-xl overflow-hidden border [--reveal-delay:680ms]">
+        <div className="animate-ring-reveal ring-strapi-gray-700/50 rounded-strapi-xl overflow-hidden ring [--reveal-delay:680ms]">
           <StrapiHeroHomeFeatures features={component.features} />
         </div>
       ) : null}

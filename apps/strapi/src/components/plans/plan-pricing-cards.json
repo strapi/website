@@ -16,6 +16,9 @@
       "component": "plans.plan-pricing-card-item",
       "repeatable": true
     },
+    "footnote": {
+      "type": "richtext"
+    },
     "extraBox": {
       "type": "component",
       "component": "plans.plan-pricing-extra-box",

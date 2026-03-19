@@ -105,7 +105,7 @@ export function MobileNavbar({
                       item={item}
                     />
                     {Array.isArray(sections) && (
-                      <div className="mt-3">
+                      <div className="mt-3 flex flex-col sm:gap-2">
                         {sections
                           .flatMap((item) => item?.items ?? [])
                           .map((item) => (

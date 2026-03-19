@@ -93,6 +93,7 @@ export function StrapiTopBanner({ component }: StrapiTopBannerProps) {
 
     return () => {
       window.clearTimeout(appearTimeout)
+
       if (hideTimeoutRef.current != null) {
         window.clearTimeout(hideTimeoutRef.current)
       }
@@ -120,30 +121,28 @@ export function StrapiTopBanner({ component }: StrapiTopBannerProps) {
   return (
     <div
       className={cn(
-        "bg-strapi-purple-600 grid transition-all duration-700 ease-in-out",
-        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        "bg-strapi-purple-600 static z-50 transition-all duration-700 ease-in-out",
+        isOpen ? "h-13" : "h-0"
       )}
     >
-      <div className="overflow-hidden">
-        <div
-          className={cn(
-            "relative px-12 py-4 text-center text-base text-white transition-opacity [&_a]:text-amber-200 [&_a]:underline [&_a]:transition-colors [&_a]:hover:text-amber-100",
-            isOpen
-              ? "opacity-100 delay-300 duration-300"
-              : "opacity-0 delay-0 duration-150"
-          )}
-        >
-          <InlineMarkdown>{content}</InlineMarkdown>
+      <div
+        className={cn(
+          "relative flex h-13 w-full items-center justify-center pr-12 pl-6 text-center text-sm text-white transition-opacity md:px-12 md:text-base [&_a]:text-amber-200 [&_a]:underline [&_a]:transition-colors [&_a]:hover:text-amber-100",
+          isOpen
+            ? "opacity-100 delay-300 duration-300"
+            : "opacity-0 delay-0 duration-150"
+        )}
+      >
+        <InlineMarkdown className="truncate">{content}</InlineMarkdown>
 
-          <button
-            type="button"
-            onClick={handleDismiss}
-            className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer p-1 text-white/80 transition-colors hover:text-white"
-            aria-label="Close banner"
-          >
-            <XIcon className="size-4" weight="bold" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleDismiss}
+          className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer p-1 text-white/80 transition-colors hover:text-white"
+          aria-label="Close banner"
+        >
+          <XIcon className="size-4" weight="bold" />
+        </button>
       </div>
     </div>
   )

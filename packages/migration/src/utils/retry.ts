@@ -40,8 +40,10 @@ export async function withRetry<T>(
       }
 
       const delay = baseDelay * Math.pow(2, attempt)
+      const reason =
+        err instanceof Error ? err.message.slice(0, 200) : String(err)
       opts.logger?.warn(
-        `Retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`
+        `Retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries}) — ${reason}`
       )
       await new Promise((r) => setTimeout(r, delay))
     }

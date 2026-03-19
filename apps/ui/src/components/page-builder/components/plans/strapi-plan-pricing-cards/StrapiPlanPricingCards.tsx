@@ -2,6 +2,7 @@ import type { Data } from "@repo/strapi-types"
 import { cva } from "class-variance-authority"
 
 import { Container } from "@/components/elementary/Container"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { PricingCard } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/PricingCard"
 import {
   PricingFeature,
@@ -118,6 +119,10 @@ export function StrapiPlanPricingCards({
           ))}
         </div>
       </PricingBillingProvider>
+
+      <div className="text-strapi-neutral-700 mt-6 text-sm">
+        <InlineMarkdown>{component.footnote}</InlineMarkdown>
+      </div>
 
       <PricingExtraBox data={component.extraBox} />
     </Container>

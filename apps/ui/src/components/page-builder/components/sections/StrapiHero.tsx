@@ -1,13 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 
 import { HeroContainer } from "@/components/elementary/HeroContainer"
-import {
-  SectionCTA,
-  SectionHeader,
-  SectionDescription,
-  SectionLabel,
-  SectionTitle,
-} from "@/components/elementary/section-header"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
@@ -23,43 +17,45 @@ export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
 
   return (
     <HeroContainer affectsNavbarTheme={affectsNavbarTheme}>
-      <div className="border-strapi-gray-700/50 rounded-strapi-lg flex flex-col items-end overflow-hidden md:flex-row md:border md:pl-10 lg:gap-12">
-        <SectionHeader
-          className="animate-reveal-cascade px-8 py-8 md:py-16 lg:pr-0 lg:pl-12"
-          layout="left"
-          size="xl"
-        >
-          {component.label ? (
-            <SectionLabel variant="default">{component.label}</SectionLabel>
+      <div className="animate-ring-reveal ring-strapi-gray-700/50 rounded-strapi-xl overflow-hidden md:ring">
+        <div className="md:bg-strapi-gray-950 rounded-strapi-xl flex w-full flex-col md:flex-row">
+          <div className="animate-reveal-cascade animate-border-reveal border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 flex-col items-start gap-5 px-8 py-8 text-left md:border-r md:px-14 md:py-16">
+            {component.label ? (
+              <span className="text-strapi-blue-600 text-sm font-bold tracking-wider uppercase">
+                {component.label}
+              </span>
+            ) : null}
+
+            <h1 className="text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
+              {component.title}
+            </h1>
+
+            {component.description ? (
+              <p className="text-background/60 text-sm leading-relaxed sm:text-base">
+                <InlineMarkdown>{component.description}</InlineMarkdown>
+              </p>
+            ) : null}
+
+            {component.ctas?.length ? (
+              <div className="mt-6 flex flex-wrap gap-4">
+                {component.ctas.map((cta) => (
+                  <StrapiLink key={cta.id} component={cta} />
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          {component.image ? (
+            <div className="animate-border-reveal animate-reveal-cascade border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 items-center justify-center overflow-hidden max-md:border-t">
+              <StrapiBasicImage
+                component={component.image}
+                mode="responsive"
+                className="max-w-[640px]"
+                sizes="(max-width: 768px) 100vw, 640px"
+              />
+            </div>
           ) : null}
-
-          <SectionTitle variant="inverse" as="h1" size="lg">
-            {component.title}
-          </SectionTitle>
-
-          {component.description ? (
-            <SectionDescription variant="inverse" size="lg">
-              {component.description}
-            </SectionDescription>
-          ) : null}
-
-          {component.ctas?.length ? (
-            <SectionCTA spacing="lg">
-              {component.ctas.map((cta) => (
-                <StrapiLink key={cta.id} component={cta} />
-              ))}
-            </SectionCTA>
-          ) : null}
-        </SectionHeader>
-
-        {component.image ? (
-          <StrapiBasicImage
-            component={component.image}
-            mode="responsive"
-            className="max-w-[640px]"
-            sizes="(max-width: 768px) 100vw, 640px"
-          />
-        ) : null}
+        </div>
       </div>
     </HeroContainer>
   )

@@ -2,15 +2,17 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { WarningIcon } from "@phosphor-icons/react/ssr"
+import { useMutation } from "@tanstack/react-query"
+import { useTranslations } from "next-intl"
 import { ReCaptchaProvider } from "next-recaptcha-v3"
-import { useCallback, useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { getEnvVar } from "@/lib/env-vars"
-import type { HubSpotFormSchema } from "@/lib/hubspot"
+import type { HubSpotFormSchema, HubSpotSubmitPayload } from "@/lib/hubspot"
 
 import {
   buildDefaultValues,
@@ -27,6 +29,36 @@ interface HubSpotSsrFormProps {
   /** When true, obtains a reCAPTCHA v3 token before submission. Requires NEXT_PUBLIC_RECAPTCHA_SITE_KEY. */
   readonly enableRecaptcha?: boolean
   readonly onSubmitted?: (values: Record<string, unknown>) => void
+}
+
+interface SubmitPayload {
+  body: HubSpotSubmitPayload
+  recaptchaToken?: string
+}
+
+interface SubmitResult {
+  inlineMessage?: string
+}
+
+async function submitHubSpotForm(
+  payload: SubmitPayload
+): Promise<SubmitResult> {
+  const res = await fetch("/api/hubspot/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...payload.body,
+      ...(payload.recaptchaToken && { recaptchaToken: payload.recaptchaToken }),
+    }),
+  })
+
+  const data = await res.json()
+
+  if (!res.ok) {
+    throw new Error(data.error || "Submission failed")
+  }
+
+  return data
 }
 
 const recaptchaSiteKey = getEnvVar("NEXT_PUBLIC_RECAPTCHA_SITE_KEY")
@@ -55,9 +87,7 @@ function HubSpotSsrFormInner({
   enableRecaptcha,
   onSubmitted,
 }: HubSpotSsrFormProps) {
-  const [submitted, setSubmitted] = useState<{
-    message: string
-  } | null>(null)
+  const t = useTranslations("forms")
 
   const zodSchema = useMemo(() => buildZodSchema(schema), [schema])
   const defaultValues = useMemo(() => buildDefaultValues(schema), [schema])
@@ -76,89 +106,62 @@ function HubSpotSsrFormInner({
     mode: "onBlur",
   })
 
-  const { setError } = form
+  const submitMutation = useMutation({
+    mutationFn: submitHubSpotForm,
+    onSuccess: (data) => {
+      if (onSubmitted) {
+        onSubmitted(form.getValues())
 
-  const onSubmit = useCallback(
-    async (values: Record<string, unknown>) => {
-      try {
-        // Obtain reCAPTCHA token when enabled (silently skipped if provider is missing)
-        let recaptchaToken: string | undefined
-        if (enableRecaptcha && recaptchaSiteKey) {
-          try {
-            recaptchaToken = await window.grecaptcha?.execute(
-              recaptchaSiteKey,
-              {
-                action: "hubspot_form_submit",
-              }
-            )
-          } catch {
-            // reCAPTCHA script not loaded — proceed without token
-          }
-        }
+        return
+      }
 
-        const payload = buildSubmissionPayload({
-          schema,
-          values,
-          formId,
-          portalId,
-        })
+      const postSubmitAction = schema.configuration?.postSubmitAction
 
-        const res = await fetch("/api/hubspot/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...payload,
-            ...(recaptchaToken && { recaptchaToken }),
-          }),
-        })
-
-        const data = await res.json()
-
-        if (!res.ok) {
-          throw new Error(data.error || "Submission failed")
-        }
-
-        // If parent provided onSubmitted, delegate post-submit handling
-        if (onSubmitted) {
-          onSubmitted(values)
-
-          return
-        }
-
-        const postSubmitAction = schema.configuration?.postSubmitAction
-
-        if (
-          postSubmitAction?.type === "redirect_url" &&
-          postSubmitAction.value
-        ) {
-          window.location.href = postSubmitAction.value
-
-          return
-        }
-
-        setSubmitted({
-          message:
-            data.inlineMessage ??
-            postSubmitAction?.value ??
-            "Thanks for submitting the form.",
-        })
-      } catch (err) {
-        setError("root", {
-          message:
-            err instanceof Error
-              ? err.message
-              : "An error occurred while submitting the form.",
-        })
+      if (postSubmitAction?.type === "redirect_url" && postSubmitAction.value) {
+        window.location.href = postSubmitAction.value
       }
     },
-    [schema, formId, portalId, setError, onSubmitted, enableRecaptcha]
-  )
+    onError: (err) => {
+      form.setError("root", {
+        message: err instanceof Error ? err.message : t("submissionError"),
+      })
+    },
+  })
 
-  if (submitted) {
+  const onSubmit = async (values: Record<string, unknown>) => {
+    let recaptchaToken: string | undefined
+
+    if (enableRecaptcha && recaptchaSiteKey) {
+      try {
+        recaptchaToken = await window.grecaptcha?.execute(recaptchaSiteKey, {
+          action: "hubspot_form_submit",
+        })
+      } catch {
+        // reCAPTCHA script not loaded — proceed without token
+      }
+    }
+
+    const payload = buildSubmissionPayload({
+      schema,
+      values,
+      formId,
+      portalId,
+    })
+
+    submitMutation.mutate({ body: payload, recaptchaToken })
+  }
+
+  if (submitMutation.isSuccess && !onSubmitted) {
+    const postSubmitAction = schema.configuration?.postSubmitAction
+    const message =
+      submitMutation.data.inlineMessage ??
+      postSubmitAction?.value ??
+      t("submissionSuccess")
+
     return (
       <div
         className="text-foreground text-sm leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: submitted.message }}
+        dangerouslySetInnerHTML={{ __html: message }}
       />
     )
   }
@@ -166,11 +169,8 @@ function HubSpotSsrFormInner({
   if (visibleFields.length === 0 && !schema.legalConsentOptions) {
     return (
       <Alert>
-        <AlertTitle>No form fields configured</AlertTitle>
-        <AlertDescription>
-          This form has no visible fields. Please check the HubSpot form
-          configuration.
-        </AlertDescription>
+        <AlertTitle>{t("noFieldsTitle")}</AlertTitle>
+        <AlertDescription>{t("noFieldsDescription")}</AlertDescription>
       </Alert>
     )
   }
@@ -198,24 +198,24 @@ function HubSpotSsrFormInner({
               role="alert"
               aria-live="polite"
             >
-              Please review the highlighted fields above and correct the errors.
+              {t("reviewErrors")}
             </div>
           )}
 
         {form.formState.errors.root && (
           <Alert variant="destructive">
             <WarningIcon className="size-4" weight="bold" />
-            <AlertTitle>Submission failed</AlertTitle>
+            <AlertTitle>{t("submissionFailed")}</AlertTitle>
             <AlertDescription>
               {form.formState.errors.root.message}
             </AlertDescription>
           </Alert>
         )}
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting
-            ? "Submitting\u2026"
-            : (schema.configuration?.submitButtonLabel ?? "Submit")}
+        <Button type="submit" disabled={submitMutation.isPending}>
+          {submitMutation.isPending
+            ? t("submitting")
+            : (schema.configuration?.submitButtonLabel ?? t("submitDefault"))}
         </Button>
       </form>
     </Form>

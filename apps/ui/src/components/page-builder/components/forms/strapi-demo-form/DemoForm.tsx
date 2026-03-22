@@ -1,6 +1,7 @@
 "use client"
 
 import { Spinner } from "@phosphor-icons/react"
+import { useTranslations } from "next-intl"
 
 import { HubSpotSsrForm } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/HubSpotSsrForm"
 import type { HubSpotFormSchema } from "@/lib/hubspot"
@@ -31,6 +32,7 @@ export function DemoForm({
   enableRecaptcha,
   config,
 }: DemoFormProps) {
+  const t = useTranslations("forms.demo")
   const { stage, result, startDemoRequest } = useDemoRequest()
 
   if (stage === "ready" && result) {
@@ -59,7 +61,7 @@ export function DemoForm({
           <div className="flex flex-col items-center gap-3">
             <Spinner className="text-strapi-blue-600 size-8 animate-spin" />
             <p className="text-strapi-neutral-600 text-sm font-medium">
-              Setting up your demo...
+              {t("settingUp")}
             </p>
           </div>
         </div>

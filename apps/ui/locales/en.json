@@ -98,6 +98,37 @@
     }
   },
 
+  "blog": {
+    "title": "Blog",
+    "description": "Tutorials, product updates, and engineering insights."
+  },
+
+  "forms": {
+    "unavailableTitle": "Form unavailable",
+    "unavailableDescription": "This form could not be loaded. Please try again later.",
+    "selectPlaceholder": "Select...",
+    "submitting": "Submitting\u2026",
+    "submitDefault": "Submit",
+    "submissionFailed": "Submission failed",
+    "submissionError": "An error occurred while submitting the form.",
+    "submissionSuccess": "Thanks for submitting the form.",
+    "noFieldsTitle": "No form fields configured",
+    "noFieldsDescription": "This form has no visible fields. Please check the HubSpot form configuration.",
+    "reviewErrors": "Please review the highlighted fields above and correct the errors.",
+    "demo": {
+      "settingUp": "Setting up your demo...",
+      "readyTitle": "Your demo is ready!",
+      "readyDescription": "Access your hosted Strapi instance:",
+      "strapiAdmin": "Strapi Admin",
+      "frontend": "Frontend",
+      "credentials": "Credentials",
+      "email": "Email:",
+      "password": "Password:",
+      "fallbackTitle": "Setting up your demo...",
+      "fallbackDescription": "You'll receive access details via email shortly."
+    }
+  },
+
   "comps": {
     "fileInput": {
       "label": "Select file",

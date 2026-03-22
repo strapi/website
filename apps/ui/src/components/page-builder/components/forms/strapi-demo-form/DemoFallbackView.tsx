@@ -1,4 +1,5 @@
 import { Spinner } from "@phosphor-icons/react"
+import { useTranslations } from "next-intl"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
@@ -11,12 +12,14 @@ export function DemoFallbackView({
   title,
   description,
 }: DemoFallbackViewProps) {
+  const t = useTranslations("forms.demo")
+
   return (
     <Alert>
       <Spinner className="size-4 animate-spin" />
-      <AlertTitle>{title ?? "Setting up your demo..."}</AlertTitle>
+      <AlertTitle>{title ?? t("fallbackTitle")}</AlertTitle>
       <AlertDescription>
-        {description ?? "You'll receive access details via email shortly."}
+        {description ?? t("fallbackDescription")}
       </AlertDescription>
     </Alert>
   )

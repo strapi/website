@@ -1,8 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
-
-export type DemoStage = "idle" | "waiting" | "ready" | "fallback"
+import { useMutation } from "@tanstack/react-query"
 
 export interface DemoResult {
   backendUrl: string
@@ -16,56 +14,52 @@ interface DemoRequestData {
   duration: number
 }
 
-/** Manages demo provisioning lifecycle: idle → waiting → ready/fallback. Aborts in-flight requests on re-call. */
+async function requestDemo(data: DemoRequestData): Promise<DemoResult> {
+  const res = await fetch("/api/demo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: data.email,
+      firstName: data.firstname,
+      lastName: data.lastname,
+      duration: data.duration,
+    }),
+  })
+
+  if (!res.ok) {
+    throw new Error("Demo request failed")
+  }
+
+  const responseData = await res.json()
+  const links = responseData.links
+
+  if (!links?.backend || !links?.frontend) {
+    throw new Error("Missing demo links in response")
+  }
+
+  return {
+    backendUrl: links.backend,
+    frontendUrl: links.frontend,
+  }
+}
+
+/** Manages demo provisioning lifecycle via useMutation. */
 export function useDemoRequest() {
-  const [stage, setStage] = useState<DemoStage>("idle")
-  const [result, setResult] = useState<DemoResult | null>(null)
-  const abortRef = useRef<AbortController | null>(null)
+  const mutation = useMutation({
+    mutationFn: requestDemo,
+  })
 
-  const startDemoRequest = useCallback(async (data: DemoRequestData) => {
-    abortRef.current?.abort()
-    const controller = new AbortController()
-    abortRef.current = controller
+  const stage = mutation.isPending
+    ? "waiting"
+    : mutation.isSuccess
+      ? "ready"
+      : mutation.isError
+        ? "fallback"
+        : "idle"
 
-    setStage("waiting")
-    setResult(null)
-
-    try {
-      const res = await fetch("/api/demo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          firstName: data.firstname,
-          lastName: data.lastname,
-          duration: data.duration,
-        }),
-        signal: controller.signal,
-      })
-
-      if (!res.ok) {
-        throw new Error("Demo request failed")
-      }
-
-      const responseData = await res.json()
-      const links = responseData.links
-
-      if (links?.backend && links?.frontend) {
-        setResult({
-          backendUrl: links.backend,
-          frontendUrl: links.frontend,
-        })
-        setStage("ready")
-
-        return
-      }
-
-      setStage("fallback")
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") return
-      setStage("fallback")
-    }
-  }, [])
-
-  return { stage, result, startDemoRequest }
+  return {
+    stage: stage as "idle" | "waiting" | "ready" | "fallback",
+    result: mutation.data ?? null,
+    startDemoRequest: mutation.mutate,
+  }
 }

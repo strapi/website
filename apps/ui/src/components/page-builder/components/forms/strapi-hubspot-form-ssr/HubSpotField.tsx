@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import type { Control, FieldValues } from "react-hook-form"
 
 import { Checkbox } from "@/components/ui/checkbox"
@@ -31,6 +32,8 @@ interface HubSpotFieldProps {
 }
 
 export function HubSpotField({ field, control }: HubSpotFieldProps) {
+  const t = useTranslations("forms")
+
   return (
     <FormField
       name={field.name}
@@ -72,7 +75,9 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue
-                        placeholder={field.placeholder || "Select..."}
+                        placeholder={
+                          field.placeholder || t("selectPlaceholder")
+                        }
                       />
                     </SelectTrigger>
                   </FormControl>

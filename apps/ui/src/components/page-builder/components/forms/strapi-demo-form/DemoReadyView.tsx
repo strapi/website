@@ -1,4 +1,5 @@
 import { CheckCircle } from "@phosphor-icons/react"
+import { useTranslations } from "next-intl"
 
 import { DemoLink } from "./DemoLink"
 import type { DemoResult } from "./useDemoRequest"
@@ -17,6 +18,8 @@ export function DemoReadyView({
   title,
   description,
 }: DemoReadyViewProps) {
+  const t = useTranslations("forms.demo")
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-start gap-3">
@@ -26,28 +29,31 @@ export function DemoReadyView({
         />
         <div>
           <h3 className="text-foreground text-lg font-semibold">
-            {title ?? "Your demo is ready!"}
+            {title ?? t("readyTitle")}
           </h3>
           <p className="text-strapi-neutral-600 mt-1 text-sm">
-            {description ?? "Access your hosted Strapi instance:"}
+            {description ?? t("readyDescription")}
           </p>
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
-        <DemoLink label="Strapi Admin" href={`${result.backendUrl}/admin`} />
-        <DemoLink label="Frontend" href={result.frontendUrl} />
+        <DemoLink
+          label={t("strapiAdmin")}
+          href={`${result.backendUrl}/admin`}
+        />
+        <DemoLink label={t("frontend")} href={result.frontendUrl} />
       </div>
 
       <div className="bg-strapi-neutral-100 rounded-lg p-4">
         <p className="text-strapi-neutral-600 mb-2 text-xs font-medium tracking-wider uppercase">
-          Credentials
+          {t("credentials")}
         </p>
         <p className="text-foreground text-sm">
-          <span className="font-medium">Email:</span> {DEMO_EMAIL}
+          <span className="font-medium">{t("email")}</span> {DEMO_EMAIL}
         </p>
         <p className="text-foreground text-sm">
-          <span className="font-medium">Password:</span> {DEMO_PASSWORD}
+          <span className="font-medium">{t("password")}</span> {DEMO_PASSWORD}
         </p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import type { Locale } from "next-intl"
-import { setRequestLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import { use } from "react"
 
 import { Container } from "@/components/elementary/Container"
@@ -17,16 +17,16 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
 
   setRequestLocale(locale)
 
+  const t = use(getTranslations({ locale, namespace: "blog" }))
+
   return (
     <main className="py-16 lg:py-24">
       <Container>
         <SectionHeader layout="center">
           <SectionTitle as="h1" size="xl">
-            Blog
+            {t("title")}
           </SectionTitle>
-          <SectionDescription>
-            Tutorials, product updates, and engineering insights.
-          </SectionDescription>
+          <SectionDescription>{t("description")}</SectionDescription>
         </SectionHeader>
       </Container>
     </main>

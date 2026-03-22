@@ -45,12 +45,14 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${operatorToken}`,
+        "x-token": operatorToken,
       },
       body: JSON.stringify({
-        email: body.email,
-        firstName: body.firstName,
-        lastName: body.lastName,
+        demoUser: {
+          email: body.email,
+          firstName: body.firstName,
+          lastName: body.lastName,
+        },
         duration: durationSeconds,
       }),
     })

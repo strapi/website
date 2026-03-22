@@ -87,8 +87,8 @@
   }
 }
 
-/* Minimal layout — hide header/footer when a page opts in */
-body:has([data-minimal-layout]) [data-slot="site-header"],
+/* Minimal layout — hide navbar and footer when a page opts in (top banner stays visible) */
+body:has([data-minimal-layout]) nav[data-navbar],
 body:has([data-minimal-layout]) [data-slot="site-footer"] {
   display: none;
 }

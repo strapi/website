@@ -77,6 +77,93 @@ export async function fetchAllPages(
   }
 }
 
+// ------ Blog post fetching functions
+
+export async function fetchBlogPost(
+  slug: string,
+  locale: Locale,
+  requestInit?: RequestInit,
+  options?: CustomFetchOptions
+) {
+  const dm = await draftMode()
+
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::blog-post.blog-post",
+      slug,
+      {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        populate: {
+          image: {
+            populate: { image: { populate: { media: true } } },
+          },
+          author: true,
+          coauthors: true,
+          category: true,
+          tags: true,
+          seo: seoPopulate,
+        } as Record<string, unknown>,
+        populateDynamicZone: { sections: true },
+      },
+      requestInit,
+      options
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching blog post '${slug}' for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+export async function fetchAllBlogPosts(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
+      locale,
+      fields: ["slug", "locale", "updatedAt", "createdAt"],
+      populate: {},
+      status: "published",
+    })
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all blog posts for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
+  }
+}
+
+export async function fetchBlogPostSeo(slug: string, locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::blog-post.blog-post",
+      slug,
+      {
+        locale,
+        populate: {
+          seo: seoPopulate,
+        },
+      }
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching blog post SEO for '${slug}' locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
 // ------ SEO fetching functions
 
 export async function fetchSeo(

@@ -25,11 +25,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "transfer": "strapi transfer",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node scripts/patch-rest-cache.mjs"
   },
   "dependencies": {
     "@repo/design-system": "workspace:*",
     "@repo/shared-data": "workspace:*",
+    "@strapi-community/plugin-rest-cache": "^5.0.1",
+    "@strapi-community/provider-rest-cache-memory": "^5.0.0",
     "@strapi/database": "5.36.0",
     "@strapi/design-system": "2.1.2",
     "@strapi/plugin-color-picker": "5.36.0",

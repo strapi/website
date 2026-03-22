@@ -1,0 +1,1 @@
+export { StrapiHubSpotFormSsr } from "./StrapiHubSpotFormSsr"

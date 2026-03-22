@@ -1,0 +1,1 @@
+export { StrapiDemoForm } from "./StrapiDemoForm"

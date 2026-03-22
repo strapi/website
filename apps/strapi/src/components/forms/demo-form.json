@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_forms_demo_forms",
+  "info": {
+    "displayName": "Demo Form",
+    "icon": "rocket",
+    "description": "HubSpot form with demo provisioning logic"
+  },
+  "options": {},
+  "attributes": {
+    "form": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hubspot-form.hubspot-form"
+    },
+    "successTitle": {
+      "type": "string",
+      "default": "Your demo is ready!"
+    },
+    "successDescription": {
+      "type": "text",
+      "default": "Access your hosted Strapi instance:"
+    },
+    "fallbackTitle": {
+      "type": "string",
+      "default": "Setting up your demo..."
+    },
+    "fallbackDescription": {
+      "type": "text",
+      "default": "You'll receive access details via email shortly."
+    },
+    "enableRecaptcha": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_elements_conversion_info_items",
+  "info": {
+    "displayName": "Conversion Info Item",
+    "icon": "chartBubble",
+    "description": "Stat or badge item with optional value for info blocks"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    },
+    "value": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

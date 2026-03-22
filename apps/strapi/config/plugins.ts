@@ -1,16 +1,30 @@
+import fs from "node:fs"
+import path from "node:path"
+
+const EXCLUDED_CONTENT_TYPES: Set<string> = new Set()
+
+/**
+ * Auto-discovers API content types from `src/api/` — only includes
+ * directories that have a `content-types` subdirectory.
+ */
+function getApiContentTypes(): string[] {
+  const apiDir = path.join(__dirname, "..", "src", "api")
+
+  return fs
+    .readdirSync(apiDir)
+    .filter((name) => {
+      // eslint-disable-next-line sonarjs/no-empty-collection
+      if (name.includes(".") || EXCLUDED_CONTENT_TYPES.has(name)) {
+        return false
+      }
+
+      return fs.existsSync(path.join(apiDir, name, "content-types"))
+    })
+    .map((name) => `api::${name}.${name}`)
+}
+
 export default ({ env }) => {
-  const awsS3Config = prepareAwsS3Config(env)
-  if (!awsS3Config) {
-    console.warn(
-      "AWS S3 upload configuration is not complete. Local file storage will be used."
-    )
-  }
-
   return {
-    upload: {
-      config: awsS3Config ?? localUploadConfig,
-    },
-
     "config-sync": {
       enabled: true,
     },
@@ -32,104 +46,32 @@ export default ({ env }) => {
       },
     },
 
-    email: {
-      config: prepareEmailConfig(env),
+    // Must be last — registers after custom field plugins (color-picker) to avoid #119
+    // https://github.com/strapi-community/plugin-rest-cache/issues/119
+    "rest-cache": {
+      enabled: true,
+      config: {
+        provider: {
+          name: "memory",
+          options: {
+            max: 32767,
+            maxAge: 3600000, // 1 hour
+          },
+        },
+        strategy: {
+          keysPrefix: "strapi-website",
+          maxAge: 3600000,
+          debug: env("NODE_ENV") !== "production",
+          resetOnStartup: true,
+          clearRelatedCache: true,
+          enableEtag: true,
+          enableXCacheHeaders: true,
+          // Allow caching of API-token requests (same data for all callers).
+          // Only skip cache for session cookies (admin panel).
+          hitpass: (ctx) => Boolean(ctx.request.header.cookie),
+          contentTypes: getApiContentTypes(),
+        },
+      },
     },
   }
-}
-
-const localUploadConfig: Record<string, unknown> = {
-  // Local provider setup
-  // https://docs.strapi.io/dev-docs/plugins/upload
-  sizeLimit: 250 * 1024 * 1024, // 256mb in bytes,
-}
-
-const prepareAwsS3Config = (env) => {
-  const awsAccessKeyId = env("AWS_ACCESS_KEY_ID")
-  const awsAccessSecret = env("AWS_ACCESS_SECRET")
-  const awsRegion = env("AWS_REGION")
-  const awsBucket = env("AWS_BUCKET")
-  const awsRequirements = [
-    awsAccessKeyId,
-    awsAccessSecret,
-    awsRegion,
-    awsBucket,
-  ]
-  const awsRequirementsOk = awsRequirements.every(
-    (req) => req != null && req !== ""
-  )
-
-  if (awsRequirementsOk) {
-    return {
-      provider: "aws-s3",
-      providerOptions: {
-        baseUrl: env("CDN_URL"),
-        rootPath: env("CDN_ROOT_PATH"),
-        s3Options: {
-          credentials: {
-            accessKeyId: awsAccessKeyId,
-            secretAccessKey: awsAccessSecret,
-          },
-          region: awsRegion,
-          params: {
-            ACL: env("AWS_ACL", "public-read"),
-            signedUrlExpires: env("AWS_SIGNED_URL_EXPIRES", 15 * 60),
-            Bucket: awsBucket,
-          },
-        },
-      },
-      actionOptions: {
-        upload: {},
-        uploadStream: {},
-        delete: {},
-      },
-    }
-  }
-}
-
-const prepareEmailConfig = (env) => {
-  const hasMailgunCreds = env("MAILGUN_API_KEY") && env("MAILGUN_DOMAIN")
-  const hasMailtrapCreds = env("MAILTRAP_USER") && env("MAILTRAP_PASS")
-
-  // Mailgun has bigger priority
-  // Mailtrap is only for development/testing purposes
-
-  if (hasMailgunCreds) {
-    return {
-      provider: "mailgun",
-      providerOptions: {
-        key: env("MAILGUN_API_KEY"),
-        domain: env("MAILGUN_DOMAIN"),
-        url: env("MAILGUN_HOST", "https://api.eu.mailgun.net"),
-      },
-      settings: {
-        defaultFrom: env("MAILGUN_EMAIL") || "noreply@example.com",
-        defaultReplyTo: env("MAILGUN_EMAIL") || "noreply@example.com",
-      },
-    }
-  }
-
-  if (hasMailtrapCreds) {
-    return {
-      provider: "nodemailer",
-      providerOptions: {
-        host: env("MAILTRAP_HOST", "sandbox.smtp.mailtrap.io"),
-        port: Number.parseInt(env("MAILTRAP_PORT", "2525"), 10),
-        auth: {
-          user: env("MAILTRAP_USER"),
-          pass: env("MAILTRAP_PASS"),
-        },
-      },
-      settings: {
-        defaultFrom: env("MAILTRAP_EMAIL") || "noreply@example.com",
-        defaultReplyTo: env("MAILTRAP_EMAIL") || "noreply@example.com",
-      },
-    }
-  }
-
-  console.warn(
-    "⚠️  No email provider is configured. Email functionality will not work."
-  )
-
-  return null
 }

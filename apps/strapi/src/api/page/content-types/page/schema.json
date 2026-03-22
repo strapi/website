@@ -86,7 +86,11 @@
         "sections.hero-home",
         "sections.feature-card-grid",
         "forms.hubspot-form",
-        "migration.data-sink"
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
+        "forms.demo-conversion",
+        "migration.data-sink",
+        "media.embed"
       ]
     },
     "children": {
@@ -100,6 +104,15 @@
       "relation": "manyToOne",
       "target": "api::page.page",
       "inversedBy": "children"
+    },
+    "minimalLayout": {
+      "type": "boolean",
+      "default": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
     },
     "seo": {
       "type": "component",

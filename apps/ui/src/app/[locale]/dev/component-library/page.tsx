@@ -28,8 +28,10 @@ import { TriangleMask } from "@/components/elementary/TriangleMask"
 import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
 import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/strapi-hubspot-form/StrapiHubSpotForm"
+import { HubSpotSsrForm } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/HubSpotSsrForm"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
+import { StrapiEmbed } from "@/components/page-builder/components/media/StrapiEmbed"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
@@ -51,7 +53,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import type { HubSpotFormSchema } from "@/lib/hubspot"
 
 // ---------------------------------------------------------------------------
 // Mock image helpers
@@ -202,6 +206,8 @@ const TOC = [
   { id: "hero", label: "Hero" },
   { id: "hero-home", label: "HeroHome" },
   { id: "hubspot-form", label: "HubSpot Form" },
+  { id: "hubspot-form-ssr", label: "HubSpot Form (SSR)" },
+  { id: "embed", label: "Embed" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -212,6 +218,146 @@ const newsletterBannerDefaultExample = {
   consentText:
     "By submitting this form you consent to us emailing you occasionally about our products and services. You can unsubscribe from emails at any time, and we will never pass your email to third parties.",
 } as Data.Component<"forms.newsletter">
+
+const hubspotSsrMockSchema: HubSpotFormSchema = {
+  fieldGroups: [
+    {
+      fields: [
+        {
+          name: "firstname",
+          label: "First Name",
+          fieldType: "single_line_text",
+          required: true,
+          hidden: false,
+          placeholder: "John",
+        },
+        {
+          name: "lastname",
+          label: "Last Name",
+          fieldType: "single_line_text",
+          required: true,
+          hidden: false,
+          placeholder: "Doe",
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "email",
+          label: "Email",
+          fieldType: "email",
+          required: true,
+          hidden: false,
+          placeholder: "john@example.com",
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "company",
+          label: "Company",
+          fieldType: "single_line_text",
+          required: false,
+          hidden: false,
+          placeholder: "Acme Inc.",
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "role",
+          label: "Your Role",
+          fieldType: "dropdown",
+          required: true,
+          hidden: false,
+          options: [
+            { label: "Developer", value: "developer" },
+            { label: "Designer", value: "designer" },
+            { label: "Product Manager", value: "product_manager" },
+            { label: "Other", value: "other" },
+          ],
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "team_size",
+          label: "Team Size",
+          fieldType: "number",
+          required: false,
+          hidden: false,
+          placeholder: "10",
+          description: "Approximate number of people on your team",
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "message",
+          label: "Message",
+          fieldType: "multi_line_text",
+          required: false,
+          hidden: false,
+          placeholder: "Tell us about your project...",
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "plan",
+          label: "Preferred Plan",
+          fieldType: "radio",
+          required: true,
+          hidden: false,
+          options: [
+            { label: "Starter", value: "starter" },
+            { label: "Pro", value: "pro" },
+            { label: "Enterprise", value: "enterprise" },
+          ],
+        },
+      ],
+    },
+    {
+      fields: [
+        {
+          name: "agree_terms",
+          label: "I agree to the terms and conditions",
+          fieldType: "single_checkbox",
+          required: true,
+          hidden: false,
+        },
+      ],
+    },
+  ],
+  legalConsentOptions: {
+    type: "explicit_consent_to_process",
+    communicationConsentText:
+      "<p>We'd like to send you updates about our products and services.</p>",
+    communicationsCheckboxes: [
+      {
+        label: "I agree to receive marketing emails",
+        subscriptionTypeId: 123,
+      },
+    ],
+    consentToProcessCheckboxLabel:
+      "I agree to allow Strapi to store and process my personal data.",
+    privacyText:
+      '<p>You can unsubscribe from these communications at any time. For more information, review our <a href="#">Privacy Policy</a>.</p>',
+  },
+  configuration: {
+    submitButtonLabel: "Get Started",
+    postSubmitAction: {
+      type: "inline_message",
+      value: "Thanks for your interest! We'll be in touch shortly.",
+    },
+  },
+}
 
 const twoColumnsBenefitsExample = {
   section: {
@@ -1971,6 +2117,109 @@ export default function ComponentLibraryPage() {
                     placeholderHeight: 420,
                   },
                 } as Data.Component<"forms.hubspot-form">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="hubspot-form-ssr" title="HubSpot Form (SSR)">
+        <p className="text-strapi-neutral-600 mb-6 text-sm">
+          Server-side rendered HubSpot form using shadcn/ui + react-hook-form +
+          zod. Renders native form controls instead of an embedded iframe.
+          Submission is disabled in this demo (no API route connected).
+        </p>
+        <div className="-mx-6 space-y-10">
+          <Variant label="All field types">
+            <div className="rounded-strapi-lg mx-auto max-w-xl bg-white p-8 shadow-lg lg:p-12">
+              <HubSpotSsrForm
+                schema={hubspotSsrMockSchema}
+                portalId="demo-portal"
+                formId="demo-form"
+              />
+            </div>
+          </Variant>
+
+          <Variant label="Error: Schema fetch failure">
+            <div className="mx-auto max-w-xl">
+              <Alert variant="destructive">
+                <AlertTitle>Form unavailable</AlertTitle>
+                <AlertDescription>
+                  This form could not be loaded. Please try again later.
+                  <p className="mt-1 text-xs">
+                    Failed to fetch HubSpot form schema (status=401)
+                  </p>
+                </AlertDescription>
+              </Alert>
+            </div>
+          </Variant>
+
+          <Variant label="Error: Empty form (no visible fields)">
+            <div className="rounded-strapi-lg mx-auto max-w-xl bg-white p-8 shadow-lg lg:p-12">
+              <HubSpotSsrForm
+                schema={{
+                  fieldGroups: [
+                    {
+                      fields: [
+                        {
+                          name: "hidden_field",
+                          label: "Hidden",
+                          fieldType: "single_line_text",
+                          required: false,
+                          hidden: true,
+                        },
+                      ],
+                    },
+                  ],
+                }}
+                portalId="demo-portal"
+                formId="demo-form-empty"
+              />
+            </div>
+          </Variant>
+
+          <Variant label="Error: Submission failure">
+            <div className="rounded-strapi-lg mx-auto max-w-xl bg-white p-8 shadow-lg lg:p-12">
+              <Alert variant="destructive">
+                <AlertTitle>Submission failed</AlertTitle>
+                <AlertDescription>
+                  Form submission failed. Please try again.
+                </AlertDescription>
+              </Alert>
+            </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Embed                                                              */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="embed" title="Embed">
+        <div className="space-y-6">
+          <Variant label="Default (Guideflow demo)">
+            <StrapiEmbed
+              component={
+                {
+                  id: 1,
+                  __component: "media.embed",
+                  url: "https://app.guideflow.com/embed/np15xl7uzk",
+                  width: 1000,
+                  height: 670,
+                } as Data.Component<"media.embed">
+              }
+            />
+          </Variant>
+
+          <Variant label="YouTube video (16:9)">
+            <StrapiEmbed
+              component={
+                {
+                  id: 2,
+                  __component: "media.embed",
+                  url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                  width: 1280,
+                  height: 720,
+                } as Data.Component<"media.embed">
               }
             />
           </Variant>

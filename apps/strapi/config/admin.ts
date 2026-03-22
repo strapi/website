@@ -7,7 +7,7 @@ export default ({ env }) => {
     enabled: env("STRAPI_PREVIEW_ENABLED") === "true",
     previewSecret: env("STRAPI_PREVIEW_SECRET"),
     clientUrl: env("CLIENT_URL"),
-    enabledContentTypeUids: ["api::page.page"],
+    enabledContentTypeUids: ["api::page.page", "api::blog-post.blog-post"],
   }
 
   return {
@@ -41,10 +41,11 @@ export default ({ env }) => {
           const document = await strapi
             .documents(uid)
             .findOne({ documentId, locale })
-          const pathname = (document as { fullPath?: string })?.fullPath // not all collections have the fullPath attribute
-          // Disable preview if the pathname is not found
+
+          // Build preview pathname based on content type
+          const pathname = getPreviewPathname(uid, document)
           if (!pathname) {
-            return null // returning null diables the preview button in the UI
+            return null // returning null disables the preview button in the UI
           }
           // Use Next.js draft mode passing it a secret key and the content-type status
           const urlSearchParams = new URLSearchParams({
@@ -59,5 +60,23 @@ export default ({ env }) => {
       },
     },
     watchIgnoreFiles: ["**/config/sync/**"],
+  }
+}
+
+function getPreviewPathname(
+  uid: UID.CollectionType,
+  document: Record<string, unknown> | null
+): string | null {
+  if (!document) return null
+
+  switch (uid) {
+    case "api::page.page":
+      return (document.fullPath as string) || null
+
+    case "api::blog-post.blog-post":
+      return document.slug ? `/blog/${document.slug}` : null
+
+    default:
+      return null
   }
 }

@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_elements_conversion_info_blocks",
+  "info": {
+    "displayName": "Conversion Info Block",
+    "icon": "layout",
+    "description": "Flexible info block with logos, stats, or badges"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "logos": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": true
+    },
+    "items": {
+      "type": "component",
+      "component": "elements.conversion-info-item",
+      "repeatable": true
+    }
+  }
+}

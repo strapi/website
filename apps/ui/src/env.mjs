@@ -34,7 +34,12 @@ export const env = createEnv({
 
     GTM_ID: z.string().optional(),
     HUBSPOT_PORTAL_ID: z.string().optional(),
+    HUBSPOT_API_TOKEN: z.string().optional(),
     HOTJAR_ID: z.string().optional(),
+
+    DEMO_OPERATOR_SERVER: z.string().url().optional(),
+    DEMO_OPERATOR_TOKEN: z.string().optional(),
+    HUBSPOT_DEMO_WORKFLOW_ID: z.string().optional(),
 
     BASIC_AUTH_ENABLED: optionalZodBoolean(),
     BASIC_AUTH_USERNAME: z.string().optional(),
@@ -53,6 +58,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional(),
     NEXT_PUBLIC_PREVENT_UNUSED_FUNCTIONS_ERROR_LOGS: optionalZodBoolean(),
+    NEXT_PUBLIC_CHARGEBEE_URL: z.string().url().optional(),
   },
 
   shared: {
@@ -90,7 +96,12 @@ export const env = createEnv({
 
     GTM_ID: process.env.GTM_ID,
     HUBSPOT_PORTAL_ID: process.env.HUBSPOT_PORTAL_ID,
+    HUBSPOT_API_TOKEN: process.env.HUBSPOT_API_TOKEN,
     HOTJAR_ID: process.env.HOTJAR_ID,
+
+    DEMO_OPERATOR_SERVER: process.env.DEMO_OPERATOR_SERVER,
+    DEMO_OPERATOR_TOKEN: process.env.DEMO_OPERATOR_TOKEN,
+    HUBSPOT_DEMO_WORKFLOW_ID: process.env.HUBSPOT_DEMO_WORKFLOW_ID,
 
     BASIC_AUTH_ENABLED: process.env.BASIC_AUTH_ENABLED,
     BASIC_AUTH_USERNAME: process.env.BASIC_AUTH_USERNAME,
@@ -102,6 +113,7 @@ export const env = createEnv({
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
     NEXT_PUBLIC_PREVENT_UNUSED_FUNCTIONS_ERROR_LOGS:
       process.env.NEXT_PUBLIC_PREVENT_UNUSED_FUNCTIONS_ERROR_LOGS,
+    NEXT_PUBLIC_CHARGEBEE_URL: process.env.NEXT_PUBLIC_CHARGEBEE_URL,
 
     // shared
     NODE_ENV: process.env.NODE_ENV,

@@ -87,6 +87,12 @@
   }
 }
 
+/* Minimal layout — hide header/footer when a page opts in */
+body:has([data-minimal-layout]) [data-slot="site-header"],
+body:has([data-minimal-layout]) [data-slot="site-footer"] {
+  display: none;
+}
+
 /* When a dark hero is present, swap to light logo on all sizes */
 body:has([data-dark-hero]) nav[data-navbar] {
   --nav-logo-default-opacity: 0;

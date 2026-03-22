@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_forms_demo_conversions",
+  "info": {
+    "displayName": "Demo Conversion",
+    "icon": "rocket",
+    "description": "Two-column conversion section with demo provisioning form"
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "component": "utilities.section-header",
+      "repeatable": false
+    },
+    "features": {
+      "type": "component",
+      "component": "elements.conversion-feature",
+      "repeatable": true
+    },
+    "infoBlocks": {
+      "type": "component",
+      "component": "elements.conversion-info-block",
+      "repeatable": true
+    },
+    "form": {
+      "type": "component",
+      "component": "forms.demo-form",
+      "repeatable": false
+    },
+    "enableRecaptcha": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

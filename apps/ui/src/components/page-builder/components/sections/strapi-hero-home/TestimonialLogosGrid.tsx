@@ -10,6 +10,21 @@ const MAX_VISIBLE = 6
 const SWAP_INTERVAL_MS = 3500
 const ANIMATION_DURATION_MS = 400
 
+/** Random slot 0..MAX_VISIBLE-1, never the same as `exclude` when there is more than one slot. */
+function pickRandomSlotIndex(exclude: number): number {
+  if (MAX_VISIBLE <= 1) {
+    return 0
+  }
+
+  let slot = exclude
+
+  while (slot === exclude) {
+    slot = Math.floor(Math.random() * MAX_VISIBLE)
+  }
+
+  return slot
+}
+
 type Logo = Data.Component<"utilities.basic-image">
 
 interface LogoSlot {
@@ -27,21 +42,27 @@ export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
     logos.slice(0, MAX_VISIBLE).map((logo) => ({ logo, state: "idle" }))
   )
 
-  // Tracks next slot position to swap (0-5) and next logo index from the full list
-  const rotationRef = useRef({ slotIndex: 0, logoIndex: MAX_VISIBLE })
+  // Next slot to swap (0–5, random each time) and next logo index (sequential through the list)
+  const rotationRef = useRef({
+    slotIndex: pickRandomSlotIndex(-1),
+    logoIndex: MAX_VISIBLE,
+  })
 
   useEffect(() => {
-    if (!shouldAnimate) return
+    if (!shouldAnimate) {
+      return
+    }
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches
 
-    if (prefersReducedMotion) return
+    if (prefersReducedMotion) {
+      return
+    }
 
     const interval = setInterval(() => {
       const { slotIndex, logoIndex } = rotationRef.current
-
       const nextLogo = logos[logoIndex % logos.length]!
 
       // Exit current logo
@@ -69,9 +90,8 @@ export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
         }, ANIMATION_DURATION_MS)
       }, ANIMATION_DURATION_MS)
 
-      // Advance rotation counters
       rotationRef.current = {
-        slotIndex: (slotIndex + 1) % MAX_VISIBLE,
+        slotIndex: pickRandomSlotIndex(slotIndex),
         logoIndex: logoIndex + 1,
       }
     }, SWAP_INTERVAL_MS)

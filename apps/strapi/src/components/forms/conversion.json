@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_forms_conversions",
+  "info": {
+    "displayName": "Conversion",
+    "icon": "cursor",
+    "description": "Two-column lead-capture section with header, features, info blocks, and HubSpot form"
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "component": "utilities.section-header",
+      "repeatable": false
+    },
+    "features": {
+      "type": "component",
+      "component": "elements.conversion-feature",
+      "repeatable": true
+    },
+    "infoBlocks": {
+      "type": "component",
+      "component": "elements.conversion-info-block",
+      "repeatable": true
+    },
+    "form": {
+      "type": "component",
+      "component": "forms.hubspot-form-ssr",
+      "repeatable": false
+    }
+  }
+}

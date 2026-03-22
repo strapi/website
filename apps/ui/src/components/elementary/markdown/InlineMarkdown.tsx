@@ -33,7 +33,7 @@ export function InlineMarkdown({ children, className }: InlineMarkdownProps) {
         allowedElements={["p", "strong", "em", "del", "u", "a", "code", "br"]}
         unwrapDisallowed
         components={{
-          p: ({ children }) => <p>{children}</p>,
+          p: ({ children }) => <>{children}</>,
           strong: ({ children }) => (
             <strong className="font-semibold">{children}</strong>
           ),

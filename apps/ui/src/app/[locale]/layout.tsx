@@ -97,9 +97,18 @@ export default async function RootLayout({
           <StrapiPreviewListener />
           <ClientProviders>
             <div className="relative flex min-h-screen flex-col">
-              <ErrorBoundary showErrorMessage>
-                <StrapiHeader locale={locale} />
-              </ErrorBoundary>
+              {/*
+                data-slot wrappers: targeted by CSS `:has([data-minimal-layout])`
+                in globals.css to hide header/footer on pages with minimalLayout
+                enabled. Header/footer stay in the layout (not moved to page level)
+                to preserve navigation state across client-side page transitions.
+                See StrapiPageView for the full explanation.
+              */}
+              <div data-slot="site-header">
+                <ErrorBoundary showErrorMessage>
+                  <StrapiHeader locale={locale} />
+                </ErrorBoundary>
+              </div>
 
               <div className="flex-1">{children}</div>
 
@@ -107,9 +116,11 @@ export default async function RootLayout({
 
               <Toaster />
 
-              <ErrorBoundary hideFallback>
-                <StrapiFooter locale={locale} />
-              </ErrorBoundary>
+              <div data-slot="site-footer">
+                <ErrorBoundary hideFallback>
+                  <StrapiFooter locale={locale} />
+                </ErrorBoundary>
+              </div>
             </div>
           </ClientProviders>
         </ServerProviders>

@@ -1237,6 +1237,9 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.hero-home",
         "sections.feature-card-grid",
         "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
+        "forms.demo-conversion",
         "migration.data-sink",
       ]
     > &
@@ -1257,6 +1260,13 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
       }>
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::page.page">
+    minimalLayout: Schema.Attribute.Boolean &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<false>
     parent: Schema.Attribute.Relation<"manyToOne", "api::page.page">
     publishedAt: Schema.Attribute.DateTime
     seo: Schema.Attribute.Component<"seo-utilities.seo", false> &

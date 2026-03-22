@@ -4,6 +4,7 @@ import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
 import { StrapiFeatureCard } from "@/components/page-builder/components/cards/StrapiFeatureCard"
 import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/strapi-hubspot-form/StrapiHubSpotForm"
+import { StrapiHubSpotFormSsr } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
@@ -13,6 +14,8 @@ import { StrapiNavbar } from "@/components/page-builder/components/navigation/na
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiPlanPricingCards } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/StrapiPlanPricingCards"
 import { StrapiPlanComparisonTable } from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
+import { StrapiConversion } from "@/components/page-builder/components/sections/strapi-conversion"
+import { StrapiDemoConversion } from "@/components/page-builder/components/sections/strapi-demo-conversion"
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
@@ -47,6 +50,9 @@ export const ContentComponents: Partial<
   // Forms
   "forms.newsletter": StrapiNewsletter,
   "forms.hubspot-form": StrapiHubSpotForm,
+  "forms.hubspot-form-ssr": StrapiHubSpotFormSsr,
+  "forms.conversion": StrapiConversion,
+  "forms.demo-conversion": StrapiDemoConversion,
 
   // Blog
   "blog.author-banner": StrapiAuthorBanner,
@@ -62,7 +68,6 @@ export const ContentComponents: Partial<
   "sections.two-column-grid": StrapiTwoColumnGrid,
   "sections.two-columns-benefits": StrapiTwoColumnsBenefits,
   "sections.user-stories-section": StrapiUserStoriesSection,
-
   // Cards
   "cards.feature-card": StrapiFeatureCard,
   "cards.content-card": StrapiContentCard,

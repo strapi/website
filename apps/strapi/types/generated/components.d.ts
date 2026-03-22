@@ -101,6 +101,49 @@ export interface ElementsBrandLogoGridItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsConversionFeature extends Struct.ComponentSchema {
+  collectionName: "components_elements_conversion_features"
+  info: {
+    description: "Icon + label feature item for conversion sections"
+    displayName: "Conversion Feature"
+    icon: "star"
+  }
+  attributes: {
+    icon: Schema.Attribute.Component<"utilities.basic-image", false>
+    label: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface ElementsConversionInfoBlock extends Struct.ComponentSchema {
+  collectionName: "components_elements_conversion_info_blocks"
+  info: {
+    description: "Flexible info block with logos, stats, or badges"
+    displayName: "Conversion Info Block"
+    icon: "layout"
+  }
+  attributes: {
+    description: Schema.Attribute.Text
+    items: Schema.Attribute.Component<"elements.conversion-info-item", true>
+    logos: Schema.Attribute.Component<"utilities.basic-image", true>
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface ElementsConversionInfoItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_conversion_info_items"
+  info: {
+    description: "Stat or badge item with optional value for info blocks"
+    displayName: "Conversion Info Item"
+    icon: "chartBubble"
+  }
+  attributes: {
+    description: Schema.Attribute.String
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    label: Schema.Attribute.String & Schema.Attribute.Required
+    value: Schema.Attribute.String
+  }
+}
+
 export interface ElementsFooterItem extends Struct.ComponentSchema {
   collectionName: "components_elements_footer_items"
   info: {
@@ -377,6 +420,69 @@ export interface FooterFooterSocials extends Struct.ComponentSchema {
   }
 }
 
+export interface FormsConversion extends Struct.ComponentSchema {
+  collectionName: "components_forms_conversions"
+  info: {
+    description: "Two-column lead-capture section with header, features, info blocks, and HubSpot form"
+    displayName: "Conversion"
+    icon: "cursor"
+  }
+  attributes: {
+    features: Schema.Attribute.Component<"elements.conversion-feature", true>
+    form: Schema.Attribute.Component<"forms.hubspot-form-ssr", false>
+    infoBlocks: Schema.Attribute.Component<
+      "elements.conversion-info-block",
+      true
+    >
+    section: Schema.Attribute.Component<"utilities.section-header", false>
+  }
+}
+
+export interface FormsDemoConversion extends Struct.ComponentSchema {
+  collectionName: "components_forms_demo_conversions"
+  info: {
+    description: "Two-column conversion section with demo provisioning form"
+    displayName: "Demo Conversion"
+    icon: "rocket"
+  }
+  attributes: {
+    enableRecaptcha: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>
+    features: Schema.Attribute.Component<"elements.conversion-feature", true>
+    form: Schema.Attribute.Component<"forms.demo-form", false>
+    infoBlocks: Schema.Attribute.Component<
+      "elements.conversion-info-block",
+      true
+    >
+    section: Schema.Attribute.Component<"utilities.section-header", false>
+  }
+}
+
+export interface FormsDemoForm extends Struct.ComponentSchema {
+  collectionName: "components_forms_demo_forms"
+  info: {
+    description: "HubSpot form with demo provisioning logic"
+    displayName: "Demo Form"
+    icon: "rocket"
+  }
+  attributes: {
+    enableRecaptcha: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>
+    fallbackDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<"You'll receive access details via email shortly.">
+    fallbackTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Setting up your demo...">
+    form: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::hubspot-form.hubspot-form"
+    >
+    successDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<"Access your hosted Strapi instance:">
+    successTitle: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Your demo is ready!">
+  }
+}
+
 export interface FormsHubspotForm extends Struct.ComponentSchema {
   collectionName: "components_forms_hubspot_form"
   info: {
@@ -385,6 +491,23 @@ export interface FormsHubspotForm extends Struct.ComponentSchema {
     icon: "envelop"
   }
   attributes: {
+    form: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::hubspot-form.hubspot-form"
+    >
+  }
+}
+
+export interface FormsHubspotFormSsr extends Struct.ComponentSchema {
+  collectionName: "components_forms_hubspot_form_ssr"
+  info: {
+    description: "Server-side rendered HubSpot form with native UI controls"
+    displayName: "HubSpot Form (SSR)"
+    icon: "envelop"
+  }
+  attributes: {
+    enableRecaptcha: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>
     form: Schema.Attribute.Relation<
       "oneToOne",
       "api::hubspot-form.hubspot-form"
@@ -1305,6 +1428,9 @@ declare module "@strapi/strapi" {
       "cards.feature-card": CardsFeatureCard
       "cms.field-entry": CmsFieldEntry
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
+      "elements.conversion-feature": ElementsConversionFeature
+      "elements.conversion-info-block": ElementsConversionInfoBlock
+      "elements.conversion-info-item": ElementsConversionInfoItem
       "elements.footer-item": ElementsFooterItem
       "elements.hero-home-cta": ElementsHeroHomeCta
       "elements.hero-home-feature": ElementsHeroHomeFeature
@@ -1317,7 +1443,11 @@ declare module "@strapi/strapi" {
       "footer.footer-cta-card": FooterFooterCtaCard
       "footer.footer-main": FooterFooterMain
       "footer.footer-socials": FooterFooterSocials
+      "forms.conversion": FormsConversion
+      "forms.demo-conversion": FormsDemoConversion
+      "forms.demo-form": FormsDemoForm
       "forms.hubspot-form": FormsHubspotForm
+      "forms.hubspot-form-ssr": FormsHubspotFormSsr
       "forms.newsletter": FormsNewsletter
       "media.brand-logo-grid": MediaBrandLogoGrid
       "media.image": MediaImage

@@ -75,7 +75,7 @@ function emitDimensionWarnings(
   }
 
   if ((mode === "fill" || mode === "responsive") && !sizes) {
-    logNonBlockingError(
+    logNonBlockingWarning(
       `StrapiBasicImage mode "${mode}" should include a sizes prop for correct responsive image selection.`
     )
   }

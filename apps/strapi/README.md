@@ -159,21 +159,6 @@ It provides a unified abstraction for handling both internal and external links 
 
 All plugins are configured in [config/plugins.ts](config/plugins.ts) file. Some of them may require additional setting of API keys or different ENV variables. User-permissions, seo and config-sync plugins are enabled by default and don't require additional configuration.
 
-#### `@strapi/provider-upload-aws-s3` (S3 file storage)
-
-This plugin is used to store uploaded files (images, documents, etc.) in AWS S3 bucket instead of default local upload folder. This is required for production deployments where local file system is not persistent or files need to be served from CDN.
-
-> [!TIP]
-> In Heroku deployments you always should use S3 (or different external) storage instead of default local upload directory. Heroku resets dyno periodically (at least once a day or after every re-deploy) and so all uploaded files are removed.
-
-Steps:
-
-- go to [AWS console login](https://signin.aws.amazon.com/signin) and create bucket
-- set ENV vars (at least `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`, `AWS_REGION`, `AWS_BUCKET`)
-- in [config/middlewares.ts](config/middlewares.ts) whitelist URL of that S3 bucket in `directives` and `img-src` objects. Otherwise Strapi blocks these URLs and images are broken in UI. By default whole "amazonaws.com" is whitelisted, but you can be more specific here.
-
-[More info here](https://market.strapi.io/providers/@strapi-provider-upload-aws-s3)
-
 #### `@strapi/plugin-sentry` (Sentry logging)
 
 Tu enable Sentry plugin, set `SENTRY_DSN` to environment variables. By default, Sentry runs only in production mode, but you can change it in [config/plugins.ts](config/plugins.ts) file.
@@ -202,41 +187,6 @@ async find(ctx) {
     return []
 },
 ```
-
-#### Emails
-
-To send emails from Strapi (e.g., registration confirmation, password reset, etc.), this starter preconfigures 2 email providers: Mailgun and Mailtrap. It is supposed that Mailtrap is used during development and Mailgun in production, but you can change this easily in [config/plugins.ts](config/plugins.ts) file - the selection is based on provided ENV variables.
-
-##### `@strapi/provider-email-mailgun` (Mailgun)
-
-It is supposed, that you created Mailgun account on [mailgun.com](https://www.mailgun.com/) and have your domain verified. Then set the following ENV variables in your `.env` file:
-
-```bash
-MAILGUN_API_KEY=your-mailgun-api-key
-MAILGUN_DOMAIN=your-mailgun-domain
-MAILGUN_EMAIL=default-from-and-replyto-address
-MAILGUN_HOST=https://api.eu.mailgun.net
-```
-
-##### `@strapi/provider-email-nodemailer` (Mailtrap)
-
-For development, the email plugin is configured to use [Mailtrap](https://mailtrap.io/) - a free email testing service that captures all outgoing emails without sending them to real recipients. This is perfect for testing registration emails, password resets, and other email functionality.
-
-**Setup:**
-
-1. Create a free account at [mailtrap.io](https://mailtrap.io/)
-2. Go to your inbox settings and copy the SMTP credentials
-3. Add the following to your `.env` file:
-
-```bash
-MAILTRAP_USER=your_mailtrap_username
-MAILTRAP_PASS=your_mailtrap_password
-MAILTRAP_HOST=sandbox.smtp.mailtrap.io
-MAILTRAP_PORT=2525
-MAILTRAP_EMAIL=default-from-and-replyto-address
-```
-
-4. Restart Strapi - emails will now be captured in your Mailtrap inbox instead of being sent
 
 #### OAuth providers (GitHub, Google, etc.)
 

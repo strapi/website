@@ -14,7 +14,6 @@ export default [
             "data:",
             "https://maps.gstatic.com",
             "https://maps.googleapis.com",
-            "*.amazonaws.com",
           ],
           "img-src": [
             "'self'",
@@ -42,7 +41,6 @@ export default [
             "khms3.googleapis.com",
             "streetviewpixels-pa.googleapis.com",
             "market-assets.strapi.io",
-            "*.amazonaws.com",
           ],
         },
       },

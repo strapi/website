@@ -31,6 +31,7 @@ import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/st
 import { HubSpotSsrForm } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/HubSpotSsrForm"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
+import { StrapiEmbed } from "@/components/page-builder/components/media/StrapiEmbed"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
@@ -206,6 +207,7 @@ const TOC = [
   { id: "hero-home", label: "HeroHome" },
   { id: "hubspot-form", label: "HubSpot Form" },
   { id: "hubspot-form-ssr", label: "HubSpot Form (SSR)" },
+  { id: "embed", label: "Embed" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -2185,6 +2187,41 @@ export default function ComponentLibraryPage() {
                 </AlertDescription>
               </Alert>
             </div>
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Embed                                                              */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="embed" title="Embed">
+        <div className="space-y-6">
+          <Variant label="Default (Guideflow demo)">
+            <StrapiEmbed
+              component={
+                {
+                  id: 1,
+                  __component: "media.embed",
+                  url: "https://app.guideflow.com/embed/np15xl7uzk",
+                  width: 1000,
+                  height: 670,
+                } as Data.Component<"media.embed">
+              }
+            />
+          </Variant>
+
+          <Variant label="YouTube video (16:9)">
+            <StrapiEmbed
+              component={
+                {
+                  id: 2,
+                  __component: "media.embed",
+                  url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                  width: 1280,
+                  height: 720,
+                } as Data.Component<"media.embed">
+              }
+            />
           </Variant>
         </div>
       </Section>

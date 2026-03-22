@@ -7,6 +7,7 @@ import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/st
 import { StrapiHubSpotFormSsr } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr"
 import { StrapiNewsletter } from "@/components/page-builder/components/forms/strapi-newsletter"
 import { StrapiBrandLogoGrid } from "@/components/page-builder/components/media/StrapiBrandLogoGrid"
+import { StrapiEmbed } from "@/components/page-builder/components/media/StrapiEmbed"
 import { StrapiImage } from "@/components/page-builder/components/media/StrapiImage"
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
@@ -78,6 +79,7 @@ export const ContentComponents: Partial<
   "media.image-gallery": StrapiImageGallery,
   "media.brand-logo-grid": StrapiBrandLogoGrid,
   "media.video": StrapiVideo,
+  "media.embed": StrapiEmbed,
 
   // Sections (continued)
   "sections.testimonies": StrapiTestimonies,

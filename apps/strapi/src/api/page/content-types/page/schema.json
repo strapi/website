@@ -89,7 +89,8 @@
         "forms.hubspot-form-ssr",
         "forms.conversion",
         "forms.demo-conversion",
-        "migration.data-sink"
+        "migration.data-sink",
+        "media.embed"
       ]
     },
     "children": {

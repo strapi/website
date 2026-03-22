@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_media_embeds",
+  "info": {
+    "displayName": "Embed",
+    "icon": "code",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "width": {
+      "type": "integer",
+      "required": true,
+      "default": 1000
+    },
+    "height": {
+      "type": "integer",
+      "required": true,
+      "default": 670
+    }
+  }
+}

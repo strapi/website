@@ -1,6 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 
 import { FormUnavailableAlert } from "@/components/elementary/FormUnavailableAlert"
+import { env } from "@/env.mjs"
 import { fetchHubSpotFormSchema } from "@/lib/hubspot"
 import { logNonBlockingError } from "@/lib/logging"
 
@@ -18,6 +19,10 @@ export async function StrapiDemoForm({
 
   if (!hubspotForm?.portalId || !hubspotForm?.formId) {
     return null
+  }
+
+  if (!env.DEMO_OPERATOR_TOKEN) {
+    return <FormUnavailableAlert />
   }
 
   let schema

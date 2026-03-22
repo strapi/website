@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-03-21T19:45
+> Auto-updated by skills. Last updated: 2026-03-22T18:30
 
 ## Registry Freshness Policy
 
@@ -95,6 +95,7 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `elements.conversion-info-block`        | elements      | Conversion Info Block       | title:string (req), description:text (opt), logos:repeatable utilities.basic-image (opt), items:repeatable elements.conversion-info-item (opt)                                                                                                                                                                  |
 | `elements.conversion-info-item`         | elements      | Conversion Info Item        | image:utilities.basic-image (opt), value:string (opt), label:string (req), description:string (opt)                                                                                                                                                                                                             |
 | `media.video`                           | media         | Video                       | url:string (req), thumbnail:utilities.basic-image (opt), link:utilities.link (opt), alignment:enumeration(left\|center\|right, default:center)                                                                                                                                                                  |
+| `media.embed`                           | media         | Embed                       | url:string (req), width:integer (req, default:1000), height:integer (req, default:670)                                                                                                                                                                                                                          |
 
 ## React Elementary Components
 
@@ -168,6 +169,7 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.meet-the-team`        | StrapiMeetTheTeam         | `page-builder/components/sections/StrapiMeetTheTeam`                          | Page         |
 | `sections.conversion`           | StrapiConversion          | `page-builder/components/sections/strapi-conversion`                          | Page         |
 | `media.video`                   | StrapiVideo               | `page-builder/components/media/StrapiVideo`                                   | Page         |
+| `media.embed`                   | StrapiEmbed               | `page-builder/components/media/StrapiEmbed`                                   | Page         |
 | `footer.footer-main`            | StrapiFooterMain          | `page-builder/single-types/footer/StrapiFooterMain`                           | Footer       |
 | `footer.footer-cta`             | StrapiFooterCta           | `page-builder/single-types/footer/StrapiFooterCta`                            | Footer       |
 | `navigation.top-banner`         | StrapiTopBanner           | `page-builder/components/navigation/top-banner/StrapiTopBanner`               | Header       |

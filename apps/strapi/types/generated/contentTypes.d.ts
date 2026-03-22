@@ -1241,6 +1241,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "forms.conversion",
         "forms.demo-conversion",
         "migration.data-sink",
+        "media.embed",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

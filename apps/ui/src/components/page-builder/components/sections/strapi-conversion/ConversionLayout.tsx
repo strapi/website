@@ -4,6 +4,7 @@ import type { ReactNode } from "react"
 import { Container } from "@/components/elementary/Container"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
+import { cn } from "@/lib/styles"
 
 import { ConversionInfoBlock } from "./ConversionInfoBlock"
 
@@ -33,7 +34,14 @@ export function ConversionLayout({
             {section && <StrapiSectionHeader component={section} />}
 
             {hasFeatures && (
-              <div className="mt-8 grid grid-cols-3 gap-4">
+              <div
+                className={cn("mt-8 grid gap-4", {
+                  "grid-cols-1": features!.length === 1,
+                  "grid-cols-1 sm:grid-cols-2": features!.length === 2,
+                  "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3":
+                    features!.length >= 3,
+                })}
+              >
                 {features!.map((feature) => (
                   <div
                     key={feature.id}

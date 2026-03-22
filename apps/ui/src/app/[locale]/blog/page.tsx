@@ -10,7 +10,6 @@ import {
 } from "@/components/elementary/section-header"
 
 export const dynamic = "force-static"
-export const revalidate = 300
 
 export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   const params = use(props.params)

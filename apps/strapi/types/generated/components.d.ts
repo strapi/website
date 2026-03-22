@@ -547,6 +547,24 @@ export interface MediaBrandLogoGrid extends Struct.ComponentSchema {
   }
 }
 
+export interface MediaEmbed extends Struct.ComponentSchema {
+  collectionName: "components_media_embeds"
+  info: {
+    description: ""
+    displayName: "Embed"
+    icon: "code"
+  }
+  attributes: {
+    height: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<670>
+    url: Schema.Attribute.String & Schema.Attribute.Required
+    width: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<1000>
+  }
+}
+
 export interface MediaImage extends Struct.ComponentSchema {
   collectionName: "components_media_images"
   info: {
@@ -1450,6 +1468,7 @@ declare module "@strapi/strapi" {
       "forms.hubspot-form-ssr": FormsHubspotFormSsr
       "forms.newsletter": FormsNewsletter
       "media.brand-logo-grid": MediaBrandLogoGrid
+      "media.embed": MediaEmbed
       "media.image": MediaImage
       "media.image-gallery": MediaImageGallery
       "media.video": MediaVideo

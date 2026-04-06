@@ -1,18 +1,73 @@
 import type { Schema, Struct } from "@strapi/strapi"
 
-export interface BlogAuthorBanner extends Struct.ComponentSchema {
-  collectionName: "components_blog_author_banner"
+export interface BlogCategoryShowcase extends Struct.ComponentSchema {
+  collectionName: "components_blog_category_showcases"
   info: {
-    description: ""
-    displayName: "AuthorBanner"
-    icon: "user"
+    description: "Blog posts from a specific category with a see-all link"
+    displayName: "Category Showcase"
+    icon: "apps"
   }
   attributes: {
-    authorAvatar: Schema.Attribute.Component<"utilities.basic-image", false>
-    authorBio: Schema.Attribute.Text
-    authorName: Schema.Attribute.String & Schema.Attribute.Required
-    authorRole: Schema.Attribute.String
-    authorUrl: Schema.Attribute.String
+    blogPosts: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-post.blog-post"
+    >
+    category: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::post-category.post-category"
+    >
+    seeAllLabel: Schema.Attribute.String
+  }
+}
+
+export interface BlogEditorsPicks extends Struct.ComponentSchema {
+  collectionName: "components_blog_editors_picks"
+  info: {
+    description: "Curated list of blog posts displayed in a compact text-only format"
+    displayName: "Editor's Picks"
+    icon: "star"
+  }
+  attributes: {
+    blogPosts: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-post.blog-post"
+    >
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface BlogRelatedPosts extends Struct.ComponentSchema {
+  collectionName: "components_blog_related_posts"
+  info: {
+    description: "Related blog posts with optional section header and/or category link"
+    displayName: "Related Posts"
+    icon: "layer"
+  }
+  attributes: {
+    blogPosts: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::blog-post.blog-post"
+    >
+    category: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::post-category.post-category"
+    >
+    section: Schema.Attribute.Component<"utilities.section-header", false>
+  }
+}
+
+export interface BlogResourceCta extends Struct.ComponentSchema {
+  collectionName: "components_blog_resource_ctas"
+  info: {
+    description: "Promotional card for downloadable resources like ebooks"
+    displayName: "Resource CTA"
+    icon: "download"
+  }
+  attributes: {
+    badge: Schema.Attribute.String
+    ctaLink: Schema.Attribute.Component<"utilities.link", false>
+    description: Schema.Attribute.Text
+    title: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -893,6 +948,36 @@ export interface PlansPricingSwitcher extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsCommunityBanner extends Struct.ComponentSchema {
+  collectionName: "components_sections_community_banners"
+  info: {
+    description: ""
+    displayName: "Community Banner"
+    icon: "star"
+  }
+  attributes: {
+    ctaLink: Schema.Attribute.Component<"utilities.link", false>
+    description: Schema.Attribute.RichText
+    title: Schema.Attribute.String & Schema.Attribute.Required
+  }
+}
+
+export interface SectionsCtaBanner extends Struct.ComponentSchema {
+  collectionName: "components_sections_cta_banners"
+  info: {
+    description: ""
+    displayName: "CTA Banner"
+    icon: "rocket"
+  }
+  attributes: {
+    background: Schema.Attribute.Enumeration<["dark", "dark-inverse"]> &
+      Schema.Attribute.DefaultTo<"dark-inverse">
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required
+    sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
+  }
+}
+
 export interface SectionsFaqSection extends Struct.ComponentSchema {
   collectionName: "components_sections_faq_section"
   info: {
@@ -1038,7 +1123,9 @@ export interface SectionsSectionHeader extends Struct.ComponentSchema {
     icon: "layout"
   }
   attributes: {
-    background: Schema.Attribute.Enumeration<["none", "light", "dark"]> &
+    background: Schema.Attribute.Enumeration<
+      ["none", "light", "dark", "dark-inverse"]
+    > &
       Schema.Attribute.DefaultTo<"none">
     boxed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
     section: Schema.Attribute.Component<"utilities.section-header", false> &
@@ -1440,7 +1527,10 @@ export interface UtilitiesTooltip extends Struct.ComponentSchema {
 declare module "@strapi/strapi" {
   export module Public {
     export interface ComponentSchemas {
-      "blog.author-banner": BlogAuthorBanner
+      "blog.category-showcase": BlogCategoryShowcase
+      "blog.editors-picks": BlogEditorsPicks
+      "blog.related-posts": BlogRelatedPosts
+      "blog.resource-cta": BlogResourceCta
       "cards.case-study-card": CardsCaseStudyCard
       "cards.content-card": CardsContentCard
       "cards.feature-card": CardsFeatureCard
@@ -1489,6 +1579,8 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-promo": PlansPricingCardPromo
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
+      "sections.community-banner": SectionsCommunityBanner
+      "sections.cta-banner": SectionsCtaBanner
       "sections.faq-section": SectionsFaqSection
       "sections.feature-card-grid": SectionsFeatureCardGrid
       "sections.hero": SectionsHero

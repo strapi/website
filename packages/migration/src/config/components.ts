@@ -1,3 +1,6 @@
+import type { TransformContext } from "../transforms/base.ts"
+import { extractRelationIds } from "../transforms/convert.ts"
+
 export interface ComponentMapping {
   /** v4 component UID */
   source: string
@@ -12,9 +15,13 @@ export interface ComponentMapping {
    * Return a single object or an array to expand one source entry
    * into multiple target entries in the dynamic zone.
    * Each returned object must NOT include __component — it's set automatically.
+   *
+   * The optional `ctx` parameter provides access to the IdMap for resolving
+   * v4 relation IDs to v5 document IDs within dynamic zone components.
    */
   transform?: (
-    entry: Record<string, unknown>
+    entry: Record<string, unknown>,
+    ctx?: TransformContext
   ) => Record<string, unknown> | Record<string, unknown>[]
 }
 
@@ -1308,20 +1315,70 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     }),
   },
 
-  // v4 related-blog-posts: intro + blog post relations
+  // v4 related-blog-posts: intro + blog post relations → blog.related-posts (with section)
   {
     source: "slices.related-blog-posts",
-    target: "sections.section-header",
-    transform: introToSectionHeader,
+    target: "blog.related-posts",
+    transform: (entry, ctx) => {
+      const intro = asIntro(entry["intro"])
+      const blogPostIds = extractRelationIds(entry["blogPosts"])
+
+      const result: Record<string, unknown> = {
+        section: buildSectionHeader({
+          label: intro.label,
+          title: intro.title,
+          description: intro.text,
+          buttons: intro.button,
+        }),
+      }
+
+      if (ctx && blogPostIds.length > 0) {
+        const resolved = blogPostIds
+          .map((v4Id) => ctx.idMap.get("api::blog-post.blog-post", v4Id))
+          .filter(Boolean) as string[]
+
+        if (resolved.length > 0) {
+          result.blogPosts = { set: resolved }
+        }
+      }
+
+      return result
+    },
   },
 
-  // v4 related-posts: blog post + category relations
+  // v4 related-posts: blog post + category relations → blog.related-posts (with category)
   {
     source: "slices.related-posts",
-    target: "sections.section-header",
-    transform: () => ({
-      section: buildSectionHeader({}),
-    }),
+    target: "blog.related-posts",
+    transform: (entry, ctx) => {
+      const result: Record<string, unknown> = {}
+      const blogPostIds = extractRelationIds(entry["blogPosts"])
+
+      if (ctx && blogPostIds.length > 0) {
+        const resolved = blogPostIds
+          .map((v4Id) => ctx.idMap.get("api::blog-post.blog-post", v4Id))
+          .filter(Boolean) as string[]
+
+        if (resolved.length > 0) {
+          result.blogPosts = { set: resolved }
+        }
+      }
+
+      const cat = entry["category"] as Record<string, unknown> | undefined
+
+      if (ctx && cat && typeof cat["_v4Id"] === "number") {
+        const docId = ctx.idMap.get(
+          "api::post-category.post-category",
+          cat["_v4Id"] as number
+        )
+
+        if (docId) {
+          result.category = { set: [docId] }
+        }
+      }
+
+      return result
+    },
   },
 
   // v4 related-case-studies: title + case study relations

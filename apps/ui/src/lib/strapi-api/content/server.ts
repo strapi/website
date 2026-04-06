@@ -8,7 +8,15 @@ import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 import type { CustomFetchOptions } from "@/types/general"
 
-// ------ SEO populate object
+// ------ Shared populate objects
+
+const authorPopulate = {
+  populate: {
+    avatar: {
+      populate: { image: { populate: { media: true } } },
+    },
+  },
+}
 
 const seoPopulate = {
   populate: {
@@ -98,8 +106,8 @@ export async function fetchBlogPost(
           image: {
             populate: { image: { populate: { media: true } } },
           },
-          author: true,
-          coauthors: true,
+          author: authorPopulate,
+          coauthors: authorPopulate,
           category: true,
           tags: true,
           seo: seoPopulate,
@@ -117,6 +125,44 @@ export async function fetchBlogPost(
         stack: e instanceof Error ? e.stack : undefined,
       },
     })
+  }
+}
+
+const blogListPopulate = {
+  image: {
+    populate: { image: { populate: { media: true } } },
+  },
+  author: authorPopulate,
+  coauthors: authorPopulate,
+  category: true,
+} as Record<string, unknown>
+
+export async function fetchBlogPostsList(
+  locale: Locale,
+  categorySlug?: string
+) {
+  const dm = await draftMode()
+
+  try {
+    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
+      locale,
+      status: dm.isEnabled ? "draft" : "published",
+      sort: { publishedAt: "desc" },
+      ...(categorySlug && {
+        filters: { category: { slug: { $eq: categorySlug } } },
+      }),
+      populate: blogListPopulate,
+    })
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching blog posts${categorySlug ? ` for category '${categorySlug}'` : ""} for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
   }
 }
 
@@ -156,6 +202,31 @@ export async function fetchBlogPostSeo(slug: string, locale: Locale) {
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching blog post SEO for '${slug}' locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+// ------ Blog navigation fetching functions
+
+export async function fetchBlogNavigation(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchOne(
+      "api::blog-navigation.blog-navigation",
+      undefined,
+      {
+        locale,
+        populate: {
+          items: { fields: ["name", "slug"] },
+        } as Record<string, unknown>,
+      }
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching blog navigation for locale '${locale}'`,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,

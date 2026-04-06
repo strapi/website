@@ -1,5 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 
+import { BlogPostHeader } from "@/components/blog/BlogPostHeader"
 import { AppLink } from "@/components/elementary/AppLink"
 import { Box } from "@/components/elementary/box/Box"
 import { CommandCTA } from "@/components/elementary/command-cta/CommandCTA"
@@ -36,10 +37,11 @@ import { StrapiImage } from "@/components/page-builder/components/media/StrapiIm
 import { StrapiImageGallery } from "@/components/page-builder/components/media/StrapiImageGallery"
 import { StrapiVideo } from "@/components/page-builder/components/media/StrapiVideo"
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
+import { StrapiCommunityBanner } from "@/components/page-builder/components/sections/strapi-community-banner/StrapiCommunityBanner"
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
-import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
+import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
@@ -193,7 +195,6 @@ const TOC = [
   { id: "triangle-mask", label: "TriangleMask" },
   { id: "faq-section", label: "FaqSection" },
   { id: "how-it-works", label: "HowItWorks" },
-  { id: "author-banner", label: "AuthorBanner" },
   { id: "integrations-section", label: "IntegrationsSection" },
   { id: "user-stories-section", label: "UserStoriesSection" },
   { id: "brand-logo-grid", label: "BrandLogoGrid" },
@@ -208,6 +209,9 @@ const TOC = [
   { id: "hubspot-form", label: "HubSpot Form" },
   { id: "hubspot-form-ssr", label: "HubSpot Form (SSR)" },
   { id: "embed", label: "Embed" },
+  { id: "cta-banner", label: "CtaBanner" },
+  { id: "community-banner", label: "CommunityBanner" },
+  { id: "blog-post-header", label: "BlogPostHeader" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -514,20 +518,6 @@ const howItWorksDefaultExample = {
   ],
 } as Data.Component<"sections.how-it-works">
 
-const authorBannerDefaultExample = {
-  authorName: "Pierre Burgy",
-  authorRole: "CEO & Co-founder",
-  authorBio:
-    "Pierre is the CEO and co-founder of Strapi, the leading open-source headless CMS. He is passionate about open source, developer experience, and building products that empower creators.",
-  authorUrl: "https://strapi.io",
-  authorAvatar: mockBasicImage(PLACEHOLDER_AVATAR, "Pierre Burgy"),
-} as Data.Component<"blog.author-banner">
-
-const authorBannerMinimalExample = {
-  authorName: "Jane Doe",
-  authorRole: "Guest Author",
-} as Data.Component<"blog.author-banner">
-
 const integrationsSectionDefaultExample = {
   label: "Integrations",
   heading: "Works with your favorite tools",
@@ -652,6 +642,44 @@ const imageRightExample = {
   ),
   alignment: "right",
 } as Data.Component<"media.image">
+
+const ctaBannerDefaultExample = {
+  section: {
+    title: "Submit your content",
+    description:
+      "Share your Strapi projects, plugins, and tutorials with the community. Get featured and inspire others to build with Strapi.",
+    label: null,
+    labelIcon: null,
+    variant: "default",
+    size: "default",
+    layout: "left",
+    ctaLinks: [
+      {
+        id: 1,
+        type: "external",
+        label: "Submit now",
+        href: "https://strapi.io/submit",
+        newTab: true,
+      },
+    ],
+  },
+  background: "dark-inverse",
+  sectionImage: null,
+} as Data.Component<"sections.cta-banner">
+
+const communityBannerDefaultExample = {
+  id: 1,
+  title: "Join Our Amazing Community",
+  description:
+    "Connect with thousands of Strapi developers, share ideas, and get help from the community.",
+  ctaLink: {
+    id: 1,
+    type: "external",
+    label: "Join Discord",
+    href: "https://discord.strapi.io",
+    newTab: true,
+  },
+} as Data.Component<"sections.community-banner">
 
 // ---------------------------------------------------------------------------
 // Page
@@ -999,34 +1027,6 @@ export default function ComponentLibraryPage() {
                 </SectionTitle>
                 <SectionDescription variant="inverse">
                   Boxed container with dark background.
-                </SectionDescription>
-              </SectionHeader>
-            </SectionHeaderContainer>
-          </Variant>
-
-          <Variant label="background: darker">
-            <SectionHeaderContainer background="darker">
-              <SectionHeader>
-                <SectionLabel variant="inverse">Label</SectionLabel>
-                <SectionTitle size="sm" variant="inverse">
-                  Dark background (900)
-                </SectionTitle>
-                <SectionDescription variant="inverse">
-                  Container using the `darker` variant.
-                </SectionDescription>
-              </SectionHeader>
-            </SectionHeaderContainer>
-          </Variant>
-
-          <Variant label="background: darker + boxed">
-            <SectionHeaderContainer background="darker" boxed>
-              <SectionHeader>
-                <SectionLabel variant="inverse">Label</SectionLabel>
-                <SectionTitle size="sm" variant="inverse">
-                  Boxed dark background (900)
-                </SectionTitle>
-                <SectionDescription variant="inverse">
-                  Rounded boxed variant with the darker blue background.
                 </SectionDescription>
               </SectionHeader>
             </SectionHeaderContainer>
@@ -1473,27 +1473,19 @@ export default function ComponentLibraryPage() {
         <div className="space-y-6">
           <Variant label="All variants">
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-              {(["none", "light", "dark", "darker", "green"] as const).map(
-                (variant) => (
-                  <Box
-                    key={variant}
-                    variant={variant}
-                    className="rounded-lg p-8"
+              {(["none", "light", "dark"] as const).map((variant) => (
+                <Box key={variant} variant={variant} className="rounded-lg p-8">
+                  <p
+                    className={`relative z-10 text-center text-sm font-medium ${
+                      variant === "dark"
+                        ? "text-white"
+                        : "text-strapi-neutral-800"
+                    }`}
                   >
-                    <p
-                      className={`relative z-10 text-center text-sm font-medium ${
-                        variant === "dark" ||
-                        variant === "darker" ||
-                        variant === "green"
-                          ? "text-white"
-                          : "text-strapi-neutral-800"
-                      }`}
-                    >
-                      {variant}
-                    </p>
-                  </Box>
-                )
-              )}
+                    {variant}
+                  </p>
+                </Box>
+              ))}
             </div>
           </Variant>
         </div>
@@ -1561,21 +1553,6 @@ export default function ComponentLibraryPage() {
         <div className="-mx-6 space-y-10">
           <Variant label="Default (3 steps, no icons)">
             <StrapiHowItWorks component={howItWorksDefaultExample} />
-          </Variant>
-        </div>
-      </Section>
-
-      {/* ----------------------------------------------------------------- */}
-      {/* AuthorBanner                                                      */}
-      {/* ----------------------------------------------------------------- */}
-      <Section id="author-banner" title="AuthorBanner">
-        <div className="-mx-6 space-y-10">
-          <Variant label="Default (name, role, bio, link — no avatar)">
-            <StrapiAuthorBanner component={authorBannerDefaultExample} />
-          </Variant>
-
-          <Variant label="Minimal (name and role only)">
-            <StrapiAuthorBanner component={authorBannerMinimalExample} />
           </Variant>
         </div>
       </Section>
@@ -2222,6 +2199,123 @@ export default function ComponentLibraryPage() {
                 } as Data.Component<"media.embed">
               }
             />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="cta-banner" title="CtaBanner">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (dark-inverse, no image)">
+            <StrapiCtaBanner component={ctaBannerDefaultExample} />
+          </Variant>
+
+          <Variant label="Dark variant">
+            <StrapiCtaBanner
+              component={
+                {
+                  ...ctaBannerDefaultExample,
+                  background: "dark",
+                } as Data.Component<"sections.cta-banner">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="community-banner" title="CommunityBanner">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (no image)">
+            <StrapiCommunityBanner component={communityBannerDefaultExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="blog-post-header" title="BlogPostHeader">
+        <div className="space-y-10">
+          <Variant label="Full (with all fields, dark background)">
+            <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
+              <BlogPostHeader
+                title="Let's Build A Strapi Plugin To Integrate Vercel's AI SDK In Our Next.js 16 Project"
+                publishedAt="2026-02-19T00:00:00.000Z"
+                content={"Lorem ipsum ".repeat(1400)}
+                author={{
+                  id: 1,
+                  username: "Paul Bratslavsky",
+                  slug: "paul-bratslavsky",
+                  avatar: {
+                    image: mockBasicImage(PLACEHOLDER_AVATAR, "Author avatar", {
+                      width: 200,
+                      height: 200,
+                    }),
+                  },
+                }}
+                category={{ name: "Engineering", slug: "engineering" }}
+                tags={[
+                  { id: 1, name: "Strapi v5", slug: "strapi-v5" },
+                  { id: 2, name: "Plugins", slug: "plugins" },
+                  { id: 3, name: "AI", slug: "ai" },
+                ]}
+                image={{
+                  image: mockBasicImage(PLACEHOLDER_IMG, "Cover image"),
+                }}
+              />
+            </div>
+          </Variant>
+
+          <Variant label="Minimal (no tags, no image, no category)">
+            <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
+              <BlogPostHeader
+                title="A Short Blog Post Title"
+                publishedAt="2026-01-15T00:00:00.000Z"
+                content={"Short content. ".repeat(50)}
+                author={{
+                  id: 2,
+                  username: "Jane Doe",
+                  slug: "jane-doe",
+                  avatar: null,
+                }}
+              />
+            </div>
+          </Variant>
+
+          <Variant label="Multiple authors">
+            <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
+              <BlogPostHeader
+                title="Collaborative Guide to Building Modern APIs"
+                publishedAt="2026-03-01T00:00:00.000Z"
+                content={"Content ".repeat(800)}
+                author={{
+                  id: 1,
+                  username: "Paul Bratslavsky",
+                  slug: "paul-bratslavsky",
+                  avatar: {
+                    image: mockBasicImage(PLACEHOLDER_AVATAR, "Author 1", {
+                      width: 200,
+                      height: 200,
+                    }),
+                  },
+                }}
+                coauthors={[
+                  {
+                    id: 3,
+                    username: "Alex Smith",
+                    slug: "alex-smith",
+                    avatar: {
+                      image: mockBasicImage(
+                        "https://picsum.photos/seed/alex/200/200",
+                        "Author 2",
+                        { width: 200, height: 200 }
+                      ),
+                    },
+                  },
+                ]}
+                category={{ name: "Tutorials", slug: "tutorials" }}
+                tags={[
+                  { id: 1, name: "API", slug: "api" },
+                  { id: 2, name: "REST", slug: "rest" },
+                ]}
+              />
+            </div>
           </Variant>
         </div>
       </Section>

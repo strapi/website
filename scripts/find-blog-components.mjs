@@ -108,7 +108,6 @@ async function main() {
     "media.image-gallery",
     "media.video",
     "testimonials.quote",
-    "blog.author-banner",
     "forms.newsletter",
     "forms.hubspot-form",
     "migration.data-sink",

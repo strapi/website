@@ -10,7 +10,7 @@ import { cn } from "@/lib/styles"
 
 export type SectionHeaderContainerBackground = Extract<
   BoxVariant,
-  "none" | "light" | "dark" | "darker"
+  "none" | "light" | "dark" | "dark-inverse"
 >
 
 export interface SectionHeaderContainerProps extends React.ComponentProps<"section"> {

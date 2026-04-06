@@ -1,0 +1,39 @@
+/* Shiki syntax highlighting styles */
+
+[data-slot="code-highlighter"] .shiki {
+  padding: 1em;
+  margin: 0;
+  overflow: auto;
+  border-radius: 0.5rem;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  tab-size: 4;
+}
+
+[data-slot="code-highlighter"] .shiki code {
+  display: block;
+}
+
+/* Line numbers via CSS counters */
+[data-slot="code-highlighter"] .shiki.line-numbers code {
+  counter-reset: line;
+}
+
+[data-slot="code-highlighter"] .shiki.line-numbers code .line {
+  display: inline-block;
+  width: 100%;
+}
+
+[data-slot="code-highlighter"] .shiki.line-numbers code .line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 2.5ch;
+  margin-right: 1.5ch;
+  text-align: right;
+  color: rgb(255 255 255 / 0.25);
+  user-select: none;
+}

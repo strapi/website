@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_sections_cta_banners",
+  "info": {
+    "displayName": "CTA Banner",
+    "icon": "rocket",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "component": "utilities.section-header",
+      "repeatable": false,
+      "required": true
+    },
+    "background": {
+      "type": "enumeration",
+      "default": "dark-inverse",
+      "enum": ["dark", "dark-inverse"]
+    },
+    "sectionImage": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

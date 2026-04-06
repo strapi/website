@@ -3,7 +3,7 @@ import { createRequire } from "node:module"
 import path from "node:path"
 
 const isRuntimeFile = (name: string) =>
-  /\.(js|ts)$/.test(name) && !name.endsWith(".d.ts")
+  /\.(js|ts)$/.test(name) && !name.endsWith(".d.ts") && !name.startsWith("_")
 
 const stripExt = (name: string) => name.slice(0, name.lastIndexOf("."))
 

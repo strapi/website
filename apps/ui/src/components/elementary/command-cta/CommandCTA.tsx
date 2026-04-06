@@ -30,7 +30,7 @@ export function CommandCTA({
   return (
     <Box
       data-slot="command-cta"
-      variant="green"
+      variant="dark"
       className={cn("rounded-xl p-8", className)}
       {...props}
     >

@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_blog_resource_ctas",
+  "info": {
+    "displayName": "Resource CTA",
+    "icon": "download",
+    "description": "Promotional card for downloadable resources like ebooks"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "ctaLink": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false
+    }
+  }
+}

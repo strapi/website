@@ -17,8 +17,27 @@
   background-image: var(--gradient-hero-code-overlay);
 }
 
+@utility gradient-hero-code-overlay-inverse {
+  background-image: var(--gradient-hero-code-overlay-inverse);
+}
+
 @utility gradient-hero-progress {
   background-image: var(--gradient-hero-progress);
+}
+
+/* ── Gradient border ── */
+
+@utility gradient-border-purple {
+  background: linear-gradient(155deg, #a15bed, #c48dff);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
 }
 
 /* ── Hero animations ── */

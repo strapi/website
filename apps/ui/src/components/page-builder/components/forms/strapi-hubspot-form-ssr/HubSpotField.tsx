@@ -31,6 +31,29 @@ interface HubSpotFieldProps {
   readonly control: Control<FieldValues>
 }
 
+function FieldLabel({
+  html,
+  required,
+  className,
+}: {
+  readonly html: string
+  readonly required?: boolean
+  readonly className?: string
+}) {
+  const label = required ? `${html} *` : html
+
+  return (
+    <FormLabel
+      className={className}
+      dangerouslySetInnerHTML={{ __html: label }}
+    />
+  )
+}
+
+function FieldDescription({ html }: { readonly html: string }) {
+  return <FormDescription dangerouslySetInnerHTML={{ __html: html }} />
+}
+
 export function HubSpotField({ field, control }: HubSpotFieldProps) {
   const t = useTranslations("forms")
 
@@ -43,10 +66,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
           case "multi_line_text":
             return (
               <FormItem>
-                <FormLabel>
-                  {field.label}
-                  {field.required && " *"}
-                </FormLabel>
+                <FieldLabel html={field.label} required={field.required} />
                 <FormControl>
                   <Textarea
                     {...rhfField}
@@ -54,7 +74,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
                   />
                 </FormControl>
                 {field.description && (
-                  <FormDescription>{field.description}</FormDescription>
+                  <FieldDescription html={field.description} />
                 )}
                 <FormMessage />
               </FormItem>
@@ -63,10 +83,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
           case "dropdown":
             return (
               <FormItem>
-                <FormLabel>
-                  {field.label}
-                  {field.required && " *"}
-                </FormLabel>
+                <FieldLabel html={field.label} required={field.required} />
                 <Select
                   name={rhfField.name}
                   value={rhfField.value as string}
@@ -90,7 +107,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
                   </SelectContent>
                 </Select>
                 {field.description && (
-                  <FormDescription>{field.description}</FormDescription>
+                  <FieldDescription html={field.description} />
                 )}
                 <FormMessage />
               </FormItem>
@@ -106,12 +123,13 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel className="font-normal">
-                    {field.label}
-                    {field.required && " *"}
-                  </FormLabel>
+                  <FieldLabel
+                    html={field.label}
+                    required={field.required}
+                    className="font-normal"
+                  />
                   {field.description && (
-                    <FormDescription>{field.description}</FormDescription>
+                    <FieldDescription html={field.description} />
                   )}
                   <FormMessage />
                 </div>
@@ -121,10 +139,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
           case "radio":
             return (
               <FormItem>
-                <FormLabel>
-                  {field.label}
-                  {field.required && " *"}
-                </FormLabel>
+                <FieldLabel html={field.label} required={field.required} />
                 <FormControl>
                   <RadioGroup
                     value={rhfField.value as string}
@@ -151,7 +166,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
                   </RadioGroup>
                 </FormControl>
                 {field.description && (
-                  <FormDescription>{field.description}</FormDescription>
+                  <FieldDescription html={field.description} />
                 )}
                 <FormMessage />
               </FormItem>
@@ -160,10 +175,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
           default:
             return (
               <FormItem>
-                <FormLabel>
-                  {field.label}
-                  {field.required && " *"}
-                </FormLabel>
+                <FieldLabel html={field.label} required={field.required} />
                 <FormControl>
                   <Input
                     {...rhfField}
@@ -172,7 +184,7 @@ export function HubSpotField({ field, control }: HubSpotFieldProps) {
                   />
                 </FormControl>
                 {field.description && (
-                  <FormDescription>{field.description}</FormDescription>
+                  <FieldDescription html={field.description} />
                 )}
                 <FormMessage />
               </FormItem>

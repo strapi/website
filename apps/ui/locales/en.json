@@ -100,7 +100,11 @@
 
   "blog": {
     "title": "Blog",
-    "description": "Tutorials, product updates, and engineering insights."
+    "description": "Tutorials, product updates, and engineering insights.",
+    "loadMore": "Load More Articles",
+    "seeAllRelated": "See all {category} articles",
+    "articles": "Articles",
+    "relatedPosts": "Related Posts"
   },
 
   "forms": {

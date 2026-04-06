@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_blog_editors_picks",
+  "info": {
+    "displayName": "Editor's Picks",
+    "icon": "star",
+    "description": "Curated list of blog posts displayed in a compact text-only format"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "blogPosts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog-post.blog-post"
+    }
+  }
+}

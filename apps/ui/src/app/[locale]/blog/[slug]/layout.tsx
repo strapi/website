@@ -10,5 +10,5 @@ export default function BlogPostLayout({
 
   setRequestLocale(locale)
 
-  return <div className="flex items-center pb-8">{children}</div>
+  return children
 }

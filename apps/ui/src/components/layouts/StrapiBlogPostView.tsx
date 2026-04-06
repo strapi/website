@@ -3,9 +3,30 @@ import type { Locale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 import { use } from "react"
 
+import {
+  type BlogAuthor,
+  BlogAuthorBanner,
+} from "@/components/blog/BlogAuthorBanner"
+import { BlogContent } from "@/components/blog/BlogContent"
+import type { AuthorAvatarData } from "@/components/elementary/AuthorAvatars"
 import { Container } from "@/components/elementary/Container"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
+import {
+  extractHeadings,
+  type BlogCategory,
+  type BlogPostImage,
+  type BlogTag,
+} from "@/lib/blog-utils"
 import { fetchBlogPost } from "@/lib/strapi-api/content/server"
+
+import { BlogNavbar } from "../blog/BlogNavbar"
+import { BlogPostHeader } from "../blog/BlogPostHeader"
+import { BlogReadingProgress } from "../blog/BlogReadingProgress"
+import { BlogTableOfContents } from "../blog/BlogTableOfContents"
+import {
+  HeroContainer,
+  HeroContainerContent,
+} from "../elementary/HeroContainer"
 
 interface Props {
   params: {
@@ -27,50 +48,71 @@ export function StrapiBlogPostView({ params }: Props) {
     notFound()
   }
 
-  // Cast to access populated relations and dynamic zone (not in strict types)
   const postData = data as Record<string, unknown>
   const sections = postData.sections as
     | { __component: string; id: number; [key: string]: unknown }[]
     | undefined
-  const content = data.content
+  const author = postData.author as BlogAuthor | null
+  const content = typeof data.content === "string" ? data.content : null
+  const headings = content ? extractHeadings(content) : []
 
   return (
-    <div className="flex w-full flex-col">
-      <main className="flex w-full flex-col">
-        {/* Temporary: render blog content as JSON to verify data fetching works */}
-        <section className="py-8 lg:py-16">
-          <Container>
-            <pre className="bg-strapi-neutral-100 overflow-auto rounded-lg p-6 text-sm">
-              {JSON.stringify(
-                {
-                  title: data.title,
-                  slug: data.slug,
-                  description: data.description,
-                  level: postData.level,
-                  author: postData.author,
-                  category: postData.category,
-                  tags: postData.tags,
-                  contentLength:
-                    typeof content === "string" ? content.length : 0,
-                  contentPreview:
-                    typeof content === "string" ? content.slice(0, 500) : null,
-                },
-                null,
-                2
-              )}
-            </pre>
-          </Container>
-        </section>
+    <>
+      {content && <BlogReadingProgress />}
 
-        {/* Dynamic sections below the blog content */}
-        {sections && sections.length > 0 && (
-          <DynamicZoneRenderer
-            content={sections}
-            itemClassName="mb-6 md:mb-10 lg:mb-14"
-            surface="page"
-          />
-        )}
-      </main>
-    </div>
+      <HeroContainer affectsNavbarTheme className="gap-0">
+        <BlogNavbar locale={locale} />
+
+        <HeroContainerContent>
+          <Container>
+            <BlogPostHeader
+              title={data.title ?? ""}
+              publishedAt={data.publishedAt as string | null}
+              content={content}
+              author={author}
+              coauthors={postData.coauthors as AuthorAvatarData[] | undefined}
+              category={postData.category as BlogCategory | null}
+              tags={postData.tags as BlogTag[] | undefined}
+              image={postData.image as BlogPostImage | null}
+            />
+          </Container>
+        </HeroContainerContent>
+      </HeroContainer>
+
+      <div className="flex w-full flex-col">
+        <main className="flex w-full flex-col">
+          {content && (
+            <section className="py-8 lg:py-16">
+              <div className="relative">
+                {headings.length > 0 && (
+                  <aside className="absolute top-0 left-0 hidden h-full xl:block">
+                    <BlogTableOfContents headings={headings} />
+                  </aside>
+                )}
+
+                <Container>
+                  <article
+                    data-slot="blog-article"
+                    className="mx-auto max-w-210"
+                  >
+                    <BlogContent>{content}</BlogContent>
+                  </article>
+
+                  <BlogAuthorBanner author={author} />
+                </Container>
+              </div>
+            </section>
+          )}
+
+          {sections && sections.length > 0 && (
+            <DynamicZoneRenderer
+              content={sections}
+              itemClassName="mb-6 md:mb-10 lg:mb-14"
+              surface="page"
+            />
+          )}
+        </main>
+      </div>
+    </>
   )
 }

@@ -1,5 +1,9 @@
 import type { UID } from "@repo/strapi-types"
 
+import { StrapiCategoryShowcase } from "@/components/page-builder/components/blog/StrapiCategoryShowcase"
+import { StrapiEditorsPicks } from "@/components/page-builder/components/blog/StrapiEditorsPicks"
+import { StrapiRelatedPosts } from "@/components/page-builder/components/blog/StrapiRelatedPosts"
+import { StrapiResourceCta } from "@/components/page-builder/components/blog/StrapiResourceCta"
 import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
 import { StrapiFeatureCard } from "@/components/page-builder/components/cards/StrapiFeatureCard"
@@ -15,12 +19,13 @@ import { StrapiNavbar } from "@/components/page-builder/components/navigation/na
 import { StrapiTopBanner } from "@/components/page-builder/components/navigation/top-banner/StrapiTopBanner"
 import { StrapiPlanPricingCards } from "@/components/page-builder/components/plans/strapi-plan-pricing-cards/StrapiPlanPricingCards"
 import { StrapiPlanComparisonTable } from "@/components/page-builder/components/plans/StrapiPlanComparisonTable"
+import { StrapiCommunityBanner } from "@/components/page-builder/components/sections/strapi-community-banner/StrapiCommunityBanner"
 import { StrapiConversion } from "@/components/page-builder/components/sections/strapi-conversion"
 import { StrapiDemoConversion } from "@/components/page-builder/components/sections/strapi-demo-conversion"
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
-import { StrapiAuthorBanner } from "@/components/page-builder/components/sections/StrapiAuthorBanner"
+import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sections/StrapiFeatureCardGrid"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
@@ -56,7 +61,10 @@ export const ContentComponents: Partial<
   "forms.demo-conversion": StrapiDemoConversion,
 
   // Blog
-  "blog.author-banner": StrapiAuthorBanner,
+  "blog.related-posts": StrapiRelatedPosts,
+  "blog.editors-picks": StrapiEditorsPicks,
+  "blog.category-showcase": StrapiCategoryShowcase,
+  "blog.resource-cta": StrapiResourceCta,
 
   // Sections
   "sections.hero": StrapiHero,
@@ -84,6 +92,8 @@ export const ContentComponents: Partial<
   // Sections (continued)
   "sections.testimonies": StrapiTestimonies,
   "sections.meet-the-team": StrapiMeetTheTeam,
+  "sections.cta-banner": StrapiCtaBanner,
+  "sections.community-banner": StrapiCommunityBanner,
 
   // Testimonials
   "testimonials.quote": StrapiQuote,

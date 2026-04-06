@@ -53,7 +53,7 @@ export function remapDynamicZone(
       // Full-component transform takes priority over fieldMap
       if (mapping.transform) {
         const { __component: _, id: __, ...fields } = entry
-        const result = mapping.transform(fields)
+        const result = mapping.transform(fields, ctx)
 
         if (Array.isArray(result)) {
           // Multi-emit: one source entry → multiple target entries

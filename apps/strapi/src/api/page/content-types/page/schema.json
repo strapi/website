@@ -77,7 +77,6 @@
         "media.image-gallery",
         "media.brand-logo-grid",
         "testimonials.quote",
-        "blog.author-banner",
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
@@ -90,7 +89,9 @@
         "forms.conversion",
         "forms.demo-conversion",
         "migration.data-sink",
-        "media.embed"
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner"
       ]
     },
     "children": {

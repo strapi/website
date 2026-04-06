@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_sections_community_banners",
+  "info": {
+    "displayName": "Community Banner",
+    "icon": "star",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "ctaLink": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

@@ -1,61 +1,56 @@
 {
   "entities": {
-    "users": {
-      "total": 281,
-      "migrated": 281,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 312,
-      "errors": []
-    },
-    "post-categories": {
-      "total": 10,
-      "migrated": 10,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 26,
-      "errors": []
-    },
-    "post-tags": {
-      "total": 105,
-      "migrated": 105,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 145,
-      "errors": []
-    },
     "blog-posts": {
-      "total": 5,
-      "migrated": 5,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 715,
-      "errors": []
-    },
-    "navbar": {
-      "total": 1,
-      "migrated": 1,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 1,
-      "errors": []
-    },
-    "page-home": {
-      "total": 1,
-      "migrated": 1,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 1,
-      "errors": []
-    },
-    "pages": {
-      "total": 1,
-      "migrated": 1,
-      "skipped": 0,
-      "failed": 0,
-      "lastProcessedId": 105,
-      "errors": []
+      "total": 40,
+      "migrated": 31,
+      "skipped": 2,
+      "failed": 7,
+      "lastProcessedId": 1318,
+      "errors": [
+        {
+          "v4Id": 110,
+          "slug": "deep-filtering-alpha-26",
+          "error": "Target API error: 413 Payload Too Large - {\"data\":null,\"error\":{\"status\":413,\"name\":\"PayloadTooLargeError\",\"message\":\"request entity too large\"}}",
+          "timestamp": "2026-03-22T22:11:45.889Z"
+        },
+        {
+          "v4Id": 473,
+          "slug": "real-time-chat-application-using-strapi-next-socket-io-and-postgre-sql",
+          "error": "Target API error: 413 Payload Too Large - {\"data\":null,\"error\":{\"status\":413,\"name\":\"PayloadTooLargeError\",\"message\":\"request entity too large\"}}",
+          "timestamp": "2026-03-22T22:12:51.292Z"
+        },
+        {
+          "v4Id": 868,
+          "slug": "authentication-and-authorization",
+          "error": "Target API error: 413 Payload Too Large - {\"data\":null,\"error\":{\"status\":413,\"name\":\"PayloadTooLargeError\",\"message\":\"request entity too large\"}}",
+          "timestamp": "2026-03-22T22:13:27.290Z"
+        },
+        {
+          "v4Id": 978,
+          "slug": "vs-code-extensions",
+          "error": "Target API error: 413 Payload Too Large - {\"data\":null,\"error\":{\"status\":413,\"name\":\"PayloadTooLargeError\",\"message\":\"request entity too large\"}}",
+          "timestamp": "2026-03-22T22:13:31.706Z"
+        },
+        {
+          "v4Id": 1243,
+          "slug": "how-notum-implemented-a-b-testing-for-strapi-io",
+          "error": "Target API error: 400 Bad Request - {\"data\":null,\"error\":{\"status\":400,\"name\":\"ValidationError\",\"message\":\"Invalid relations\",\"details\":{\"errors\":[{\"path\":[],\"message\":\"Invalid relations\",\"name\":\"ValidationError\",\"value\":{\"publishedAt\":null,\"sections\":[{\"__component\":\"sections.section-header\",\"boxed\":false,\"background\":\"none\",\"section\":{\"ctaLinks\":[],\"layout\":\"center\",\"size\":\"default\",\"variant\":\"default\",\"description\":\"Continue reading...\",\"title\":\"Related Articles\"}}],\"content\":\"## Introduction: A/B Testing at Strapi with Amplitu",
+          "timestamp": "2026-03-22T22:13:35.154Z"
+        },
+        {
+          "v4Id": 1253,
+          "slug": "str-happy-10th-birthday-strapi",
+          "error": "Target API error: 413 Payload Too Large - {\"data\":null,\"error\":{\"status\":413,\"name\":\"PayloadTooLargeError\",\"message\":\"request entity too large\"}}",
+          "timestamp": "2026-03-22T22:13:39.001Z"
+        },
+        {
+          "v4Id": 1318,
+          "slug": "strapi-5-migration-why-it-is-essential-for-modern-cms",
+          "error": "Target API error: 413 Payload Too Large - {\"data\":null,\"error\":{\"status\":413,\"name\":\"PayloadTooLargeError\",\"message\":\"request entity too large\"}}",
+          "timestamp": "2026-03-22T22:13:43.647Z"
+        }
+      ]
     }
   },
-  "lastRun": "2026-03-21T20:11:56.019Z"
+  "lastRun": "2026-03-22T22:13:43.661Z"
 }

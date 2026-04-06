@@ -4,7 +4,7 @@ import ReactMarkdown, { type Components } from "react-markdown"
 import rehypeRaw from "rehype-raw"
 import remarkGfm from "remark-gfm"
 
-import { Typography } from "@/components/typography"
+import { headingId } from "@/lib/markdown-utils"
 import { cn } from "@/lib/styles"
 
 type MarkdownProps = {
@@ -12,47 +12,54 @@ type MarkdownProps = {
   className?: string
 }
 
+const remarkPlugins = [remarkGfm]
+const rehypePlugins = [rehypeRaw]
+
 const components: Components = {
   h1: ({ children }) => (
-    <Typography tag="h1" textColor="foreground" className="mb-4">
+    <h1 className="text-foreground mt-18 mb-8 scroll-mt-24 text-4xl leading-tight font-bold tracking-tight">
       {children}
-    </Typography>
+    </h1>
   ),
 
   h2: ({ children }) => (
-    <Typography tag="h2" textColor="foreground" className="mb-3">
+    <h2
+      id={headingId(children)}
+      className="text-foreground mt-17 mb-7 scroll-mt-24 text-3xl leading-tight font-bold tracking-tight"
+    >
       {children}
-    </Typography>
+    </h2>
   ),
 
   h3: ({ children }) => (
-    <Typography tag="h3" textColor="foreground" className="mb-3">
+    <h3
+      id={headingId(children)}
+      className="text-foreground mb-8 scroll-mt-24 text-2xl leading-tight font-bold tracking-tight"
+    >
       {children}
-    </Typography>
+    </h3>
   ),
 
   h4: ({ children }) => (
-    <Typography tag="h4" textColor="foreground" className="mb-2">
+    <h4 className="text-foreground mb-8 text-xl leading-tight font-bold tracking-tight">
       {children}
-    </Typography>
+    </h4>
   ),
 
   h5: ({ children }) => (
-    <Typography tag="h5" textColor="foreground" className="mb-2">
+    <h5 className="text-foreground mb-6 text-lg leading-tight font-bold tracking-tight">
       {children}
-    </Typography>
+    </h5>
   ),
 
   h6: ({ children }) => (
-    <Typography tag="h6" textColor="foreground" className="mb-2">
+    <h6 className="text-foreground mb-4 text-base leading-tight font-bold tracking-tight">
       {children}
-    </Typography>
+    </h6>
   ),
 
   p: ({ children }) => (
-    <p className="text-strapi-body-1 text-muted-foreground mb-4 leading-relaxed">
-      {children}
-    </p>
+    <p className="text-foreground mb-8 text-xl leading-relaxed">{children}</p>
   ),
 
   strong: ({ children }) => (
@@ -72,7 +79,7 @@ const components: Components = {
     return (
       <a
         href={href}
-        className="text-primary underline"
+        className="*:text-strapi-purple-600 text-strapi-purple-600 bg-strapi-purple-100 hover:*:text-strapi-purple-700 hover:text-strapi-purple-700 transition-colors *:transition-colors"
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
       >
@@ -82,19 +89,17 @@ const components: Components = {
   },
 
   ul: ({ children }) => (
-    <ul className="mb-4 list-disc space-y-1 pl-6">{children}</ul>
+    <ul className="mb-8 list-disc space-y-1 pl-6">{children}</ul>
   ),
 
   ol: ({ children }) => (
-    <ol className="mb-4 list-decimal space-y-1 pl-6">{children}</ol>
+    <ol className="mb-8 list-decimal space-y-1 pl-6">{children}</ol>
   ),
 
-  li: ({ children }) => (
-    <li className="text-strapi-body-1 text-muted-foreground">{children}</li>
-  ),
+  li: ({ children }) => <li className="text-strapi-body-1">{children}</li>,
 
   blockquote: ({ children }) => (
-    <blockquote className="border-strapi-purple-300 text-muted-foreground mb-4 border-l-4 pl-4 italic">
+    <blockquote className="border-strapi-purple-300 text-muted-foreground mb-8 border-l-4 pl-4 italic">
       {children}
     </blockquote>
   ),
@@ -106,13 +111,13 @@ const components: Components = {
   ),
 
   pre: ({ children }) => (
-    <pre className="bg-muted mb-4 overflow-x-auto rounded-lg p-4 font-mono text-sm [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
+    <pre className="bg-muted mb-8 overflow-x-auto rounded-lg p-4 font-mono text-sm [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
       {children}
     </pre>
   ),
 
   table: ({ children }) => (
-    <div className="mb-4 w-full overflow-x-auto">
+    <div className="mb-8 w-full overflow-x-auto">
       <table className="border-strapi-neutral-500 text-strapi-small-1 w-full border-collapse border">
         {children}
       </table>
@@ -133,13 +138,15 @@ const components: Components = {
 }
 
 export function Markdown({ children, className }: MarkdownProps) {
-  if (!children) return null
+  if (!children) {
+    return null
+  }
 
   return (
     <div data-slot="markdown" className={cn(className)}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={remarkPlugins}
+        rehypePlugins={rehypePlugins}
         components={components}
       >
         {children}

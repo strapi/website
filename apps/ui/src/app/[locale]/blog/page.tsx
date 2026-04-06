@@ -2,12 +2,15 @@ import type { Locale } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { use } from "react"
 
+import { BlogNavbar } from "@/components/blog/BlogNavbar"
+import { BlogPostsList } from "@/components/blog/BlogPostsList"
+import { FeaturedBlogPost } from "@/components/blog/FeaturedBlogPost"
 import { Container } from "@/components/elementary/Container"
 import {
-  SectionHeader,
-  SectionTitle,
-  SectionDescription,
-} from "@/components/elementary/section-header"
+  HeroContainer,
+  HeroContainerContent,
+} from "@/components/elementary/HeroContainer"
+import { fetchBlogPostsList } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
 
@@ -17,18 +20,64 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
 
   setRequestLocale(locale)
 
-  const t = use(getTranslations({ locale, namespace: "blog" }))
+  const [t, allPosts] = use(
+    Promise.all([
+      getTranslations({ locale, namespace: "blog" }),
+      fetchBlogPostsList(locale),
+    ])
+  )
+
+  const featuredPost =
+    (allPosts?.data[0] as Record<string, unknown> | undefined) ?? null
+  const remainingPosts = allPosts?.data.slice(1) ?? []
 
   return (
-    <main className="py-16 lg:py-24">
-      <Container>
-        <SectionHeader layout="center">
-          <SectionTitle as="h1" size="xl">
-            {t("title")}
-          </SectionTitle>
-          <SectionDescription>{t("description")}</SectionDescription>
-        </SectionHeader>
-      </Container>
-    </main>
+    <HeroContainer affectsNavbarTheme className="gap-0">
+      <BlogNavbar locale={locale} />
+
+      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10">
+        {featuredPost && (
+          <Container>
+            <FeaturedBlogPost
+              title={featuredPost.title as string}
+              slug={featuredPost.slug as string}
+              content={featuredPost.content as string | null}
+              publishedAt={featuredPost.publishedAt as string | null}
+              author={
+                featuredPost.author as Parameters<
+                  typeof FeaturedBlogPost
+                >[0]["author"]
+              }
+              coauthors={
+                featuredPost.coauthors as Parameters<
+                  typeof FeaturedBlogPost
+                >[0]["coauthors"]
+              }
+              category={
+                featuredPost.category as Parameters<
+                  typeof FeaturedBlogPost
+                >[0]["category"]
+              }
+              image={
+                featuredPost.image as Parameters<
+                  typeof FeaturedBlogPost
+                >[0]["image"]
+              }
+            />
+          </Container>
+        )}
+
+        <Container>
+          <BlogPostsList
+            posts={
+              remainingPosts as unknown as Parameters<
+                typeof BlogPostsList
+              >[0]["posts"]
+            }
+            loadMoreLabel={t("loadMore")}
+          />
+        </Container>
+      </HeroContainerContent>
+    </HeroContainer>
   )
 }

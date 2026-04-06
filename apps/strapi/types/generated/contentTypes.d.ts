@@ -484,43 +484,35 @@ export interface ApiBlogCategoryBlogCategory
   }
 }
 
-export interface ApiBlogLayoutBlogLayout extends Struct.SingleTypeSchema {
-  collectionName: "blog_layouts"
+export interface ApiBlogNavigationBlogNavigation
+  extends Struct.SingleTypeSchema {
+  collectionName: "blog_navigations"
   info: {
-    description: ""
-    displayName: "Blog Layout"
-    pluralName: "blog-layouts"
-    singularName: "blog-layout"
+    displayName: "Blog Navigation"
+    pluralName: "blog-navigations"
+    singularName: "blog-navigation"
   }
   options: {
-    draftAndPublish: true
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
   }
   attributes: {
-    content: Schema.Attribute.DynamicZone<
-      [
-        "sections.hero",
-        "sections.section-header",
-        "sections.faq-section",
-        "sections.two-column-grid",
-        "cards.content-card",
-        "media.image",
-        "media.image-gallery",
-        "media.video",
-        "testimonials.quote",
-        "blog.author-banner",
-        "forms.newsletter",
-        "forms.hubspot-form",
-      ]
-    >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    locale: Schema.Attribute.String & Schema.Attribute.Private
+    items: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::post-category.post-category"
+    >
+    locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<
       "oneToMany",
-      "api::blog-layout.blog-layout"
-    > &
-      Schema.Attribute.Private
+      "api::blog-navigation.blog-navigation"
+    >
     publishedAt: Schema.Attribute.DateTime
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -556,7 +548,6 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    description: Schema.Attribute.Text
     image: Schema.Attribute.Component<"media.image", false>
     level: Schema.Attribute.Enumeration<
       ["beginner", "intermediate", "advanced"]
@@ -578,7 +569,10 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
         "media.image-gallery",
         "media.video",
         "testimonials.quote",
-        "blog.author-banner",
+        "blog.related-posts",
+        "blog.editors-picks",
+        "blog.category-showcase",
+        "blog.resource-cta",
         "forms.newsletter",
         "forms.hubspot-form",
         "migration.data-sink",
@@ -1228,7 +1222,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "media.image-gallery",
         "media.brand-logo-grid",
         "testimonials.quote",
-        "blog.author-banner",
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
@@ -1242,6 +1235,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "forms.demo-conversion",
         "migration.data-sink",
         "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -2190,7 +2185,7 @@ declare module "@strapi/strapi" {
       "admin::transfer-token-permission": AdminTransferTokenPermission
       "admin::user": AdminUser
       "api::blog-category.blog-category": ApiBlogCategoryBlogCategory
-      "api::blog-layout.blog-layout": ApiBlogLayoutBlogLayout
+      "api::blog-navigation.blog-navigation": ApiBlogNavigationBlogNavigation
       "api::blog-post.blog-post": ApiBlogPostBlogPost
       "api::blog-tag.blog-tag": ApiBlogTagBlogTag
       "api::case-study-category.case-study-category": ApiCaseStudyCategoryCaseStudyCategory

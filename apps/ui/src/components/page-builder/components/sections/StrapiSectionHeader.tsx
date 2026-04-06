@@ -20,7 +20,7 @@ export function StrapiSectionHeader({
 
   const background =
     (component.background as SectionHeaderContainerBackground | null) ?? "none"
-  const isDark = background === "dark"
+  const isDark = background === "dark" || background === "dark-inverse"
   const isBoxed = component.boxed === true
   const hasSectionImage = component.sectionImage != null
   const layout = component.section.layout ?? "center"
@@ -33,7 +33,8 @@ export function StrapiSectionHeader({
       contentClassName={cn(
         hasSectionImage && {
           "items-center gap-12": isCenter,
-          "items-center gap-12 lg:flex-row lg:items-start lg:gap-16": !isCenter,
+          "items-center gap-12 lg:flex-row lg:items-center lg:gap-16":
+            !isCenter,
         }
       )}
     >

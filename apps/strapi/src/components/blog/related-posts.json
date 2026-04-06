@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_blog_related_posts",
+  "info": {
+    "displayName": "Related Posts",
+    "icon": "layer",
+    "description": "Related blog posts with optional section header and/or category link"
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "component": "utilities.section-header",
+      "repeatable": false
+    },
+    "blogPosts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog-post.blog-post"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::post-category.post-category"
+    }
+  }
+}

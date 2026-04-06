@@ -545,6 +545,13 @@
     var(--color-strapi-blue-600) 65%,
     var(--color-strapi-purple-500) 100%
   );
+  --gradient-hero-code-overlay-inverse: linear-gradient(
+    335deg,
+    var(--color-strapi-gray-950) 0%,
+    var(--color-hero-accent-primary-transparent) 33%,
+    var(--color-strapi-blue-600) 65%,
+    var(--color-strapi-purple-500) 100%
+  );
   --gradient-hero-progress: linear-gradient(
     -90deg,
     var(--color-strapi-purple-500) 0%,

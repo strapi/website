@@ -4,6 +4,7 @@
 
 @import "tw-animate-css";
 @import "./animations.css";
+@import "./shiki.css";
 @import "../components/elementary/hero.css";
 
 /*
@@ -45,6 +46,26 @@
   ol {
     list-style-type: decimal;
     list-style-position: inside;
+  }
+
+  /* Site header heights — used by sticky sub-navbars (e.g. BlogNavbar) to
+     offset below the header. Banner: h-13 (52px), nav: h-16 / lg:h-20. */
+  :root {
+    --banner-h: 3.25rem;
+    --nav-h: 4rem;
+    --site-header-h: calc(var(--banner-h) + var(--nav-h));
+
+    @media (width >= 1024px) {
+      --nav-h: 5rem;
+    }
+  }
+
+  /* Site header sticky — the wrapper must be the sticky element so the nav's
+     containing block spans the full page (not just the header height) */
+  [data-slot="site-header"] {
+    position: sticky;
+    top: 0;
+    z-index: 40;
   }
 
   /* Navbar scroll bg + shadow via ::before so we can transition opacity */
@@ -97,6 +118,12 @@ body:has([data-minimal-layout]) [data-slot="site-footer"] {
 body:has([data-dark-hero]) nav[data-navbar] {
   --nav-logo-default-opacity: 0;
   --nav-logo-light-opacity: 1;
+}
+
+/* On dark-hero pages the bg must appear instantly so it doesn't lag
+   behind the text color change (which switches via steps(1) at 1px scroll) */
+body:has([data-dark-hero]) nav[data-navbar]::before {
+  transition: opacity 0ms;
 }
 
 /* White nav text only on desktop */

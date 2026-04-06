@@ -22,9 +22,6 @@
       "required": true,
       "regex": "^[a-z0-9-]+$"
     },
-    "description": {
-      "type": "text"
-    },
     "level": {
       "type": "enumeration",
       "enum": ["beginner", "intermediate", "advanced"]
@@ -75,7 +72,10 @@
         "media.image-gallery",
         "media.video",
         "testimonials.quote",
-        "blog.author-banner",
+        "blog.related-posts",
+        "blog.editors-picks",
+        "blog.category-showcase",
+        "blog.resource-cta",
         "forms.newsletter",
         "forms.hubspot-form",
         "migration.data-sink"

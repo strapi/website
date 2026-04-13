@@ -90,11 +90,8 @@ export function StrapiBlogPostView({ params }: Props) {
                   </aside>
                 )}
 
-                <Container>
-                  <article
-                    data-slot="blog-article"
-                    className="mx-auto max-w-210"
-                  >
+                <Container variant="condensed">
+                  <article data-slot="blog-article">
                     <BlogContent>{content}</BlogContent>
                   </article>
 

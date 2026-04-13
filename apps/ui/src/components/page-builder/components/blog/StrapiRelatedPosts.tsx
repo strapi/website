@@ -4,10 +4,6 @@ import { getTranslations } from "next-intl/server"
 import { BlogPostCard } from "@/components/blog/BlogPostCard"
 import { Box } from "@/components/elementary/box/Box"
 import { Container } from "@/components/elementary/Container"
-import {
-  SectionHeader,
-  SectionTitle,
-} from "@/components/elementary/section-header"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
 import { Link } from "@/lib/navigation"
 
@@ -39,12 +35,10 @@ export async function StrapiRelatedPosts({
                 />
               </div>
             ) : (
-              <div className="mb-8 flex items-center justify-between">
-                <SectionHeader layout="left" size="sm">
-                  <SectionTitle size="sm" variant="inverse">
-                    {category?.name ?? t("relatedPosts")}
-                  </SectionTitle>
-                </SectionHeader>
+              <div className="mb-8 flex flex-col items-center justify-between md:flex-row">
+                <h4 className="text-3xl font-bold text-white">
+                  {category?.name ?? t("relatedPosts")}
+                </h4>
 
                 {category?.slug && (
                   <Link

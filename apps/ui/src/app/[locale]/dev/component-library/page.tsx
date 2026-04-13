@@ -41,11 +41,11 @@ import { StrapiCommunityBanner } from "@/components/page-builder/components/sect
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
+import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
-import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
 import { StrapiUserStoriesSection } from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
@@ -195,7 +195,6 @@ const TOC = [
   { id: "triangle-mask", label: "TriangleMask" },
   { id: "faq-section", label: "FaqSection" },
   { id: "how-it-works", label: "HowItWorks" },
-  { id: "integrations-section", label: "IntegrationsSection" },
   { id: "user-stories-section", label: "UserStoriesSection" },
   { id: "brand-logo-grid", label: "BrandLogoGrid" },
   { id: "case-study-card", label: "CaseStudyCard" },
@@ -211,6 +210,7 @@ const TOC = [
   { id: "embed", label: "Embed" },
   { id: "cta-banner", label: "CtaBanner" },
   { id: "community-banner", label: "CommunityBanner" },
+  { id: "comparator-grid", label: "ComparatorGrid" },
   { id: "blog-post-header", label: "BlogPostHeader" },
 ] as const
 
@@ -517,11 +517,6 @@ const howItWorksDefaultExample = {
     },
   ],
 } as Data.Component<"sections.how-it-works">
-
-const integrationsSectionDefaultExample = {
-  label: "Integrations",
-  heading: "Works with your favorite tools",
-} as Data.Component<"sections.integrations-section">
 
 const userStoriesSectionDefaultExample = {
   label: "User Stories",
@@ -1558,19 +1553,6 @@ export default function ComponentLibraryPage() {
       </Section>
 
       {/* ----------------------------------------------------------------- */}
-      {/* IntegrationsSection                                               */}
-      {/* ----------------------------------------------------------------- */}
-      <Section id="integrations-section" title="IntegrationsSection">
-        <div className="-mx-6 space-y-10">
-          <Variant label="Default (with built-in mock integrations)">
-            <StrapiIntegrationsSection
-              component={integrationsSectionDefaultExample}
-            />
-          </Variant>
-        </div>
-      </Section>
-
-      {/* ----------------------------------------------------------------- */}
       {/* UserStoriesSection                                                */}
       {/* ----------------------------------------------------------------- */}
       <Section id="user-stories-section" title="UserStoriesSection">
@@ -2316,6 +2298,14 @@ export default function ComponentLibraryPage() {
                 ]}
               />
             </div>
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="comparator-grid" title="ComparatorGrid">
+        <div className="space-y-6">
+          <Variant label="Default (fetches all CMS comparisons)">
+            <StrapiComparatorGrid />
           </Variant>
         </div>
       </Section>

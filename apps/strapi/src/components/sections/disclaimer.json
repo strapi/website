@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_sections_disclaimers",
+  "info": {
+    "displayName": "Disclaimer",
+    "icon": "exclamationMark",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

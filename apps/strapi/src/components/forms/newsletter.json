@@ -27,6 +27,11 @@
       "type": "component",
       "component": "utilities.basic-image",
       "repeatable": false
+    },
+    "hubspotForm": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hubspot-form.hubspot-form"
     }
   }
 }

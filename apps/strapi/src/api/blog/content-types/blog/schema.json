@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "blogs",
+  "info": {
+    "singularName": "blog",
+    "pluralName": "blogs",
+    "displayName": "Blog"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "navigation": {
+      "type": "component",
+      "component": "blog.navigation",
+      "repeatable": false
+    },
+    "newsletter": {
+      "type": "component",
+      "component": "forms.newsletter",
+      "repeatable": false
+    }
+  }
+}

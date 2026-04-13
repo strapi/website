@@ -215,5 +215,13 @@
         "phoneNumber": "This field must contain 9 numbers"
       }
     }
+  },
+
+  "cmsComparison": {
+    "compare": "Compare",
+    "seeAll": "See all our comparators",
+    "vs": "vs",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimer": "The data on this page is regularly updated, however don't hesitate to [contact us](mailto:marketing@strapi.io) if you notice a mistake."
   }
 }

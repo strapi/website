@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_blog_navigations",
+  "info": {
+    "displayName": "Blog Navigation",
+    "icon": "compass",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::post-category.post-category"
+    }
+  }
+}

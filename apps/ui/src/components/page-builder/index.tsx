@@ -25,12 +25,13 @@ import { StrapiDemoConversion } from "@/components/page-builder/components/secti
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
+import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
+import { StrapiDisclaimer } from "@/components/page-builder/components/sections/StrapiDisclaimer"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sections/StrapiFeatureCardGrid"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
-import { StrapiIntegrationsSection } from "@/components/page-builder/components/sections/StrapiIntegrationsSection"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
@@ -71,7 +72,6 @@ export const ContentComponents: Partial<
   "sections.hero-home": StrapiHeroHome,
   "sections.faq-section": StrapiFaqSection,
   "sections.how-it-works": StrapiHowItWorks,
-  "sections.integrations-section": StrapiIntegrationsSection,
   "sections.section-header": StrapiSectionHeader,
   "sections.feature-card-grid": StrapiFeatureCardGrid,
   "sections.two-column-grid": StrapiTwoColumnGrid,
@@ -94,6 +94,8 @@ export const ContentComponents: Partial<
   "sections.meet-the-team": StrapiMeetTheTeam,
   "sections.cta-banner": StrapiCtaBanner,
   "sections.community-banner": StrapiCommunityBanner,
+  "sections.comparator-grid": StrapiComparatorGrid,
+  "sections.disclaimer": StrapiDisclaimer,
 
   // Testimonials
   "testimonials.quote": StrapiQuote,

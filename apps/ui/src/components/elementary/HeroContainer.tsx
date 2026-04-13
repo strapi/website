@@ -1,3 +1,5 @@
+import { Slot as SlotPrimitive } from "radix-ui"
+
 import { cn } from "@/lib/styles"
 
 import { Container } from "./Container"
@@ -54,5 +56,23 @@ export function HeroContainerContent({
     <div className={cn("p-6 md:p-4", className)} {...restProps}>
       {children}
     </div>
+  )
+}
+
+export function HeroContainerBorder({
+  asChild = false,
+  className,
+  children,
+  ...restProps
+}: React.ComponentProps<"div"> & { asChild?: boolean }) {
+  const Comp = asChild ? SlotPrimitive.Slot : "div"
+
+  return (
+    <Comp
+      className={cn("border-strapi-gray-700/50 rounded-2xl border", className)}
+      {...restProps}
+    >
+      {children}
+    </Comp>
   )
 }

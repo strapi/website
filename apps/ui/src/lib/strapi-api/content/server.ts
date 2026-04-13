@@ -210,23 +210,31 @@ export async function fetchBlogPostSeo(slug: string, locale: Locale) {
   }
 }
 
-// ------ Blog navigation fetching functions
+// ------ Blog settings fetching functions
 
-export async function fetchBlogNavigation(locale: Locale) {
+export async function fetchBlog(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchOne(
-      "api::blog-navigation.blog-navigation",
-      undefined,
-      {
-        locale,
-        populate: {
-          items: { fields: ["name", "slug"] },
-        } as Record<string, unknown>,
-      }
-    )
+    return await PublicStrapiClient.fetchOne("api::blog.blog", undefined, {
+      locale,
+      populate: {
+        navigation: {
+          populate: {
+            items: { fields: ["name", "slug"] },
+          },
+        },
+        newsletter: {
+          populate: {
+            image: {
+              populate: { media: true },
+            },
+            hubspotForm: true,
+          },
+        },
+      } as Record<string, unknown>,
+    })
   } catch (e: unknown) {
     logNonBlockingError({
-      message: `Error fetching blog navigation for locale '${locale}'`,
+      message: `Error fetching blog settings for locale '${locale}'`,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,
@@ -279,6 +287,115 @@ export async function fetchGlobalSeo() {
     })
   }
 }
+
+// ------ CMS comparison fetching functions
+
+export async function fetchCmsComparison(
+  slug: string,
+  locale: Locale,
+  requestInit?: RequestInit,
+  options?: CustomFetchOptions
+) {
+  const dm = await draftMode()
+
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::cms-comparison.cms-comparison",
+      slug,
+      {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        populate: {
+          seo: seoPopulate,
+        } as Record<string, unknown>,
+        populateDynamicZone: { content: true },
+      },
+      requestInit,
+      options
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching CMS comparison '${slug}' for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+export async function fetchAllCmsComparisons(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchAll(
+      "api::cms-comparison.cms-comparison",
+      {
+        locale,
+        fields: ["slug", "locale", "updatedAt", "createdAt"],
+        populate: {},
+        status: "published",
+      }
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all CMS comparisons for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
+  }
+}
+
+export async function fetchCmsComparisonSeo(slug: string, locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::cms-comparison.cms-comparison",
+      slug,
+      {
+        locale,
+        populate: {
+          seo: seoPopulate,
+        },
+      }
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching CMS comparison SEO for '${slug}' locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+export async function fetchAllCms(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchAll("api::cms.cms", {
+      locale,
+      fields: ["name", "slug"],
+      populate: {
+        logo: { fields: ["url", "width", "height", "alternativeText"] },
+        fields: true,
+      } as Record<string, unknown>,
+      status: "published",
+    })
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all CMS entries for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
+  }
+}
+
+// ------ Header & footer fetching functions
 
 export async function fetchHeader(locale: Locale) {
   try {

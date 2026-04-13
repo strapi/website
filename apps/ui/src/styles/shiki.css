@@ -1,39 +1,59 @@
-/* Shiki syntax highlighting styles */
+/* Shiki syntax highlighting styles — matching website-2020 */
+
+[data-slot="code-highlighter"] {
+  position: relative;
+  margin: 0;
+}
 
 [data-slot="code-highlighter"] .shiki {
   padding: 1em;
   margin: 0;
-  overflow: auto;
-  border-radius: 0.5rem;
+  overflow-x: auto;
+  border-radius: 6px;
+  background-color: #2f2e8b !important;
+  color: #fff;
   font-family:
-    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
-    monospace;
-  font-size: 0.8125rem;
-  line-height: 1.6;
+    Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 0.9375rem;
+  line-height: 1.5;
   tab-size: 4;
 }
 
 [data-slot="code-highlighter"] .shiki code {
   display: block;
+  width: fit-content;
+  min-width: 100%;
+}
+
+[data-slot="code-highlighter"] .shiki .line {
+  display: inline-block;
+  width: 100%;
+  min-height: 1.5em;
+  line-height: 1.5;
 }
 
 /* Line numbers via CSS counters */
+[data-slot="code-highlighter"] .shiki.line-numbers {
+  padding-left: 4em;
+  position: relative;
+}
+
 [data-slot="code-highlighter"] .shiki.line-numbers code {
   counter-reset: line;
 }
 
-[data-slot="code-highlighter"] .shiki.line-numbers code .line {
-  display: inline-block;
-  width: 100%;
+[data-slot="code-highlighter"] .shiki.line-numbers .line {
+  position: relative;
 }
 
-[data-slot="code-highlighter"] .shiki.line-numbers code .line::before {
-  content: counter(line);
+[data-slot="code-highlighter"] .shiki.line-numbers .line::before {
   counter-increment: line;
-  display: inline-block;
-  width: 2.5ch;
-  margin-right: 1.5ch;
+  content: counter(line);
+  position: absolute;
+  left: -3.5em;
+  width: 2.5em;
   text-align: right;
-  color: rgb(255 255 255 / 0.25);
+  color: rgba(115, 138, 148, 0.5);
   user-select: none;
+  pointer-events: none;
 }

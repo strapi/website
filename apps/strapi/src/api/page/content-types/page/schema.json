@@ -64,7 +64,6 @@
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
         "sections.faq-section",
-        "sections.integrations-section",
         "sections.user-stories-section",
         "sections.how-it-works",
         "sections.section-header",
@@ -91,7 +90,9 @@
         "migration.data-sink",
         "media.embed",
         "sections.cta-banner",
-        "sections.community-banner"
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer"
       ]
     },
     "children": {

@@ -7,14 +7,26 @@ import {
   SectionHeader,
   SectionTitle,
 } from "@/components/elementary/section-header"
+import {
+  NewsletterForm,
+  type NewsletterFormData,
+} from "@/components/newsletter/NewsletterForm"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import { Button } from "@/components/ui/button"
 
 interface StrapiNewsletterProps {
   readonly component: Data.Component<"forms.newsletter">
 }
 
 export function StrapiNewsletter({ component }: StrapiNewsletterProps) {
+  const formData: NewsletterFormData = {
+    title: component.title ?? "",
+    description: component.description,
+    emailPlaceholder: component.emailPlaceholder,
+    submitLabel: component.submitLabel,
+    consentText: component.consentText,
+    hubspotForm: component.hubspotForm as NewsletterFormData["hubspotForm"],
+  }
+
   return (
     <section>
       <Container className="relative">
@@ -32,25 +44,7 @@ export function StrapiNewsletter({ component }: StrapiNewsletterProps) {
                 )}
               </SectionHeader>
 
-              <form className="flex w-full flex-row gap-1 md:flex-col lg:flex-row">
-                <input
-                  type="email"
-                  aria-label="Email address"
-                  placeholder={
-                    component.emailPlaceholder ?? "Enter your email address"
-                  }
-                  className="h-[42px] w-full rounded-[8px] border border-transparent bg-white px-4 text-sm text-black shadow-xs outline-none"
-                />
-                <Button type="button" variant="default">
-                  {component.submitLabel ?? "Subscribe"}
-                </Button>
-              </form>
-
-              {component.consentText && (
-                <p className="text-strapi-gray-400 w-full text-left text-xs leading-relaxed">
-                  {component.consentText}
-                </p>
-              )}
+              <NewsletterForm data={formData} variant="dark" layout="inline" />
             </div>
 
             {component.image && (

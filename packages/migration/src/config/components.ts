@@ -1471,30 +1471,6 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     }),
   },
 
-  // v4 integration-cards-grid: intro + integration relations
-  {
-    source: "slices.integration-cards-grid",
-    target: "sections.section-header",
-    transform: introToSectionHeader,
-  },
-
-  // v4 integrations: description + buttons
-  {
-    source: "slices.integrations",
-    target: "sections.section-header",
-    transform: (entry) => {
-      const buttons = asArray(entry["buttons"])
-
-      return {
-        section: buildSectionHeader({
-          description:
-            `${(entry["boldDescription"] as string) ?? ""}\n${(entry["description"] as string) ?? ""}`.trim(),
-          buttons: buttons as V4Button[],
-        }),
-      }
-    },
-  },
-
   // v4 contributors-slice: intro only
   {
     source: "slices.contributors-slice",

@@ -7,8 +7,6 @@ import type { Logger } from "../utils/logger.ts"
  */
 const DZ_ENTITIES: Record<string, { endpoint: string; dzField: string }> = {
   // sections DZ
-  integrations: { endpoint: "integrations", dzField: "sections" },
-  partners: { endpoint: "partners", dzField: "sections" },
   "blog-posts": { endpoint: "blog-posts", dzField: "sections" },
   "cms-pages": { endpoint: "cmses", dzField: "sections" },
 

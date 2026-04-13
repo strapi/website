@@ -4,6 +4,7 @@ import ReactMarkdown, { type Components } from "react-markdown"
 import rehypeRaw from "rehype-raw"
 import remarkGfm from "remark-gfm"
 
+import { CodeHighlighter } from "@/components/elementary/code-highlighter/CodeHighlighter"
 import { headingId } from "@/lib/markdown-utils"
 import { cn } from "@/lib/styles"
 
@@ -110,11 +111,30 @@ const components: Components = {
     </code>
   ),
 
-  pre: ({ children }) => (
-    <pre className="bg-muted mb-8 overflow-x-auto rounded-lg p-4 font-mono text-sm [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
-      {children}
-    </pre>
-  ),
+  pre: ({ node, children }) => {
+    const codeChild = node?.children?.[0]
+
+    if (codeChild?.type === "element" && codeChild.tagName === "code") {
+      const classNames = (codeChild.properties?.className ?? []) as string[]
+      const langClass = classNames.find((c) => c.startsWith("language-"))
+      const language = langClass?.replace("language-", "")
+
+      const text = codeChild.children
+        ?.map((child) => (child.type === "text" ? child.value : ""))
+        .join("")
+        .replace(/\n$/, "")
+
+      if (text) {
+        return <CodeHighlighter code={text} language={language} />
+      }
+    }
+
+    return (
+      <pre className="bg-muted mb-8 overflow-x-auto rounded-lg p-4 font-mono text-sm [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
+        {children}
+      </pre>
+    )
+  },
 
   table: ({ children }) => (
     <div className="mb-8 w-full overflow-x-auto">

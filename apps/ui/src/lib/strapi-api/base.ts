@@ -17,9 +17,11 @@ import type { AppError, CustomFetchOptions } from "@/types/general"
 export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::page.page": "/pages",
   "api::blog-post.blog-post": "/blog-posts",
-  "api::blog-navigation.blog-navigation": "/blog-navigation",
+  "api::blog.blog": "/blog",
   "api::footer.footer": "/footer",
   "api::header.header": "/header",
+  "api::cms.cms": "/cmses",
+  "api::cms-comparison.cms-comparison": "/cms-comparisons",
 } as const
 
 export default abstract class BaseStrapiClient {

@@ -484,42 +484,6 @@ export interface ApiBlogCategoryBlogCategory
   }
 }
 
-export interface ApiBlogNavigationBlogNavigation
-  extends Struct.SingleTypeSchema {
-  collectionName: "blog_navigations"
-  info: {
-    displayName: "Blog Navigation"
-    pluralName: "blog-navigations"
-    singularName: "blog-navigation"
-  }
-  options: {
-    draftAndPublish: false
-  }
-  pluginOptions: {
-    i18n: {
-      localized: true
-    }
-  }
-  attributes: {
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    items: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::post-category.post-category"
-    >
-    locale: Schema.Attribute.String
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::blog-navigation.blog-navigation"
-    >
-    publishedAt: Schema.Attribute.DateTime
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
 export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   collectionName: "blog_posts"
   info: {
@@ -629,6 +593,36 @@ export interface ApiBlogTagBlogTag extends Struct.CollectionTypeSchema {
           localized: false
         }
       }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiBlogBlog extends Struct.SingleTypeSchema {
+  collectionName: "blogs"
+  info: {
+    displayName: "Blog"
+    pluralName: "blogs"
+    singularName: "blog"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::blog.blog">
+    navigation: Schema.Attribute.Component<"blog.navigation", false>
+    newsletter: Schema.Attribute.Component<"forms.newsletter", false>
+    publishedAt: Schema.Attribute.DateTime
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -1016,99 +1010,6 @@ export interface ApiHubspotFormHubspotForm extends Struct.CollectionTypeSchema {
   }
 }
 
-export interface ApiIntegrationCategoryIntegrationCategory
-  extends Struct.CollectionTypeSchema {
-  collectionName: "integration_categories"
-  info: {
-    description: ""
-    displayName: "Integration Category"
-    pluralName: "integration-categories"
-    singularName: "integration-category"
-  }
-  options: {
-    draftAndPublish: false
-  }
-  attributes: {
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::integration-category.integration-category"
-    > &
-      Schema.Attribute.Private
-    name: Schema.Attribute.String & Schema.Attribute.Required
-    publishedAt: Schema.Attribute.DateTime
-    slug: Schema.Attribute.UID<"name">
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
-export interface ApiIntegrationIntegration extends Struct.CollectionTypeSchema {
-  collectionName: "integrations"
-  info: {
-    description: ""
-    displayName: "Integration"
-    pluralName: "integrations"
-    singularName: "integration"
-  }
-  options: {
-    draftAndPublish: true
-  }
-  attributes: {
-    author: Schema.Attribute.Relation<
-      "manyToOne",
-      "plugin::users-permissions.user"
-    >
-    content: Schema.Attribute.RichText
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    description: Schema.Attribute.RichText
-    image: Schema.Attribute.Component<"media.image", false>
-    integrationCategories: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::integration-category.integration-category"
-    >
-    isExternal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
-    link: Schema.Attribute.Component<"utilities.link", false>
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::integration.integration"
-    > &
-      Schema.Attribute.Private
-    logo: Schema.Attribute.Component<"media.image", false>
-    publishedAt: Schema.Attribute.DateTime
-    sections: Schema.Attribute.DynamicZone<
-      [
-        "sections.section-header",
-        "sections.faq-section",
-        "sections.two-column-grid",
-        "sections.feature-card-grid",
-        "cards.content-card",
-        "cards.feature-card",
-        "media.image",
-        "media.image-gallery",
-        "media.video",
-        "testimonials.quote",
-        "forms.newsletter",
-        "forms.hubspot-form",
-        "migration.data-sink",
-      ]
-    >
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
-    slug: Schema.Attribute.UID<"title">
-    title: Schema.Attribute.String & Schema.Attribute.Required
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
 export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
   collectionName: "internal_jobs"
   info: {
@@ -1209,7 +1110,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
         "sections.faq-section",
-        "sections.integrations-section",
         "sections.user-stories-section",
         "sections.how-it-works",
         "sections.section-header",
@@ -1237,6 +1137,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "media.embed",
         "sections.cta-banner",
         "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -1285,104 +1187,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
           localized: true
         }
       }>
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
-export interface ApiPartnerServicePartnerService
-  extends Struct.CollectionTypeSchema {
-  collectionName: "partner_services"
-  info: {
-    description: ""
-    displayName: "Partner Service"
-    pluralName: "partner-services"
-    singularName: "partner-service"
-  }
-  options: {
-    draftAndPublish: false
-  }
-  attributes: {
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::partner-service.partner-service"
-    > &
-      Schema.Attribute.Private
-    name: Schema.Attribute.String & Schema.Attribute.Required
-    publishedAt: Schema.Attribute.DateTime
-    slug: Schema.Attribute.UID<"name">
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
-export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
-  collectionName: "partners"
-  info: {
-    description: ""
-    displayName: "Partner"
-    pluralName: "partners"
-    singularName: "partner"
-  }
-  options: {
-    draftAndPublish: true
-  }
-  attributes: {
-    city: Schema.Attribute.Relation<"manyToOne", "api::city.city">
-    content: Schema.Attribute.RichText
-    country: Schema.Attribute.Relation<"manyToOne", "api::country.country">
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    cta: Schema.Attribute.Component<"utilities.link", false>
-    description: Schema.Attribute.RichText
-    label: Schema.Attribute.String
-    level: Schema.Attribute.Enumeration<["community", "business", "enterprise"]>
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::partner.partner"
-    > &
-      Schema.Attribute.Private
-    logo: Schema.Attribute.Component<"media.image", false>
-    publishedAt: Schema.Attribute.DateTime
-    sections: Schema.Attribute.DynamicZone<
-      [
-        "sections.section-header",
-        "sections.faq-section",
-        "sections.two-columns-benefits",
-        "sections.two-column-grid",
-        "cards.content-card",
-        "media.image",
-        "media.image-gallery",
-        "media.video",
-        "testimonials.quote",
-        "sections.testimonies",
-        "forms.newsletter",
-        "forms.hubspot-form",
-        "migration.data-sink",
-      ]
-    >
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
-    services: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::partner-service.partner-service"
-    >
-    slug: Schema.Attribute.UID<"title">
-    techStacks: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::tech-stack.tech-stack"
-    >
-    title: Schema.Attribute.String & Schema.Attribute.Required
-    type: Schema.Attribute.Enumeration<
-      ["solution-partner", "technology-partner"]
-    >
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -2185,9 +1989,9 @@ declare module "@strapi/strapi" {
       "admin::transfer-token-permission": AdminTransferTokenPermission
       "admin::user": AdminUser
       "api::blog-category.blog-category": ApiBlogCategoryBlogCategory
-      "api::blog-navigation.blog-navigation": ApiBlogNavigationBlogNavigation
       "api::blog-post.blog-post": ApiBlogPostBlogPost
       "api::blog-tag.blog-tag": ApiBlogTagBlogTag
+      "api::blog.blog": ApiBlogBlog
       "api::case-study-category.case-study-category": ApiCaseStudyCategoryCaseStudyCategory
       "api::case-study.case-study": ApiCaseStudyCaseStudy
       "api::city.city": ApiCityCity
@@ -2198,13 +2002,9 @@ declare module "@strapi/strapi" {
       "api::global.global": ApiGlobalGlobal
       "api::header.header": ApiHeaderHeader
       "api::hubspot-form.hubspot-form": ApiHubspotFormHubspotForm
-      "api::integration-category.integration-category": ApiIntegrationCategoryIntegrationCategory
-      "api::integration.integration": ApiIntegrationIntegration
       "api::internal-job.internal-job": ApiInternalJobInternalJob
       "api::news-item.news-item": ApiNewsItemNewsItem
       "api::page.page": ApiPagePage
-      "api::partner-service.partner-service": ApiPartnerServicePartnerService
-      "api::partner.partner": ApiPartnerPartner
       "api::plan-feature.plan-feature": ApiPlanFeaturePlanFeature
       "api::plan.plan": ApiPlanPlan
       "api::post-category.post-category": ApiPostCategoryPostCategory

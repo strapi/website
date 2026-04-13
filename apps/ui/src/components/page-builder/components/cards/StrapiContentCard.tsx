@@ -9,15 +9,15 @@ export function StrapiContentCard({
 }: {
   readonly component: Data.Component<"cards.content-card">
 }) {
-  if (!component.title) return null
+  if (!component.title) {
+    return null
+  }
 
   return (
-    <section className="py-12 lg:py-16">
-      <Container>
-        <ContentCard label={component.label} title={component.title}>
-          <Markdown>{component.content}</Markdown>
-        </ContentCard>
-      </Container>
-    </section>
+    <Container>
+      <ContentCard label={component.label} title={component.title}>
+        <Markdown>{component.content}</Markdown>
+      </ContentCard>
+    </Container>
   )
 }

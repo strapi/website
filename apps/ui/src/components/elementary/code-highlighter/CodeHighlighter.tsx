@@ -19,7 +19,7 @@ export function CodeHighlighter({
   return (
     <div
       data-slot="code-highlighter"
-      className={cn("relative my-8 lg:my-10", className)}
+      className={cn("relative my-9", className)}
     >
       <CodeBlockCopyButton code={code} />
       <div dangerouslySetInnerHTML={{ __html: html }} />

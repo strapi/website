@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server"
 import { use } from "react"
 
 import { BlogNavbar } from "@/components/blog/BlogNavbar"
+import { BlogNewsletter } from "@/components/blog/BlogNewsletter"
 import { BlogPostsList } from "@/components/blog/BlogPostsList"
 import { FeaturedBlogPost } from "@/components/blog/FeaturedBlogPost"
 import { Container } from "@/components/elementary/Container"
@@ -11,10 +12,8 @@ import {
   HeroContainer,
   HeroContainerContent,
 } from "@/components/elementary/HeroContainer"
-import {
-  fetchBlogNavigation,
-  fetchBlogPostsList,
-} from "@/lib/strapi-api/content/server"
+import type { NewsletterFormData } from "@/components/newsletter/NewsletterForm"
+import { fetchBlog, fetchBlogPostsList } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
 
@@ -23,10 +22,11 @@ export async function generateStaticParams({
 }: {
   params: { locale: string }
 }) {
-  const navigation = await fetchBlogNavigation(locale as Locale)
-  const items = (navigation?.data as Record<string, unknown>)?.items as
-    | readonly { slug?: string }[]
+  const blog = await fetchBlog(locale as Locale)
+  const navigation = (blog?.data as Record<string, unknown>)?.navigation as
+    | Record<string, unknown>
     | undefined
+  const items = navigation?.items as readonly { slug?: string }[] | undefined
 
   return (
     items
@@ -57,12 +57,16 @@ export default function BlogCategoryPage(
 
   setRequestLocale(locale)
 
-  const [t, categoryPosts] = use(
+  const [t, categoryPosts, blog] = use(
     Promise.all([
       getTranslations({ locale, namespace: "blog" }),
       fetchBlogPostsList(locale, slug),
+      fetchBlog(locale),
     ])
   )
+
+  const newsletter = (blog?.data as Record<string, unknown> | undefined)
+    ?.newsletter as NewsletterFormData | undefined
 
   const featuredPost =
     (categoryPosts?.data[0] as Record<string, unknown> | undefined) ?? null
@@ -114,6 +118,8 @@ export default function BlogCategoryPage(
             loadMoreLabel={t("loadMore")}
           />
         </Container>
+
+        {newsletter && <BlogNewsletter newsletter={newsletter} />}
       </HeroContainerContent>
     </HeroContainer>
   )

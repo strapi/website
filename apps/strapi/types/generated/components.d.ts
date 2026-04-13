@@ -36,6 +36,21 @@ export interface BlogEditorsPicks extends Struct.ComponentSchema {
   }
 }
 
+export interface BlogNavigation extends Struct.ComponentSchema {
+  collectionName: "components_blog_navigations"
+  info: {
+    description: ""
+    displayName: "Blog Navigation"
+    icon: "compass"
+  }
+  attributes: {
+    items: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::post-category.post-category"
+    >
+  }
+}
+
 export interface BlogRelatedPosts extends Struct.ComponentSchema {
   collectionName: "components_blog_related_posts"
   info: {
@@ -581,6 +596,10 @@ export interface FormsNewsletter extends Struct.ComponentSchema {
     consentText: Schema.Attribute.Text
     description: Schema.Attribute.Text
     emailPlaceholder: Schema.Attribute.String
+    hubspotForm: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::hubspot-form.hubspot-form"
+    >
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     submitLabel: Schema.Attribute.String
     title: Schema.Attribute.String & Schema.Attribute.Required
@@ -962,6 +981,16 @@ export interface SectionsCommunityBanner extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsComparatorGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_comparator_grids"
+  info: {
+    description: ""
+    displayName: "ComparatorGrid"
+    icon: "grid"
+  }
+  attributes: {}
+}
+
 export interface SectionsCtaBanner extends Struct.ComponentSchema {
   collectionName: "components_sections_cta_banners"
   info: {
@@ -975,6 +1004,19 @@ export interface SectionsCtaBanner extends Struct.ComponentSchema {
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
     sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
+  }
+}
+
+export interface SectionsDisclaimer extends Struct.ComponentSchema {
+  collectionName: "components_sections_disclaimers"
+  info: {
+    description: ""
+    displayName: "Disclaimer"
+    icon: "exclamationMark"
+  }
+  attributes: {
+    content: Schema.Attribute.Text & Schema.Attribute.Required
+    title: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -1068,29 +1110,6 @@ export interface SectionsHowItWorks extends Struct.ComponentSchema {
         }
       }>
     items: Schema.Attribute.Component<"elements.how-it-works-item", true> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-  }
-}
-
-export interface SectionsIntegrationsSection extends Struct.ComponentSchema {
-  collectionName: "components_sections_integrations_section"
-  info: {
-    description: ""
-    displayName: "Integrations Section"
-    icon: "puzzlePiece"
-  }
-  attributes: {
-    heading: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    label: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -1529,6 +1548,7 @@ declare module "@strapi/strapi" {
     export interface ComponentSchemas {
       "blog.category-showcase": BlogCategoryShowcase
       "blog.editors-picks": BlogEditorsPicks
+      "blog.navigation": BlogNavigation
       "blog.related-posts": BlogRelatedPosts
       "blog.resource-cta": BlogResourceCta
       "cards.case-study-card": CardsCaseStudyCard
@@ -1580,13 +1600,14 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.community-banner": SectionsCommunityBanner
+      "sections.comparator-grid": SectionsComparatorGrid
       "sections.cta-banner": SectionsCtaBanner
+      "sections.disclaimer": SectionsDisclaimer
       "sections.faq-section": SectionsFaqSection
       "sections.feature-card-grid": SectionsFeatureCardGrid
       "sections.hero": SectionsHero
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
-      "sections.integrations-section": SectionsIntegrationsSection
       "sections.meet-the-team": SectionsMeetTheTeam
       "sections.section-header": SectionsSectionHeader
       "sections.testimonies": SectionsTestimonies

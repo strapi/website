@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-03-22
+> Auto-updated by skills. Last updated: 2026-04-10
 
 ## Registry Freshness Policy
 
@@ -98,6 +98,8 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `elements.conversion-info-item`         | elements      | Conversion Info Item        | image:utilities.basic-image (opt), value:string (opt), label:string (req), description:string (opt)                                                                                                                                                                                                             |
 | `media.video`                           | media         | Video                       | url:string (req), thumbnail:utilities.basic-image (opt), link:utilities.link (opt), alignment:enumeration(left\|center\|right, default:center)                                                                                                                                                                  |
 | `media.embed`                           | media         | Embed                       | url:string (req), width:integer (req, default:1000), height:integer (req, default:670)                                                                                                                                                                                                                          |
+| `sections.comparator-grid`              | sections      | ComparatorGrid              | title:string (opt, default "Compare"), linkTitle:string (opt, default "See all our comparators") — fetches all CMS comparisons at render time                                                                                                                                                                   |
+| `sections.disclaimer`                   | sections      | Disclaimer                  | title:string (req), content:text (req) — inline markdown rendered on frontend via InlineMarkdown                                                                                                                                                                                                                |
 
 ## React Elementary Components
 
@@ -125,6 +127,7 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | Box                    | `@/components/elementary/box/Box`                  | variant (none/light/dark), className — base: relative overflow-hidden. Exports `boxVariants` CVA for reusing bg colors on parent elements.                                                                                         | Colored background wrapper with decorative patterns. none=transparent, light=blue-100, dark=blue-800+webp. Consumer handles padding/layout.                                                                |
 | CommandCTA             | `@/components/elementary/command-cta/CommandCTA`   | title (string, req), description (string, opt), codeSnippet (string, opt), ctaLabel (string, default "Copy"), className — client component. Uses Box variant="dark" internally. Copy-to-clipboard for code snippet.                | Dark CTA card with title, description, code snippet + copy button. Used inside other Strapi components (no own schema).                                                                                    |
 | ContentCard            | `@/components/elementary/content-card/ContentCard` | label (string, opt), title (string, req), titleAs (HeadingElement, default h3), children (ReactNode). Uses SectionHeader layout="left" size="xs" constrain={false} internally.                                                     | Reusable card with purple label, title heading, and content body slot. Used by StrapiContentCard for rich markdown content sections.                                                                       |
+| Disclaimer             | `@/components/elementary/disclaimer/Disclaimer`    | title (string, req), children (string\|null, opt) — styled info box with light blue bg, border, rounded-lg. Content rendered via InlineMarkdown.                                                                                   | Disclaimer/notice blocks with title + inline markdown content. Used by StrapiDisclaimer.                                                                                                                   |
 
 ## Strapi Utility React Wrappers
 
@@ -174,6 +177,8 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.community-banner`     | StrapiCommunityBanner     | `page-builder/components/sections/strapi-community-banner/StrapiCommunityBanner` | Page         |
 | `media.video`                   | StrapiVideo               | `page-builder/components/media/StrapiVideo`                                      | Page         |
 | `media.embed`                   | StrapiEmbed               | `page-builder/components/media/StrapiEmbed`                                      | Page         |
+| `sections.comparator-grid`      | StrapiComparatorGrid      | `page-builder/components/sections/StrapiComparatorGrid`                          | Page         |
+| `sections.disclaimer`           | StrapiDisclaimer          | `page-builder/components/sections/StrapiDisclaimer`                              | Page         |
 | `footer.footer-main`            | StrapiFooterMain          | `page-builder/single-types/footer/StrapiFooterMain`                              | Footer       |
 | `footer.footer-cta`             | StrapiFooterCta           | `page-builder/single-types/footer/StrapiFooterCta`                               | Footer       |
 | `navigation.top-banner`         | StrapiTopBanner           | `page-builder/components/navigation/top-banner/StrapiTopBanner`                  | Header       |

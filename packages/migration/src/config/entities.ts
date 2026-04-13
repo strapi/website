@@ -10,7 +10,6 @@ import {
   convertV4Link,
   ensureSlug,
   extractMediaUrl,
-  extractNestedRelationId,
   extractRelationIds,
   extractV4Person,
   uploadDirectMediaFields,
@@ -768,38 +767,12 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
     ],
   },
 
-  "partner-services": {
-    sourceEndpoint: "partner-services",
-    sourcePopulate: "*",
-    targetEndpoint: "partner-services",
-    dedupField: "name",
-    sourceUid: "api::partner-service.partner-service",
-    transforms: [
-      flattenV4,
-      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
-      ensureSlug("name"),
-    ],
-  },
-
   "case-study-categories": {
     sourceEndpoint: "case-study-use-cases",
     sourcePopulate: "*",
     targetEndpoint: "case-study-categories",
     dedupField: "name",
     sourceUid: "api::case-study-use-case.case-study-use-case",
-    transforms: [
-      flattenV4,
-      dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
-      ensureSlug("name"),
-    ],
-  },
-
-  "integration-categories": {
-    sourceEndpoint: "integration-tags",
-    sourcePopulate: "*",
-    targetEndpoint: "integration-categories",
-    dedupField: "name",
-    sourceUid: "api::integration-tag.integration-tag",
     transforms: [
       flattenV4,
       dropFields("_v4Id", "createdAt", "updatedAt", "publishedAt", "locale"),
@@ -1117,276 +1090,6 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
   // ENTITIES WITH RELATION DEPENDENCIES
   // ═════════════════════════════════════════
 
-  integrations: {
-    sourceEndpoint: "integrations",
-    sourcePopulate: {
-      seo: { populate: "*" },
-      logo: { populate: "*" },
-      image: { populate: "*" },
-      link: { populate: "*" },
-      user: { populate: "*" },
-      integration_topics: { populate: "*" },
-      integration_tags: { populate: "*" },
-      slices: DEEP_DZ_POPULATE["slices"],
-    },
-    targetEndpoint: "integrations",
-    dedupField: "slug",
-    sourceUid: "api::integration.integration",
-    transforms: [
-      flattenV4,
-      dropFields(
-        "_v4Id",
-        "createdAt",
-        "updatedAt",
-        "publishedAt",
-        "locale",
-        "settings",
-        // No v5 equivalent for topics
-        "integration_topics"
-      ),
-      // Resolve v4 user → v5 author
-      ((entity, ctx) => {
-        const result = { ...entity }
-        const user = result["user"] as Record<string, unknown> | undefined
-        delete result["user"]
-
-        if (user?.["_v4Id"]) {
-          const docId = ctx.idMap.get(
-            "plugin::users-permissions.user",
-            user["_v4Id"] as number
-          )
-
-          if (docId) {
-            result["author"] = { set: [docId] }
-          } else {
-            ctx.logger.warn(
-              `Unresolved integration author: v4Id=${user["_v4Id"]}`
-            )
-          }
-        }
-
-        return result
-      }) as TransformFn,
-      // Convert v4 link → v5 utilities.link
-      convertLinkFields("link"),
-      // Convert v4 media.image components → v5 format with fallbackSrc
-      convertMediaImageFields("logo", "image"),
-      // Map v4 integration_tags → v5 integrationCategories via IdMap
-      ((entity, ctx) => {
-        const result = { ...entity }
-        const tagIds = extractRelationIds(result["integration_tags"])
-        delete result["integration_tags"]
-
-        if (tagIds.length > 0) {
-          const resolved = tagIds
-            .map((v4Id) => {
-              const v5DocId = ctx.idMap.get(
-                "api::integration-tag.integration-tag",
-                v4Id
-              )
-
-              if (v5DocId) {
-                return v5DocId
-              }
-
-              ctx.logger.warn(`Unresolved integration category: v4Id=${v4Id}`)
-
-              return null
-            })
-            .filter(Boolean) as string[]
-
-          if (resolved.length > 0) {
-            result["integrationCategories"] = { set: resolved }
-          }
-        }
-
-        return result
-      }) as TransformFn,
-      // Dynamic zone: slices → sections
-      remapDynamicZone("slices", "sections"),
-      resolveHubspotForms,
-      transformSeo,
-      uploadMedia,
-    ],
-  },
-
-  partners: {
-    sourceEndpoint: "partners",
-    sourcePopulate: {
-      seo: { populate: "*" },
-      hero: { populate: { image: { populate: "*" } } },
-      intro: {
-        populate: {
-          button: { populate: "*" },
-          smallTextWithLink: { populate: "*" },
-        },
-      },
-      logo: { populate: "*" },
-      location: {
-        populate: {
-          cities: { populate: "*" },
-          countries: { populate: "*" },
-        },
-      },
-      services: { populate: "*" },
-      techStacks: { populate: "*" },
-      slices: DEEP_DZ_POPULATE["slices"],
-    },
-    targetEndpoint: "partners",
-    dedupField: "slug",
-    sourceUid: "api::partner.partner",
-    transforms: [
-      flattenV4,
-      dropFields(
-        "_v4Id",
-        "createdAt",
-        "updatedAt",
-        "publishedAt",
-        "locale",
-        "settings",
-        "hero"
-      ),
-      // Extract fields from v4 intro component → v5 flat fields
-      ((entity, ctx) => {
-        const result = { ...entity }
-        const intro = (result["intro"] ?? {}) as Record<string, unknown>
-        delete result["intro"]
-
-        // title from intro.title (required in v5)
-        if (!result["title"] || typeof result["title"] !== "string") {
-          result["title"] =
-            (intro["title"] as string) ??
-            (result["slug"] as string) ??
-            "Untitled"
-        }
-
-        // label from intro.label
-        if (intro["label"]) {
-          result["label"] = intro["label"]
-        }
-
-        // description from intro.text
-        if (intro["text"]) {
-          result["description"] = intro["text"]
-        }
-
-        // CTA from first button
-        const buttons = intro["button"] as Record<string, unknown>[] | undefined
-        if (buttons && buttons.length > 0) {
-          const btn = buttons[0]!
-          result["cta"] = {
-            type: "external",
-            label: (btn["label"] as string) ?? "",
-            newTab: false,
-            href: (btn["url"] as string) ?? (btn["href"] as string) ?? "",
-          }
-        }
-
-        return result
-      }) as TransformFn,
-      // Convert level/type enums to lowercase-hyphen format
-      ((entity) => {
-        const result = { ...entity }
-
-        if (typeof result["level"] === "string") {
-          result["level"] = (result["level"] as string)
-            .toLowerCase()
-            .replaceAll(" ", "-")
-        }
-
-        if (typeof result["type"] === "string") {
-          result["type"] = (result["type"] as string)
-            .toLowerCase()
-            .replaceAll(" ", "-")
-        }
-
-        return result
-      }) as TransformFn,
-      // Extract city/country from location component
-      ((entity, ctx) => {
-        const result = { ...entity }
-        const location = result["location"] as
-          | Record<string, unknown>
-          | undefined
-        delete result["location"]
-
-        if (location) {
-          // Extract first city
-          const cityV4Id = extractNestedRelationId(location, "cities")
-          if (cityV4Id) {
-            const cityDocId = ctx.idMap.get("api::city.city", cityV4Id)
-
-            if (cityDocId) {
-              result["city"] = { set: [cityDocId] }
-            } else {
-              ctx.logger.warn(`Unresolved city: v4Id=${cityV4Id}`)
-            }
-          }
-
-          // Extract first country
-          const countryV4Id = extractNestedRelationId(location, "countries")
-          if (countryV4Id) {
-            const countryDocId = ctx.idMap.get(
-              "api::country.country",
-              countryV4Id
-            )
-
-            if (countryDocId) {
-              result["country"] = { set: [countryDocId] }
-            } else {
-              ctx.logger.warn(`Unresolved country: v4Id=${countryV4Id}`)
-            }
-          }
-        }
-
-        return result
-      }) as TransformFn,
-      // Resolve services and techStacks relations via IdMap
-      ((entity, ctx) => {
-        const result = { ...entity }
-
-        // services
-        const serviceIds = extractRelationIds(result["services"])
-        if (serviceIds.length > 0) {
-          const resolved = serviceIds
-            .map((v4Id) =>
-              ctx.idMap.get("api::partner-service.partner-service", v4Id)
-            )
-            .filter(Boolean) as string[]
-
-          if (resolved.length > 0) {
-            result["services"] = { set: resolved }
-          }
-        } else {
-          delete result["services"]
-        }
-
-        // techStacks
-        const techIds = extractRelationIds(result["techStacks"])
-        if (techIds.length > 0) {
-          const resolved = techIds
-            .map((v4Id) => ctx.idMap.get("api::tech-stack.tech-stack", v4Id))
-            .filter(Boolean) as string[]
-
-          if (resolved.length > 0) {
-            result["techStacks"] = { set: resolved }
-          }
-        } else {
-          delete result["techStacks"]
-        }
-
-        return result
-      }) as TransformFn,
-      // Convert logo media.image component → v5 format
-      convertMediaImageFields("logo"),
-      // Dynamic zone: slices → sections
-      remapDynamicZone("slices", "sections"),
-      resolveHubspotForms,
-      transformSeo,
-      uploadMedia,
-    ],
-  },
-
   "case-studies": {
     sourceEndpoint: "case-studies",
     sourcePopulate: {
@@ -1491,7 +1194,8 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         // v4-only fields not in v5
         "card",
         "version",
-        "postSubCategory"
+        "postSubCategory",
+        "description"
       ),
       // Resolve v4 user → v5 author, coauthors
       ((entity, ctx) => {
@@ -1539,12 +1243,10 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       ((entity) => {
         const result = { ...entity }
 
-        if (!result["title"]) {
-          result["title"] = "Untitled"
-        }
-
-        if (!result["slug"]) {
-          result["slug"] = `post-${Date.now()}`
+        if (!result["title"] || !result["slug"]) {
+          throw new Error(
+            `Skipping orphan blog post (no title/slug): v4Id=${result["_v4Id"]}`
+          )
         }
 
         if (typeof result["slug"] === "string") {

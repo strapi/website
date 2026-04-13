@@ -25,7 +25,6 @@ export function StrapiTwoColumnsBenefits({
                 key={item.id}
                 className="rounded-strapi-lg border-strapi-blue-200 bg-strapi-blue-100 border p-6 lg:flex lg:items-start lg:gap-6 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0"
               >
-                {/* Left border bar — desktop only */}
                 <div className="lg:bg-strapi-neutral-300 hidden lg:block lg:w-1 lg:self-stretch lg:rounded-full" />
 
                 <div className="flex flex-col gap-1 lg:gap-2">

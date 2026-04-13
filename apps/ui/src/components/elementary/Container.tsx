@@ -9,6 +9,8 @@ export const containerVariants = cva("mx-auto", {
       default:
         "w-full max-w-312 px-6 sm:px-10 md:px-14 lg:px-20 xl:px-0 2xl:px-0",
       hero: "w-full max-w-312 px-0 sm:px-4 md:px-10 lg:px-16 xl:px-0 2xl:px-0", // Specially padded for hero and navbar sections
+      condensed:
+        "w-full max-w-216 px-6 sm:px-10 md:px-14 lg:px-20 xl:px-0 2xl:px-0",
     },
   },
   defaultVariants: {

@@ -30,15 +30,15 @@ export function StrapiFooterCta({
 
             <div className="flex flex-col gap-6">
               {component.codeSnippet && (
-                <div className="border-strapi-neutral-200 flex w-fit items-center rounded-lg border bg-white shadow-sm">
-                  <pre className="text-strapi-neutral-800 py-4 pr-4 pl-6 font-mono text-base">
+                <div className="border-strapi-neutral-200 flex w-full max-w-full items-center rounded-lg border bg-white shadow-sm sm:w-fit">
+                  <pre className="text-strapi-neutral-800 min-w-0 flex-1 overflow-x-auto py-4 pr-4 pl-4 font-mono text-sm sm:pl-6 sm:text-base">
                     {component.codeSnippet}
                   </pre>
 
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="text-strapi-purple-500 hover:text-strapi-purple-600 pr-6 text-base font-semibold transition-colors"
+                    className="text-strapi-purple-500 hover:text-strapi-purple-600 shrink-0 pr-4 text-sm font-semibold transition-colors sm:pr-6 sm:text-base"
                     aria-label={copied ? "Code copied" : "Copy code"}
                   >
                     {copied ? "Copied!" : "Copy"}

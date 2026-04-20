@@ -544,7 +544,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
         "migration.data-sink",
       ]
     >
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
     tags: Schema.Attribute.Relation<"manyToMany", "api::post-tag.post-tag">
     title: Schema.Attribute.String & Schema.Attribute.Required
@@ -710,7 +710,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private
     logoImage: Schema.Attribute.Component<"media.image", false>
     publishedAt: Schema.Attribute.DateTime
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -793,7 +793,7 @@ export interface ApiCmsComparisonCmsComparison
     > &
       Schema.Attribute.Private
     publishedAt: Schema.Attribute.DateTime
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    seo: Schema.Attribute.Component<"shared.seo", false>
     showTable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
     slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
     title: Schema.Attribute.String & Schema.Attribute.Required
@@ -849,7 +849,7 @@ export interface ApiCmsCms extends Struct.CollectionTypeSchema {
         "migration.data-sink",
       ]
     >
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID<"name">
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -935,7 +935,7 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    defaultSeo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    defaultSeo: Schema.Attribute.Component<"shared.seo", false>
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       "oneToMany",
@@ -1170,7 +1170,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<false>
     parent: Schema.Attribute.Relation<"manyToOne", "api::page.page">
     publishedAt: Schema.Attribute.DateTime
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false> &
+    seo: Schema.Attribute.Component<"shared.seo", false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -1335,7 +1335,7 @@ export interface ApiPostCategoryPostCategory
       "api::post-category.post-category"
     >
     publishedAt: Schema.Attribute.DateTime
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID<"name">
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -1370,7 +1370,7 @@ export interface ApiPostTagPostTag extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private
     name: Schema.Attribute.String & Schema.Attribute.Required
     publishedAt: Schema.Attribute.DateTime
-    seo: Schema.Attribute.Component<"seo-utilities.seo", false>
+    seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID<"name"> & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &

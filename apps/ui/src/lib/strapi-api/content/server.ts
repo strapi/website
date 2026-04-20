@@ -21,8 +21,7 @@ const authorPopulate = {
 const seoPopulate = {
   populate: {
     metaImage: true,
-    twitter: { populate: { images: true } },
-    og: { populate: { image: true } },
+    metaSocial: { populate: { image: true } },
   },
 }
 

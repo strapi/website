@@ -29,6 +29,10 @@ export default ({ env }) => {
       enabled: true,
     },
 
+    seo: {
+      enabled: true,
+    },
+
     "users-permissions": {
       config: {
         jwt: {

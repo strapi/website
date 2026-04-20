@@ -32,6 +32,7 @@
     "@repo/design-system": "workspace:*",
     "@repo/shared-data": "workspace:*",
     "@strapi-community/plugin-rest-cache": "^5.0.1",
+    "@strapi-community/plugin-seo": "^2.1.1",
     "@strapi-community/provider-rest-cache-memory": "^5.0.0",
     "@strapi/database": "5.36.0",
     "@strapi/design-system": "2.1.2",

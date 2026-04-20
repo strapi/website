@@ -1245,81 +1245,6 @@ export interface SectionsUserStoriesSection extends Struct.ComponentSchema {
   }
 }
 
-export interface SeoUtilitiesSeo extends Struct.ComponentSchema {
-  collectionName: "components_seo_utilities_seos"
-  info: {
-    description: ""
-    displayName: "Seo"
-    icon: "search"
-  }
-  attributes: {
-    applicationName: Schema.Attribute.String
-    canonicalUrl: Schema.Attribute.String
-    keywords: Schema.Attribute.Text
-    metaDescription: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 160
-      }>
-    metaImage: Schema.Attribute.Media<"images">
-    metaRobots: Schema.Attribute.Enumeration<
-      [
-        "all",
-        "index",
-        "index,follow",
-        "noindex",
-        "noindex,follow",
-        "noindex,nofollow",
-        "none",
-        "noarchive",
-        "nosnippet",
-        "max-snippet",
-      ]
-    > &
-      Schema.Attribute.DefaultTo<"all">
-    metaTitle: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 60
-      }>
-    og: Schema.Attribute.Component<"seo-utilities.seo-og", false>
-    structuredData: Schema.Attribute.JSON
-    twitter: Schema.Attribute.Component<"seo-utilities.seo-twitter", false>
-  }
-}
-
-export interface SeoUtilitiesSeoOg extends Struct.ComponentSchema {
-  collectionName: "components_seo_utilities_seo_ogs"
-  info: {
-    displayName: "SeoOg"
-    icon: "earth"
-  }
-  attributes: {
-    description: Schema.Attribute.String
-    image: Schema.Attribute.Media<"images">
-    siteName: Schema.Attribute.String
-    title: Schema.Attribute.String
-    type: Schema.Attribute.Enumeration<["website", "article"]> &
-      Schema.Attribute.DefaultTo<"website">
-    url: Schema.Attribute.String
-  }
-}
-
-export interface SeoUtilitiesSeoTwitter extends Struct.ComponentSchema {
-  collectionName: "components_seo_utilities_seo_twitters"
-  info: {
-    displayName: "SeoTwitter"
-    icon: "discuss"
-  }
-  attributes: {
-    card: Schema.Attribute.String
-    creator: Schema.Attribute.String
-    creatorId: Schema.Attribute.String
-    description: Schema.Attribute.String
-    images: Schema.Attribute.Media<"images", true>
-    siteId: Schema.Attribute.String
-    title: Schema.Attribute.String
-  }
-}
-
 export interface SeoUtilitiesSocialIcons extends Struct.ComponentSchema {
   collectionName: "components_seo_utilities_social_icons"
   info: {
@@ -1329,6 +1254,57 @@ export interface SeoUtilitiesSocialIcons extends Struct.ComponentSchema {
   attributes: {
     socials: Schema.Attribute.Component<"utilities.link-image", true>
     title: Schema.Attribute.String
+  }
+}
+
+export interface SharedMetaSocial extends Struct.ComponentSchema {
+  collectionName: "components_shared_meta_socials"
+  info: {
+    displayName: "metaSocial"
+    icon: "project-diagram"
+  }
+  attributes: {
+    description: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 65
+      }>
+    image: Schema.Attribute.Media<"images" | "files" | "videos">
+    socialNetwork: Schema.Attribute.Enumeration<["Facebook", "Twitter"]> &
+      Schema.Attribute.Required
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60
+      }>
+  }
+}
+
+export interface SharedSeo extends Struct.ComponentSchema {
+  collectionName: "components_shared_seos"
+  info: {
+    displayName: "seo"
+    icon: "search"
+  }
+  attributes: {
+    canonicalURL: Schema.Attribute.String
+    keywords: Schema.Attribute.Text
+    metaDescription: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160
+        minLength: 50
+      }>
+    metaImage: Schema.Attribute.Media<"images" | "files" | "videos">
+    metaRobots: Schema.Attribute.String
+    metaSocial: Schema.Attribute.Component<"shared.meta-social", true>
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60
+      }>
+    metaViewport: Schema.Attribute.String
+    structuredData: Schema.Attribute.JSON
   }
 }
 
@@ -1603,10 +1579,9 @@ declare module "@strapi/strapi" {
       "sections.two-column-grid": SectionsTwoColumnGrid
       "sections.two-columns-benefits": SectionsTwoColumnsBenefits
       "sections.user-stories-section": SectionsUserStoriesSection
-      "seo-utilities.seo": SeoUtilitiesSeo
-      "seo-utilities.seo-og": SeoUtilitiesSeoOg
-      "seo-utilities.seo-twitter": SeoUtilitiesSeoTwitter
       "seo-utilities.social-icons": SeoUtilitiesSocialIcons
+      "shared.meta-social": SharedMetaSocial
+      "shared.seo": SharedSeo
       "testimonials.quote": TestimonialsQuote
       "utilities.accordions": UtilitiesAccordions
       "utilities.basic-image": UtilitiesBasicImage

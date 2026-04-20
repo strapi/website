@@ -25,7 +25,7 @@
     },
     "seo": {
       "type": "component",
-      "component": "seo-utilities.seo",
+      "component": "shared.seo",
       "repeatable": false
     },
     "parent": {

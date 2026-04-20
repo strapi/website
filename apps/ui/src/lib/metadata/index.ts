@@ -57,7 +57,6 @@ export async function getMetadataFromStrapi({
     description: globalSeo?.metaDescription,
     keywords: globalSeo?.keywords,
     robots: globalSeo?.metaRobots,
-    applicationName: globalSeo?.applicationName,
   }
   const globalSocialMeta = preprocessSocialMetadata(globalSeo)
 
@@ -129,7 +128,6 @@ async function fetchAndMapStrapiMetadata(
     description: seo?.metaDescription,
     keywords: seo?.keywords,
     robots: seo?.metaRobots,
-    applicationName: seo?.applicationName,
   }
 
   const robots = getMetaRobots(seo?.metaRobots, forbidIndexing)

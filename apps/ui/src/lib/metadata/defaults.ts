@@ -12,7 +12,6 @@ export function getDefaultMetadata(siteUrl: string, t: TranslateFn) {
     description: t("metaDescription"),
     keywords: t("keywords"),
     robots: t("metaRobots"),
-    applicationName: t("applicationName"),
 
     icons: {
       icon: "favicon.ico",

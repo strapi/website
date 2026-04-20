@@ -28,7 +28,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="animate-ring-reveal ring-strapi-gray-700/50 overflow-hidden rounded-2xl md:ring">
-        <div className="animate-reveal-cascade md:bg-strapi-gray-950 flex flex-col rounded-2xl px-6 py-8 md:px-14 md:py-12">
+        <div className="animate-reveal-cascade md:bg-strapi-gray-950 flex flex-col rounded-2xl px-4 py-6 sm:px-6 sm:py-8 md:px-14 md:py-12">
           <BlogBreadcrumbs
             category={
               post.category?.name && post.category?.slug
@@ -67,7 +67,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
             )}
           </div>
 
-          <h1 className="mt-5 text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
+          <h1 className="mt-4 text-3xl leading-tight font-semibold tracking-tight text-white sm:mt-5 md:text-4xl">
             {post.title}
           </h1>
 
@@ -84,7 +84,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
             </div>
           )}
 
-          <div className="border-strapi-gray-700/50 mt-8 flex items-center gap-4 border-t pt-6">
+          <div className="border-strapi-gray-700/50 mt-6 flex flex-wrap items-center gap-3 border-t pt-4 sm:mt-8 sm:gap-4 sm:pt-6">
             <AuthorAvatars authors={allAuthors} />
 
             {post.publishedAt && (

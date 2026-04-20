@@ -8,38 +8,43 @@ import { routing } from "@/lib/navigation"
 import type { StrapiLocalization } from "@/types/api"
 import type { NextMetadataTwitterCard, SocialMetadata } from "@/types/general"
 
+type SeoComponent = Data.Component<"shared.seo">
+type MetaSocialEntry = NonNullable<SeoComponent>["metaSocial"] extends
+  | (infer T)[]
+  | null
+  | undefined
+  ? T
+  : never
+
+const findSocialEntry = (
+  metaSocial: MetaSocialEntry[] | null | undefined,
+  network: "Facebook" | "Twitter"
+): MetaSocialEntry | undefined =>
+  metaSocial?.find((entry) => entry?.socialNetwork === network)
+
 export const preprocessSocialMetadata = (
-  seo: Data.Component<"seo-utilities.seo"> | null | undefined,
+  seo: SeoComponent | null | undefined,
   canonicalUrl?: string
 ): SocialMetadata => {
-  const twitterSeo = seo?.twitter
-  const ogSeo = seo?.og
+  const fb = findSocialEntry(seo?.metaSocial, "Facebook")
+  const tw = findSocialEntry(seo?.metaSocial, "Twitter")
 
-  const card = ["summary", "summary_large_image", "player", "app"].includes(
-    String(twitterSeo?.card)
-  )
-    ? (String(twitterSeo?.card) as NextMetadataTwitterCard)
-    : "summary"
+  const ogImage = fb?.image ?? seo?.metaImage
+  const twitterImage = tw?.image ?? seo?.metaImage
 
-  const ogImage = ogSeo?.image ?? seo?.metaImage
-  const twitterImages =
-    twitterSeo?.images ?? (seo?.metaImage ? [seo?.metaImage] : undefined)
+  const card: NextMetadataTwitterCard = "summary_large_image"
 
   return {
     twitter: {
       card,
-      title: twitterSeo?.title ?? seo?.metaTitle ?? undefined,
-      description: twitterSeo?.description ?? seo?.metaDescription ?? undefined,
-      siteId: twitterSeo?.siteId ?? undefined,
-      creator: twitterSeo?.creator ?? undefined,
-      creatorId: twitterSeo?.creatorId ?? undefined,
-      images: twitterImages?.map((img) => img?.url),
+      title: tw?.title ?? seo?.metaTitle ?? undefined,
+      description: tw?.description ?? seo?.metaDescription ?? undefined,
+      images: twitterImage?.url ? [twitterImage.url] : undefined,
     },
     openGraph: {
-      siteName: ogSeo?.siteName ?? undefined,
-      title: ogSeo?.title ?? seo?.metaTitle ?? undefined,
-      description: ogSeo?.description ?? seo?.metaDescription ?? undefined,
-      url: ogSeo?.url ?? canonicalUrl ?? undefined,
+      title: fb?.title ?? seo?.metaTitle ?? undefined,
+      description: fb?.description ?? seo?.metaDescription ?? undefined,
+      url: canonicalUrl ?? undefined,
       images: ogImage
         ? [
             {
@@ -78,12 +83,12 @@ export const getMetaAlternates = ({
   locale,
   localizations,
 }: {
-  seo: Data.Component<"seo-utilities.seo"> | null | undefined
+  seo: SeoComponent | null | undefined
   fullPath: string | null
   locale: Locale
   localizations?: StrapiLocalization[]
 }) => {
-  const canonicalUrl = seo?.canonicalUrl ?? fullPath ?? ""
+  const canonicalUrl = seo?.canonicalURL ?? fullPath ?? ""
 
   const languages = Array.isArray(localizations)
     ? {

@@ -5,7 +5,6 @@
     "metaImage": "SEO-IMAGE",
     "metaRobots": "SEO-ROBOTS",
     "keywords": "SEO-KEYWORDS",
-    "applicationName": "SEO-APPLICATION-NAME",
     "og": {
       "title": "SEO-OG-TITLE",
       "description": "SEO-OG-DESCRIPTION",
@@ -115,9 +114,7 @@
       "twitter": "Share on X",
       "linkedin": "Share on LinkedIn",
       "facebook": "Share on Facebook",
-      "email": "Share via email",
-      "copyLink": "Copy link",
-      "copied": "Link copied"
+      "email": "Share via email"
     }
   },
   "forms": {

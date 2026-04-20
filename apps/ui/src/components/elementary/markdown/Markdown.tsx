@@ -124,7 +124,7 @@ function isSafeHref(href: string | undefined): href is string {
 
 const components: Components = {
   h1: ({ children }) => (
-    <h1 className="text-foreground mt-18 mb-8 scroll-mt-24 text-4xl leading-tight font-bold tracking-tight">
+    <h1 className="text-foreground mt-12 mb-6 scroll-mt-24 text-3xl leading-tight font-bold tracking-tight sm:mt-18 sm:mb-8 sm:text-4xl">
       {children}
     </h1>
   ),
@@ -132,7 +132,7 @@ const components: Components = {
   h2: ({ children }) => (
     <h2
       id={headingId(children)}
-      className="text-foreground mt-17 mb-7 scroll-mt-24 text-3xl leading-tight font-bold tracking-tight"
+      className="text-foreground mt-12 mb-5 scroll-mt-24 text-2xl leading-tight font-bold tracking-tight sm:mt-17 sm:mb-7 sm:text-3xl"
     >
       {children}
     </h2>
@@ -141,14 +141,14 @@ const components: Components = {
   h3: ({ children }) => (
     <h3
       id={headingId(children)}
-      className="text-foreground mb-8 scroll-mt-24 text-2xl leading-tight font-bold tracking-tight"
+      className="text-foreground mb-6 scroll-mt-24 text-xl leading-tight font-bold tracking-tight sm:mb-8 sm:text-2xl"
     >
       {children}
     </h3>
   ),
 
   h4: ({ children }) => (
-    <h4 className="text-foreground mb-8 text-xl leading-tight font-bold tracking-tight">
+    <h4 className="text-foreground mb-6 text-lg leading-tight font-bold tracking-tight sm:mb-8 sm:text-xl">
       {children}
     </h4>
   ),
@@ -177,7 +177,9 @@ const components: Components = {
     }
 
     return (
-      <p className="text-foreground mb-8 text-xl leading-relaxed">{children}</p>
+      <p className="text-foreground mb-8 text-base leading-relaxed lg:text-xl">
+        {children}
+      </p>
     )
   },
 

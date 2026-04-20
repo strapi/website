@@ -3,7 +3,7 @@ import type { Data } from "@repo/strapi-types"
 export function StrapiStructuredData({
   structuredData,
 }: {
-  structuredData: Data.Component<"seo-utilities.seo">["structuredData"]
+  structuredData: Data.Component<"shared.seo">["structuredData"]
 }) {
   if (structuredData) {
     // we need to use a plain `script` tag instead of the `Script` component

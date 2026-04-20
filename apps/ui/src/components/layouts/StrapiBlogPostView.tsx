@@ -99,12 +99,28 @@ export function StrapiBlogPostView({ params }: Props) {
                   </aside>
                 )}
 
+                {/* 27rem = half of Container variant="condensed" max-w-216 (864px). Update if that variant changes. */}
+                <aside className="absolute top-0 left-[calc(50%+27rem+1rem)] hidden h-full xl:block">
+                  <div className="sticky top-28 pb-24">
+                    <BlogSocialShare
+                      url={postUrl}
+                      title={post.title ?? ""}
+                      variant="sticky"
+                    />
+                  </div>
+                </aside>
+
                 <Container variant="condensed">
                   <article data-slot="blog-article">
                     <BlogContent>{content}</BlogContent>
                   </article>
 
-                  <BlogSocialShare url={postUrl} title={post.title ?? ""} />
+                  <BlogSocialShare
+                    url={postUrl}
+                    title={post.title ?? ""}
+                    variant="row"
+                    className="xl:hidden"
+                  />
 
                   <BlogAuthorBanner author={author} />
                 </Container>

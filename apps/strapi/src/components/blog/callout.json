@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blog_callouts",
+  "info": {
+    "displayName": "Callout",
+    "icon": "bell",
+    "description": "Inline callout / admonition (note, tip, warning, info)"
+  },
+  "options": {},
+  "attributes": {
+    "variant": {
+      "type": "enumeration",
+      "enum": ["note", "tip", "warning", "info"],
+      "required": true,
+      "default": "note"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

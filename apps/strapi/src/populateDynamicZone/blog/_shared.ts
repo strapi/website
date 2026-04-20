@@ -2,7 +2,7 @@ import basicImagePopulate from "../utilities/basic-image"
 
 /**
  * Shared populate config for blog post relations (image, author avatars, category).
- * Used by related-posts, editors-picks, and category-showcase populate configs.
+ * Used by related-posts and editors-picks populate configs.
  */
 export const blogPostPopulate = {
   populate: {
@@ -14,5 +14,6 @@ export const blogPostPopulate = {
       populate: { avatar: { populate: { image: basicImagePopulate } } },
     },
     category: true,
+    tags: { fields: ["name", "slug"] },
   },
 }

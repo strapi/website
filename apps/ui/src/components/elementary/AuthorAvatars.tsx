@@ -4,7 +4,7 @@ import { StrapiBasicImage } from "@/components/page-builder/components/utilities
 import { cn } from "@/lib/styles"
 
 export interface AuthorAvatarData {
-  readonly id: number
+  readonly id: Data.ID
   readonly username?: string | null
   readonly slug?: string | null
   readonly avatar?: {

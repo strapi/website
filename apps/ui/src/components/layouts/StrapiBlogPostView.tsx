@@ -7,17 +7,16 @@ import {
   type BlogAuthor,
   BlogAuthorBanner,
 } from "@/components/blog/BlogAuthorBanner"
+import { BlogAutoRelatedPosts } from "@/components/blog/BlogAutoRelatedPosts"
 import { BlogContent } from "@/components/blog/BlogContent"
-import type { AuthorAvatarData } from "@/components/elementary/AuthorAvatars"
+import { BlogSocialShare } from "@/components/blog/BlogSocialShare"
 import { Container } from "@/components/elementary/Container"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
-import {
-  extractHeadings,
-  type BlogCategory,
-  type BlogPostImage,
-  type BlogTag,
-} from "@/lib/blog-utils"
+import { extractHeadings, type BlogPost } from "@/lib/blog-utils"
+import { getEnvVar } from "@/lib/env-vars"
+import { routing } from "@/lib/navigation"
 import { fetchBlogPost } from "@/lib/strapi-api/content/server"
+import { buildBlogPostingJsonLd } from "@/lib/structured-data/blog-posting"
 
 import { BlogNavbar } from "../blog/BlogNavbar"
 import { BlogPostHeader } from "../blog/BlogPostHeader"
@@ -43,21 +42,40 @@ export function StrapiBlogPostView({ params }: Props) {
 
   const response = use(fetchBlogPost(slug, locale))
 
-  const data = response?.data
-  if (!data) {
+  const post = response?.data as BlogPost | null | undefined
+  if (!post) {
     notFound()
   }
 
-  const postData = data as Record<string, unknown>
-  const sections = postData.sections as
-    | { __component: string; id: number; [key: string]: unknown }[]
-    | undefined
-  const author = postData.author as BlogAuthor | null
-  const content = typeof data.content === "string" ? data.content : null
+  const sections = post.sections
+  const author = post.author as BlogAuthor | null
+  const content = post.content
   const headings = content ? extractHeadings(content) : []
+  const hasManualRelated = (sections ?? []).some(
+    (s) =>
+      s?.__component === "blog.related-posts" ||
+      s?.__component === "blog.editors-picks"
+  )
+
+  const siteUrl = getEnvVar("APP_PUBLIC_URL") ?? ""
+  const localePath = routing.defaultLocale !== locale ? `/${locale}` : ""
+  const postUrl = siteUrl
+    ? new URL(`${localePath}/blog/${slug}`, siteUrl).toString()
+    : `${localePath}/blog/${slug}`
+
+  const jsonLd = buildBlogPostingJsonLd({
+    post,
+    url: postUrl,
+    siteUrl: siteUrl || undefined,
+  })
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {content && <BlogReadingProgress />}
 
       <HeroContainer affectsNavbarTheme className="gap-0">
@@ -65,16 +83,7 @@ export function StrapiBlogPostView({ params }: Props) {
 
         <HeroContainerContent>
           <Container>
-            <BlogPostHeader
-              title={data.title ?? ""}
-              publishedAt={data.publishedAt as string | null}
-              content={content}
-              author={author}
-              coauthors={postData.coauthors as AuthorAvatarData[] | undefined}
-              category={postData.category as BlogCategory | null}
-              tags={postData.tags as BlogTag[] | undefined}
-              image={postData.image as BlogPostImage | null}
-            />
+            <BlogPostHeader post={post} />
           </Container>
         </HeroContainerContent>
       </HeroContainer>
@@ -95,6 +104,8 @@ export function StrapiBlogPostView({ params }: Props) {
                     <BlogContent>{content}</BlogContent>
                   </article>
 
+                  <BlogSocialShare url={postUrl} title={post.title ?? ""} />
+
                   <BlogAuthorBanner author={author} />
                 </Container>
               </div>
@@ -106,6 +117,24 @@ export function StrapiBlogPostView({ params }: Props) {
               content={sections}
               itemClassName="mb-6 md:mb-10 lg:mb-14"
               surface="page"
+              extraProps={{ currentSlug: slug, locale }}
+            />
+          )}
+
+          {!hasManualRelated && (
+            <BlogAutoRelatedPosts
+              currentSlug={slug}
+              category={
+                (
+                  post as unknown as {
+                    category?: {
+                      name?: string | null
+                      slug?: string | null
+                    } | null
+                  }
+                ).category ?? null
+              }
+              locale={locale}
             />
           )}
         </main>

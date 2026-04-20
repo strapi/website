@@ -1,6 +1,6 @@
 import type { UID } from "@repo/strapi-types"
 
-import { StrapiCategoryShowcase } from "@/components/page-builder/components/blog/StrapiCategoryShowcase"
+import { StrapiCallout } from "@/components/page-builder/components/blog/StrapiCallout"
 import { StrapiEditorsPicks } from "@/components/page-builder/components/blog/StrapiEditorsPicks"
 import { StrapiRelatedPosts } from "@/components/page-builder/components/blog/StrapiRelatedPosts"
 import { StrapiResourceCta } from "@/components/page-builder/components/blog/StrapiResourceCta"
@@ -62,9 +62,9 @@ export const ContentComponents: Partial<
   "forms.demo-conversion": StrapiDemoConversion,
 
   // Blog
+  "blog.callout": StrapiCallout,
   "blog.related-posts": StrapiRelatedPosts,
   "blog.editors-picks": StrapiEditorsPicks,
-  "blog.category-showcase": StrapiCategoryShowcase,
   "blog.resource-cta": StrapiResourceCta,
 
   // Sections

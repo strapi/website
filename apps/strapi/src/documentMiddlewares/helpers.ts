@@ -1,7 +1,55 @@
-import type { UID } from "@strapi/strapi"
+import type { Core, UID } from "@strapi/strapi"
 import { errors } from "@strapi/utils"
 
 import { getPopulateDynamicZoneConfig } from "../populateDynamicZone"
+
+interface DynamicZoneAttributeMeta {
+  readonly type?: string
+  readonly components?: readonly string[]
+}
+
+/**
+ * Strapi v5 rejects shallow `populate: { myZone: true }` on dynamic zones in some
+ * code paths (ValidationError: invalid nested keys like `image`). Prefetch using
+ * explicit `on` + minimal fields per allowed component UID instead.
+ */
+function buildDynamicZonePrefetchPopulate(
+  strapi: Core.Strapi,
+  uid: UID.ContentType,
+  zoneNames: readonly string[]
+): Record<string, unknown> {
+  const meta = strapi.db.metadata.get(uid)
+  const attrs = meta?.attributes as
+    | Record<string, DynamicZoneAttributeMeta>
+    | undefined
+
+  if (!attrs) {
+    return Object.fromEntries(zoneNames.map((zone) => [zone, true]))
+  }
+
+  const result: Record<string, unknown> = {}
+
+  for (const zoneName of zoneNames) {
+    const attr = attrs[zoneName]
+    const isDynamicZone =
+      attr?.type === "dynamiczone" || attr?.type === "dynamicZone"
+    const components = attr?.components
+
+    result[zoneName] =
+      isDynamicZone && Array.isArray(components) && components.length > 0
+        ? {
+            on: Object.fromEntries(
+              components.map((componentUid) => [
+                componentUid,
+                { fields: ["__component", "id"] },
+              ])
+            ),
+          }
+        : true
+  }
+
+  return result
+}
 
 /**
  * Normalize the input to always have an array of strings
@@ -87,6 +135,7 @@ export const createComponentsPopulateObject = (
  * that need to be populated for each dynamic zone.
  */
 export const getComponentsToPopulate = async (
+  strapi: Core.Strapi,
   dynamicZonePopulate: string[],
   context: {
     uid: UID.ContentType
@@ -95,18 +144,17 @@ export const getComponentsToPopulate = async (
     locale?: string
   }
 ): Promise<Record<string, string[]>> => {
-  const attributesToPrefetch = dynamicZonePopulate.reduce((acc, attr) => {
-    return {
-      ...acc,
-      [attr]: true,
-    }
-  }, {})
+  const prefetchPopulate = buildDynamicZonePrefetchPopulate(
+    strapi,
+    context.uid,
+    dynamicZonePopulate
+  )
 
   const prefetchedData = await strapi
     .documents(context.uid)
     [context.action].call(this, {
       documentId: context.documentId,
-      populate: attributesToPrefetch,
+      populate: prefetchPopulate,
       fields: ["documentId"],
       locale: context.locale,
     })

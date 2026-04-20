@@ -3,15 +3,10 @@
   "info": {
     "displayName": "Related Posts",
     "icon": "layer",
-    "description": "Related blog posts with optional section header and/or category link"
+    "description": "Related blog posts with optional category link"
   },
   "options": {},
   "attributes": {
-    "section": {
-      "type": "component",
-      "component": "utilities.section-header",
-      "repeatable": false
-    },
     "blogPosts": {
       "type": "relation",
       "relation": "oneToMany",

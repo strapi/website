@@ -1,45 +1,76 @@
-import { calculateReadTime } from "@/lib/blog-utils"
+import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
+import { calculateReadTime, type BlogPost } from "@/lib/blog-utils"
 import { Link } from "@/lib/navigation"
 import { cn } from "@/lib/styles"
 
 interface BlogPostLinkRowProps {
-  readonly post: Record<string, unknown>
+  readonly post: BlogPost
   readonly showCategory?: boolean
+  readonly showImage?: boolean
+  readonly showTags?: boolean
   readonly className?: string
 }
 
 export function BlogPostLinkRow({
   post,
   showCategory = true,
+  showImage = false,
+  showTags = false,
   className,
 }: BlogPostLinkRowProps) {
-  const category = showCategory
-    ? (post.category as { name?: string; slug?: string } | null)
-    : null
-  const readTime = calculateReadTime(post.content as string | null)
+  const category = showCategory ? post.category : null
+  const readTime = calculateReadTime(post.content)
+  const image = showImage ? post.image : null
+  const tags = showTags ? (post.tags ?? []) : []
 
   return (
     <Link
-      href={`/blog/${post.slug as string}`}
-      className={cn("group flex flex-col gap-1", className)}
+      href={`/blog/${post.slug}`}
+      className={cn("group flex items-center gap-4", className)}
     >
-      <div className="text-strapi-gray-400 flex items-center gap-2 text-xs font-bold uppercase">
-        {category?.name && (
-          <span className="border-strapi-gray-700/50 rounded-sm border px-2 py-0.5">
-            {category.name}
-          </span>
-        )}
-        {readTime > 0 && (
-          <>
-            {category?.name && <span>·</span>}
-            <span>{readTime} min read</span>
-          </>
+      {image?.image && (
+        <div className="border-strapi-gray-700/50 relative aspect-video w-24 shrink-0 overflow-hidden rounded-md border sm:w-28">
+          <StrapiBasicImage
+            component={image.image}
+            mode="fill"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 640px) 96px, 112px"
+          />
+        </div>
+      )}
+
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="text-strapi-gray-400 flex items-center gap-2 text-xs font-bold uppercase">
+          {category?.name && (
+            <span className="border-strapi-gray-700/50 rounded-sm border px-2 py-0.5">
+              {category.name}
+            </span>
+          )}
+          {readTime > 0 && (
+            <>
+              {category?.name && <span>·</span>}
+              <span>{readTime} min read</span>
+            </>
+          )}
+        </div>
+
+        <h4 className="text-base font-semibold text-white underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover:decoration-white">
+          {post.title}
+        </h4>
+
+        {tags.length > 0 && (
+          <div className="mt-1 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <span
+                key={tag.id}
+                className="border-strapi-gray-700/50 text-strapi-gray-400 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
+              >
+                {tag.name}
+              </span>
+            ))}
+          </div>
         )}
       </div>
-
-      <h4 className="text-base font-semibold text-white underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover:decoration-white">
-        {post.title as string}
-      </h4>
     </Link>
   )
 }

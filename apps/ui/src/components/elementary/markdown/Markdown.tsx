@@ -1,20 +1,126 @@
 import "server-only"
 
-import ReactMarkdown, { type Components } from "react-markdown"
+import { YouTubeEmbed } from "@next/third-parties/google"
+import ReactMarkdown, { type Components, type Options } from "react-markdown"
+import { Tweet } from "react-tweet"
 import rehypeRaw from "rehype-raw"
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize"
 import remarkGfm from "remark-gfm"
 
+type PluggableList = NonNullable<Options["rehypePlugins"]>
+
 import { CodeHighlighter } from "@/components/elementary/code-highlighter/CodeHighlighter"
+import { getTweetId, getYouTubeId } from "@/lib/embed-utils"
 import { headingId } from "@/lib/markdown-utils"
 import { cn } from "@/lib/styles"
+
+function extractSoleLink(
+  children: React.ReactNode
+): { href: string; text: string } | null {
+  const nodes = Array.isArray(children) ? children : [children]
+  const meaningful = nodes.filter((child) => {
+    if (typeof child === "string") return child.trim() !== ""
+
+    return child != null && child !== false
+  })
+
+  if (meaningful.length !== 1) {
+    return null
+  }
+
+  const [only] = meaningful
+
+  if (!only || typeof only !== "object" || !("props" in only)) {
+    return null
+  }
+
+  const props = (only as { props?: { href?: unknown; children?: unknown } })
+    .props
+
+  const href = typeof props?.href === "string" ? props.href : null
+
+  if (!href) {
+    return null
+  }
+
+  const text =
+    typeof props?.children === "string"
+      ? props.children
+      : Array.isArray(props?.children)
+        ? props.children.join("")
+        : ""
+
+  return { href, text: typeof text === "string" ? text : "" }
+}
+
+function InlineEmbed({ url }: { url: string }) {
+  const youtubeId = getYouTubeId(url)
+
+  if (youtubeId) {
+    return (
+      <div className="my-9 overflow-hidden rounded-lg">
+        <YouTubeEmbed videoid={youtubeId} />
+      </div>
+    )
+  }
+
+  const tweetId = getTweetId(url)
+
+  if (tweetId) {
+    return (
+      <div className="my-9 flex justify-center [&_.react-tweet-theme]:my-0">
+        <Tweet id={tweetId} />
+      </div>
+    )
+  }
+
+  return null
+}
 
 type MarkdownProps = {
   children?: string | null
   className?: string
 }
 
-const remarkPlugins = [remarkGfm]
-const rehypePlugins = [rehypeRaw]
+const sanitizeSchema: typeof defaultSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    code: [
+      ...(defaultSchema.attributes?.code ?? []),
+      ["className", /^language-./],
+    ],
+    pre: [
+      ...(defaultSchema.attributes?.pre ?? []),
+      ["className", /^language-./],
+    ],
+    h1: [...(defaultSchema.attributes?.h1 ?? []), "id"],
+    h2: [...(defaultSchema.attributes?.h2 ?? []), "id"],
+    h3: [...(defaultSchema.attributes?.h3 ?? []), "id"],
+    h4: [...(defaultSchema.attributes?.h4 ?? []), "id"],
+    h5: [...(defaultSchema.attributes?.h5 ?? []), "id"],
+    h6: [...(defaultSchema.attributes?.h6 ?? []), "id"],
+  },
+}
+
+const remarkPlugins: PluggableList = [remarkGfm]
+const rehypePlugins: PluggableList = [
+  rehypeRaw,
+  [rehypeSanitize, sanitizeSchema],
+]
+
+function isSafeHref(href: string | undefined): href is string {
+  if (!href) return false
+
+  const trimmed = href.trim().toLowerCase()
+
+  return (
+    // eslint-disable-next-line sonarjs/code-eval
+    !trimmed.startsWith("javascript:") &&
+    !trimmed.startsWith("data:") &&
+    !trimmed.startsWith("vbscript:")
+  )
+}
 
 const components: Components = {
   h1: ({ children }) => (
@@ -59,9 +165,21 @@ const components: Components = {
     </h6>
   ),
 
-  p: ({ children }) => (
-    <p className="text-foreground mb-8 text-xl leading-relaxed">{children}</p>
-  ),
+  p: ({ children }) => {
+    const soleLink = extractSoleLink(children)
+
+    if (soleLink) {
+      const embed = <InlineEmbed url={soleLink.href} />
+
+      if (getYouTubeId(soleLink.href) || getTweetId(soleLink.href)) {
+        return embed
+      }
+    }
+
+    return (
+      <p className="text-foreground mb-8 text-xl leading-relaxed">{children}</p>
+    )
+  },
 
   strong: ({ children }) => (
     <strong className="text-foreground font-semibold">{children}</strong>
@@ -74,12 +192,13 @@ const components: Components = {
   u: ({ children }) => <u className="underline">{children}</u>,
 
   a: ({ href, children }) => {
+    const safeHref = isSafeHref(href) ? href : undefined
     const isExternal =
-      href?.startsWith("http://") || href?.startsWith("https://")
+      safeHref?.startsWith("http://") || safeHref?.startsWith("https://")
 
     return (
       <a
-        href={href}
+        href={safeHref}
         className="*:text-strapi-purple-600 text-strapi-purple-600 bg-strapi-purple-100 hover:*:text-strapi-purple-700 hover:text-strapi-purple-700 transition-colors *:transition-colors"
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}

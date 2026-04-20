@@ -62,7 +62,15 @@ export class SourceClient {
       }
 
       if (opts?.slugFilter) {
-        params["filters"] = { slug: { $eq: opts.slugFilter } }
+        const slugs = opts.slugFilter
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+
+        params["filters"] =
+          slugs.length > 1
+            ? { slug: { $in: slugs } }
+            : { slug: { $eq: slugs[0] } }
       }
 
       const query = qs.stringify(params, { encodeValuesOnly: true })

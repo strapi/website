@@ -512,6 +512,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+    description: Schema.Attribute.Text
     image: Schema.Attribute.Component<"media.image", false>
     level: Schema.Attribute.Enumeration<
       ["beginner", "intermediate", "advanced"]
@@ -532,10 +533,11 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
         "media.image",
         "media.image-gallery",
         "media.video",
+        "media.embed",
         "testimonials.quote",
+        "blog.callout",
         "blog.related-posts",
         "blog.editors-picks",
-        "blog.category-showcase",
         "blog.resource-cta",
         "forms.newsletter",
         "forms.hubspot-form",
@@ -549,6 +551,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+    version: Schema.Attribute.Enumeration<["v3", "v4", "v5"]>
   }
 }
 

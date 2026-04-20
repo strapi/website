@@ -49,6 +49,7 @@ export const registerDynamicZonePopulateMiddleware = ({ strapi }) => {
     delete context.params.populateDynamicZone
 
     const componentsToPopulate = await getComponentsToPopulate(
+      strapi,
       dynamicZonePopulate,
       context
     )

@@ -2,7 +2,10 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Locale } from "next-intl"
 
 import { Container } from "@/components/elementary/Container"
-import type { NewsletterFormData } from "@/components/newsletter/NewsletterForm"
+import {
+  getBlogNewsletterHubspot,
+  type BlogNavbarCategory,
+} from "@/lib/blog-utils"
 import { fetchBlog } from "@/lib/strapi-api/content/server"
 
 import { BlogNavbarTabs } from "./BlogNavbarTabs"
@@ -11,17 +14,15 @@ import { Button } from "../ui/button"
 
 export async function BlogNavbar({ locale }: { readonly locale: Locale }) {
   const response = await fetchBlog(locale)
-  const data = response?.data as Record<string, unknown> | undefined
+  const data = response?.data
 
   if (!data) {
     return null
   }
 
-  const navigation = data.navigation as Record<string, unknown> | undefined
-  const categories =
-    (navigation?.items as { id: number; name: string; slug: string }[]) ?? []
+  const categories: BlogNavbarCategory[] = data.navigation?.items ?? []
 
-  const newsletter = data.newsletter as NewsletterFormData | undefined
+  const hubspotForm = getBlogNewsletterHubspot(response)
 
   return (
     <nav className="border-strapi-neutral-800 border-b px-4 py-3 sm:px-6 sm:py-4">
@@ -33,16 +34,7 @@ export async function BlogNavbar({ locale }: { readonly locale: Locale }) {
             <Button variant="outlineInverse" size="icon">
               <MagnifyingGlassIcon weight="bold" />
             </Button>
-            {newsletter ? (
-              <BlogNewsletterPopover newsletter={newsletter} />
-            ) : (
-              <Button
-                variant="outlineInverse"
-                className="hidden sm:inline-flex"
-              >
-                Subscribe
-              </Button>
-            )}
+            <BlogNewsletterPopover hubspotForm={hubspotForm} />
           </div>
         </div>
       </Container>

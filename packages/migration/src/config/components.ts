@@ -1,5 +1,4 @@
 import type { TransformContext } from "../transforms/base.ts"
-import { extractRelationIds } from "../transforms/convert.ts"
 
 export interface ComponentMapping {
   /** v4 component UID */
@@ -82,6 +81,38 @@ function asPerson(value: unknown): V4Person {
   if (!value || typeof value !== "object") return {}
 
   return value as V4Person
+}
+
+/**
+ * Extract v4 relation IDs from a DZ entry field. Handles both the
+ * post-flattenV4 shape `[{ _v4Id, ... }]` and the raw v4 shape
+ * `{ data: [{ id, attributes }] }` (DZ children aren't flattened).
+ */
+function extractDzRelationIds(value: unknown): number[] {
+  if (Array.isArray(value)) {
+    return value
+      .filter(
+        (item): item is { _v4Id: number } =>
+          item != null &&
+          typeof item === "object" &&
+          typeof (item as Record<string, unknown>)["_v4Id"] === "number"
+      )
+      .map((item) => item._v4Id)
+  }
+
+  if (
+    value != null &&
+    typeof value === "object" &&
+    Array.isArray((value as { data?: unknown }).data)
+  ) {
+    const data = (value as { data: { id?: number }[] }).data
+
+    return data
+      .filter((d): d is { id: number } => typeof d?.id === "number")
+      .map((d) => d.id)
+  }
+
+  return []
 }
 
 function asRecord(value: unknown): Record<string, unknown> {
@@ -1032,20 +1063,33 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   // FORMS
   // =============================================
 
-  // v4 newsletter-banner: nested newsletter component
-  // v5: title, description, emailPlaceholder, submitLabel, consentText
+  // v4 newsletter-banner wraps shared.newsletter (title/text/portalId/formGuid/…)
+  // v5 forms.newsletter has ONLY `hubspotForm` (relation) — frontend copy is fixed.
+  //
+  // Empirical finding: all 224 v4 newsletter-banner instances have an EMPTY
+  // nested newsletter, so portalId/formGuid are almost never present. When
+  // they are, we carry them as `_hubspot*` markers so resolveHubspotForms can
+  // find-or-create the hubspot-form entity and link it. When absent, the
+  // section is migrated with no relation — editor links a form manually.
   {
     source: "slices.newsletter-banner",
     target: "forms.newsletter",
     transform: (entry) => {
       const newsletter = asRecord(entry["newsletter"])
+      const portalId = newsletter["portalId"] as string | undefined
+      const formId = newsletter["formGuid"] as string | undefined
+
+      // v5 forms.newsletter has ONLY hubspotForm (relation). Frontend copy is
+      // hardcoded. When the v4 source has a portalId/formGuid, we carry them
+      // as `_hubspot*` markers for resolveHubspotForms to find-or-create the
+      // hubspot-form entity and link via `hubspotForm`. When absent (the case
+      // for 100% of 224 legacy instances), we emit an empty newsletter — an
+      // editor links the form post-migration.
+      if (!formId) return {}
 
       return {
-        title: (newsletter["title"] as string) ?? "",
-        description: (newsletter["description"] as string) ?? "",
-        emailPlaceholder: (newsletter["inputPlaceholder"] as string) ?? "",
-        submitLabel: (newsletter["submitLabel"] as string) ?? "",
-        consentText: (newsletter["consentNote"] as string) ?? "",
+        _hubspotFormId: formId,
+        _hubspotPortalId: portalId ?? "",
       }
     },
   },
@@ -1315,69 +1359,52 @@ export const COMPONENT_MAP: ComponentMapping[] = [
     }),
   },
 
-  // v4 related-blog-posts: intro + blog post relations → blog.related-posts (with section)
+  // v4 related-blog-posts / related-posts → blog.related-posts.
+  //
+  // Two-step migration: blog-post → blog-post relations can't be resolved in
+  // pass 1 because referenced posts may not exist yet in v5. We store the raw
+  // v4 ids as `_blogPostV4Ids` and a `resolve-blog-relations` CLI command
+  // PATCHes the v5 entries after all blog-posts are migrated.
+  //
+  // v5 schema: blogPosts (oneToMany) + optional category (oneToOne).
+  //   - intro/gradientHeader dropped (80%+ were generic defaults in v4 audit)
+  //   - category eagerly resolved because post-categories migrate first
+  // Both related-blog-posts and related-posts land in migration.data-sink
+  // during pass 1 because the v4 → v5 blog-post relations can't be resolved
+  // until every blog-post is migrated. `resolve-blog-relations` (pass 2)
+  // reads the sink's data.*V4* markers, resolves via IdMap, and REPLACES
+  // the sink with a real `blog.related-posts` component.
   {
     source: "slices.related-blog-posts",
-    target: "blog.related-posts",
-    transform: (entry, ctx) => {
-      const intro = asIntro(entry["intro"])
-      const blogPostIds = extractRelationIds(entry["blogPosts"])
+    target: "migration.data-sink",
+    transform: (entry) => {
+      const blogPostV4Ids = extractDzRelationIds(entry["blogPosts"])
+      const data: Record<string, unknown> = {}
+      if (blogPostV4Ids.length > 0) data["_blogPostV4Ids"] = blogPostV4Ids
 
-      const result: Record<string, unknown> = {
-        section: buildSectionHeader({
-          label: intro.label,
-          title: intro.title,
-          description: intro.text,
-          buttons: intro.button,
-        }),
-      }
-
-      if (ctx && blogPostIds.length > 0) {
-        const resolved = blogPostIds
-          .map((v4Id) => ctx.idMap.get("api::blog-post.blog-post", v4Id))
-          .filter(Boolean) as string[]
-
-        if (resolved.length > 0) {
-          result.blogPosts = { set: resolved }
-        }
-      }
-
-      return result
+      return { sourceComponent: "blog.related-posts", data }
     },
   },
 
-  // v4 related-posts: blog post + category relations → blog.related-posts (with category)
   {
     source: "slices.related-posts",
-    target: "blog.related-posts",
-    transform: (entry, ctx) => {
-      const result: Record<string, unknown> = {}
-      const blogPostIds = extractRelationIds(entry["blogPosts"])
-
-      if (ctx && blogPostIds.length > 0) {
-        const resolved = blogPostIds
-          .map((v4Id) => ctx.idMap.get("api::blog-post.blog-post", v4Id))
-          .filter(Boolean) as string[]
-
-        if (resolved.length > 0) {
-          result.blogPosts = { set: resolved }
-        }
-      }
+    target: "migration.data-sink",
+    transform: (entry) => {
+      const blogPostV4Ids = extractDzRelationIds(entry["blogPosts"])
 
       const cat = entry["category"] as Record<string, unknown> | undefined
+      const catV4Id =
+        typeof cat?.["_v4Id"] === "number"
+          ? (cat["_v4Id"] as number)
+          : typeof (cat as { data?: { id?: number } })?.data?.id === "number"
+            ? (cat as { data: { id: number } }).data.id
+            : undefined
 
-      if (ctx && cat && typeof cat["_v4Id"] === "number") {
-        const docId = ctx.idMap.get(
-          "api::post-category.post-category",
-          cat["_v4Id"] as number
-        )
+      const data: Record<string, unknown> = {}
+      if (blogPostV4Ids.length > 0) data["_blogPostV4Ids"] = blogPostV4Ids
+      if (typeof catV4Id === "number") data["_categoryV4Id"] = catV4Id
 
-        if (docId) {
-          result.category = { set: [docId] }
-        }
-      }
-
-      return result
+      return { sourceComponent: "blog.related-posts", data }
     },
   },
 

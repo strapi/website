@@ -1,20 +1,33 @@
+import type { Data } from "@repo/strapi-types"
+
 import type { AuthorAvatarData } from "@/components/elementary/AuthorAvatars"
+import type { NewsletterHubspotRef } from "@/components/newsletter/NewsletterForm"
 
 export const BLOG_HEADER_OFFSET = 96
 
-export interface BlogCategory {
-  readonly name?: string
-  readonly slug?: string
-}
+export type BlogPost = Data.ContentType<"api::blog-post.blog-post">
+export type BlogCategory = Data.ContentType<"api::post-category.post-category">
+export type BlogTag = Data.ContentType<"api::post-tag.post-tag">
+export type BlogData = Data.ContentType<"api::blog.blog">
+export type BlogPostImage = NonNullable<BlogPost["image"]>
+export type BlogNavigation = NonNullable<BlogData["navigation"]>
+export type BlogNavbarCategory = NonNullable<BlogNavigation["items"]>[number]
+export type BlogNewsletterData = NewsletterHubspotRef
 
-export interface BlogTag {
-  readonly id: number
-  readonly name?: string
-  readonly slug?: string
-}
+export function getBlogNewsletterHubspot(
+  blogResponse: { readonly data?: unknown } | null | undefined
+): NewsletterHubspotRef | null {
+  const blog = blogResponse?.data as BlogData | null | undefined
+  const hubspot = blog?.newsletter?.hubspotForm as
+    | NewsletterHubspotRef
+    | null
+    | undefined
 
-export interface BlogPostImage {
-  readonly image?: Record<string, unknown> | null
+  if (hubspot?.portalId && hubspot?.formId) {
+    return { portalId: hubspot.portalId, formId: hubspot.formId }
+  }
+
+  return null
 }
 
 export function combineAuthors(
@@ -95,3 +108,21 @@ export function extractHeadings(markdown: string): TocHeading[] {
 }
 
 export const BLOG_DATE_FORMAT = "MMMM D, YYYY"
+
+const UPDATED_AT_THRESHOLD_MS = 24 * 60 * 60 * 1000
+
+export function shouldShowUpdatedAt(
+  publishedAt: string | Date | null | undefined,
+  updatedAt: string | Date | null | undefined
+): boolean {
+  if (!publishedAt || !updatedAt) return false
+
+  const published = new Date(publishedAt).getTime()
+  const updated = new Date(updatedAt).getTime()
+
+  if (Number.isNaN(published) || Number.isNaN(updated)) return false
+
+  return updated - published > UPDATED_AT_THRESHOLD_MS
+}
+
+export type BlogPostLevel = NonNullable<BlogPost["level"]>

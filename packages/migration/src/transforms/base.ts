@@ -4,6 +4,7 @@ import type { ComponentMapping } from "../config/components.ts"
 import type { MigrationEnv } from "../config/env.ts"
 import type { IdMap } from "../state/id-map.ts"
 import type { MediaCache } from "../state/media-cache.ts"
+import type { PendingRelations } from "../state/pending-relations.ts"
 import type { Logger } from "../utils/logger.ts"
 
 export interface TransformContext {
@@ -12,6 +13,7 @@ export interface TransformContext {
   targetClient: TargetClient
   idMap: IdMap
   mediaCache: MediaCache
+  pendingRelations?: PendingRelations
   logger: Logger
   componentMap: ComponentMapping[]
   dryRun: boolean

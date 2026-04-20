@@ -66,7 +66,8 @@ export async function getBlogPostMetadata({
 
   try {
     const res = await fetchBlogPostSeo(slug, locale)
-    const seo = res?.data?.seo
+    const post = res?.data
+    const seo = post?.seo
 
     if (!seo) {
       return {
@@ -77,8 +78,8 @@ export async function getBlogPostMetadata({
     }
 
     const strapiMeta: Metadata = {
-      title: seo.metaTitle,
-      description: seo.metaDescription,
+      title: seo.metaTitle || post?.title || undefined,
+      description: seo.metaDescription || post?.description || undefined,
       keywords: seo.keywords,
     }
 

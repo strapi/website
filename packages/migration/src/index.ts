@@ -11,6 +11,7 @@ import { TargetClient } from "./clients/target.ts"
 import { COMPONENT_MAP } from "./config/components.ts"
 import { ENTITY_CONFIGS } from "./config/entities.ts"
 import { loadEnv } from "./config/env.ts"
+import { resolveBlogPostRelations } from "./entities/blog-post.ts"
 import { setPageParents } from "./entities/page.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
 import { IdMap } from "./state/id-map.ts"
@@ -19,6 +20,7 @@ import {
   MigrationState,
   type EntityMigrationResult,
 } from "./state/migration-state.ts"
+import { PendingRelations } from "./state/pending-relations.ts"
 import { createTransformContext } from "./transforms/base.ts"
 import { createLogger, formatDuration } from "./utils/logger.ts"
 import { writeReport } from "./utils/report.ts"
@@ -245,6 +247,60 @@ program
   })
 
 program
+  .command("resolve-blog-relations")
+  .description(
+    "Resolve deferred blog-post → blog-post relations in blog.related-posts sections (run after all blog-posts are migrated)"
+  )
+  .option("--dry-run", "Log what would be updated without making changes")
+  .option("--verbose", "Debug-level logging")
+  .action(async (opts) => {
+    const env = loadEnv()
+    const logger = createLogger(opts.verbose)
+    const idMap = new IdMap()
+    await idMap.load()
+    const mediaCache = new MediaCache()
+    await mediaCache.load()
+    const pendingRelations = new PendingRelations()
+    await pendingRelations.load()
+
+    const ctx = {
+      ...createTransformContext({
+        env,
+        idMap,
+        logger,
+        dryRun: opts.dryRun ?? false,
+        force: false,
+      }),
+      sourceClient: new SourceClient({ env, logger }),
+      targetClient: new TargetClient({ env, logger }),
+      componentMap: COMPONENT_MAP,
+      mediaCache,
+      pendingRelations,
+    }
+
+    logger.header("Resolving blog-post related-posts relations")
+
+    const result = await resolveBlogPostRelations(ctx)
+
+    logger.info(
+      chalk.green(
+        `Updated ${result.updated} blog posts · skipped ${result.skipped}`
+      )
+    )
+
+    if (result.unresolved.length > 0) {
+      console.log()
+      logger.warn(
+        chalk.bold(`${result.unresolved.length} unresolved references:`)
+      )
+
+      for (const msg of result.unresolved) {
+        logger.warn(`  ${msg}`)
+      }
+    }
+  })
+
+program
   .command("status")
   .description("Show migration state")
   .action(async () => {
@@ -263,6 +319,8 @@ program
     await idMap.reset()
     const mediaCache = new MediaCache()
     await mediaCache.reset()
+    const pendingRelations = new PendingRelations()
+    await pendingRelations.reset()
     console.log("Migration state cleared.")
   })
 

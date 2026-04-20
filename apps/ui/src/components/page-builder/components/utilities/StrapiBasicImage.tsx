@@ -99,6 +99,9 @@ export function StrapiBasicImage({
   transparentPlaceholder,
   ...imgProps
 }: StrapiBasicImageProps) {
+  const effectiveSizes =
+    sizes ?? (mode === "fill" || mode === "responsive" ? "100vw" : undefined)
+
   const media = (component?.media ?? null) as StrapiImageMedia | null
   const selectedFormat = format
     ? (media?.formats?.[format] as StrapiImageMediaFormat | undefined)
@@ -123,7 +126,7 @@ export function StrapiBasicImage({
     mediaDims,
     hasPartialCms,
     mode,
-    sizes
+    effectiveSizes
   )
 
   if (!src) {
@@ -155,7 +158,7 @@ export function StrapiBasicImage({
     "aria-hidden": decorative || undefined,
     className:
       mode === "responsive" ? cn("max-w-full h-auto", className) : className,
-    sizes,
+    sizes: effectiveSizes,
     src,
     style,
   }

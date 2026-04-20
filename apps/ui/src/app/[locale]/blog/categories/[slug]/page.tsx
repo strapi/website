@@ -3,8 +3,8 @@ import type { Locale } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 import { use } from "react"
 
+import { BlogBreadcrumbs } from "@/components/blog/BlogBreadcrumbs"
 import { BlogNavbar } from "@/components/blog/BlogNavbar"
-import { BlogNewsletter } from "@/components/blog/BlogNewsletter"
 import { BlogPostsList } from "@/components/blog/BlogPostsList"
 import { FeaturedBlogPost } from "@/components/blog/FeaturedBlogPost"
 import { Container } from "@/components/elementary/Container"
@@ -12,8 +12,26 @@ import {
   HeroContainer,
   HeroContainerContent,
 } from "@/components/elementary/HeroContainer"
-import type { NewsletterFormData } from "@/components/newsletter/NewsletterForm"
-import { fetchBlog, fetchBlogPostsList } from "@/lib/strapi-api/content/server"
+import { Markdown } from "@/components/elementary/markdown/Markdown"
+import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
+import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
+import {
+  fetchBlog,
+  fetchBlogPostsList,
+  fetchPostCategory,
+} from "@/lib/strapi-api/content/server"
+
+type CategoryWithExtras = {
+  name?: string | null
+  slug?: string | null
+  description?: string | null
+  seo?: {
+    metaTitle?: string | null
+    metaDescription?: string | null
+    keywords?: string | null
+  } | null
+  children?: ({ slug?: string | null } | null)[] | null
+}
 
 export const dynamic = "force-static"
 
@@ -23,28 +41,37 @@ export async function generateStaticParams({
   params: { locale: string }
 }) {
   const blog = await fetchBlog(locale as Locale)
-  const navigation = (blog?.data as Record<string, unknown>)?.navigation as
-    | Record<string, unknown>
-    | undefined
-  const items = navigation?.items as readonly { slug?: string }[] | undefined
+  const items = blog?.data?.navigation?.items ?? []
 
-  return (
-    items
-      ?.filter((item) => item.slug)
-      .map((item) => ({ slug: item.slug as string })) ?? []
-  )
+  const slugs = new Set<string>()
+
+  for (const item of items) {
+    if (item.slug) slugs.add(item.slug)
+    for (const child of item.children ?? []) {
+      if (child.slug) slugs.add(child.slug)
+    }
+  }
+
+  return [...slugs].map((slug) => ({ slug }))
 }
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
-  const { slug } = await props.params
-  const categoryName = slug
+  const { slug, locale } = await props.params
+  const res = await fetchPostCategory(slug, locale as Locale)
+  const category = res?.data as CategoryWithExtras | undefined
+  const seo = category?.seo
+
+  const fallbackName = slug
     .replaceAll("-", " ")
     .replaceAll(/\b\w/g, (c) => c.toUpperCase())
+  const name = category?.name ?? fallbackName
 
   return {
-    title: `${categoryName} — Blog`,
+    title: seo?.metaTitle || `${name} — Blog`,
+    description: seo?.metaDescription ?? undefined,
+    keywords: seo?.keywords ?? undefined,
   }
 }
 
@@ -57,69 +84,57 @@ export default function BlogCategoryPage(
 
   setRequestLocale(locale)
 
-  const [t, categoryPosts, blog] = use(
+  const [t, blog, categoryRes] = use(
     Promise.all([
       getTranslations({ locale, namespace: "blog" }),
-      fetchBlogPostsList(locale, slug),
       fetchBlog(locale),
+      fetchPostCategory(slug, locale),
     ])
   )
 
-  const newsletter = (blog?.data as Record<string, unknown> | undefined)
-    ?.newsletter as NewsletterFormData | undefined
+  const category = categoryRes?.data as CategoryWithExtras | undefined
+  const childSlugs = (category?.children ?? [])
+    .map((c) => c?.slug)
+    .filter((s): s is string => typeof s === "string" && s.length > 0)
+  const allSlugs: string[] = [slug, ...childSlugs]
 
-  const featuredPost =
-    (categoryPosts?.data[0] as Record<string, unknown> | undefined) ?? null
-  const remainingPosts = categoryPosts?.data.slice(1) ?? []
+  const categoryPosts = use(fetchBlogPostsList(locale, allSlugs))
+
+  const hubspotForm = getBlogNewsletterHubspot(blog)
+  const featuredPost: BlogPost | null = categoryPosts?.data[0] ?? null
+  const remainingPosts: BlogPost[] = categoryPosts?.data.slice(1) ?? []
+  const categoryName = category?.name ?? featuredPost?.category?.name ?? slug
 
   return (
     <HeroContainer affectsNavbarTheme className="gap-0">
       <BlogNavbar locale={locale} />
 
       <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10">
+        <Container className="flex flex-col gap-6">
+          <BlogBreadcrumbs category={{ name: categoryName, slug }} />
+
+          <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            {categoryName}
+          </h1>
+
+          {category?.description && (
+            <div className="text-strapi-gray-300 max-w-3xl [&_p]:text-base [&_p:last-child]:mb-0">
+              <Markdown>{category.description}</Markdown>
+            </div>
+          )}
+        </Container>
+
         {featuredPost && (
           <Container>
-            <FeaturedBlogPost
-              title={featuredPost.title as string}
-              slug={featuredPost.slug as string}
-              content={featuredPost.content as string | null}
-              publishedAt={featuredPost.publishedAt as string | null}
-              author={
-                featuredPost.author as Parameters<
-                  typeof FeaturedBlogPost
-                >[0]["author"]
-              }
-              coauthors={
-                featuredPost.coauthors as Parameters<
-                  typeof FeaturedBlogPost
-                >[0]["coauthors"]
-              }
-              category={
-                featuredPost.category as Parameters<
-                  typeof FeaturedBlogPost
-                >[0]["category"]
-              }
-              image={
-                featuredPost.image as Parameters<
-                  typeof FeaturedBlogPost
-                >[0]["image"]
-              }
-            />
+            <FeaturedBlogPost post={featuredPost} />
           </Container>
         )}
 
         <Container>
-          <BlogPostsList
-            posts={
-              remainingPosts as unknown as Parameters<
-                typeof BlogPostsList
-              >[0]["posts"]
-            }
-            loadMoreLabel={t("loadMore")}
-          />
+          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
         </Container>
 
-        {newsletter && <BlogNewsletter newsletter={newsletter} />}
+        <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
       </HeroContainerContent>
     </HeroContainer>
   )

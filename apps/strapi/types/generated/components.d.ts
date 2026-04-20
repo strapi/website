@@ -1,22 +1,18 @@
 import type { Schema, Struct } from "@strapi/strapi"
 
-export interface BlogCategoryShowcase extends Struct.ComponentSchema {
-  collectionName: "components_blog_category_showcases"
+export interface BlogCallout extends Struct.ComponentSchema {
+  collectionName: "components_blog_callouts"
   info: {
-    description: "Blog posts from a specific category with a see-all link"
-    displayName: "Category Showcase"
-    icon: "apps"
+    description: "Inline callout / admonition (note, tip, warning, info)"
+    displayName: "Callout"
+    icon: "bell"
   }
   attributes: {
-    blogPosts: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::blog-post.blog-post"
-    >
-    category: Schema.Attribute.Relation<
-      "oneToOne",
-      "api::post-category.post-category"
-    >
-    seeAllLabel: Schema.Attribute.String
+    content: Schema.Attribute.RichText & Schema.Attribute.Required
+    title: Schema.Attribute.String
+    variant: Schema.Attribute.Enumeration<["note", "tip", "warning", "info"]> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<"note">
   }
 }
 
@@ -54,7 +50,7 @@ export interface BlogNavigation extends Struct.ComponentSchema {
 export interface BlogRelatedPosts extends Struct.ComponentSchema {
   collectionName: "components_blog_related_posts"
   info: {
-    description: "Related blog posts with optional section header and/or category link"
+    description: "Related blog posts with optional category link"
     displayName: "Related Posts"
     icon: "layer"
   }
@@ -67,7 +63,6 @@ export interface BlogRelatedPosts extends Struct.ComponentSchema {
       "oneToOne",
       "api::post-category.post-category"
     >
-    section: Schema.Attribute.Component<"utilities.section-header", false>
   }
 }
 
@@ -588,21 +583,15 @@ export interface FormsHubspotFormSsr extends Struct.ComponentSchema {
 export interface FormsNewsletter extends Struct.ComponentSchema {
   collectionName: "components_forms_newsletter"
   info: {
-    description: ""
+    description: "Newsletter CTA \u2014 frontend renders fixed copy; only the HubSpot form is configurable"
     displayName: "Newsletter"
     icon: "paperPlane"
   }
   attributes: {
-    consentText: Schema.Attribute.Text
-    description: Schema.Attribute.Text
-    emailPlaceholder: Schema.Attribute.String
     hubspotForm: Schema.Attribute.Relation<
       "oneToOne",
       "api::hubspot-form.hubspot-form"
     >
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    submitLabel: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -1546,7 +1535,7 @@ export interface UtilitiesTooltip extends Struct.ComponentSchema {
 declare module "@strapi/strapi" {
   export module Public {
     export interface ComponentSchemas {
-      "blog.category-showcase": BlogCategoryShowcase
+      "blog.callout": BlogCallout
       "blog.editors-picks": BlogEditorsPicks
       "blog.navigation": BlogNavigation
       "blog.related-posts": BlogRelatedPosts

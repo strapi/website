@@ -12,6 +12,10 @@ import {
   MigrationState,
   type EntityMigrationResult,
 } from "../state/migration-state.ts"
+import {
+  PendingRelations,
+  extractPendingSinks,
+} from "../state/pending-relations.ts"
 import type { TransformContext } from "../transforms/base.ts"
 
 interface DynamicZoneEntry {
@@ -46,6 +50,9 @@ export async function runEntityMigration(
   const mediaCache = new MediaCache()
   await mediaCache.load()
 
+  const pendingRelations = new PendingRelations()
+  await pendingRelations.load()
+
   const ctx: TransformContext = {
     ...partialCtx,
     sourceClient: new SourceClient({
@@ -58,6 +65,7 @@ export async function runEntityMigration(
     }),
     componentMap: COMPONENT_MAP,
     mediaCache,
+    pendingRelations,
   }
 
   const migrationState = new MigrationState()
@@ -189,6 +197,14 @@ export async function runEntityMigration(
 
         ctx.idMap.set(config.sourceUid, v4Id, result.documentId)
 
+        // Capture deferred blog.related-posts markers for pass 2 resolution.
+        // Markers live in data-sink's `data` field which is marked private
+        // on the target schema, so we track them locally indexed by v5 docId.
+        if (config.sourceUid === "api::blog-post.blog-post") {
+          const sinks = extractPendingSinks(transformed["sections"])
+          ctx.pendingRelations?.set(result.documentId, sinks)
+        }
+
         const actionLabel = formatAction(result.action)
         const componentsLabel = formatComponentList(
           targetComponents,
@@ -253,6 +269,7 @@ export async function runEntityMigration(
       migrationState.setEntityState(entityStateKey, state)
       await migrationState.save()
       await mediaCache.save()
+      await pendingRelations.save()
     }
   }
 
@@ -267,6 +284,7 @@ export async function runEntityMigration(
   migrationState.setEntityState(entityStateKey, state)
   await migrationState.save()
   await mediaCache.save()
+  await pendingRelations.save()
 
   stats.durationMs = Date.now() - startTime
 

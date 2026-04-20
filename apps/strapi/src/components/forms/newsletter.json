@@ -3,31 +3,10 @@
   "info": {
     "displayName": "Newsletter",
     "icon": "paperPlane",
-    "description": ""
+    "description": "Newsletter CTA — frontend renders fixed copy; only the HubSpot form is configurable"
   },
   "options": {},
   "attributes": {
-    "title": {
-      "type": "string",
-      "required": true
-    },
-    "description": {
-      "type": "text"
-    },
-    "emailPlaceholder": {
-      "type": "string"
-    },
-    "submitLabel": {
-      "type": "string"
-    },
-    "consentText": {
-      "type": "text"
-    },
-    "image": {
-      "type": "component",
-      "component": "utilities.basic-image",
-      "repeatable": false
-    },
     "hubspotForm": {
       "type": "relation",
       "relation": "oneToOne",

@@ -2,22 +2,10 @@
 
 import { useState } from "react"
 
-import type { AuthorAvatarData } from "@/components/elementary/AuthorAvatars"
-import type { BlogCategory } from "@/lib/blog-utils"
+import type { BlogPost } from "@/lib/blog-utils"
 
 import { BlogPostRow } from "./BlogPostRow"
 import { Button } from "../ui/button"
-
-interface BlogPost {
-  readonly id: number
-  readonly documentId: string
-  readonly title: string
-  readonly slug: string
-  readonly publishedAt: string | null
-  readonly author?: AuthorAvatarData | null
-  readonly coauthors?: readonly AuthorAvatarData[]
-  readonly category?: BlogCategory | null
-}
 
 interface BlogPostsListProps {
   readonly posts: readonly BlogPost[]
@@ -37,17 +25,21 @@ export function BlogPostsList({
 
   return (
     <div className="flex flex-col gap-4">
-      {visiblePosts.map((post) => (
-        <BlogPostRow
-          key={post.documentId}
-          title={post.title}
-          slug={post.slug}
-          publishedAt={post.publishedAt}
-          author={post.author}
-          coauthors={post.coauthors}
-          category={post.category}
-        />
-      ))}
+      {visiblePosts
+        .filter((post) => typeof post.slug === "string" && post.slug.length > 0)
+        .map((post) => (
+          <BlogPostRow
+            key={post.documentId}
+            title={post.title ?? ""}
+            slug={post.slug as string}
+            publishedAt={
+              typeof post.publishedAt === "string" ? post.publishedAt : null
+            }
+            author={post.author}
+            coauthors={post.coauthors ?? undefined}
+            category={post.category}
+          />
+        ))}
 
       {hasMore && (
         <div className="flex justify-center py-6">

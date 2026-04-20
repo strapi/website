@@ -22,7 +22,7 @@ import { dropFields, renameFields } from "../transforms/fields.ts"
 import { flattenV4 } from "../transforms/flatten-v4.ts"
 import { uploadMedia } from "../transforms/media.ts"
 import { resolveRelations } from "../transforms/relations.ts"
-import { transformSeo } from "../transforms/seo.ts"
+import { transformBlogSeo, transformSeo } from "../transforms/seo.ts"
 
 /**
  * Deep populate config for v4 dynamic zones.
@@ -130,6 +130,34 @@ const DEEP_DZ_POPULATE = {
       plans: { populate: "*" },
       extraBoxFeatures: { populate: "*" },
       extraBoxLink: { populate: "*" },
+    },
+    // Strapi v4 needs the `.on` syntax for certain DZ component fields to be
+    // populated — the flat `populate: {...}` above doesn't reliably hydrate
+    // every nested component (e.g. `newsletter`, `blogPosts` relation).
+    on: {
+      "slices.newsletter-banner": {
+        populate: { newsletter: { populate: "*" } },
+      },
+      "slices.related-blog-posts": {
+        populate: {
+          intro: { populate: "*" },
+          gradientHeader: { populate: "*" },
+          blogPosts: { fields: ["id"] },
+        },
+      },
+      "slices.related-posts": {
+        populate: {
+          blogPosts: { fields: ["id"] },
+          category: { fields: ["id"] },
+        },
+      },
+      "slices.embed-form": {
+        populate: {
+          intro: { populate: "*" },
+          gradientHeader: { populate: "*" },
+          embedForm: { populate: "*" },
+        },
+      },
     },
   },
 }
@@ -298,10 +326,16 @@ const ensureTitle: TransformFn = (entity) => {
 }
 
 /**
- * Resolve hubspot-form references in the content dynamic zone.
- * Finds DZ entries with _hubspotFormId, creates/finds the hubspot-form entity,
- * and links it via the `form` relation.
+ * Resolve hubspot-form references in the content/sections dynamic zone.
+ * Finds DZ entries with _hubspotFormId (on forms.hubspot-form and
+ * forms.newsletter), creates/finds the hubspot-form entity, and links it
+ * via the component's relation field.
  */
+const HUBSPOT_FORM_RELATIONS: Record<string, string> = {
+  "forms.hubspot-form": "form",
+  "forms.newsletter": "hubspotForm",
+}
+
 // eslint-disable-next-line sonarjs/no-invariant-returns
 const resolveHubspotForms: TransformFn = async (entity, ctx) => {
   const dzField = Array.isArray(entity["content"])
@@ -315,7 +349,9 @@ const resolveHubspotForms: TransformFn = async (entity, ctx) => {
   const content = entity[dzField] as Record<string, unknown>[]
 
   for (const entry of content) {
-    if (entry["__component"] !== "forms.hubspot-form") continue
+    const component = entry["__component"] as string
+    const relationField = HUBSPOT_FORM_RELATIONS[component]
+    if (!relationField) continue
 
     const formId = entry["_hubspotFormId"] as string | undefined
     const portalId = entry["_hubspotPortalId"] as string | undefined
@@ -332,8 +368,10 @@ const resolveHubspotForms: TransformFn = async (entity, ctx) => {
       )
 
       if (existing) {
-        entry["form"] = existing.documentId
-        ctx.logger.debug(`Linked existing hubspot-form: ${formId}`)
+        entry[relationField] = existing.documentId
+        ctx.logger.debug(
+          `Linked existing hubspot-form: ${formId} → ${component}.${relationField}`
+        )
       } else if (!ctx.dryRun) {
         const created = await ctx.targetClient.create("hubspot-forms", {
           name: `HubSpot Form ${formId.slice(0, 8)}`,
@@ -341,9 +379,9 @@ const resolveHubspotForms: TransformFn = async (entity, ctx) => {
           formId,
         })
 
-        entry["form"] = created.documentId
+        entry[relationField] = created.documentId
         ctx.logger.debug(
-          `Created hubspot-form: ${formId} → ${created.documentId}`
+          `Created hubspot-form: ${formId} → ${created.documentId} (${component}.${relationField})`
         )
       }
     } catch (e) {
@@ -854,6 +892,56 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
     ],
   },
 
+  // Sub-categories are migrated as child `post-category` records using the
+  // self-referencing parent/children relation on post-category. This preserves
+  // the old taxonomy hierarchy without introducing a separate content type.
+  "post-sub-categories": {
+    sourceEndpoint: "post-sub-categories",
+    sourcePopulate: {
+      post_category: { populate: "*" },
+      seo: { populate: "*" },
+    },
+    targetEndpoint: "post-categories",
+    dedupField: "slug",
+    sourceUid: "api::post-sub-category.post-sub-category",
+    transforms: [
+      flattenV4,
+      dropFields(
+        "_v4Id",
+        "createdAt",
+        "updatedAt",
+        "publishedAt",
+        "locale",
+        "blogPosts",
+        "blog_posts",
+        "seo"
+      ),
+      ensureSlug("name"),
+      ((entity, ctx) => {
+        const result = { ...entity }
+        const parent = result["post_category"] as { _v4Id?: number } | undefined
+        delete result["post_category"]
+
+        if (parent?.["_v4Id"]) {
+          const parentDoc = ctx.idMap.get(
+            "api::post-category.post-category",
+            parent["_v4Id"]
+          )
+
+          if (parentDoc) {
+            result["parent"] = { set: [parentDoc] }
+          } else {
+            ctx.logger.warn(
+              `Unresolved parent category for sub-category: v4Id=${parent["_v4Id"]}`
+            )
+          }
+        }
+
+        return result
+      }) as TransformFn,
+    ],
+  },
+
   "post-tags": {
     sourceEndpoint: "post-tags",
     sourcePopulate: {
@@ -1173,8 +1261,14 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
     sourcePopulate: {
       image: { populate: "*" },
       tags: { populate: "*" },
-      seo: { populate: "*" },
+      seo: {
+        populate: {
+          metaImage: { populate: "*" },
+          metaSocial: { populate: { image: { populate: "*" } } },
+        },
+      },
       featuredCategory: { populate: "*" },
+      postSubCategory: { populate: "*" },
       user: { populate: "*" },
       coauthors: { populate: "*" },
       slices: DEEP_DZ_POPULATE["slices"],
@@ -1191,11 +1285,8 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "publishedAt",
         "locale",
         "settings",
-        // v4-only fields not in v5
-        "card",
-        "version",
-        "postSubCategory",
-        "description"
+        // v4-only fields without a v5 equivalent
+        "card"
       ),
       // Resolve v4 user → v5 author, coauthors
       ((entity, ctx) => {
@@ -1262,25 +1353,43 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       // Convert image (media.image component) → v5 format
       convertMediaImageFields("image"),
-      // Map featuredCategory → category via IdMap
+      // Resolve category: prefer postSubCategory (more specific, migrated as
+      // a child post-category) over featuredCategory.
       ((entity, ctx) => {
         const result = { ...entity }
-        const cat = result["featuredCategory"] as
+        const sub = result["postSubCategory"] as
           | Record<string, unknown>
           | undefined
+        const feat = result["featuredCategory"] as
+          | Record<string, unknown>
+          | undefined
+        delete result["postSubCategory"]
         delete result["featuredCategory"]
 
-        if (cat && typeof cat["_v4Id"] === "number") {
-          const docId = ctx.idMap.get(
-            "api::post-category.post-category",
-            cat["_v4Id"] as number
-          )
+        const subId =
+          typeof sub?.["_v4Id"] === "number"
+            ? (sub["_v4Id"] as number)
+            : undefined
+        const featId =
+          typeof feat?.["_v4Id"] === "number"
+            ? (feat["_v4Id"] as number)
+            : undefined
 
-          if (docId) {
-            result["category"] = { set: [docId] }
-          } else {
-            ctx.logger.warn(`Unresolved blog category: v4Id=${cat["_v4Id"]}`)
-          }
+        const subDoc = subId
+          ? ctx.idMap.get("api::post-sub-category.post-sub-category", subId)
+          : undefined
+        const featDoc = featId
+          ? ctx.idMap.get("api::post-category.post-category", featId)
+          : undefined
+
+        const chosen = subDoc ?? featDoc
+
+        if (chosen) {
+          result["category"] = { set: [chosen] }
+        } else if (subId || featId) {
+          ctx.logger.warn(
+            `Unresolved blog category: v4Ids sub=${subId ?? "-"} feat=${featId ?? "-"}`
+          )
         }
 
         return result
@@ -1306,7 +1415,8 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       // Dynamic zone: slices → sections
       remapDynamicZone("slices", "sections"),
-      transformSeo,
+      resolveHubspotForms,
+      transformBlogSeo,
       uploadMedia,
     ],
   },

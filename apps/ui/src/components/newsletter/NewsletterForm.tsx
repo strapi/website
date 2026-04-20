@@ -1,47 +1,45 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/styles"
 
-export interface NewsletterFormData {
-  readonly title: string
-  readonly description?: string | null
-  readonly emailPlaceholder?: string | null
-  readonly submitLabel?: string | null
-  readonly consentText?: string | null
-  readonly hubspotForm?: {
-    readonly portalId: string
-    readonly formId: string
-  } | null
+export interface NewsletterHubspotRef {
+  readonly portalId: string
+  readonly formId: string
 }
 
 type FormStatus = "idle" | "loading" | "success" | "error"
 
 interface NewsletterFormProps {
-  readonly data: NewsletterFormData
+  readonly hubspotForm?: NewsletterHubspotRef | null
   readonly variant?: "dark" | "light"
   readonly layout?: "inline" | "stacked"
   readonly onSuccess?: () => void
 }
 
 export function NewsletterForm({
-  data,
+  hubspotForm,
   variant = "dark",
   layout = "inline",
   onSuccess,
 }: NewsletterFormProps) {
+  const t = useTranslations("newsletter")
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<FormStatus>("idle")
   const [errorMessage, setErrorMessage] = useState("")
 
-  const canSubmit = data.hubspotForm?.portalId && data.hubspotForm?.formId
+  const canSubmit = Boolean(hubspotForm?.portalId && hubspotForm?.formId)
+  const isDark = variant === "dark"
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    if (!canSubmit) return
+    if (!canSubmit) {
+      return
+    }
 
     setStatus("loading")
     setErrorMessage("")
@@ -51,15 +49,16 @@ export function NewsletterForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          portalId: data.hubspotForm!.portalId,
-          formId: data.hubspotForm!.formId,
+          portalId: hubspotForm!.portalId,
+          formId: hubspotForm!.formId,
           fields: { email },
         }),
       })
 
       if (!response.ok) {
         const body = await response.json().catch(() => null)
-        throw new Error(body?.error ?? "Submission failed")
+
+        throw new Error(body?.error ?? t("errorMessage"))
       }
 
       setStatus("success")
@@ -67,13 +66,22 @@ export function NewsletterForm({
       onSuccess?.()
     } catch (err) {
       setStatus("error")
-      setErrorMessage(
-        err instanceof Error ? err.message : "Something went wrong"
-      )
+      setErrorMessage(err instanceof Error ? err.message : t("errorMessage"))
     }
   }
 
-  const isDark = variant === "dark"
+  if (!canSubmit) {
+    return (
+      <p
+        className={cn(
+          "text-sm",
+          isDark ? "text-strapi-gray-400" : "text-muted-foreground"
+        )}
+      >
+        {t("unavailableMessage")}
+      </p>
+    )
+  }
 
   if (status === "success") {
     return (
@@ -83,7 +91,7 @@ export function NewsletterForm({
           isDark ? "text-green-400" : "text-green-600"
         )}
       >
-        Thanks for subscribing! Check your inbox to confirm.
+        {t("successMessage")}
       </p>
     )
   }
@@ -101,8 +109,8 @@ export function NewsletterForm({
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          aria-label="Email address"
-          placeholder={data.emailPlaceholder ?? "Enter your email address"}
+          aria-label={t("emailPlaceholder")}
+          placeholder={t("emailPlaceholder")}
           className={cn(
             "h-[42px] w-full rounded-[8px] border px-4 text-sm shadow-xs outline-none",
             isDark
@@ -113,12 +121,10 @@ export function NewsletterForm({
         <Button
           type="submit"
           variant="default"
-          disabled={status === "loading" || !canSubmit}
+          disabled={status === "loading"}
           className="shrink-0"
         >
-          {status === "loading"
-            ? "Submitting..."
-            : (data.submitLabel ?? "Subscribe")}
+          {status === "loading" ? t("submitLabel") + "…" : t("submitLabel")}
         </Button>
       </div>
 
@@ -128,16 +134,14 @@ export function NewsletterForm({
         </p>
       )}
 
-      {data.consentText && (
-        <p
-          className={cn(
-            "w-full text-left text-xs leading-relaxed",
-            isDark ? "text-strapi-gray-400" : "text-muted-foreground"
-          )}
-        >
-          {data.consentText}
-        </p>
-      )}
+      <p
+        className={cn(
+          "w-full text-left text-xs leading-relaxed",
+          isDark ? "text-strapi-gray-400" : "text-muted-foreground"
+        )}
+      >
+        {t("consentText")}
+      </p>
     </form>
   )
 }

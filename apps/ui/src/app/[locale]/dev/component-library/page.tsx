@@ -26,6 +26,7 @@ import {
 import { Spinner } from "@/components/elementary/Spinner"
 import { Tooltip } from "@/components/elementary/Tooltip"
 import { TriangleMask } from "@/components/elementary/TriangleMask"
+import { StrapiCallout } from "@/components/page-builder/components/blog/StrapiCallout"
 import { StrapiCaseStudyCard } from "@/components/page-builder/components/cards/StrapiCaseStudyCard"
 import { StrapiContentCard } from "@/components/page-builder/components/cards/StrapiContentCard"
 import { StrapiHubSpotForm } from "@/components/page-builder/components/forms/strapi-hubspot-form/StrapiHubSpotForm"
@@ -43,6 +44,7 @@ import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
+import { StrapiDisclaimer } from "@/components/page-builder/components/sections/StrapiDisclaimer"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
@@ -212,16 +214,13 @@ const TOC = [
   { id: "community-banner", label: "CommunityBanner" },
   { id: "comparator-grid", label: "ComparatorGrid" },
   { id: "blog-post-header", label: "BlogPostHeader" },
+  { id: "callout", label: "Callout" },
+  { id: "disclaimer", label: "Disclaimer" },
 ] as const
 
 const newsletterBannerDefaultExample = {
-  title: "Join our Newsletter",
-  description: "Get all the latest Strapi updates, news and events.",
-  emailPlaceholder: "Enter your email address",
-  submitLabel: "Subscribe",
-  consentText:
-    "By submitting this form you consent to us emailing you occasionally about our products and services. You can unsubscribe from emails at any time, and we will never pass your email to third parties.",
-} as Data.Component<"forms.newsletter">
+  hubspotForm: null,
+} as unknown as Data.Component<"forms.newsletter">
 
 const hubspotSsrMockSchema: HubSpotFormSchema = {
   fieldGroups: [
@@ -439,12 +438,8 @@ const twoColumnGridLightExample = {
 } as Data.Component<"sections.two-column-grid">
 
 const newsletterBannerShortExample = {
-  title: "Stay in the loop",
-  description: "Weekly product updates for developers and content teams.",
-  emailPlaceholder: "Work email",
-  submitLabel: "Join now",
-  consentText: "No spam. Unsubscribe any time.",
-} as Data.Component<"forms.newsletter">
+  hubspotForm: null,
+} as unknown as Data.Component<"forms.newsletter">
 
 const topBannerDefaultExample = {
   content:
@@ -2217,29 +2212,39 @@ export default function ComponentLibraryPage() {
           <Variant label="Full (with all fields, dark background)">
             <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
               <BlogPostHeader
-                title="Let's Build A Strapi Plugin To Integrate Vercel's AI SDK In Our Next.js 16 Project"
-                publishedAt="2026-02-19T00:00:00.000Z"
-                content={"Lorem ipsum ".repeat(1400)}
-                author={{
-                  id: 1,
-                  username: "Paul Bratslavsky",
-                  slug: "paul-bratslavsky",
-                  avatar: {
-                    image: mockBasicImage(PLACEHOLDER_AVATAR, "Author avatar", {
-                      width: 200,
-                      height: 200,
-                    }),
-                  },
-                }}
-                category={{ name: "Engineering", slug: "engineering" }}
-                tags={[
-                  { id: 1, name: "Strapi v5", slug: "strapi-v5" },
-                  { id: 2, name: "Plugins", slug: "plugins" },
-                  { id: 3, name: "AI", slug: "ai" },
-                ]}
-                image={{
-                  image: mockBasicImage(PLACEHOLDER_IMG, "Cover image"),
-                }}
+                post={
+                  {
+                    title:
+                      "Let's Build A Strapi Plugin To Integrate Vercel's AI SDK In Our Next.js 16 Project",
+                    slug: "build-strapi-plugin-vercel-ai-sdk-nextjs-16",
+                    publishedAt: "2026-02-19T00:00:00.000Z",
+                    content: "Lorem ipsum ".repeat(1400),
+                    author: {
+                      id: 1,
+                      username: "Paul Bratslavsky",
+                      slug: "paul-bratslavsky",
+                      avatar: {
+                        image: mockBasicImage(
+                          PLACEHOLDER_AVATAR,
+                          "Author avatar",
+                          {
+                            width: 200,
+                            height: 200,
+                          }
+                        ),
+                      },
+                    },
+                    category: { name: "Engineering", slug: "engineering" },
+                    tags: [
+                      { id: 1, name: "Strapi v5", slug: "strapi-v5" },
+                      { id: 2, name: "Plugins", slug: "plugins" },
+                      { id: 3, name: "AI", slug: "ai" },
+                    ],
+                    image: {
+                      image: mockBasicImage(PLACEHOLDER_IMG, "Cover image"),
+                    },
+                  } as Data.ContentType<"api::blog-post.blog-post">
+                }
               />
             </div>
           </Variant>
@@ -2247,15 +2252,20 @@ export default function ComponentLibraryPage() {
           <Variant label="Minimal (no tags, no image, no category)">
             <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
               <BlogPostHeader
-                title="A Short Blog Post Title"
-                publishedAt="2026-01-15T00:00:00.000Z"
-                content={"Short content. ".repeat(50)}
-                author={{
-                  id: 2,
-                  username: "Jane Doe",
-                  slug: "jane-doe",
-                  avatar: null,
-                }}
+                post={
+                  {
+                    title: "A Short Blog Post Title",
+                    slug: "a-short-blog-post-title",
+                    publishedAt: "2026-01-15T00:00:00.000Z",
+                    content: "Short content. ".repeat(50),
+                    author: {
+                      id: 2,
+                      username: "Jane Doe",
+                      slug: "jane-doe",
+                      avatar: null,
+                    },
+                  } as Data.ContentType<"api::blog-post.blog-post">
+                }
               />
             </div>
           </Variant>
@@ -2263,39 +2273,44 @@ export default function ComponentLibraryPage() {
           <Variant label="Multiple authors">
             <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
               <BlogPostHeader
-                title="Collaborative Guide to Building Modern APIs"
-                publishedAt="2026-03-01T00:00:00.000Z"
-                content={"Content ".repeat(800)}
-                author={{
-                  id: 1,
-                  username: "Paul Bratslavsky",
-                  slug: "paul-bratslavsky",
-                  avatar: {
-                    image: mockBasicImage(PLACEHOLDER_AVATAR, "Author 1", {
-                      width: 200,
-                      height: 200,
-                    }),
-                  },
-                }}
-                coauthors={[
+                post={
                   {
-                    id: 3,
-                    username: "Alex Smith",
-                    slug: "alex-smith",
-                    avatar: {
-                      image: mockBasicImage(
-                        "https://picsum.photos/seed/alex/200/200",
-                        "Author 2",
-                        { width: 200, height: 200 }
-                      ),
+                    title: "Collaborative Guide to Building Modern APIs",
+                    slug: "collaborative-guide-building-modern-apis",
+                    publishedAt: "2026-03-01T00:00:00.000Z",
+                    content: "Content ".repeat(800),
+                    author: {
+                      id: 1,
+                      username: "Paul Bratslavsky",
+                      slug: "paul-bratslavsky",
+                      avatar: {
+                        image: mockBasicImage(PLACEHOLDER_AVATAR, "Author 1", {
+                          width: 200,
+                          height: 200,
+                        }),
+                      },
                     },
-                  },
-                ]}
-                category={{ name: "Tutorials", slug: "tutorials" }}
-                tags={[
-                  { id: 1, name: "API", slug: "api" },
-                  { id: 2, name: "REST", slug: "rest" },
-                ]}
+                    coauthors: [
+                      {
+                        id: 3,
+                        username: "Alex Smith",
+                        slug: "alex-smith",
+                        avatar: {
+                          image: mockBasicImage(
+                            "https://picsum.photos/seed/alex/200/200",
+                            "Author 2",
+                            { width: 200, height: 200 }
+                          ),
+                        },
+                      },
+                    ],
+                    category: { name: "Tutorials", slug: "tutorials" },
+                    tags: [
+                      { id: 1, name: "API", slug: "api" },
+                      { id: 2, name: "REST", slug: "rest" },
+                    ],
+                  } as Data.ContentType<"api::blog-post.blog-post">
+                }
               />
             </div>
           </Variant>
@@ -2306,6 +2321,59 @@ export default function ComponentLibraryPage() {
         <div className="space-y-6">
           <Variant label="Default (fetches all CMS comparisons)">
             <StrapiComparatorGrid />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="callout" title="Callout">
+        <div className="space-y-6">
+          {(["note", "tip", "warning", "info"] as const).map((variant, idx) => (
+            <Variant key={variant} label={`Variant: ${variant}`}>
+              <StrapiCallout
+                component={
+                  {
+                    id: 100 + idx,
+                    __component: "blog.callout",
+                    variant,
+                    title: `${variant[0]?.toUpperCase()}${variant.slice(1)} heading`,
+                    content:
+                      "This is the **callout body**. It supports full Markdown — lists, [links](https://strapi.io), and `inline code`.",
+                  } as Data.Component<"blog.callout">
+                }
+              />
+            </Variant>
+          ))}
+
+          <Variant label="No title (body only)">
+            <StrapiCallout
+              component={
+                {
+                  id: 110,
+                  __component: "blog.callout",
+                  variant: "note",
+                  content:
+                    "Callouts can render without a title when you just need a short aside.",
+                } as Data.Component<"blog.callout">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="disclaimer" title="Disclaimer">
+        <div className="space-y-6">
+          <Variant label="Default">
+            <StrapiDisclaimer
+              component={
+                {
+                  id: 200,
+                  __component: "sections.disclaimer",
+                  title: "Disclaimer",
+                  content:
+                    "This page contains **affiliate content**. Pricing and features described here may change — verify on the vendor site before purchasing.",
+                } as Data.Component<"sections.disclaimer">
+              }
+            />
           </Variant>
         </div>
       </Section>

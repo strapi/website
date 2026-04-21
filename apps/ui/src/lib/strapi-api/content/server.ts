@@ -266,7 +266,7 @@ export async function fetchRelatedBlogPosts({
   const notInSlugs = Array.from(new Set([currentSlug, ...excludeSlugs]))
 
   try {
-    return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
+    const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
       sort: { publishedAt: "desc" },
@@ -279,6 +279,8 @@ export async function fetchRelatedBlogPosts({
       pagination: { page: 1, pageSize: limit },
       populate: blogListPopulate,
     })
+
+    return { ...res, data: (res.data ?? []).slice(0, limit) }
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching related blog posts for '${currentSlug}' locale '${locale}'`,
@@ -304,7 +306,7 @@ export async function fetchLatestBlogPosts({
   const notInSlugs = Array.from(new Set(excludeSlugs))
 
   try {
-    return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
+    const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
       sort: { publishedAt: "desc" },
@@ -314,6 +316,8 @@ export async function fetchLatestBlogPosts({
       pagination: { page: 1, pageSize: limit },
       populate: blogListPopulate,
     })
+
+    return { ...res, data: (res.data ?? []).slice(0, limit) }
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching latest blog posts for locale '${locale}'`,

@@ -2,8 +2,10 @@ import type { TransformContext, TransformFn } from "./base.ts"
 import { absoluteUrl, extractMediaUrl } from "./convert.ts"
 
 const META_TITLE_MAX = 60
+const META_DESCRIPTION_MIN = 50
 const META_DESCRIPTION_MAX = 160
-const OG_SITE_NAME = "Strapi"
+const META_SOCIAL_TITLE_MAX = 60
+const META_SOCIAL_DESCRIPTION_MAX = 65
 
 type SocialEntry = {
   socialNetwork?: string
@@ -14,6 +16,47 @@ type SocialEntry = {
 
 function truncate(value: string, max: number): string {
   return value.length > max ? value.slice(0, max - 3) + "..." : value
+}
+
+function buildFallbackDescription(title: string): string {
+  const topic = title.trim()
+
+  if (topic) {
+    return `Learn more about ${topic} with tutorials, guides, and resources on the Strapi blog.`
+  }
+
+  return "Learn more with tutorials, guides, and resources on the Strapi blog."
+}
+
+/**
+ * Pad a string up to `min` chars by appending additional snippets. Used to
+ * satisfy the target schema's metaDescription minLength while respecting max.
+ */
+function ensureMinLength(
+  value: string,
+  min: number,
+  max: number,
+  additions: string[],
+  fallbackTitle: string
+): string {
+  let out = value.trim()
+  if (out.length >= min) return out
+
+  for (const add of additions) {
+    if (!add) continue
+
+    const extra = add.trim()
+    if (!extra || out.includes(extra)) continue
+
+    out = out ? `${out} — ${extra}` : extra
+    if (out.length >= min) break
+  }
+
+  if (out.length < min) {
+    out = buildFallbackDescription(fallbackTitle)
+  }
+
+  return truncate(out, max)
 }
 
 function stripMarkdown(value: string): string {
@@ -88,41 +131,41 @@ async function resolveMediaId(
 
 interface TransformSeoOptions {
   /**
-   * Default `og.type` value when the component lacks one. Blog posts pass
-   * "article"; generic pages/cms entities stay on the implicit "website".
+   * Retained for backwards compatibility — the plugin-canonical shared.seo
+   * schema no longer exposes an og.type field.
    */
   defaultOgType?: "article" | "website"
 }
 
 /**
- * Transform v4 shared.seo component to v5 seo-utilities.seo format.
+ * Transform v4 shared.seo to the plugin-canonical v5 shared.seo shape.
  *
  * v4: { metaTitle, metaDescription, metaImage, metaSocial[],
  *       keywords, structuredData, canonicalURL, metaRobots, ... }
- * v5: { metaTitle, metaDescription, metaImage, keywords, canonicalUrl,
- *       structuredData, og: { title, description, type, image, siteName, ... },
- *       twitter: { title, description, images, ... } }
+ * v5: { metaTitle, metaDescription, metaImage, keywords, metaRobots,
+ *       canonicalURL, structuredData,
+ *       metaSocial: [{ socialNetwork, title, description, image }] }
  *
  * Fallbacks sourced from the parent entity (`title`, `description`, `content`)
  * guarantee SEO fields are never empty after migration. Media references are
  * re-uploaded to v5 so IDs are valid on the target.
  */
 export function createTransformSeo(
-  options: TransformSeoOptions = {}
+  _options: TransformSeoOptions = {}
 ): TransformFn {
-  const defaultOgType = options.defaultOgType ?? "website"
-
   return async (entity, ctx) => {
     const seo = entity["seo"] as Record<string, unknown> | undefined | null
 
     const entityTitle =
-      typeof entity["title"] === "string" ? (entity["title"] as string) : ""
+      (typeof entity["title"] === "string" && (entity["title"] as string)) ||
+      (typeof entity["name"] === "string" && (entity["name"] as string)) ||
+      ""
     const entityDescription =
       typeof entity["description"] === "string"
         ? (entity["description"] as string)
         : ""
-    const derivedDescription =
-      entityDescription || firstParagraph(entity["content"]) || ""
+    const firstPara = firstParagraph(entity["content"]) || ""
+    const derivedDescription = entityDescription || firstPara
 
     const src: Record<string, unknown> = seo ? { ...seo } : {}
     delete src["__component"]
@@ -132,9 +175,15 @@ export function createTransformSeo(
       (src["metaTitle"] as string | undefined) || entityTitle,
       META_TITLE_MAX
     )
-    const metaDescription = truncate(
-      (src["metaDescription"] as string | undefined) || derivedDescription,
-      META_DESCRIPTION_MAX
+    const metaDescription = ensureMinLength(
+      truncate(
+        (src["metaDescription"] as string | undefined) || derivedDescription,
+        META_DESCRIPTION_MAX
+      ),
+      META_DESCRIPTION_MIN,
+      META_DESCRIPTION_MAX,
+      [entityDescription, firstPara, entityTitle],
+      entityTitle
     )
 
     const transformed: Record<string, unknown> = {}
@@ -142,9 +191,10 @@ export function createTransformSeo(
     if (metaTitle) transformed["metaTitle"] = metaTitle
     if (metaDescription) transformed["metaDescription"] = metaDescription
     if (src["keywords"]) transformed["keywords"] = src["keywords"]
+    if (src["metaRobots"]) transformed["metaRobots"] = src["metaRobots"]
     if (src["structuredData"])
       transformed["structuredData"] = src["structuredData"]
-    if (src["canonicalURL"]) transformed["canonicalUrl"] = src["canonicalURL"]
+    if (src["canonicalURL"]) transformed["canonicalURL"] = src["canonicalURL"]
 
     const metaImageId = await resolveMediaId(src["metaImage"], ctx)
     if (metaImageId != null) transformed["metaImage"] = metaImageId
@@ -154,35 +204,26 @@ export function createTransformSeo(
     const fbImageId = fb ? await resolveMediaId(fb.image, ctx) : null
     const twImageId = tw ? await resolveMediaId(tw.image, ctx) : null
 
-    const og: Record<string, unknown> = {
-      type: defaultOgType,
-      siteName: OG_SITE_NAME,
-    }
+    const metaSocial = [
+      buildMetaSocial(
+        "Facebook",
+        fb,
+        fbImageId,
+        metaImageId,
+        metaTitle,
+        metaDescription
+      ),
+      buildMetaSocial(
+        "Twitter",
+        tw,
+        twImageId,
+        metaImageId,
+        metaTitle,
+        metaDescription
+      ),
+    ].filter((entry): entry is Record<string, unknown> => entry != null)
 
-    if (fb?.title) og["title"] = fb.title
-    if (fb?.description) og["description"] = fb.description
-    if (fbImageId != null) og["image"] = fbImageId
-
-    if (og["image"] == null && metaImageId != null) og["image"] = metaImageId
-    if (!og["title"] && metaTitle) og["title"] = metaTitle
-    if (!og["description"] && metaDescription)
-      og["description"] = metaDescription
-
-    transformed["og"] = og
-
-    const twitter: Record<string, unknown> = {}
-    if (tw?.title) twitter["title"] = tw.title
-    if (tw?.description) twitter["description"] = tw.description
-    if (twImageId != null) twitter["images"] = [twImageId]
-
-    if (!twitter["title"] && metaTitle) twitter["title"] = metaTitle
-    if (!twitter["description"] && metaDescription)
-      twitter["description"] = metaDescription
-    if (twitter["images"] == null && metaImageId != null) {
-      twitter["images"] = [metaImageId]
-    }
-
-    transformed["twitter"] = twitter
+    if (metaSocial.length > 0) transformed["metaSocial"] = metaSocial
 
     return {
       ...entity,
@@ -191,10 +232,38 @@ export function createTransformSeo(
   }
 }
 
-/** Generic SEO transform — defaults og.type to "website". */
+function buildMetaSocial(
+  socialNetwork: "Facebook" | "Twitter",
+  src: SocialEntry | undefined,
+  srcImageId: number | null,
+  fallbackImageId: number | null,
+  fallbackTitle: string,
+  fallbackDescription: string
+): Record<string, unknown> | null {
+  const title = truncate(src?.title || fallbackTitle, META_SOCIAL_TITLE_MAX)
+  const description = truncate(
+    src?.description || fallbackDescription,
+    META_SOCIAL_DESCRIPTION_MAX
+  )
+
+  if (!title || !description) return null
+
+  const entry: Record<string, unknown> = {
+    socialNetwork,
+    title,
+    description,
+  }
+
+  const imageId = srcImageId ?? fallbackImageId
+  if (imageId != null) entry["image"] = imageId
+
+  return entry
+}
+
+/** Generic SEO transform. */
 export const transformSeo: TransformFn = createTransformSeo()
 
-/** Blog-post SEO transform — forces og.type="article". */
+/** Blog-post SEO transform (option retained for API stability). */
 export const transformBlogSeo: TransformFn = createTransformSeo({
   defaultOgType: "article",
 })

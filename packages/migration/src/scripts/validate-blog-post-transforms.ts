@@ -17,6 +17,7 @@ import { SourceClient } from "../clients/source.ts"
 import { TargetClient } from "../clients/target.ts"
 import { ENTITY_CONFIGS } from "../config/entities.ts"
 import { loadEnv } from "../config/env.ts"
+import { prewarmIdMap } from "../pipeline/prewarm.ts"
 import { runTransforms } from "../pipeline/transform.ts"
 import { IdMap } from "../state/id-map.ts"
 import { MediaCache } from "../state/media-cache.ts"
@@ -38,10 +39,18 @@ async function main() {
   const logger = createLogger(false)
 
   const idMap = new IdMap()
-  await idMap.load()
-
   const mediaCache = new MediaCache()
   await mediaCache.load()
+
+  const blogPostConfig = ENTITY_CONFIGS["blog-posts"]
+  if (blogPostConfig?.dependencies?.length) {
+    const depCfgs = blogPostConfig.dependencies.flatMap((name) => {
+      const cfg = ENTITY_CONFIGS[name]
+
+      return cfg ? [cfg] : []
+    })
+    await prewarmIdMap({ env, idMap, logger }, depCfgs)
+  }
 
   const { COMPONENT_MAP } = await import("../config/components.ts")
 

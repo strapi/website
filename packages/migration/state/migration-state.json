@@ -2,11 +2,36 @@
   "entities": {
     "post-categories": {
       "total": 10,
-      "migrated": 0,
-      "skipped": 10,
-      "failed": 0,
+      "migrated": 6,
+      "skipped": 0,
+      "failed": 4,
       "lastProcessedId": 26,
-      "errors": []
+      "errors": [
+        {
+          "v4Id": 22,
+          "slug": "features",
+          "error": "Target API error: 400 Bad Request - {\"data\":null,\"error\":{\"status\":400,\"name\":\"ValidationError\",\"message\":\"2 errors occurred\",\"details\":{\"errors\":[{\"path\":[\"seo\",\"metaTitle\"],\"message\":\"seo.metaTitle must be a `string` type, but the final value was: `null`.\",\"name\":\"ValidationError\",\"value\":null},{\"path\":[\"seo\",\"metaDescription\"],\"message\":\"seo.metaDescription must be at least 50 characters\",\"name\":\"ValidationError\",\"value\":\" — Learn more on the Strapi blog.\"}]}}}",
+          "timestamp": "2026-04-21T11:46:26.012Z"
+        },
+        {
+          "v4Id": 24,
+          "slug": "use-cases",
+          "error": "Target API error: 400 Bad Request - {\"data\":null,\"error\":{\"status\":400,\"name\":\"ValidationError\",\"message\":\"2 errors occurred\",\"details\":{\"errors\":[{\"path\":[\"seo\",\"metaTitle\"],\"message\":\"seo.metaTitle must be a `string` type, but the final value was: `null`.\",\"name\":\"ValidationError\",\"value\":null},{\"path\":[\"seo\",\"metaDescription\"],\"message\":\"seo.metaDescription must be at least 50 characters\",\"name\":\"ValidationError\",\"value\":\" — Learn more on the Strapi blog.\"}]}}}",
+          "timestamp": "2026-04-21T11:46:29.631Z"
+        },
+        {
+          "v4Id": 25,
+          "slug": "engineering",
+          "error": "Target API error: 400 Bad Request - {\"data\":null,\"error\":{\"status\":400,\"name\":\"ValidationError\",\"message\":\"2 errors occurred\",\"details\":{\"errors\":[{\"path\":[\"seo\",\"metaTitle\"],\"message\":\"seo.metaTitle must be a `string` type, but the final value was: `null`.\",\"name\":\"ValidationError\",\"value\":null},{\"path\":[\"seo\",\"metaDescription\"],\"message\":\"seo.metaDescription must be at least 50 characters\",\"name\":\"ValidationError\",\"value\":\" — Learn more on the Strapi blog.\"}]}}}",
+          "timestamp": "2026-04-21T11:46:30.521Z"
+        },
+        {
+          "v4Id": 26,
+          "slug": "web-development",
+          "error": "Target API error: 400 Bad Request - {\"data\":null,\"error\":{\"status\":400,\"name\":\"ValidationError\",\"message\":\"2 errors occurred\",\"details\":{\"errors\":[{\"path\":[\"seo\",\"metaTitle\"],\"message\":\"seo.metaTitle must be a `string` type, but the final value was: `null`.\",\"name\":\"ValidationError\",\"value\":null},{\"path\":[\"seo\",\"metaDescription\"],\"message\":\"seo.metaDescription must be at least 50 characters\",\"name\":\"ValidationError\",\"value\":\" — Learn more on the Strapi blog.\"}]}}}",
+          "timestamp": "2026-04-21T11:46:31.371Z"
+        }
+      ]
     },
     "post-sub-categories": {
       "total": 24,
@@ -18,34 +43,49 @@
     },
     "post-tags": {
       "total": 105,
-      "migrated": 2,
-      "skipped": 103,
+      "migrated": 105,
+      "skipped": 0,
       "failed": 0,
       "lastProcessedId": 145,
       "errors": []
     },
-    "users": {
-      "total": 281,
-      "migrated": 0,
-      "skipped": 281,
-      "failed": 0,
-      "lastProcessedId": 312,
-      "errors": []
-    },
     "blog-posts": {
-      "total": 4,
-      "migrated": 3,
+      "total": 1203,
+      "migrated": 1199,
       "skipped": 0,
-      "failed": 1,
-      "lastProcessedId": 715,
+      "failed": 4,
+      "lastProcessedId": 1461,
       "errors": [
         {
           "v4Id": 715,
           "error": "Skipping orphan blog post (no title/slug): v4Id=undefined",
-          "timestamp": "2026-04-19T22:15:58.212Z"
+          "timestamp": "2026-04-21T13:14:10.761Z"
+        },
+        {
+          "v4Id": 716,
+          "error": "Skipping orphan blog post (no title/slug): v4Id=undefined",
+          "timestamp": "2026-04-21T13:14:13.323Z"
+        },
+        {
+          "v4Id": 717,
+          "error": "Skipping orphan blog post (no title/slug): v4Id=undefined",
+          "timestamp": "2026-04-21T13:14:15.272Z"
+        },
+        {
+          "v4Id": 964,
+          "error": "Skipping orphan blog post (no title/slug): v4Id=undefined",
+          "timestamp": "2026-04-21T13:39:07.856Z"
         }
       ]
+    },
+    "cms-comparisons": {
+      "total": 145,
+      "migrated": 145,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 186,
+      "errors": []
     }
   },
-  "lastRun": "2026-04-19T22:15:58.216Z"
+  "lastRun": "2026-04-21T15:29:22.761Z"
 }

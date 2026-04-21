@@ -266,7 +266,7 @@ export async function fetchRelatedBlogPosts({
   const notInSlugs = Array.from(new Set([currentSlug, ...excludeSlugs]))
 
   try {
-    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
+    return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
       sort: { publishedAt: "desc" },
@@ -304,7 +304,7 @@ export async function fetchLatestBlogPosts({
   const notInSlugs = Array.from(new Set(excludeSlugs))
 
   try {
-    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
+    return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
       sort: { publishedAt: "desc" },

@@ -13,6 +13,7 @@ import { ENTITY_CONFIGS } from "./config/entities.ts"
 import { loadEnv } from "./config/env.ts"
 import { resolveBlogPostRelations } from "./entities/blog-post.ts"
 import { setPageParents } from "./entities/page.ts"
+import { prewarmIdMap, resolveDependencyUids } from "./pipeline/prewarm.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
@@ -40,6 +41,7 @@ program
   .option("--limit <n>", "Max entities to process", Number.parseInt)
   .option("--force", "Overwrite existing entries (bypass dedup)")
   .option("--no-resume", "Ignore resume state, re-process all entities")
+  .option("--no-prewarm", "Skip prewarming IdMap from live v4+v5 APIs")
   .option("--verbose", "Debug-level logging")
   .action(async (entity: string, opts) => {
     const config = ENTITY_CONFIGS[entity]
@@ -57,7 +59,6 @@ program
     const env = loadEnv()
     const logger = createLogger(opts.verbose)
     const idMap = new IdMap()
-    await idMap.load()
 
     const ctx = createTransformContext({
       env,
@@ -74,6 +75,7 @@ program
       opts.dryRun && "dry-run",
       opts.force && "force",
       opts.resume === false && "no-resume",
+      opts.prewarm === false && "no-prewarm",
       opts.slug && `slug=${opts.slug}`,
       opts.limit && `limit=${opts.limit}`,
     ].filter(Boolean)
@@ -81,6 +83,25 @@ program
     logger.header(
       `Migrating: ${entity}${flags.length > 0 ? ` (${flags.join(", ")})` : ""}`
     )
+
+    if (opts.prewarm !== false && config.dependencies?.length) {
+      const depUids = resolveDependencyUids(ENTITY_CONFIGS, config.dependencies)
+      logger.info(
+        chalk.gray(
+          `Prewarming IdMap for dependencies: ${config.dependencies.join(", ")}`
+        )
+      )
+      const warmed = await prewarmIdMap(
+        { env, idMap, logger },
+        Object.values(ENTITY_CONFIGS),
+        { only: depUids }
+      )
+      logger.info(
+        chalk.gray(
+          `IdMap prewarmed: ${warmed.prewarmed} types · ${warmed.matched} matched · ${warmed.unmatched} unmatched`
+        )
+      )
+    }
 
     const result = await runEntityMigration(config, ctx, entity)
     printEntitySummary(entity, result, result.stats, logger)
@@ -91,8 +112,6 @@ program
       opts.dryRun ?? false
     )
     logger.info(chalk.gray(`Report: ${reportPath}`))
-
-    await idMap.save()
 
     if (result.failed > 0) {
       throw new Error(`Migration failed for ${entity}`)
@@ -110,12 +129,12 @@ program
   )
   .option("--force", "Overwrite existing entries (bypass dedup)")
   .option("--no-resume", "Ignore resume state, re-process all entities")
+  .option("--no-prewarm", "Skip prewarming IdMap from live v4+v5 APIs")
   .option("--verbose", "Debug-level logging")
   .action(async (opts) => {
     const env = loadEnv()
     const logger = createLogger(opts.verbose)
     const idMap = new IdMap()
-    await idMap.load()
 
     const excludeSet = new Set(
       opts.exclude
@@ -159,6 +178,23 @@ program
         noResume: opts.resume === false,
       })
 
+      if (opts.prewarm !== false && config.dependencies?.length) {
+        const depUids = resolveDependencyUids(
+          ENTITY_CONFIGS,
+          config.dependencies
+        )
+        logger.info(
+          chalk.gray(
+            `Prewarming IdMap for ${name} deps: ${config.dependencies.join(", ")}`
+          )
+        )
+        await prewarmIdMap(
+          { env, idMap, logger },
+          Object.values(ENTITY_CONFIGS),
+          { only: depUids }
+        )
+      }
+
       logger.header(`Migrating: ${name}`)
 
       const result = await runEntityMigration(config, ctx, name)
@@ -195,8 +231,6 @@ program
 
     const reportPath = await writeReport("all", allStats, opts.dryRun ?? false)
     logger.info(chalk.gray(`Report: ${reportPath}`))
-
-    await idMap.save()
   })
 
 program
@@ -205,12 +239,12 @@ program
     "Set parent relations for migrated pages (run after all pages are migrated)"
   )
   .option("--dry-run", "Log what would be updated without making changes")
+  .option("--no-prewarm", "Skip prewarming IdMap from live v4+v5 APIs")
   .option("--verbose", "Debug-level logging")
   .action(async (opts) => {
     const env = loadEnv()
     const logger = createLogger(opts.verbose)
     const idMap = new IdMap()
-    await idMap.load()
     const mediaCache = new MediaCache()
     await mediaCache.load()
 
@@ -226,6 +260,16 @@ program
       targetClient: new TargetClient({ env, logger }),
       componentMap: COMPONENT_MAP,
       mediaCache,
+    }
+
+    if (opts.prewarm !== false) {
+      const pageConfigs = Object.entries(ENTITY_CONFIGS)
+        .filter(([name]) => name.startsWith("page-") || name === "pages")
+        .map(([, cfg]) => cfg)
+      if (pageConfigs.length > 0) {
+        logger.info(chalk.gray(`Prewarming IdMap for page content types`))
+        await prewarmIdMap({ env, idMap, logger }, pageConfigs)
+      }
     }
 
     logger.header("Setting page parent relations")
@@ -252,12 +296,12 @@ program
     "Resolve deferred blog-post → blog-post relations in blog.related-posts sections (run after all blog-posts are migrated)"
   )
   .option("--dry-run", "Log what would be updated without making changes")
+  .option("--no-prewarm", "Skip prewarming IdMap from live v4+v5 APIs")
   .option("--verbose", "Debug-level logging")
   .action(async (opts) => {
     const env = loadEnv()
     const logger = createLogger(opts.verbose)
     const idMap = new IdMap()
-    await idMap.load()
     const mediaCache = new MediaCache()
     await mediaCache.load()
     const pendingRelations = new PendingRelations()
@@ -276,6 +320,14 @@ program
       componentMap: COMPONENT_MAP,
       mediaCache,
       pendingRelations,
+    }
+
+    if (opts.prewarm !== false) {
+      const blogPostConfig = ENTITY_CONFIGS["blog-posts"]
+      if (blogPostConfig) {
+        logger.info(chalk.gray(`Prewarming IdMap for blog-posts`))
+        await prewarmIdMap({ env, idMap, logger }, [blogPostConfig])
+      }
     }
 
     logger.header("Resolving blog-post related-posts relations")
@@ -315,13 +367,13 @@ program
   .action(async () => {
     const state = new MigrationState()
     await state.reset()
-    const idMap = new IdMap()
-    await idMap.reset()
     const mediaCache = new MediaCache()
     await mediaCache.reset()
     const pendingRelations = new PendingRelations()
     await pendingRelations.reset()
-    console.log("Migration state cleared.")
+    console.log(
+      "Migration state cleared. (IdMap is in-memory now — no file to reset.)"
+    )
   })
 
 program

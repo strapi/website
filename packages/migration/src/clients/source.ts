@@ -59,6 +59,7 @@ export class SourceClient {
         pagination: { page, pageSize },
         publicationState: "preview", // include drafts
         locale: "en",
+        sort: "id:asc",
       }
 
       if (opts?.slugFilter) {

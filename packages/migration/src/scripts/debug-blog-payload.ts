@@ -5,6 +5,7 @@ import { TargetClient } from "../clients/target.ts"
 import { COMPONENT_MAP } from "../config/components.ts"
 import { ENTITY_CONFIGS } from "../config/entities.ts"
 import { loadEnv } from "../config/env.ts"
+import { prewarmIdMap } from "../pipeline/prewarm.ts"
 import { runTransforms } from "../pipeline/transform.ts"
 import { IdMap } from "../state/id-map.ts"
 import { MediaCache } from "../state/media-cache.ts"
@@ -17,11 +18,21 @@ const v4Id = Number(process.argv[2] ?? 556)
 const env = loadEnv()
 const logger = createLogger(false)
 const idMap = new IdMap()
-await idMap.load()
 const mediaCache = new MediaCache()
 await mediaCache.load()
 const pendingRelations = new PendingRelations()
 await pendingRelations.load()
+
+// Prewarm blog-post deps so relation lookups in the transform work.
+const blogPostConfig = ENTITY_CONFIGS["blog-posts"]
+if (blogPostConfig?.dependencies?.length) {
+  const depCfgs = blogPostConfig.dependencies.flatMap((name) => {
+    const cfg = ENTITY_CONFIGS[name]
+
+    return cfg ? [cfg] : []
+  })
+  await prewarmIdMap({ env, idMap, logger }, depCfgs)
+}
 
 const ctx = {
   ...createTransformContext({ env, idMap, logger, dryRun: true, force: false }),

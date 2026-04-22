@@ -14,11 +14,10 @@ import {
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
 import { routing } from "@/lib/navigation"
-import { PAGE_REVALIDATE_SECONDS } from "@/lib/revalidate"
 import { fetchBlog, fetchBlogPostsList } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
-export const revalidate = PAGE_REVALIDATE_SECONDS
+export const revalidate = 14400
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>

@@ -6,14 +6,13 @@ import { StrapiPageView } from "@/components/layouts/StrapiPageView"
 import { createFallbackPath, debugStaticParams } from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
 import { getMetadataFromStrapi } from "@/lib/metadata"
-import { PAGE_REVALIDATE_SECONDS } from "@/lib/revalidate"
 import { fetchAllPages } from "@/lib/strapi-api/content/server"
 
 // Static/ISR page — no access to headers(), cookies(), or searchParams.
 // Use /[locale]/dynamic/[[...rest]] for pages that need runtime context.
 export const dynamic = "force-static"
 
-export const revalidate = PAGE_REVALIDATE_SECONDS
+export const revalidate = 14400
 
 // Enable ISR generation for pages not returned by generateStaticParams
 // First request will SSR the page, then cache it for future requests

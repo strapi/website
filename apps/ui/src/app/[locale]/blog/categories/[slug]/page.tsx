@@ -15,7 +15,6 @@ import {
 import { Markdown } from "@/components/elementary/markdown/Markdown"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
-import { PAGE_REVALIDATE_SECONDS } from "@/lib/revalidate"
 import {
   fetchBlog,
   fetchBlogPostsList,
@@ -35,7 +34,7 @@ type CategoryWithExtras = {
 }
 
 export const dynamic = "force-static"
-export const revalidate = PAGE_REVALIDATE_SECONDS
+export const revalidate = 14400
 
 export async function generateStaticParams({
   params: { locale },

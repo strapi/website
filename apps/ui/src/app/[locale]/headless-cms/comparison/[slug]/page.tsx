@@ -8,7 +8,6 @@ import { getCmsComparisonMetadata } from "@/lib/metadata/cms-comparison"
 import { fetchAllCmsComparisons } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
-export const revalidate = 300
 
 export async function generateStaticParams({
   params: { locale },
@@ -57,3 +56,5 @@ export default function CmsComparisonDetailPage(
 
   return <CmsComparisonView params={params} />
 }
+
+export { PAGE_REVALIDATE_SECONDS as revalidate } from "@/lib/revalidate"

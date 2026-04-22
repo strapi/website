@@ -44,6 +44,8 @@ export const env = createEnv({
     BASIC_AUTH_ENABLED: optionalZodBoolean(),
     BASIC_AUTH_USERNAME: z.string().optional(),
     BASIC_AUTH_PASSWORD: z.string().optional(),
+
+    DEFAULT_REVALIDATE_TIME: z.coerce.number().int().positive().optional(),
   },
 
   /*
@@ -106,6 +108,8 @@ export const env = createEnv({
     BASIC_AUTH_ENABLED: process.env.BASIC_AUTH_ENABLED,
     BASIC_AUTH_USERNAME: process.env.BASIC_AUTH_USERNAME,
     BASIC_AUTH_PASSWORD: process.env.BASIC_AUTH_PASSWORD,
+
+    DEFAULT_REVALIDATE_TIME: process.env.DEFAULT_REVALIDATE_TIME,
 
     // client
     // @dominik-juriga - find out if these are specific per environment

@@ -24,7 +24,6 @@ export default [
         "error",
         { onlyIfContainsSeparator: true },
       ],
-      "unicorn/prefer-export-from": ["error", { ignoreUsedVariables: true }],
       "unicorn/prefer-module": "off",
       "unicorn/switch-case-braces": ["error", "avoid"],
       "unicorn/prefer-object-from-entries": "warn",
@@ -46,6 +45,7 @@ export default [
 
       // Style rules turned off due to prettier
       "unicorn/empty-brace-spaces": "off",
+      "unicorn/prefer-export-from": "off",
 
       // This causes issues with some frameworks but is really rare to use
       "unicorn/no-array-method-this-argument": "off",

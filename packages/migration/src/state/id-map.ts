@@ -1,11 +1,14 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises"
-import path from "node:path"
-
-const STATE_DIR = path.join(import.meta.dirname, "../../state")
-const ID_MAP_FILE = path.join(STATE_DIR, "id-map.json")
-
 type IdMapData = Record<string, Record<number, string>>
 
+/**
+ * In-memory mapping of (v4 contentType, v4 id) → v5 documentId.
+ *
+ * Populated at run start from live v4 + v5 APIs by `prewarmIdMap`, and kept in
+ * sync during the run via `set()` calls in the pipeline. Not persisted to disk:
+ * the prior JSON cache was a third source of truth that silently drifted from
+ * reality (wipes, manual v5 edits, resume skips) and caused unresolved-relation
+ * bugs. API is authoritative now.
+ */
 export class IdMap {
   private data: IdMapData = {}
 
@@ -21,22 +24,7 @@ export class IdMap {
     return this.data[contentType]?.[v4Id]
   }
 
-  async load(): Promise<void> {
-    try {
-      const raw = await readFile(ID_MAP_FILE, "utf8")
-      this.data = JSON.parse(raw)
-    } catch {
-      this.data = {}
-    }
-  }
-
-  async save(): Promise<void> {
-    await mkdir(STATE_DIR, { recursive: true })
-    await writeFile(ID_MAP_FILE, JSON.stringify(this.data, null, 2))
-  }
-
-  async reset(): Promise<void> {
+  clear(): void {
     this.data = {}
-    await this.save()
   }
 }

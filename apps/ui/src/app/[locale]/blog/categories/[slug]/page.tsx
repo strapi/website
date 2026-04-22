@@ -98,7 +98,7 @@ export default function BlogCategoryPage(
     .filter((s): s is string => typeof s === "string" && s.length > 0)
   const allSlugs: string[] = [slug, ...childSlugs]
 
-  const categoryPosts = use(fetchBlogPostsList(locale, allSlugs))
+  const categoryPosts = use(fetchBlogPostsList(locale, allSlugs, 20))
 
   const hubspotForm = getBlogNewsletterHubspot(blog)
   const featuredPost: BlogPost | null = categoryPosts?.data[0] ?? null

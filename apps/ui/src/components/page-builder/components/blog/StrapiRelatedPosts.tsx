@@ -21,22 +21,26 @@ export async function StrapiRelatedPosts({
   readonly locale?: Locale
 }) {
   const t = await getTranslations("blog")
-  const curated = component.blogPosts ?? []
+  const curated = (component.blogPosts ?? []).slice(0, DISPLAY_LIMIT)
   const category = component.category
 
-  const needTopUp = curated.length < DISPLAY_LIMIT
-  const canTopUp = needTopUp && !!currentSlug && !!locale && !!category?.slug
+  const gap = DISPLAY_LIMIT - curated.length
+  const canTopUp = gap > 0 && !!currentSlug && !!locale && !!category?.slug
 
   const topUp = canTopUp
-    ? ((
-        await fetchRelatedBlogPosts({
-          currentSlug,
-          categorySlug: category.slug,
-          locale,
-          limit: DISPLAY_LIMIT - curated.length,
-          excludeSlugs: curated.map((p) => p.slug).filter(Boolean) as string[],
-        })
-      ).data ?? [])
+    ? (
+        (
+          await fetchRelatedBlogPosts({
+            currentSlug,
+            categorySlug: category.slug,
+            locale,
+            limit: gap,
+            excludeSlugs: curated
+              .map((p) => p.slug)
+              .filter(Boolean) as string[],
+          })
+        ).data ?? []
+      ).slice(0, gap)
     : []
 
   const blogPosts = [...curated, ...topUp].slice(0, DISPLAY_LIMIT)

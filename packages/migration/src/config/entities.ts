@@ -479,6 +479,11 @@ export interface EntityMigrationConfig {
   singleType?: boolean
   /** Whether the v5 target is a single type (PUT without documentId) */
   targetSingleType?: boolean
+  /**
+   * Names of upstream ENTITY_CONFIGS keys whose IdMap must be populated before
+   * this entity's transforms run. Prewarmed from live v4 + v5 APIs at run start.
+   */
+  dependencies?: readonly string[]
   /** Custom extract function (overrides default fetchAll) */
   customExtract?: (ctx: TransformContext) => Promise<V4Entity[]>
   /** Custom fetchOne function (overrides default fetchOne per entity) */
@@ -559,6 +564,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
   },
 
   cities: {
+    dependencies: ["countries"],
     sourceEndpoint: "cities",
     sourcePopulate: {
       country: { populate: "*" },
@@ -587,6 +593,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
   // ═════════════════════════════════════════
 
   users: {
+    dependencies: ["cities"],
     sourceEndpoint: "users",
     sourcePopulate: "*",
     targetEndpoint: "users",
@@ -896,6 +903,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
   // self-referencing parent/children relation on post-category. This preserves
   // the old taxonomy hierarchy without introducing a separate content type.
   "post-sub-categories": {
+    dependencies: ["post-categories"],
     sourceEndpoint: "post-sub-categories",
     sourcePopulate: {
       post_category: { populate: "*" },
@@ -1257,6 +1265,12 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
   },
 
   "blog-posts": {
+    dependencies: [
+      "users",
+      "post-categories",
+      "post-sub-categories",
+      "post-tags",
+    ],
     sourceEndpoint: "blog-posts",
     sourcePopulate: {
       image: { populate: "*" },
@@ -1282,7 +1296,6 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "_v4Id",
         "createdAt",
         "updatedAt",
-        "publishedAt",
         "locale",
         "settings",
         // v4-only fields without a v5 equivalent

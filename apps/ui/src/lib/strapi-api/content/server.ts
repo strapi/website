@@ -140,7 +140,8 @@ const blogListPopulate = {
 
 export async function fetchBlogPostsList(
   locale: Locale,
-  categorySlug?: string | readonly string[]
+  categorySlug?: string | readonly string[],
+  limit?: number
 ) {
   const dm = await draftMode()
 
@@ -150,16 +151,28 @@ export async function fetchBlogPostsList(
       ? [categorySlug as string]
       : null
 
+  const filters =
+    slugs && slugs.length > 0
+      ? { filters: { category: { slug: { $in: slugs } } } }
+      : {}
+
   try {
+    if (typeof limit === "number") {
+      return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        sort: { publishedAt: "desc" },
+        ...filters,
+        populate: blogListPopulate,
+        pagination: { page: 1, pageSize: limit },
+      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1])
+    }
+
     return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
       locale,
       status: dm.isEnabled ? "draft" : "published",
       sort: { publishedAt: "desc" },
-      ...(slugs && slugs.length > 0
-        ? {
-            filters: { category: { slug: { $in: slugs } } },
-          }
-        : {}),
+      ...filters,
       populate: blogListPopulate,
     })
   } catch (e: unknown) {
@@ -266,7 +279,7 @@ export async function fetchRelatedBlogPosts({
   const notInSlugs = Array.from(new Set([currentSlug, ...excludeSlugs]))
 
   try {
-    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
+    const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
       sort: { publishedAt: "desc" },
@@ -279,6 +292,8 @@ export async function fetchRelatedBlogPosts({
       pagination: { page: 1, pageSize: limit },
       populate: blogListPopulate,
     })
+
+    return { ...res, data: (res.data ?? []).slice(0, limit) }
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching related blog posts for '${currentSlug}' locale '${locale}'`,
@@ -304,7 +319,7 @@ export async function fetchLatestBlogPosts({
   const notInSlugs = Array.from(new Set(excludeSlugs))
 
   try {
-    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
+    const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
       sort: { publishedAt: "desc" },
@@ -314,6 +329,8 @@ export async function fetchLatestBlogPosts({
       pagination: { page: 1, pageSize: limit },
       populate: blogListPopulate,
     })
+
+    return { ...res, data: (res.data ?? []).slice(0, limit) }
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching latest blog posts for locale '${locale}'`,

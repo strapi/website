@@ -38,6 +38,11 @@
       "component": "media.image",
       "repeatable": false
     },
+    "timelineImage": {
+      "type": "component",
+      "component": "media.image",
+      "repeatable": false
+    },
     "author": {
       "type": "relation",
       "relation": "manyToOne",
@@ -65,6 +70,9 @@
       "component": "shared.seo",
       "repeatable": false
     },
+    "originalPublishedAt": {
+      "type": "datetime"
+    },
     "content": {
       "type": "richtext"
     },
@@ -86,7 +94,8 @@
         "blog.resource-cta",
         "forms.newsletter",
         "forms.hubspot-form",
-        "migration.data-sink"
+        "migration.data-sink",
+        "sections.richtext"
       ]
     }
   }

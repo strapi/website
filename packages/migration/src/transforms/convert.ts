@@ -11,6 +11,20 @@ export function slugify(str: string): string {
     .replaceAll(/^-|-$/g, "")
 }
 
+/**
+ * Normalize a v4 slug to match v5's `uid` regex `/^[a-z0-9-]+$/`.
+ * Used both by the main blog-post migration transform and by the
+ * fix-published-at patch script so they match identically.
+ */
+export function normalizeV5Slug(slug: string): string {
+  return slug
+    .toLowerCase()
+    .replaceAll(".", "-")
+    .replaceAll(/[^a-z0-9-]/g, "")
+    .replaceAll(/-+/g, "-")
+    .replaceAll(/^-|-$/g, "")
+}
+
 /** Ensure entity has a slug field, generating from sourceField if missing */
 export function ensureSlug(sourceField = "name"): TransformFn {
   return (entity) => {

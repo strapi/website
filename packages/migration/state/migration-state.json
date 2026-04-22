@@ -85,7 +85,15 @@
       "failed": 0,
       "lastProcessedId": 186,
       "errors": []
+    },
+    "case-studies": {
+      "total": 35,
+      "migrated": 35,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 36,
+      "errors": []
     }
   },
-  "lastRun": "2026-04-21T15:29:22.761Z"
+  "lastRun": "2026-04-22T20:44:03.536Z"
 }

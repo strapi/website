@@ -41,6 +41,19 @@ export default ({ env }) => {
       },
     },
 
+    // Max dimensions (fit: inside) for responsive variants generated on upload.
+    // Aligned with design-system breakpoints + 2x retina: sm=640, lg=1024, 2xl=1536.
+    // Thumbnail (245×156) is hardcoded in @strapi/upload and not configurable here.
+    upload: {
+      config: {
+        breakpoints: {
+          small: 640,
+          medium: 1024,
+          large: 1536,
+        },
+      },
+    },
+
     sentry: {
       enabled: true,
       config: {

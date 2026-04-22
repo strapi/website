@@ -92,6 +92,16 @@
       "title": "Frequently Asked Questions"
     }
   },
+  "caseStudies": {
+    "title": "User Stories",
+    "sectionLabel": "Case Studies",
+    "intro": "Explore how innovative companies use Strapi to build blazing-fast, fully customizable digital experiences. From startups to global enterprises, these case studies showcase how teams ship faster, rationalize their Application Portfolio with a single Content Hub.",
+    "description": "See how teams ship with Strapi.",
+    "readStory": "Read a story",
+    "searchPlaceholder": "Search user stories...",
+    "filterCategoriesLabel": "Categories",
+    "loadMore": "See more"
+  },
   "blog": {
     "title": "Blog",
     "description": "Tutorials, product updates, and engineering insights.",

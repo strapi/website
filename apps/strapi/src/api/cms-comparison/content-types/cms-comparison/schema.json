@@ -56,7 +56,8 @@
         "sections.feature-card-grid",
         "media.video",
         "forms.hubspot-form",
-        "migration.data-sink"
+        "migration.data-sink",
+        "sections.richtext"
       ]
     }
   }

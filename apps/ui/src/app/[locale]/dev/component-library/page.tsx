@@ -48,9 +48,9 @@ import { StrapiDisclaimer } from "@/components/page-builder/components/sections/
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
-import { StrapiUserStoriesSection } from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
 import {
   Accordion,
   AccordionContent,
@@ -197,7 +197,6 @@ const TOC = [
   { id: "triangle-mask", label: "TriangleMask" },
   { id: "faq-section", label: "FaqSection" },
   { id: "how-it-works", label: "HowItWorks" },
-  { id: "user-stories-section", label: "UserStoriesSection" },
   { id: "brand-logo-grid", label: "BrandLogoGrid" },
   { id: "case-study-card", label: "CaseStudyCard" },
   { id: "image-gallery", label: "ImageGallery" },
@@ -216,6 +215,7 @@ const TOC = [
   { id: "blog-post-header", label: "BlogPostHeader" },
   { id: "callout", label: "Callout" },
   { id: "disclaimer", label: "Disclaimer" },
+  { id: "richtext", label: "Richtext" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -512,11 +512,6 @@ const howItWorksDefaultExample = {
     },
   ],
 } as Data.Component<"sections.how-it-works">
-
-const userStoriesSectionDefaultExample = {
-  label: "User Stories",
-  heading: "See what others are building with Strapi",
-} as Data.Component<"sections.user-stories-section">
 
 const LOGO_SIZE = { width: 90, height: 45 }
 
@@ -1548,19 +1543,6 @@ export default function ComponentLibraryPage() {
       </Section>
 
       {/* ----------------------------------------------------------------- */}
-      {/* UserStoriesSection                                                */}
-      {/* ----------------------------------------------------------------- */}
-      <Section id="user-stories-section" title="UserStoriesSection">
-        <div className="-mx-6 space-y-10">
-          <Variant label="Default (with built-in mock stories)">
-            <StrapiUserStoriesSection
-              component={userStoriesSectionDefaultExample}
-            />
-          </Variant>
-        </div>
-      </Section>
-
-      {/* ----------------------------------------------------------------- */}
       {/* BrandLogoGrid                                                     */}
       {/* ----------------------------------------------------------------- */}
       <Section id="brand-logo-grid" title="BrandLogoGrid">
@@ -2372,6 +2354,36 @@ export default function ComponentLibraryPage() {
                   content:
                     "This page contains **affiliate content**. Pricing and features described here may change — verify on the vendor site before purchasing.",
                 } as Data.Component<"sections.disclaimer">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="richtext" title="Richtext">
+        <div className="space-y-6">
+          <Variant label="Default">
+            <StrapiRichtext
+              component={
+                {
+                  id: 201,
+                  __component: "sections.richtext",
+                  content: `## Freeform content block
+
+Drop **Richtext** anywhere in the page dynamic zone to author long-form content with standard markdown — headings, lists, \`inline code\`, and [links](https://strapi.io).
+
+- Bulleted lists render with consistent spacing
+- Numbered lists, tables, and blockquotes are supported
+- Code fences get syntax highlighting
+
+\`\`\`ts
+export function hello(name: string) {
+  return \`Hello, \${name}!\`
+}
+\`\`\`
+
+> Tip: use this when no dedicated section fits and you just need prose.`,
+                } as Data.Component<"sections.richtext">
               }
             />
           </Variant>

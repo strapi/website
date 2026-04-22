@@ -7,6 +7,7 @@ import {
   type BlogPost,
   calculateReadTime,
   combineAuthors,
+  getBlogPostPublishDate,
   shouldShowUpdatedAt,
 } from "@/lib/blog-utils"
 import { formatDate } from "@/lib/dates"
@@ -23,7 +24,8 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
   const t = useTranslations("blog")
   const readTime = calculateReadTime(post.content)
   const allAuthors = combineAuthors(post.author, post.coauthors ?? undefined)
-  const showUpdated = shouldShowUpdatedAt(post.publishedAt, post.updatedAt)
+  const publishDate = getBlogPostPublishDate(post)
+  const showUpdated = shouldShowUpdatedAt(publishDate, post.updatedAt)
 
   return (
     <div className="flex flex-col gap-4">
@@ -87,13 +89,13 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           <div className="border-strapi-gray-700/50 mt-6 flex flex-wrap items-center gap-3 border-t pt-4 sm:mt-8 sm:gap-4 sm:pt-6">
             <AuthorAvatars authors={allAuthors} />
 
-            {post.publishedAt && (
+            {publishDate && (
               <>
                 {allAuthors.length > 0 && (
                   <span className="text-strapi-gray-400">●</span>
                 )}
                 <span className="text-strapi-gray-400 text-sm">
-                  {formatDate(post.publishedAt, BLOG_DATE_FORMAT)}
+                  {formatDate(publishDate, BLOG_DATE_FORMAT)}
                 </span>
               </>
             )}

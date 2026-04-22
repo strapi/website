@@ -16,6 +16,7 @@ import {
   convertV4BasicImage,
   convertV4LinkText,
   convertV4LinkImage,
+  normalizeV5Slug,
 } from "../transforms/convert.ts"
 import { remapDynamicZone } from "../transforms/dynamic-zone.ts"
 import { dropFields, renameFields } from "../transforms/fields.ts"
@@ -1214,12 +1215,17 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         "_v4Id",
         "createdAt",
         "updatedAt",
-        "publishedAt",
         "locale",
         "settings",
         "sectionLabel"
       ),
-      // Extract logoImage from whiteHero component
+      // Preserve the original publishedAt as originalPublishedAt for sorting;
+      // Strapi will assign a fresh publishedAt when entries are published.
+      renameFields({ publishedAt: "originalPublishedAt" }),
+      // Extract data from whiteHero: logoImage → top-level, intro.{title,text,label}
+      // → top-level title/description/companyName. Hero is rendered by the
+      // Next.js view from these first-class fields (no sections.hero prepend).
+      // topRightImage is dropped.
       ((entity) => {
         const result = { ...entity }
         const whiteHero = result["whiteHero"] as
@@ -1229,6 +1235,38 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
 
         if (whiteHero?.["logoImage"]) {
           result["logoImage"] = whiteHero["logoImage"]
+        }
+
+        const intro = whiteHero?.["intro"] as
+          | Record<string, unknown>
+          | undefined
+
+        if (intro) {
+          if (intro["title"] && !result["title"]) {
+            result["title"] = intro["title"]
+          }
+
+          if (intro["text"] && !result["description"]) {
+            result["description"] = intro["text"]
+          }
+
+          if (intro["label"] && !result["companyName"]) {
+            result["companyName"] = intro["label"]
+          }
+        }
+
+        // Schema marks `title` required. Fall back through the next-best
+        // human-readable fields so v4 rows missing whiteHero.intro.title
+        // still pass validation. Surface the source slug to help editors
+        // patch the row after import.
+        if (!result["title"]) {
+          const fallback =
+            (typeof whiteHero?.["title"] === "string" && whiteHero["title"]) ||
+            (typeof result["companyName"] === "string" &&
+              result["companyName"]) ||
+            (typeof result["slug"] === "string" && result["slug"]) ||
+            "Untitled case study"
+          result["title"] = fallback
         }
 
         return result
@@ -1354,12 +1392,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         }
 
         if (typeof result["slug"] === "string") {
-          result["slug"] = (result["slug"] as string)
-            .toLowerCase()
-            .replaceAll(".", "-")
-            .replaceAll(/[^a-z0-9-]/g, "")
-            .replaceAll(/-+/g, "-")
-            .replaceAll(/^-|-$/g, "")
+          result["slug"] = normalizeV5Slug(result["slug"] as string)
         }
 
         return result
@@ -1422,6 +1455,19 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
           }
         } else {
           delete result["tags"]
+        }
+
+        return result
+      }) as TransformFn,
+      // Preserve v4 publish date in a user-defined field. Strapi v5's system
+      // `publishedAt` is server-managed on publish and ignores client values,
+      // so historical dates land here instead. Frontend reads
+      // `originalPublishedAt ?? publishedAt`.
+      ((entity) => {
+        const result = { ...entity }
+
+        if (typeof result["publishedAt"] === "string") {
+          result["originalPublishedAt"] = result["publishedAt"]
         }
 
         return result

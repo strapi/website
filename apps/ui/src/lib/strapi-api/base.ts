@@ -22,6 +22,7 @@ export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::header.header": "/header",
   "api::cms.cms": "/cmses",
   "api::cms-comparison.cms-comparison": "/cms-comparisons",
+  "api::case-study.case-study": "/case-studies",
 } as const
 
 export default abstract class BaseStrapiClient {

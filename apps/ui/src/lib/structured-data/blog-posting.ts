@@ -1,4 +1,4 @@
-import type { BlogPost } from "@/lib/blog-utils"
+import { type BlogPost, getBlogPostPublishDate } from "@/lib/blog-utils"
 import { formatStrapiMediaUrl } from "@/lib/strapi-helpers"
 
 interface BuildBlogPostingArgs {
@@ -38,6 +38,8 @@ export function buildBlogPostingJsonLd({
     ...coauthorNames.map((name) => ({ "@type": "Person" as const, name })),
   ]
 
+  const datePublished = getBlogPostPublishDate(post)
+
   const rawImageUrl = post.image?.image?.media?.url ?? undefined
   const imageBase = siteUrl ?? url
   const imageUrl = rawImageUrl
@@ -55,8 +57,8 @@ export function buildBlogPostingJsonLd({
     headline: post.title,
     description: post.description ?? undefined,
     image: imageUrl ? [imageUrl] : undefined,
-    datePublished: post.publishedAt ?? undefined,
-    dateModified: post.updatedAt ?? post.publishedAt ?? undefined,
+    datePublished: datePublished ?? undefined,
+    dateModified: post.updatedAt ?? datePublished ?? undefined,
     author: authors.length > 0 ? authors : undefined,
     publisher: siteName
       ? { "@type": "Organization", name: siteName }

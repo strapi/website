@@ -49,7 +49,7 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   const [t, allPosts, blog] = use(
     Promise.all([
       getTranslations({ locale, namespace: "blog" }),
-      fetchBlogPostsList(locale),
+      fetchBlogPostsList(locale, undefined, 20),
       fetchBlog(locale),
     ])
   )

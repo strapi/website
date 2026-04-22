@@ -1,7 +1,7 @@
 import type { Locale } from "next-intl"
 import { getTranslations } from "next-intl/server"
 
-import type { BlogPost } from "@/lib/blog-utils"
+import { type BlogPost, getBlogPostPublishDate } from "@/lib/blog-utils"
 import { getEnvVar } from "@/lib/env-vars"
 import { routing } from "@/lib/navigation"
 import { fetchBlogPostsList } from "@/lib/strapi-api/content/server"
@@ -68,8 +68,9 @@ export async function GET(
           )}" /></p>`
         : ""
       const description = post.description ?? ""
-      const pubDate = post.publishedAt
-        ? new Date(post.publishedAt).toUTCString()
+      const resolvedPublishDate = getBlogPostPublishDate(post)
+      const pubDate = resolvedPublishDate
+        ? new Date(resolvedPublishDate).toUTCString()
         : new Date().toUTCString()
       const categoryTag = post.category?.name
         ? `<category>${escapeXml(post.category.name)}</category>`

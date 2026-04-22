@@ -4,7 +4,10 @@ import type { Locale } from "next-intl"
 import { getEnvVar } from "@/lib/env-vars"
 import { isDevelopment, isProduction } from "@/lib/general-helpers"
 import { createPublicFullPath, routing } from "@/lib/navigation"
-import { fetchAllPages } from "@/lib/strapi-api/content/server"
+import {
+  fetchAllCaseStudies,
+  fetchAllPages,
+} from "@/lib/strapi-api/content/server"
 
 // This should be static or dynamic based on build/runtime needs
 export const dynamic = "force-dynamic"
@@ -62,20 +65,34 @@ async function generateLocalizedSitemap(
    * iterate over all pageable collections, and push each entry into the sitemap array,
    * alongside mapping of changeFrequency
    */
-  return Object.entries(pageEntities).reduce((acc, [uid, pages]) => {
-    pages.forEach((page) => {
-      if (page.fullPath) {
-        acc.push({
-          url: createPublicFullPath(page.fullPath, String(page.locale)),
-          lastModified: page.updatedAt ?? page.createdAt ?? undefined,
-          changeFrequency:
-            entityChangeFrequency[uid as PageEntityUID] ?? "monthly",
-        })
-      }
-    })
+  const pageEntries = Object.entries(pageEntities).reduce(
+    (acc, [uid, pages]) => {
+      pages.forEach((page) => {
+        if (page.fullPath) {
+          acc.push({
+            url: createPublicFullPath(page.fullPath, String(page.locale)),
+            lastModified: page.updatedAt ?? page.createdAt ?? undefined,
+            changeFrequency:
+              entityChangeFrequency[uid as PageEntityUID] ?? "monthly",
+          })
+        }
+      })
 
-    return acc
-  }, [] as MetadataRoute.Sitemap)
+      return acc
+    },
+    [] as MetadataRoute.Sitemap
+  )
+
+  const caseStudiesRes = await fetchAllCaseStudies(locale)
+  const caseStudyEntries: MetadataRoute.Sitemap = caseStudiesRes.data.map(
+    (cs) => ({
+      url: createPublicFullPath(`/user-stories/${cs.slug}`, String(cs.locale)),
+      lastModified: cs.updatedAt ?? cs.createdAt ?? undefined,
+      changeFrequency: "weekly",
+    })
+  )
+
+  return [...pageEntries, ...caseStudyEntries]
 }
 
 // Should you have multiple "pageable" collections, add them to this array

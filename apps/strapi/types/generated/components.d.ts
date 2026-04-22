@@ -1124,6 +1124,18 @@ export interface SectionsMeetTheTeam extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsRichtext extends Struct.ComponentSchema {
+  collectionName: "components_sections_richtexts"
+  info: {
+    description: "Freeform markdown/richtext content block"
+    displayName: "Rich Text"
+    icon: "align-justify"
+  }
+  attributes: {
+    content: Schema.Attribute.RichText & Schema.Attribute.Required
+  }
+}
+
 export interface SectionsSectionHeader extends Struct.ComponentSchema {
   collectionName: "components_sections_section_headers"
   info: {
@@ -1214,29 +1226,6 @@ export interface SectionsTwoColumnsBenefits extends Struct.ComponentSchema {
         }
       }>
     section: Schema.Attribute.Component<"utilities.section-header", false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-  }
-}
-
-export interface SectionsUserStoriesSection extends Struct.ComponentSchema {
-  collectionName: "components_sections_user_stories_section"
-  info: {
-    description: ""
-    displayName: "User Stories Section"
-    icon: "user"
-  }
-  attributes: {
-    heading: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true
-        }
-      }>
-    label: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -1574,11 +1563,11 @@ declare module "@strapi/strapi" {
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
       "sections.meet-the-team": SectionsMeetTheTeam
+      "sections.richtext": SectionsRichtext
       "sections.section-header": SectionsSectionHeader
       "sections.testimonies": SectionsTestimonies
       "sections.two-column-grid": SectionsTwoColumnGrid
       "sections.two-columns-benefits": SectionsTwoColumnsBenefits
-      "sections.user-stories-section": SectionsUserStoriesSection
       "seo-utilities.social-icons": SeoUtilitiesSocialIcons
       "shared.meta-social": SharedMetaSocial
       "shared.seo": SharedSeo

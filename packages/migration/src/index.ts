@@ -15,6 +15,7 @@ import { resolveBlogPostRelations } from "./entities/blog-post.ts"
 import { setPageParents } from "./entities/page.ts"
 import { prewarmIdMap, resolveDependencyUids } from "./pipeline/prewarm.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
+import { runFixPublishedAt } from "./scripts/fix-published-at.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
 import {
@@ -350,6 +351,35 @@ program
         logger.warn(`  ${msg}`)
       }
     }
+  })
+
+program
+  .command("fix-published-at <entity>")
+  .description(
+    "Backfill originalPublishedAt on existing v5 entities using v4 publish dates"
+  )
+  .option("--dry-run", "Log matches without writing")
+  .option("--slug <pattern>", "Filter by comma-separated slugs")
+  .option("--limit <n>", "Max entries to patch", Number.parseInt)
+  .option("--verbose", "Debug-level logging")
+  .action(async (entity: string, opts) => {
+    const config = ENTITY_CONFIGS[entity]
+
+    if (!config) {
+      throw new Error(
+        `Unknown entity: ${entity}. Available: ${Object.keys(ENTITY_CONFIGS).join(", ")}`
+      )
+    }
+
+    await runFixPublishedAt({
+      entity,
+      sourceEndpoint: config.sourceEndpoint,
+      targetEndpoint: config.targetEndpoint,
+      dryRun: opts.dryRun ?? false,
+      slugFilter: opts.slug,
+      limit: opts.limit,
+      verbose: opts.verbose ?? false,
+    })
   })
 
 program

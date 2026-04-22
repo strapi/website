@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_sections_richtexts",
+  "info": {
+    "displayName": "Rich Text",
+    "icon": "align-justify",
+    "description": "Freeform markdown/richtext content block"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

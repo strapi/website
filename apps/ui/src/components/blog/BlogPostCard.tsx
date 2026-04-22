@@ -7,6 +7,7 @@ import {
   BLOG_DATE_FORMAT,
   calculateReadTime,
   combineAuthors,
+  getBlogPostPublishDate,
   getExcerpt,
 } from "@/lib/blog-utils"
 import { formatDate } from "@/lib/dates"
@@ -26,6 +27,7 @@ export function BlogPostCard({ post, className }: BlogPostCardProps) {
   const readTime = calculateReadTime(post.content)
   const excerpt = post.description?.trim() || getExcerpt(post.content, 120)
   const allAuthors = combineAuthors(post.author, post.coauthors ?? undefined)
+  const publishDate = getBlogPostPublishDate(post)
 
   return (
     <HeroContainerBorder asChild>
@@ -78,10 +80,10 @@ export function BlogPostCard({ post, className }: BlogPostCardProps) {
           <div className="text-strapi-gray-400 mt-auto flex items-center gap-2 pt-4 text-sm">
             <AuthorAvatars authors={allAuthors} hideUsername />
 
-            {post.publishedAt && (
+            {publishDate && (
               <>
                 {allAuthors.length > 0 && <span>·</span>}
-                <span>{formatDate(post.publishedAt, BLOG_DATE_FORMAT)}</span>
+                <span>{formatDate(publishDate, BLOG_DATE_FORMAT)}</span>
               </>
             )}
           </div>

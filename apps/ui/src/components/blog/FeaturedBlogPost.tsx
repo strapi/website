@@ -6,6 +6,8 @@ import {
   type BlogPost,
   calculateReadTime,
   combineAuthors,
+  getBlogPostPublishDate,
+  getBlogPostTimelineImage,
   getExcerpt,
 } from "@/lib/blog-utils"
 import { formatDate } from "@/lib/dates"
@@ -21,6 +23,8 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
   const readTime = calculateReadTime(post.content)
   const excerpt = post.description?.trim() || getExcerpt(post.content)
   const allAuthors = combineAuthors(post.author, post.coauthors ?? undefined)
+  const publishDate = getBlogPostPublishDate(post)
+  const timelineImage = getBlogPostTimelineImage(post)
 
   return (
     <HeroContainerBorder asChild>
@@ -58,19 +62,19 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
             <div className="text-strapi-gray-400 mt-6 flex items-center gap-3 text-sm">
               <AuthorAvatars authors={allAuthors} />
 
-              {post.publishedAt && (
+              {publishDate && (
                 <>
                   {allAuthors.length > 0 && <span>●</span>}
-                  <span>{formatDate(post.publishedAt, BLOG_DATE_FORMAT)}</span>
+                  <span>{formatDate(publishDate, BLOG_DATE_FORMAT)}</span>
                 </>
               )}
             </div>
           </div>
 
-          {post.image?.image && (
+          {timelineImage && (
             <div className="border-strapi-gray-700/50 relative aspect-square overflow-hidden border-l">
               <StrapiBasicImage
-                component={post.image.image}
+                component={timelineImage}
                 mode="fill"
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"

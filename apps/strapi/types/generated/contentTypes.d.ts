@@ -523,6 +523,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       "api::blog-post.blog-post"
     > &
       Schema.Attribute.Private
+    originalPublishedAt: Schema.Attribute.DateTime
     publishedAt: Schema.Attribute.DateTime
     sections: Schema.Attribute.DynamicZone<
       [
@@ -542,11 +543,13 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
         "forms.newsletter",
         "forms.hubspot-form",
         "migration.data-sink",
+        "sections.richtext",
       ]
     >
     seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
     tags: Schema.Attribute.Relation<"manyToMany", "api::post-tag.post-tag">
+    timelineImage: Schema.Attribute.Component<"media.image", false>
     title: Schema.Attribute.String & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -666,7 +669,7 @@ export interface ApiCaseStudyCategoryCaseStudyCategory
 export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
   collectionName: "case_studies"
   info: {
-    description: ""
+    description: "Long-form story showcasing a customer success."
     displayName: "Case Study"
     pluralName: "case-studies"
     singularName: "case-study"
@@ -679,6 +682,7 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
       "oneToMany",
       "api::case-study-category.case-study-category"
     >
+    companyName: Schema.Attribute.String
     content: Schema.Attribute.DynamicZone<
       [
         "sections.hero",
@@ -696,12 +700,14 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
         "forms.newsletter",
         "forms.hubspot-form",
         "migration.data-sink",
+        "sections.richtext",
       ]
     >
     coverImage: Schema.Attribute.Component<"media.image", false>
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+    description: Schema.Attribute.Text
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       "oneToMany",
@@ -709,9 +715,11 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private
     logoImage: Schema.Attribute.Component<"media.image", false>
+    originalPublishedAt: Schema.Attribute.DateTime
     publishedAt: Schema.Attribute.DateTime
     seo: Schema.Attribute.Component<"shared.seo", false>
-    slug: Schema.Attribute.UID & Schema.Attribute.Required
+    slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
+    title: Schema.Attribute.String & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -779,6 +787,7 @@ export interface ApiCmsComparisonCmsComparison
         "media.video",
         "forms.hubspot-form",
         "migration.data-sink",
+        "sections.richtext",
       ]
     >
     createdAt: Schema.Attribute.DateTime
@@ -847,6 +856,7 @@ export interface ApiCmsCms extends Struct.CollectionTypeSchema {
         "media.video",
         "forms.hubspot-form",
         "migration.data-sink",
+        "sections.richtext",
       ]
     >
     seo: Schema.Attribute.Component<"shared.seo", false>
@@ -1113,7 +1123,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
         "sections.faq-section",
-        "sections.user-stories-section",
         "sections.how-it-works",
         "sections.section-header",
         "sections.two-columns-benefits",
@@ -1142,6 +1151,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.community-banner",
         "sections.comparator-grid",
         "sections.disclaimer",
+        "sections.richtext",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

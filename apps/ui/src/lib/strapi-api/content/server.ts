@@ -105,6 +105,9 @@ export async function fetchBlogPost(
           image: {
             populate: { image: { populate: { media: true } } },
           },
+          timelineImage: {
+            populate: { image: { populate: { media: true } } },
+          },
           author: authorPopulate,
           coauthors: authorPopulate,
           category: {
@@ -131,6 +134,9 @@ export async function fetchBlogPost(
 
 const blogListPopulate = {
   image: {
+    populate: { image: { populate: { media: true } } },
+  },
+  timelineImage: {
     populate: { image: { populate: { media: true } } },
   },
   author: authorPopulate,
@@ -161,7 +167,7 @@ export async function fetchBlogPostsList(
       return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
         locale,
         status: dm.isEnabled ? "draft" : "published",
-        sort: { publishedAt: "desc" },
+        sort: { originalPublishedAt: "desc" },
         ...filters,
         populate: blogListPopulate,
         pagination: { page: 1, pageSize: limit },
@@ -171,7 +177,7 @@ export async function fetchBlogPostsList(
     return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
       locale,
       status: dm.isEnabled ? "draft" : "published",
-      sort: { publishedAt: "desc" },
+      sort: { originalPublishedAt: "desc" },
       ...filters,
       populate: blogListPopulate,
     })
@@ -282,7 +288,7 @@ export async function fetchRelatedBlogPosts({
     const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
-      sort: { publishedAt: "desc" },
+      sort: { originalPublishedAt: "desc" },
       filters: {
         $and: [
           { category: { slug: { $eq: categorySlug } } },
@@ -322,7 +328,7 @@ export async function fetchLatestBlogPosts({
     const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
       locale,
       status: "published",
-      sort: { publishedAt: "desc" },
+      sort: { originalPublishedAt: "desc" },
       ...(notInSlugs.length > 0
         ? { filters: { slug: { $notIn: notInSlugs } } }
         : {}),
@@ -532,6 +538,132 @@ export async function fetchAllCms(locale: Locale) {
     })
 
     return { data: [] }
+  }
+}
+
+// ------ Case study fetching functions
+
+const caseStudyImagePopulate = {
+  coverImage: { populate: { image: { populate: { media: true } } } },
+  logoImage: { populate: { image: { populate: { media: true } } } },
+} as const
+
+const caseStudyListPopulate = {
+  ...caseStudyImagePopulate,
+  categories: { fields: ["name", "slug"] },
+} as Record<string, unknown>
+
+export async function fetchCaseStudy(
+  slug: string,
+  locale: Locale,
+  requestInit?: RequestInit,
+  options?: CustomFetchOptions
+) {
+  const dm = await draftMode()
+
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::case-study.case-study",
+      slug,
+      {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        populate: {
+          ...caseStudyImagePopulate,
+          categories: { fields: ["name", "slug"] },
+          seo: seoPopulate,
+        } as Record<string, unknown>,
+        populateDynamicZone: { content: true },
+      },
+      requestInit,
+      options
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching case study '${slug}' for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+export async function fetchCaseStudiesList(locale: Locale, limit?: number) {
+  const dm = await draftMode()
+
+  try {
+    if (typeof limit === "number") {
+      return await PublicStrapiClient.fetchMany("api::case-study.case-study", {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        sort: { originalPublishedAt: "desc" },
+        populate: caseStudyListPopulate,
+        pagination: { page: 1, pageSize: limit },
+      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1])
+    }
+
+    return await PublicStrapiClient.fetchAll("api::case-study.case-study", {
+      locale,
+      status: dm.isEnabled ? "draft" : "published",
+      sort: { originalPublishedAt: "desc" },
+      populate: caseStudyListPopulate,
+    })
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching case studies for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
+  }
+}
+
+export async function fetchAllCaseStudies(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchAll("api::case-study.case-study", {
+      locale,
+      fields: ["slug", "locale", "updatedAt", "createdAt"],
+      populate: {},
+      status: "published",
+    })
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all case studies for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
+  }
+}
+
+export async function fetchCaseStudySeo(slug: string, locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::case-study.case-study",
+      slug,
+      {
+        locale,
+        fields: ["title", "description"],
+        populate: {
+          seo: seoPopulate,
+        },
+      }
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching case study SEO for '${slug}' locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
   }
 }
 

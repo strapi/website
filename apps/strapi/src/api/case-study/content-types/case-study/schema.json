@@ -5,16 +5,30 @@
     "singularName": "case-study",
     "pluralName": "case-studies",
     "displayName": "Case Study",
-    "description": ""
+    "description": "Long-form story showcasing a customer success."
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
     "slug": {
       "type": "uid",
+      "targetField": "title",
       "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "originalPublishedAt": {
+      "type": "datetime"
     },
     "coverImage": {
       "type": "component",
@@ -53,7 +67,8 @@
         "sections.testimonies",
         "forms.newsletter",
         "forms.hubspot-form",
-        "migration.data-sink"
+        "migration.data-sink",
+        "sections.richtext"
       ]
     }
   }

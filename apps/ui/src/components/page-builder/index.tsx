@@ -32,10 +32,10 @@ import { StrapiFaqSection } from "@/components/page-builder/components/sections/
 import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sections/StrapiFeatureCardGrid"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
-import { StrapiUserStoriesSection } from "@/components/page-builder/components/sections/StrapiUserStoriesSection"
 import { StrapiQuote } from "@/components/page-builder/components/testimonials/strapi-quote/StrapiQuote"
 import { StrapiFooterCta } from "@/components/page-builder/single-types/footer/StrapiFooterCta"
 import { StrapiFooterMain } from "@/components/page-builder/single-types/footer/StrapiFooterMain"
@@ -76,7 +76,6 @@ export const ContentComponents: Partial<
   "sections.feature-card-grid": StrapiFeatureCardGrid,
   "sections.two-column-grid": StrapiTwoColumnGrid,
   "sections.two-columns-benefits": StrapiTwoColumnsBenefits,
-  "sections.user-stories-section": StrapiUserStoriesSection,
   // Cards
   "cards.feature-card": StrapiFeatureCard,
   "cards.content-card": StrapiContentCard,
@@ -96,6 +95,7 @@ export const ContentComponents: Partial<
   "sections.community-banner": StrapiCommunityBanner,
   "sections.comparator-grid": StrapiComparatorGrid,
   "sections.disclaimer": StrapiDisclaimer,
+  "sections.richtext": StrapiRichtext,
 
   // Testimonials
   "testimonials.quote": StrapiQuote,

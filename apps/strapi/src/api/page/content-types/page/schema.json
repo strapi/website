@@ -64,7 +64,6 @@
         "plans.plan-pricing-cards",
         "plans.plan-comparison-table",
         "sections.faq-section",
-        "sections.user-stories-section",
         "sections.how-it-works",
         "sections.section-header",
         "sections.two-columns-benefits",
@@ -92,7 +91,8 @@
         "sections.cta-banner",
         "sections.community-banner",
         "sections.comparator-grid",
-        "sections.disclaimer"
+        "sections.disclaimer",
+        "sections.richtext"
       ]
     },
     "children": {

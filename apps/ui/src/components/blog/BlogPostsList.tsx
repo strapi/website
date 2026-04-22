@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import type { BlogPost } from "@/lib/blog-utils"
+import { type BlogPost, getBlogPostPublishDate } from "@/lib/blog-utils"
 
 import { BlogPostRow } from "./BlogPostRow"
 import { Button } from "../ui/button"
@@ -32,9 +32,7 @@ export function BlogPostsList({
             key={post.documentId}
             title={post.title ?? ""}
             slug={post.slug as string}
-            publishedAt={
-              typeof post.publishedAt === "string" ? post.publishedAt : null
-            }
+            publishedAt={getBlogPostPublishDate(post)}
             author={post.author}
             coauthors={post.coauthors ?? undefined}
             category={post.category}

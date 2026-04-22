@@ -37,6 +37,10 @@ export function combineAuthors(
   return [...(author ? [author] : []), ...(coauthors ?? [])]
 }
 
+export function getBlogPostTimelineImage(post: BlogPost) {
+  return post.timelineImage?.image ?? post.image?.image
+}
+
 function stripMarkup(content: string): string {
   return content
     .replaceAll(/<[^>]*>/g, "")
@@ -108,6 +112,32 @@ export function extractHeadings(markdown: string): TocHeading[] {
 }
 
 export const BLOG_DATE_FORMAT = "MMMM D, YYYY"
+
+/**
+ * Pick the best publish date for a blog post.
+ *
+ * Migrated posts carry the real v4 date on `originalPublishedAt` because
+ * Strapi v5 overwrites the system `publishedAt` with "now" on publish.
+ * Posts created natively in v5 have no `originalPublishedAt`, so we fall
+ * back to the system field.
+ */
+export function getBlogPostPublishDate(
+  post:
+    | {
+        readonly originalPublishedAt?: string | Date | null
+        readonly publishedAt?: string | Date | null
+      }
+    | null
+    | undefined
+): string | null {
+  if (!post) return null
+
+  const value = post.originalPublishedAt ?? post.publishedAt
+
+  if (!value) return null
+
+  return typeof value === "string" ? value : value.toISOString()
+}
 
 const UPDATED_AT_THRESHOLD_MS = 24 * 60 * 60 * 1000
 

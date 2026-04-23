@@ -1,5 +1,5 @@
 import type { Data } from "@repo/strapi-types"
-import type { CSSProperties, ImgHTMLAttributes } from "react"
+import type { ImgHTMLAttributes } from "react"
 
 import { logNonBlockingError, logNonBlockingWarning } from "@/lib/logging"
 import { buildStrapiSrcSet } from "@/lib/strapi-helpers"
@@ -7,8 +7,6 @@ import { cn } from "@/lib/styles"
 import type { StrapiImageMedia } from "@/types/api"
 
 export type StrapiBasicImageMode = "intrinsic" | "responsive" | "fill"
-
-const DEFAULT_BLUR_RGB: readonly [number, number, number] = [229, 231, 235]
 
 interface Dimensions {
   readonly width: number
@@ -26,8 +24,6 @@ export interface StrapiBasicImageProps extends NativeImgProps {
   readonly hideWhenMissing?: boolean
   readonly mode?: StrapiBasicImageMode
   readonly priority?: boolean
-  readonly transparentPlaceholder?: boolean
-  readonly blurRgb?: readonly [number, number, number]
 }
 
 function toPositiveInteger(value: unknown): number | undefined {
@@ -98,8 +94,6 @@ export function StrapiBasicImage({
   priority,
   sizes,
   style,
-  transparentPlaceholder,
-  blurRgb,
   loading,
   ...imgProps
 }: StrapiBasicImageProps) {
@@ -143,15 +137,6 @@ export function StrapiBasicImage({
     ? ""
     : (component?.alt ?? media?.caption ?? media?.alternativeText ?? "")
 
-  const background = transparentPlaceholder
-    ? undefined
-    : `rgb(${(blurRgb ?? DEFAULT_BLUR_RGB).join(", ")})`
-
-  const mergedStyle: CSSProperties = {
-    ...(background ? { backgroundColor: background } : null),
-    ...style,
-  }
-
   const resolvedLoading = loading ?? (priority ? "eager" : "lazy")
   const fetchPriority = priority ? "high" : undefined
 
@@ -174,7 +159,7 @@ export function StrapiBasicImage({
       <img
         {...commonProps}
         className={cn("absolute inset-0 h-full w-full object-cover", className)}
-        style={mergedStyle}
+        style={style}
       />
     )
   }
@@ -186,7 +171,7 @@ export function StrapiBasicImage({
       width={dimensions!.width}
       height={dimensions!.height}
       className={cn(mode === "responsive" && "h-auto max-w-full", className)}
-      style={mergedStyle}
+      style={style}
     />
   )
 }

@@ -8,7 +8,7 @@ import { getBlogPostMetadata } from "@/lib/metadata/blog"
 import { fetchAllBlogPosts } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
-export const revalidate = 14400
+export const revalidate = 60
 
 export async function generateStaticParams({
   params: { locale },

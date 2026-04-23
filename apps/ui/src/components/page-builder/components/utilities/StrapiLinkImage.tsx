@@ -14,7 +14,6 @@ export interface StrapiLinkImageProps {
   readonly imageClassName?: string
   readonly imageMode?: StrapiBasicImageProps["mode"]
   readonly sizes?: string
-  readonly transparentPlaceholder?: boolean
 }
 
 export const getStrapiLinkImageHref = (
@@ -38,7 +37,6 @@ export function StrapiLinkImage({
   imageClassName,
   imageMode,
   sizes,
-  transparentPlaceholder,
 }: StrapiLinkImageProps) {
   if (component?.image == null) {
     return null
@@ -69,7 +67,6 @@ export function StrapiLinkImage({
           className={imageClassName}
           decorative={decorative}
           sizes={sizes}
-          transparentPlaceholder={transparentPlaceholder}
         />
       </Link>
     )
@@ -89,7 +86,6 @@ export function StrapiLinkImage({
         className={imageClassName}
         decorative={decorative}
         sizes={sizes}
-        transparentPlaceholder={transparentPlaceholder}
       />
     </a>
   )

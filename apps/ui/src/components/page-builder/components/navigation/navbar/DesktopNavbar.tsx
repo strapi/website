@@ -48,7 +48,6 @@ export function DesktopNavbar({
           <StrapiLinkImage
             component={logoImage}
             imageMode="responsive"
-            transparentPlaceholder
             sizes="140px"
             className={cn(
               logoClassName,
@@ -60,7 +59,6 @@ export function DesktopNavbar({
           <StrapiLinkImage
             component={logoImageLight}
             imageMode="responsive"
-            transparentPlaceholder
             sizes="140px"
             className={cn(
               logoClassName,

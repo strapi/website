@@ -17,7 +17,7 @@ import { routing } from "@/lib/navigation"
 import { fetchBlog, fetchBlogPostsList } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
-export const revalidate = 14400
+export const revalidate = 60
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>

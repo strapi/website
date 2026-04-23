@@ -48,7 +48,6 @@ export function MobileNavbar({
             <StrapiLinkImage
               component={logoImage}
               imageMode="responsive"
-              transparentPlaceholder
               sizes="120px"
               className={cn(
                 logoClassName,
@@ -60,7 +59,6 @@ export function MobileNavbar({
             <StrapiLinkImage
               component={logoImageLight}
               imageMode="responsive"
-              transparentPlaceholder
               sizes="120px"
               className={cn(
                 logoClassName,

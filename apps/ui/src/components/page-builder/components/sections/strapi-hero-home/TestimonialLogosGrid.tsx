@@ -123,7 +123,6 @@ export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
           >
             <StrapiBasicImage
               component={slot.logo}
-              transparentPlaceholder
               mode="fill"
               sizes="(max-width: 767px) 72px, 78px"
               className="object-contain"

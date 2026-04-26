@@ -11,7 +11,6 @@ import { fetchAllPages } from "@/lib/strapi-api/content/server"
 // Static/ISR page — no access to headers(), cookies(), or searchParams.
 // Use /[locale]/dynamic/[[...rest]] for pages that need runtime context.
 export const dynamic = "force-static"
-
 // Enable ISR generation for pages not returned by generateStaticParams
 // First request will SSR the page, then cache it for future requests
 export const dynamicParams = true

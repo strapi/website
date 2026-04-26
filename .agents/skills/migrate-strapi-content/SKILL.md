@@ -48,14 +48,14 @@ The detailed per-slice rules in Step 6 are refinements of this heuristic with th
 
 ## Inputs
 
-| Input           | Required | Default          | Description                                                                                              |
-| --------------- | -------- | ---------------- | -------------------------------------------------------------------------------------------------------- |
-| `urls`          | yes      | —                | Whitespace/newline-separated list of URLs (any host — only the path matters)                             |
-| `source_server` | no       | `production-old` | Strapi MCP server to read from                                                                           |
-| `target_server` | no       | `production`     | Strapi MCP server to write to                                                                            |
-| `mode`          | no       | `replace`        | `replace` wipes+rebuilds the target dynamic zone; `append` adds to existing. Default is `replace`.       |
-| `publish`       | no       | `true`           | After successful migration, publish the target record                                                    |
-| `media_policy`  | no       | `reuse-existing` | If target record already has cover/logo set, leave them; else upload from old if old has them; else skip |
+| Input | Required | Default | Description |
+|---|---|---|---|
+| `urls` | yes | — | Whitespace/newline-separated list of URLs (any host — only the path matters) |
+| `source_server` | no | `production-old` | Strapi MCP server to read from |
+| `target_server` | no | `production` | Strapi MCP server to write to |
+| `mode` | no | `replace` | `replace` wipes+rebuilds the target dynamic zone; `append` adds to existing. Default is `replace`. |
+| `publish` | no | `true` | After successful migration, publish the target record |
+| `media_policy` | no | `reuse-existing` | If target record already has cover/logo set, leave them; else upload from old if old has them; else skip |
 
 Everything else (target documentId, category documentIds, schema mapping) is discovered at runtime.
 
@@ -63,15 +63,15 @@ Everything else (target documentId, category documentIds, schema mapping) is dis
 
 Detect content type from the URL **path** prefix. The host doesn't matter — `strapi.io`, `website-ui-omega.vercel.app`, `localhost:3000` all resolve the same.
 
-| URL path pattern                             | Old endpoint          | New endpoint          | Target content type   | Match by                         |
-| -------------------------------------------- | --------------------- | --------------------- | --------------------- | -------------------------------- |
-| `/user-stories/<slug>`                       | `api/case-studies`    | `api/case-studies`    | case-study            | slug                             |
-| `/blog/<slug>`                               | `api/blog-posts`      | `api/blog-posts`      | blog-post             | slug                             |
-| `/news/<slug>`                               | `api/news-items`      | `api/news-items`      | news-item             | slug                             |
-| `/jobs/<slug>`                               | `api/internal-jobs`   | `api/internal-jobs`   | internal-job          | slug                             |
-| `/comparators/<slug>` or `/<slug>-vs-<slug>` | `api/cms-comparisons` | `api/cms-comparisons` | cms-comparison        | slug                             |
-| `/solutions/<slug>`                          | `api/use-cases`       | `api/pages`           | **page** (cross-type) | `fullPath` = `/solutions/<slug>` |
-| `/<slug>` (top-level, no prefix above)       | `api/universals`      | `api/pages`           | **page** (cross-type) | `fullPath` = `/<slug>`           |
+| URL path pattern | Old endpoint | New endpoint | Target content type | Match by |
+|---|---|---|---|---|
+| `/user-stories/<slug>` | `api/case-studies` | `api/case-studies` | case-study | slug |
+| `/blog/<slug>` | `api/blog-posts` | `api/blog-posts` | blog-post | slug |
+| `/news/<slug>` | `api/news-items` | `api/news-items` | news-item | slug |
+| `/jobs/<slug>` | `api/internal-jobs` | `api/internal-jobs` | internal-job | slug |
+| `/comparators/<slug>` or `/<slug>-vs-<slug>` | `api/cms-comparisons` | `api/cms-comparisons` | cms-comparison | slug |
+| `/solutions/<slug>` | `api/use-cases` | `api/pages` | **page** (cross-type) | `fullPath` = `/solutions/<slug>` |
+| `/<slug>` (top-level, no prefix above) | `api/universals` | `api/pages` | **page** (cross-type) | `fullPath` = `/<slug>` |
 
 Cross-type rules: old `use-case` and `universal` records are collapsed into the new `page` collection. Lookup the target by `fullPath` (not `slug`), because multiple pages can share a slug across different parent paths.
 
@@ -96,7 +96,6 @@ Extract `{pathSegment, slug, contentType, oldEndpoint, newEndpoint, matchField, 
 ### 3. Inspect local target schema (once per content type)
 
 Read `apps/strapi/src/api/<content-type>/content-types/<content-type>/schema.json`. Capture:
-
 - Dynamic-zone field name (usually `content`) and its allowed component UIDs
 - Required top-level fields
 - Relation fields and their targets (for category-like lookups)
@@ -135,7 +134,6 @@ mcp__strapi-local__strapi_rest({
 For `fullPath`-matched pages, use `filters: { fullPath: { $in: [<"/market-guidelines">, <"/solutions/ecommerce-cms">, ...] } }` and include `fullPath` in `fields`.
 
 For each row:
-
 - **Found** → reuse `documentId`
 - **Not found** → create a draft shell first via POST with minimal required fields so the agent has a documentId to write to.
 
@@ -147,76 +145,76 @@ The following map was validated across case-study, blog-post, and page (use-case
 
 **Rich text / text**
 
-| Old                            | Target              | Rule                                                                                                               |
-| ------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `slices.universal-rich-text`   | `sections.richtext` | `{ content: richText }`. SKIP if empty.                                                                            |
-| `slices.text-slice`            | `sections.richtext` | Markdown from `content.label` (bold), `content.title` (H2), `content.text`. SKIP if all empty.                     |
+| Old | Target | Rule |
+|---|---|---|
+| `slices.universal-rich-text` | `sections.richtext` | `{ content: richText }`. SKIP if empty. |
+| `slices.text-slice` | `sections.richtext` | Markdown from `content.label` (bold), `content.title` (H2), `content.text`. SKIP if all empty. |
 | `slices.text-with-key-numbers` | `sections.richtext` | `"## Key Numbers\n\n" + keyNumber.map(k => "- **"+k.number+"** — "+k.text).join("\n")`. SKIP if `keyNumber` empty. |
 
 **Hero / intro**
 
-| Old                                            | Target          | Rule                                                                                                                                         |
-| ---------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.intro`                                 | `sections.hero` | from `content.{label, title, text, button}` (NOTE: v4 `slices.intro` wraps fields inside `content`, not at the top level). SKIP if no title. |
-| root field `useCaseHero` (on use-case records) | `sections.hero` | PREPEND to newContent. Build from `useCaseHero.hero.intro.{label, title, text, button}`. SKIP if no `useCaseHero.hero.intro.title`.          |
+| Old | Target | Rule |
+|---|---|---|
+| `slices.intro` | `sections.hero` | from `content.{label, title, text, button}` (NOTE: v4 `slices.intro` wraps fields inside `content`, not at the top level). SKIP if no title. |
+| root field `useCaseHero` (on use-case records) | `sections.hero` | PREPEND to newContent. Build from `useCaseHero.hero.intro.{label, title, text, button}`. SKIP if no `useCaseHero.hero.intro.title`. |
 
 **Cards**
 
-| Old                         | Target               | Rule                                                                                                                                                                                                                                                                                                        |
-| --------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.section-with-image` | `cards.feature-card` | `{ title, description: text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", size: "default", layout: "full", ctaLinks: button?.link ? [link] : [] }`. **Note the inversion**: v4 `textPosition` = where text is; v5 `imagePosition` = where image is. Flip it. SKIP if no title. |
-| `slices.text-next-to-image` | `cards.feature-card` | `{ title: title \|\| content?.title, description: text \|\| content?.text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", size: "default", layout: "full", ctaLinks: (content?.button \|\| []).map(resolveLink) }`. SKIP if no title.                                            |
+| `slices.text-next-to-image` | `cards.feature-card` | `{ title: title \|\| content?.title, description: text \|\| content?.text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", size: "default", layout: "full", ctaLinks: (content?.button \|\| []).map(resolveLink) }`. SKIP if no title. |
 
 **Grids of features / cards**
 
-| Old                             | Target                       | Rule                                                                                                                                                                                                                                                                                                                            |
-| ------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.top-features`           | `sections.feature-card-grid` | `section` from `intro` or `{ title: "Features" }`; `items` = `features[]` filtered by `title`, each mapped to feature-card with `variant: "plain", layout: "third"`, `ctaLinks` from `.links`. SKIP entire slice if no items have title.                                                                                        |
-| `slices.features-slice`         | `sections.feature-card-grid` | `section: s.title ? { title: s.title, layout: "center" } : undefined`; `items` = `cards[]` filtered by `title`, layout `s.layout==="two"?"half":"third"`, `variant: "plain"`. SKIP if empty. Omit `section` key when undefined.                                                                                                 |
-| `slices.stacking-cards`         | `sections.feature-card-grid` | `section: s.title ? { title: s.title } : undefined`; items from `cards[]` filtered by title, `variant: "bordered", layout: "half"`. SKIP if empty.                                                                                                                                                                              |
+| Old | Target | Rule |
+|---|---|---|
+| `slices.top-features` | `sections.feature-card-grid` | `section` from `intro` or `{ title: "Features" }`; `items` = `features[]` filtered by `title`, each mapped to feature-card with `variant: "plain", layout: "third"`, `ctaLinks` from `.links`. SKIP entire slice if no items have title. |
+| `slices.features-slice` | `sections.feature-card-grid` | `section: s.title ? { title: s.title, layout: "center" } : undefined`; `items` = `cards[]` filtered by `title`, layout `s.layout==="two"?"half":"third"`, `variant: "plain"`. SKIP if empty. Omit `section` key when undefined. |
+| `slices.stacking-cards` | `sections.feature-card-grid` | `section: s.title ? { title: s.title } : undefined`; items from `cards[]` filtered by title, `variant: "bordered", layout: "half"`. SKIP if empty. |
 | `slices.integration-cards-grid` | `sections.feature-card-grid` | `section` from `intro` if present; `items` = `integrations.data[]` filtered by `attributes.title`, cap at 12, map to feature-card with `title: attributes.title, description: attributes.description, ctaLinks: [{ type:"external", label:"Learn more", href:"/integrations/"+attributes.slug, newTab:false }]`. SKIP if empty. |
 
 **Brand logos**
 
-| Old                        | Target                    | Rule                                                                                                                                                                                                                                                   |
-| -------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.brands-with-intro` | `sections.section-header` | Emit ONLY the intro as section-header — logo rendering requires media uploads, which is out of scope by default. `{ section: { label, title, description: intro.text, layout: "center" }, background: "none", boxed: false }`. SKIP if intro is empty. |
-| `slices.brands`            | SKIP                      | Pure-logo slice with no title — media upload needed. Skip + report.                                                                                                                                                                                    |
+| `slices.brands` | SKIP | Pure-logo slice with no title — media upload needed. Skip + report. |
 
 **Quotes**
 
-| Old                                        | Target               | Rule                                                                                                                              |
-| ------------------------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.full-width-quote` / `slices.quote` | `testimonials.quote` | `{ quote, authorName: author?.name \|\| "Strapi", authorRole: author?.description \|\| "", variant: "boxed" }`. SKIP if no quote. |
 
 **Media**
 
-| Old                  | Target        | Rule                                                   |
-| -------------------- | ------------- | ------------------------------------------------------ |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.large-video` | `media.video` | `{ url, alignment: "center" }`. SKIP if `url` missing. |
 
 **FAQ / interview**
 
-| Old                | Target                 | Rule                                                                                                  |
-| ------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.interview` | `sections.faq-section` | `{ items: questionAnswer.filter(qa => qa.question && qa.answer).map(qa => ({ question, answer })) }`. |
 
 **Case study reference**
 
-| Old                      | Target                  | Rule                                                                                                                                                                                                                                                                                                                                          |
-| ------------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.case-study-card` | `cards.case-study-card` | `slug = card?.data?.attributes?.slug`. Look up on **target** server: `api/case-studies?filters[slug][$eq]=<slug>&fields=companyName,title,slug`. If found: `{ companyName, title, ctaLink: { type:"external", label: buttonText \|\| "Read story", href: "/user-stories/"+slug, newTab: false } }`. SKIP if slug missing or target not found. |
 
 **Algorithmic / always-skip**
 
-| Old                           | Target | Rule                                      |
-| ----------------------------- | ------ | ----------------------------------------- |
-| `slices.related-case-studies` | SKIP   | Rendered algorithmically on the frontend. |
+| Old | Target | Rule |
+|---|---|---|
+| `slices.related-case-studies` | SKIP | Rendered algorithmically on the frontend. |
 
 **HubSpot forms**
 
-| Old                 | Target            | Rule                                                                                                                                      |
-| ------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Old | Target | Rule |
+|---|---|---|
 | `slices.embed-form` | SKIP (by default) | `forms.hubspot-form` requires a relation to an existing `api::hubspot-form.hubspot-form` record. Without a mapping config, skip + report. |
 
 **Fallback**
@@ -226,7 +224,6 @@ Anything not listed above → `migration.data-sink` IF allowed in the target dyn
 **Before emitting any component**: verify its UID is in the dynamic-zone allowlist from Step 3. If not, use `migration.data-sink` (if allowed) or SKIP.
 
 Required-field validation:
-
 - Fragments whose required fields cannot be filled are SKIPPED (never sent with null values).
 - Skipped fragments append to the report's `skipped` array with a reason + sliceType.
 
@@ -255,10 +252,9 @@ Verify by spot-checking one record in the batch: the `slices[].cards[].title`, `
 
 ### 9. Launch one parallel agent per URL
 
-Use the Agent tool with `general-purpose` subagent type, `model: "sonnet"`, `run_in_background: true`, one agent per URL. Sonnet is sufficient for this mechanical mapping work — Opus is wasted tokens here. All agents get the same shared context (schema map, category map, target server name, slice mapping) plus their own `{slug or fullPath, contentType, targetDocumentId}`.
+Use the Agent tool with `general-purpose` subagent type, `run_in_background: true`, one agent per URL. All agents get the same shared context (schema map, category map, target server name, slice mapping) plus their own `{slug or fullPath, contentType, targetDocumentId}`.
 
 Each agent's prompt must contain:
-
 1. The slice → component mapping from Step 6.
 2. The `{ name → documentId }` map for each relation field from Step 4.
 3. The dynamic-zone allowlist from Step 3.
@@ -270,7 +266,6 @@ Each agent's prompt must contain:
 9. A strict JSON report format (see Step 11).
 
 The agent should:
-
 - `ToolSearch({ query: "select:mcp__strapi-local__strapi_rest,mcp__strapi-local__strapi_upload_media", max_results: 2 })` to load MCP schemas.
 - GET old record with the populate spec from Step 8.
 - GET target record: `api/<plural>/<documentId>?populate[content]=true&populate[seo]=true&status=draft`.
@@ -305,7 +300,6 @@ Skip publish for any record whose agent returned `status: "failed"`.
 One compact table plus a JSON summary. No narrative beyond one sentence.
 
 Required report fields per URL:
-
 - `slug` (or `fullPath` for pages)
 - `documentId`
 - `status` (`success` | `failed` | `skipped`)

@@ -154,14 +154,12 @@ function DataRevalidateButton() {
       return null
     }
 
-    return buildAction(
-      REVALIDATE_COLLECTIONS.find(
-        (config) => config.uid === uid
-      ) as RevalidateCollectionConfig,
-      slug,
-      fullPath,
-      locale
-    )
+    const config = REVALIDATE_COLLECTIONS.find((entry) => entry.uid === uid)
+    if (!config) {
+      return null
+    }
+
+    return buildAction(config, slug, fullPath, locale)
   }, [fullPath, locale, slug, uid])
 
   if (!action) {

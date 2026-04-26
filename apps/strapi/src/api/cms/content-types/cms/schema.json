@@ -27,9 +27,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "fields": {
       "type": "component",
@@ -54,6 +52,7 @@
         "sections.two-column-grid",
         "cards.feature-card",
         "cards.content-card",
+        "cards.case-study-card",
         "media.image",
         "media.image-gallery",
         "media.brand-logo-grid",
@@ -61,10 +60,19 @@
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
-        "sections.feature-card-grid",
         "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "sections.feature-card-grid",
         "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
         "migration.data-sink",
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
         "sections.richtext"
       ]
     }

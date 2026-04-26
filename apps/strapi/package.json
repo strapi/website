@@ -50,7 +50,8 @@
     "react-router-dom": "^6.0.0",
     "strapi-plugin-config-sync": "2.1.0",
     "styled-components": "^6.0.0",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "catalog:",

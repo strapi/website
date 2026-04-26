@@ -40,7 +40,7 @@ export function BlogPostsList({
         ))}
 
       {hasMore && (
-        <div className="flex justify-center py-6">
+        <div className="flex justify-center py-10">
           <Button onClick={() => setVisibleCount((c) => c + pageSize)}>
             {loadMoreLabel}
           </Button>

@@ -2,6 +2,7 @@ import type { FindFirst, FindMany, ID, Result, UID } from "@repo/strapi-types"
 
 import { getEnvVar } from "@/lib/env-vars"
 import { isDevelopment } from "@/lib/general-helpers"
+import { PAGE_REVALIDATE_SECONDS } from "@/lib/revalidate"
 import type {
   APIResponse,
   APIResponseCollection,
@@ -17,12 +18,14 @@ import type { AppError, CustomFetchOptions } from "@/types/general"
 export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::page.page": "/pages",
   "api::blog-post.blog-post": "/blog-posts",
+  "api::post-tag.post-tag": "/post-tags",
   "api::blog.blog": "/blog",
   "api::footer.footer": "/footer",
   "api::header.header": "/header",
   "api::cms.cms": "/cmses",
   "api::cms-comparison.cms-comparison": "/cms-comparisons",
   "api::case-study.case-study": "/case-studies",
+  "api::global.global": "/global",
 } as const
 
 export default abstract class BaseStrapiClient {
@@ -44,18 +47,34 @@ export default abstract class BaseStrapiClient {
       options
     )
 
-    const response = await fetch(url, {
-      ...requestInit,
-      next: {
-        ...requestInit?.next,
-        // if revalidate is set to a number since 0 implies cache: 'no-store' and a positive value implies cache: 'force-cache'.
-        revalidate: isDevelopment() ? 0 : (requestInit?.next?.revalidate ?? 60),
-      },
-      headers: {
-        ...requestInit?.headers,
-        ...headers,
-      },
-    })
+    // Caller-provided cache config wins. When the caller passes `cache: "no-store"`
+    // (e.g. draft mode), Next.js treats `next.revalidate` as mutually exclusive,
+    // so only forward `next.tags` in that case.
+    const mergedHeaders = {
+      ...requestInit?.headers,
+      ...headers,
+    }
+    const fetchInit: RequestInit = requestInit?.cache
+      ? {
+          ...requestInit,
+          ...(requestInit?.next?.tags
+            ? { next: { tags: requestInit.next.tags } }
+            : {}),
+          headers: mergedHeaders,
+        }
+      : {
+          ...requestInit,
+          next: {
+            tags: requestInit?.next?.tags,
+            // if revalidate is set to a number since 0 implies cache: 'no-store' and a positive value implies cache: 'force-cache'.
+            revalidate: isDevelopment()
+              ? 0
+              : (requestInit?.next?.revalidate ?? PAGE_REVALIDATE_SECONDS),
+          },
+          headers: mergedHeaders,
+        }
+
+    const response = await fetch(url, fetchInit)
 
     const { json, text } = await this.parseResponse(response)
 

@@ -451,7 +451,7 @@ export interface ApiBlogCategoryBlogCategory
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
-    description: Schema.Attribute.Text &
+    description: Schema.Attribute.RichText &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -527,22 +527,38 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime
     sections: Schema.Attribute.DynamicZone<
       [
-        "sections.section-header",
         "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
+        "sections.two-columns-benefits",
         "sections.two-column-grid",
+        "cards.feature-card",
         "cards.content-card",
+        "cards.case-study-card",
         "media.image",
         "media.image-gallery",
-        "media.video",
-        "media.embed",
+        "media.brand-logo-grid",
         "testimonials.quote",
+        "forms.newsletter",
         "blog.callout",
         "blog.related-posts",
         "blog.editors-picks",
         "blog.resource-cta",
-        "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "sections.feature-card-grid",
         "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
         "migration.data-sink",
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
         "sections.richtext",
       ]
     >
@@ -685,21 +701,34 @@ export interface ApiCaseStudyCaseStudy extends Struct.CollectionTypeSchema {
     companyName: Schema.Attribute.String
     content: Schema.Attribute.DynamicZone<
       [
-        "sections.hero",
-        "sections.section-header",
         "sections.faq-section",
+        "sections.how-it-works",
+        "sections.section-header",
         "sections.two-columns-benefits",
         "sections.two-column-grid",
+        "cards.feature-card",
         "cards.content-card",
+        "cards.case-study-card",
         "media.image",
         "media.image-gallery",
-        "media.video",
         "media.brand-logo-grid",
         "testimonials.quote",
-        "sections.testimonies",
         "forms.newsletter",
+        "sections.testimonies",
+        "sections.meet-the-team",
+        "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "sections.feature-card-grid",
         "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
         "migration.data-sink",
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
         "sections.richtext",
       ]
     >
@@ -776,17 +805,31 @@ export interface ApiCmsComparisonCmsComparison
         "sections.two-column-grid",
         "cards.feature-card",
         "cards.content-card",
+        "cards.case-study-card",
         "media.image",
         "media.image-gallery",
         "media.brand-logo-grid",
         "testimonials.quote",
         "forms.newsletter",
+        "media.embed",
+        "media.video",
+        "blog.callout",
+        "blog.related-posts",
+        "blog.editors-picks",
+        "blog.resource-cta",
         "sections.testimonies",
         "sections.meet-the-team",
+        "sections.hero",
+        "sections.hero-home",
         "sections.feature-card-grid",
-        "media.video",
         "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
         "migration.data-sink",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
         "sections.richtext",
       ]
     >
@@ -845,6 +888,7 @@ export interface ApiCmsCms extends Struct.CollectionTypeSchema {
         "sections.two-column-grid",
         "cards.feature-card",
         "cards.content-card",
+        "cards.case-study-card",
         "media.image",
         "media.image-gallery",
         "media.brand-logo-grid",
@@ -852,10 +896,19 @@ export interface ApiCmsCms extends Struct.CollectionTypeSchema {
         "forms.newsletter",
         "sections.testimonies",
         "sections.meet-the-team",
-        "sections.feature-card-grid",
         "media.video",
+        "sections.hero",
+        "sections.hero-home",
+        "sections.feature-card-grid",
         "forms.hubspot-form",
+        "forms.hubspot-form-ssr",
+        "forms.conversion",
         "migration.data-sink",
+        "media.embed",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.comparator-grid",
+        "sections.disclaimer",
         "sections.richtext",
       ]
     >
@@ -1372,6 +1425,7 @@ export interface ApiPostTagPostTag extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+    description: Schema.Attribute.RichText
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       "oneToMany",

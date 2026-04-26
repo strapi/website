@@ -13,7 +13,6 @@ import {
 import { formatDate } from "@/lib/dates"
 import { Link } from "@/lib/navigation"
 
-import { BlogBreadcrumbs } from "./BlogBreadcrumbs"
 import { BlogLevelBadge } from "./BlogLevelBadge"
 
 interface BlogPostHeaderProps {
@@ -31,26 +30,6 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
     <div className="flex flex-col gap-4">
       <div className="animate-ring-reveal ring-strapi-gray-700/50 overflow-hidden rounded-2xl md:ring">
         <div className="animate-reveal-cascade md:bg-strapi-gray-950 flex flex-col rounded-2xl px-4 py-6 sm:px-6 sm:py-8 md:px-14 md:py-12">
-          <BlogBreadcrumbs
-            category={
-              post.category?.name && post.category?.slug
-                ? {
-                    name: post.category.name,
-                    slug: post.category.slug,
-                    parent:
-                      post.category.parent?.name && post.category.parent?.slug
-                        ? {
-                            name: post.category.parent.name,
-                            slug: post.category.parent.slug,
-                          }
-                        : null,
-                  }
-                : null
-            }
-            current={post.title}
-            className="mb-6"
-          />
-
           <div className="text-strapi-gray-400 flex flex-wrap items-center gap-3 text-sm font-bold tracking-wider uppercase">
             {post.category?.name && (
               <Link
@@ -76,12 +55,13 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           {post.tags && post.tags.length > 0 && (
             <div className="mt-6 flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <span
+                <Link
                   key={tag.id}
-                  className="border-strapi-blue-500/40 text-strapi-blue-400 rounded-strapi-sm border px-3 py-1.5 text-sm font-medium"
+                  href={`/blog/tags/${tag.slug}`}
+                  className="border-strapi-blue-500/40 text-strapi-blue-400 hover:border-strapi-blue-400 hover:text-strapi-blue-300 rounded-strapi-sm border px-3 py-1.5 text-sm font-medium transition-colors"
                 >
                   {tag.name}
-                </span>
+                </Link>
               ))}
             </div>
           )}

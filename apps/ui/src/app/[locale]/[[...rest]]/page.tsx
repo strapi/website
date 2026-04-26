@@ -12,8 +12,6 @@ import { fetchAllPages } from "@/lib/strapi-api/content/server"
 // Use /[locale]/dynamic/[[...rest]] for pages that need runtime context.
 export const dynamic = "force-static"
 
-export const revalidate = 60
-
 // Enable ISR generation for pages not returned by generateStaticParams
 // First request will SSR the page, then cache it for future requests
 export const dynamicParams = true

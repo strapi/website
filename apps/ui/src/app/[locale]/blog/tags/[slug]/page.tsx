@@ -16,12 +16,13 @@ import { Markdown } from "@/components/elementary/markdown/Markdown"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
 import {
+  fetchAllPostTags,
   fetchBlog,
   fetchBlogPostsList,
-  fetchPostCategory,
+  fetchPostTag,
 } from "@/lib/strapi-api/content/server"
 
-type CategoryWithExtras = {
+type TagWithExtras = {
   name?: string | null
   slug?: string | null
   description?: string | null
@@ -30,7 +31,6 @@ type CategoryWithExtras = {
     metaDescription?: string | null
     keywords?: string | null
   } | null
-  children?: ({ slug?: string | null } | null)[] | null
 }
 
 export const dynamic = "force-static"
@@ -40,33 +40,28 @@ export async function generateStaticParams({
 }: {
   params: { locale: string }
 }) {
-  const blog = await fetchBlog(locale as Locale)
-  const items = blog?.data?.navigation?.items ?? []
+  const tags = await fetchAllPostTags(locale as Locale)
 
-  const slugs = new Set<string>()
-
-  for (const item of items) {
-    if (item.slug) slugs.add(item.slug)
-    for (const child of item.children ?? []) {
-      if (child.slug) slugs.add(child.slug)
-    }
-  }
-
-  return [...slugs].map((slug) => ({ slug }))
+  return (tags?.data ?? [])
+    .map((tag) => tag?.slug)
+    .filter(
+      (slug): slug is string => typeof slug === "string" && slug.length > 0
+    )
+    .map((slug) => ({ slug }))
 }
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { slug, locale } = await props.params
-  const res = await fetchPostCategory(slug, locale as Locale)
-  const category = res?.data as CategoryWithExtras | undefined
-  const seo = category?.seo
+  const res = await fetchPostTag(slug, locale as Locale)
+  const tag = res?.data as TagWithExtras | undefined
+  const seo = tag?.seo
 
   const fallbackName = slug
     .replaceAll("-", " ")
     .replaceAll(/\b\w/g, (c) => c.toUpperCase())
-  const name = category?.name ?? fallbackName
+  const name = tag?.name ?? fallbackName
 
   return {
     title: seo?.metaTitle || `${name} — Blog`,
@@ -75,8 +70,8 @@ export async function generateMetadata(props: {
   }
 }
 
-export default function BlogCategoryPage(
-  props: PageProps<"/[locale]/blog/categories/[slug]">
+export default function BlogTagPage(
+  props: PageProps<"/[locale]/blog/tags/[slug]">
 ) {
   const params = use(props.params)
   const locale = params.locale as Locale
@@ -84,26 +79,22 @@ export default function BlogCategoryPage(
 
   setRequestLocale(locale)
 
-  const [t, blog, categoryRes] = use(
+  const [t, blog, tagRes] = use(
     Promise.all([
       getTranslations({ locale, namespace: "blog" }),
       fetchBlog(locale),
-      fetchPostCategory(slug, locale),
+      fetchPostTag(slug, locale),
     ])
   )
 
-  const category = categoryRes?.data as CategoryWithExtras | undefined
-  const childSlugs = (category?.children ?? [])
-    .map((c) => c?.slug)
-    .filter((s): s is string => typeof s === "string" && s.length > 0)
-  const allSlugs: string[] = [slug, ...childSlugs]
+  const tag = tagRes?.data as TagWithExtras | undefined
 
-  const categoryPosts = use(fetchBlogPostsList(locale, allSlugs, 20))
+  const tagPosts = use(fetchBlogPostsList(locale, undefined, 20, slug))
 
   const hubspotForm = getBlogNewsletterHubspot(blog)
-  const featuredPost: BlogPost | null = categoryPosts?.data[0] ?? null
-  const remainingPosts: BlogPost[] = categoryPosts?.data.slice(1) ?? []
-  const categoryName = category?.name ?? featuredPost?.category?.name ?? slug
+  const featuredPost: BlogPost | null = tagPosts?.data[0] ?? null
+  const remainingPosts: BlogPost[] = tagPosts?.data.slice(1) ?? []
+  const tagName = tag?.name ?? slug
 
   return (
     <HeroContainer affectsNavbarTheme className="gap-0">
@@ -111,15 +102,15 @@ export default function BlogCategoryPage(
 
       <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
         <Container className="flex flex-col gap-6">
-          <BlogBreadcrumbs category={{ name: categoryName, slug }} />
+          <BlogBreadcrumbs tag={{ name: tagName, slug }} />
 
           <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {categoryName}
+            {tagName}
           </h1>
 
-          {category?.description && (
+          {tag?.description && (
             <div className="text-strapi-gray-300 max-w-3xl [&_p]:text-base [&_p:last-child]:mb-0">
-              <Markdown>{category.description}</Markdown>
+              <Markdown>{tag.description}</Markdown>
             </div>
           )}
         </Container>

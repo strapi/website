@@ -17,7 +17,6 @@ import { routing } from "@/lib/navigation"
 import { fetchBlog, fetchBlogPostsList } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
-export const revalidate = 60
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>
@@ -63,7 +62,7 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
     <HeroContainer affectsNavbarTheme className="gap-0">
       <BlogNavbar locale={locale} />
 
-      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10">
+      <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
         {featuredPost && (
           <Container>
             <FeaturedBlogPost post={featuredPost} />
@@ -73,7 +72,9 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
         <Container>
           <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
         </Container>
+      </HeroContainerContent>
 
+      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
         <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
       </HeroContainerContent>
     </HeroContainer>

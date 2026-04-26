@@ -1,6 +1,7 @@
 import type { Core } from "@strapi/strapi"
 
 import { registerDynamicZonePopulateMiddleware } from "./documentMiddlewares/dynamic-zone"
+import { registerAutoRevalidateMiddleware } from "./documentMiddlewares/revalidate"
 import { registerAdminUserSubscriber } from "./lifeCycles/adminUser"
 import { getPopulateDynamicZoneConfig } from "./populateDynamicZone"
 
@@ -28,5 +29,9 @@ export default {
 
     // Register Documents API middleware for dynamic zone population
     registerDynamicZonePopulateMiddleware({ strapi })
+
+    // Register Documents API middleware that POSTs to the Next.js
+    // /api/strapi-revalidate webhook on writes to enrolled content types.
+    registerAutoRevalidateMiddleware({ strapi })
   },
 }

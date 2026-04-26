@@ -8,6 +8,50 @@ import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 import type { CustomFetchOptions } from "@/types/general"
 
+// ------ Cache tag map
+//
+// One tag per Strapi content type (`strapi:<uid>`). The Strapi-side document
+// middleware (`apps/strapi/src/documentMiddlewares/revalidate.ts`) calls
+// `revalidateTag(tag, "max")` after writes, so any fetch tagged below is
+// invalidated as soon as the editor publishes.
+
+const STRAPI_TAGS = {
+  page: ["strapi:api::page.page"] as const,
+  blogPost: ["strapi:api::blog-post.blog-post"] as const,
+  postCategory: ["strapi:api::post-category.post-category"] as const,
+  postTag: ["strapi:api::post-tag.post-tag"] as const,
+  caseStudy: ["strapi:api::case-study.case-study"] as const,
+  cms: ["strapi:api::cms.cms"] as const,
+  cmsComparison: ["strapi:api::cms-comparison.cms-comparison"] as const,
+  blog: ["strapi:api::blog.blog"] as const,
+  global: ["strapi:api::global.global"] as const,
+  header: ["strapi:api::header.header"] as const,
+  footer: ["strapi:api::footer.footer"] as const,
+} as const
+
+/**
+ * Build a `RequestInit` that is safe to pass to the Strapi client:
+ *  - In draft mode, opt out of Next.js caching entirely (`cache: "no-store"`)
+ *    so editors see live changes and draft content never seeds the public tag.
+ *  - Otherwise tag the fetch so it can be invalidated on demand.
+ */
+function withCacheTags(
+  isDraftMode: boolean,
+  tags: readonly string[],
+  base?: RequestInit
+): RequestInit {
+  if (isDraftMode) {
+    return { ...base, cache: "no-store" }
+  }
+
+  const callerTags = base?.next?.tags ?? []
+
+  return {
+    ...base,
+    next: { ...base?.next, tags: [...callerTags, ...tags] },
+  }
+}
+
 // ------ Shared populate objects
 
 const authorPopulate = {
@@ -45,7 +89,7 @@ export async function fetchPage(
         populate: { seo: seoPopulate },
         populateDynamicZone: { content: true },
       },
-      requestInit,
+      withCacheTags(dm.isEnabled, STRAPI_TAGS.page, requestInit),
       options
     )
   } catch (e: unknown) {
@@ -65,12 +109,16 @@ export async function fetchAllPages(
   locale: Locale
 ) {
   try {
-    return await PublicStrapiClient.fetchAll(uid, {
-      locale,
-      fields: ["fullPath", "locale", "updatedAt", "createdAt", "slug"],
-      populate: {},
-      status: "published",
-    })
+    return await PublicStrapiClient.fetchAll(
+      uid,
+      {
+        locale,
+        fields: ["fullPath", "locale", "updatedAt", "createdAt", "slug"],
+        populate: {},
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.page)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching all pages for locale '${locale}'`,
@@ -118,7 +166,7 @@ export async function fetchBlogPost(
         } as Record<string, unknown>,
         populateDynamicZone: { sections: true },
       },
-      requestInit,
+      withCacheTags(dm.isEnabled, STRAPI_TAGS.blogPost, requestInit),
       options
     )
   } catch (e: unknown) {
@@ -147,7 +195,8 @@ const blogListPopulate = {
 export async function fetchBlogPostsList(
   locale: Locale,
   categorySlug?: string | readonly string[],
-  limit?: number
+  limit?: number,
+  tagSlug?: string
 ) {
   const dm = await draftMode()
 
@@ -157,33 +206,57 @@ export async function fetchBlogPostsList(
       ? [categorySlug as string]
       : null
 
-  const filters =
-    slugs && slugs.length > 0
-      ? { filters: { category: { slug: { $in: slugs } } } }
-      : {}
+  const conditions: Record<string, unknown>[] = []
+  if (slugs && slugs.length > 0) {
+    conditions.push({ category: { slug: { $in: slugs } } })
+  }
+  if (tagSlug) {
+    conditions.push({ tags: { slug: { $eq: tagSlug } } })
+  }
+
+  const filters = conditions.length > 0 ? { filters: { $and: conditions } } : {}
+
+  const cacheTags = tagSlug
+    ? [...STRAPI_TAGS.blogPost, ...STRAPI_TAGS.postTag]
+    : STRAPI_TAGS.blogPost
+  const requestInit = withCacheTags(dm.isEnabled, cacheTags)
 
   try {
     if (typeof limit === "number") {
-      return await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
+      return await PublicStrapiClient.fetchMany(
+        "api::blog-post.blog-post",
+        {
+          locale,
+          status: dm.isEnabled ? "draft" : "published",
+          sort: { originalPublishedAt: "desc" },
+          ...filters,
+          populate: blogListPopulate,
+          pagination: { page: 1, pageSize: limit },
+        } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1],
+        requestInit
+      )
+    }
+
+    return await PublicStrapiClient.fetchAll(
+      "api::blog-post.blog-post",
+      {
         locale,
         status: dm.isEnabled ? "draft" : "published",
         sort: { originalPublishedAt: "desc" },
         ...filters,
         populate: blogListPopulate,
-        pagination: { page: 1, pageSize: limit },
-      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1])
-    }
-
-    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
-      locale,
-      status: dm.isEnabled ? "draft" : "published",
-      sort: { originalPublishedAt: "desc" },
-      ...filters,
-      populate: blogListPopulate,
-    })
+      },
+      requestInit
+    )
   } catch (e: unknown) {
+    const scopeParts: string[] = []
+    if (slugs) scopeParts.push(`categories '${slugs.join(",")}'`)
+    if (tagSlug) scopeParts.push(`tag '${tagSlug}'`)
+    const scope =
+      scopeParts.length > 0 ? ` for ${scopeParts.join(" and ")}` : ""
+
     logNonBlockingError({
-      message: `Error fetching blog posts${slugs ? ` for categories '${slugs.join(",")}'` : ""} for locale '${locale}'`,
+      message: `Error fetching blog posts${scope} for locale '${locale}'`,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,
@@ -196,12 +269,16 @@ export async function fetchBlogPostsList(
 
 export async function fetchAllBlogPosts(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchAll("api::blog-post.blog-post", {
-      locale,
-      fields: ["slug", "locale", "updatedAt", "createdAt"],
-      populate: {},
-      status: "published",
-    })
+    return await PublicStrapiClient.fetchAll(
+      "api::blog-post.blog-post",
+      {
+        locale,
+        fields: ["slug", "locale", "updatedAt", "createdAt"],
+        populate: {},
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.blogPost)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching all blog posts for locale '${locale}'`,
@@ -226,7 +303,8 @@ export async function fetchBlogPostSeo(slug: string, locale: Locale) {
         populate: {
           seo: seoPopulate,
         },
-      }
+      },
+      withCacheTags(false, STRAPI_TAGS.blogPost)
     )
   } catch (e: unknown) {
     logNonBlockingError({
@@ -254,7 +332,8 @@ export async function fetchPostCategory(slug: string, locale: Locale) {
           parent: { fields: ["name", "slug"] },
           children: { fields: ["name", "slug"] },
         } as Record<string, unknown>,
-      }
+      },
+      withCacheTags(dm.isEnabled, STRAPI_TAGS.postCategory)
     )
   } catch (e: unknown) {
     logNonBlockingError({
@@ -264,6 +343,58 @@ export async function fetchPostCategory(slug: string, locale: Locale) {
         stack: e instanceof Error ? e.stack : undefined,
       },
     })
+  }
+}
+
+export async function fetchPostTag(slug: string, locale: Locale) {
+  const dm = await draftMode()
+
+  try {
+    return await PublicStrapiClient.fetchOneBySlug(
+      "api::post-tag.post-tag",
+      slug,
+      {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        populate: {
+          seo: seoPopulate,
+        } as Record<string, unknown>,
+      },
+      withCacheTags(dm.isEnabled, STRAPI_TAGS.postTag)
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching post tag '${slug}' for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+export async function fetchAllPostTags(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchAll(
+      "api::post-tag.post-tag",
+      {
+        locale,
+        fields: ["slug", "name"],
+        populate: {},
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.postTag)
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all post tags for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
   }
 }
 
@@ -285,19 +416,23 @@ export async function fetchRelatedBlogPosts({
   const notInSlugs = Array.from(new Set([currentSlug, ...excludeSlugs]))
 
   try {
-    const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
-      locale,
-      status: "published",
-      sort: { originalPublishedAt: "desc" },
-      filters: {
-        $and: [
-          { category: { slug: { $eq: categorySlug } } },
-          { slug: { $notIn: notInSlugs } },
-        ],
+    const res = await PublicStrapiClient.fetchMany(
+      "api::blog-post.blog-post",
+      {
+        locale,
+        status: "published",
+        sort: { originalPublishedAt: "desc" },
+        filters: {
+          $and: [
+            { category: { slug: { $eq: categorySlug } } },
+            { slug: { $notIn: notInSlugs } },
+          ],
+        },
+        pagination: { page: 1, pageSize: limit },
+        populate: blogListPopulate,
       },
-      pagination: { page: 1, pageSize: limit },
-      populate: blogListPopulate,
-    })
+      withCacheTags(false, STRAPI_TAGS.blogPost)
+    )
 
     return { ...res, data: (res.data ?? []).slice(0, limit) }
   } catch (e: unknown) {
@@ -325,16 +460,20 @@ export async function fetchLatestBlogPosts({
   const notInSlugs = Array.from(new Set(excludeSlugs))
 
   try {
-    const res = await PublicStrapiClient.fetchMany("api::blog-post.blog-post", {
-      locale,
-      status: "published",
-      sort: { originalPublishedAt: "desc" },
-      ...(notInSlugs.length > 0
-        ? { filters: { slug: { $notIn: notInSlugs } } }
-        : {}),
-      pagination: { page: 1, pageSize: limit },
-      populate: blogListPopulate,
-    })
+    const res = await PublicStrapiClient.fetchMany(
+      "api::blog-post.blog-post",
+      {
+        locale,
+        status: "published",
+        sort: { originalPublishedAt: "desc" },
+        ...(notInSlugs.length > 0
+          ? { filters: { slug: { $notIn: notInSlugs } } }
+          : {}),
+        pagination: { page: 1, pageSize: limit },
+        populate: blogListPopulate,
+      },
+      withCacheTags(false, STRAPI_TAGS.blogPost)
+    )
 
     return { ...res, data: (res.data ?? []).slice(0, limit) }
   } catch (e: unknown) {
@@ -376,7 +515,8 @@ export async function fetchBlog(locale: Locale) {
     return await PublicStrapiClient.fetchOne(
       "api::blog.blog",
       undefined,
-      params
+      params,
+      withCacheTags(false, STRAPI_TAGS.blog)
     )
   } catch (e: unknown) {
     logNonBlockingError({
@@ -398,13 +538,18 @@ export async function fetchSeo(
   locale: Locale
 ) {
   try {
-    return await PublicStrapiClient.fetchOneByFullPath(uid, fullPath, {
-      locale,
-      populate: {
-        seo: seoPopulate,
-        localizations: true,
+    return await PublicStrapiClient.fetchOneByFullPath(
+      uid,
+      fullPath,
+      {
+        locale,
+        populate: {
+          seo: seoPopulate,
+          localizations: true,
+        },
       },
-    })
+      withCacheTags(false, STRAPI_TAGS.page)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching SEO for '${uid}' with fullPath '${fullPath}' for locale '${locale}'`,
@@ -418,11 +563,16 @@ export async function fetchSeo(
 
 export async function fetchGlobalSeo() {
   try {
-    return await PublicStrapiClient.fetchOne("api::global.global", undefined, {
-      populate: {
-        defaultSeo: seoPopulate,
+    return await PublicStrapiClient.fetchOne(
+      "api::global.global",
+      undefined,
+      {
+        populate: {
+          defaultSeo: seoPopulate,
+        },
       },
-    })
+      withCacheTags(false, STRAPI_TAGS.global)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: "Error fetching global SEO defaults",
@@ -456,7 +606,7 @@ export async function fetchCmsComparison(
         } as Record<string, unknown>,
         populateDynamicZone: { content: true },
       },
-      requestInit,
+      withCacheTags(dm.isEnabled, STRAPI_TAGS.cmsComparison, requestInit),
       options
     )
   } catch (e: unknown) {
@@ -479,7 +629,8 @@ export async function fetchAllCmsComparisons(locale: Locale) {
         fields: ["slug", "locale", "updatedAt", "createdAt"],
         populate: {},
         status: "published",
-      }
+      },
+      withCacheTags(false, STRAPI_TAGS.cmsComparison)
     )
   } catch (e: unknown) {
     logNonBlockingError({
@@ -504,7 +655,8 @@ export async function fetchCmsComparisonSeo(slug: string, locale: Locale) {
         populate: {
           seo: seoPopulate,
         },
-      }
+      },
+      withCacheTags(false, STRAPI_TAGS.cmsComparison)
     )
   } catch (e: unknown) {
     logNonBlockingError({
@@ -519,15 +671,19 @@ export async function fetchCmsComparisonSeo(slug: string, locale: Locale) {
 
 export async function fetchAllCms(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchAll("api::cms.cms", {
-      locale,
-      fields: ["name", "slug"],
-      populate: {
-        logo: { fields: ["url", "width", "height", "alternativeText"] },
-        fields: true,
-      } as Record<string, unknown>,
-      status: "published",
-    })
+    return await PublicStrapiClient.fetchAll(
+      "api::cms.cms",
+      {
+        locale,
+        fields: ["name", "slug"],
+        populate: {
+          logo: { fields: ["url", "width", "height", "alternativeText"] },
+          fields: true,
+        } as Record<string, unknown>,
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.cms)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching all CMS entries for locale '${locale}'`,
@@ -575,7 +731,7 @@ export async function fetchCaseStudy(
         } as Record<string, unknown>,
         populateDynamicZone: { content: true },
       },
-      requestInit,
+      withCacheTags(dm.isEnabled, STRAPI_TAGS.caseStudy, requestInit),
       options
     )
   } catch (e: unknown) {
@@ -592,23 +748,33 @@ export async function fetchCaseStudy(
 export async function fetchCaseStudiesList(locale: Locale, limit?: number) {
   const dm = await draftMode()
 
+  const requestInit = withCacheTags(dm.isEnabled, STRAPI_TAGS.caseStudy)
+
   try {
     if (typeof limit === "number") {
-      return await PublicStrapiClient.fetchMany("api::case-study.case-study", {
+      return await PublicStrapiClient.fetchMany(
+        "api::case-study.case-study",
+        {
+          locale,
+          status: dm.isEnabled ? "draft" : "published",
+          sort: { originalPublishedAt: "desc" },
+          populate: caseStudyListPopulate,
+          pagination: { page: 1, pageSize: limit },
+        } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1],
+        requestInit
+      )
+    }
+
+    return await PublicStrapiClient.fetchAll(
+      "api::case-study.case-study",
+      {
         locale,
         status: dm.isEnabled ? "draft" : "published",
         sort: { originalPublishedAt: "desc" },
         populate: caseStudyListPopulate,
-        pagination: { page: 1, pageSize: limit },
-      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1])
-    }
-
-    return await PublicStrapiClient.fetchAll("api::case-study.case-study", {
-      locale,
-      status: dm.isEnabled ? "draft" : "published",
-      sort: { originalPublishedAt: "desc" },
-      populate: caseStudyListPopulate,
-    })
+      },
+      requestInit
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching case studies for locale '${locale}'`,
@@ -624,12 +790,16 @@ export async function fetchCaseStudiesList(locale: Locale, limit?: number) {
 
 export async function fetchAllCaseStudies(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchAll("api::case-study.case-study", {
-      locale,
-      fields: ["slug", "locale", "updatedAt", "createdAt"],
-      populate: {},
-      status: "published",
-    })
+    return await PublicStrapiClient.fetchAll(
+      "api::case-study.case-study",
+      {
+        locale,
+        fields: ["slug", "locale", "updatedAt", "createdAt"],
+        populate: {},
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.caseStudy)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching all case studies for locale '${locale}'`,
@@ -654,7 +824,8 @@ export async function fetchCaseStudySeo(slug: string, locale: Locale) {
         populate: {
           seo: seoPopulate,
         },
-      }
+      },
+      withCacheTags(false, STRAPI_TAGS.caseStudy)
     )
   } catch (e: unknown) {
     logNonBlockingError({
@@ -671,10 +842,15 @@ export async function fetchCaseStudySeo(slug: string, locale: Locale) {
 
 export async function fetchHeader(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchOne("api::header.header", undefined, {
-      locale,
-      populateDynamicZone: { content: true },
-    })
+    return await PublicStrapiClient.fetchOne(
+      "api::header.header",
+      undefined,
+      {
+        locale,
+        populateDynamicZone: { content: true },
+      },
+      withCacheTags(false, STRAPI_TAGS.header)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching header for locale '${locale}'`,
@@ -688,10 +864,15 @@ export async function fetchHeader(locale: Locale) {
 
 export async function fetchFooter(locale: Locale) {
   try {
-    return await PublicStrapiClient.fetchOne("api::footer.footer", undefined, {
-      locale,
-      populateDynamicZone: { content: true },
-    })
+    return await PublicStrapiClient.fetchOne(
+      "api::footer.footer",
+      undefined,
+      {
+        locale,
+        populateDynamicZone: { content: true },
+      },
+      withCacheTags(false, STRAPI_TAGS.footer)
+    )
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching footer for locale '${locale}'`,

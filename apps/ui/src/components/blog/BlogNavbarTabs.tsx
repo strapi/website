@@ -54,20 +54,11 @@ function isCategoryActive(pathname: string, category: Category): boolean {
 
 export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
   const pathname = usePathname()
-
   const isAllActive = pathname === "/blog" || pathname === "/blog/"
-
-  const activeCategory = categories
-    .filter((category) => category.slug && category.name)
-    .find((category) => isCategoryActive(pathname, category))
-
-  const subCategories = (activeCategory?.children ?? []).filter(
-    (c) => c.slug && c.name
-  )
 
   return (
     <div className="flex min-w-0 flex-col gap-2">
-      <div className="-mx-1 flex min-w-0 items-center gap-1 overflow-x-auto py-1 sm:gap-2">
+      <div className="flex min-w-0 items-center gap-1 overflow-x-auto py-1 sm:gap-2">
         <BlogNavbarLink
           href="/blog"
           active={isAllActive}
@@ -88,21 +79,6 @@ export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
             </BlogNavbarLink>
           ))}
       </div>
-
-      {subCategories.length > 0 && (
-        <div className="border-strapi-neutral-800 -mx-1 flex min-w-0 items-center gap-1 overflow-x-auto border-t pt-2 pl-4 sm:gap-2">
-          {subCategories.map((child) => (
-            <BlogNavbarLink
-              key={child.id}
-              href={`/blog/categories/${child.slug}`}
-              active={pathname === `/blog/categories/${child.slug}`}
-              className="text-xs sm:text-sm"
-            >
-              {child.name}
-            </BlogNavbarLink>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

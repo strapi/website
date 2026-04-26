@@ -37,7 +37,7 @@
       "regex": "^[a-z0-9-]+$"
     },
     "description": {
-      "type": "text",
+      "type": "richtext",
       "pluginOptions": {
         "i18n": {
           "localized": true

@@ -23,54 +23,59 @@ export function BlogPostLinkRow({
   const image = showImage ? post.image : null
   const tags = showTags ? (post.tags ?? []) : []
 
+  const postHref = `/blog/${post.slug}`
+
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      className={cn("group flex items-center gap-4", className)}
-    >
+    <div className={cn("group flex items-center gap-4", className)}>
       {image?.image && (
-        <div className="border-strapi-gray-700/50 relative aspect-video w-24 shrink-0 overflow-hidden rounded-md border sm:w-28">
+        <Link
+          href={postHref}
+          className="border-strapi-gray-700/50 relative aspect-video w-24 shrink-0 overflow-hidden rounded-md border sm:w-28"
+        >
           <StrapiBasicImage
             component={image.image}
             mode="fill"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 96px, 112px"
           />
-        </div>
+        </Link>
       )}
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <div className="text-strapi-gray-400 flex items-center gap-2 text-xs font-bold uppercase">
-          {category?.name && (
-            <span className="border-strapi-gray-700/50 rounded-sm border px-2 py-0.5">
-              {category.name}
-            </span>
-          )}
-          {readTime > 0 && (
-            <>
-              {category?.name && <span>·</span>}
-              <span>{readTime} min read</span>
-            </>
-          )}
-        </div>
+        <Link href={postHref} className="flex min-w-0 flex-col gap-1">
+          <div className="text-strapi-gray-400 flex items-center gap-2 text-xs font-bold uppercase">
+            {category?.name && (
+              <span className="border-strapi-gray-700/50 rounded-sm border px-2 py-0.5">
+                {category.name}
+              </span>
+            )}
+            {readTime > 0 && (
+              <>
+                {category?.name && <span>·</span>}
+                <span>{readTime} min read</span>
+              </>
+            )}
+          </div>
 
-        <h4 className="text-base font-semibold text-white underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover:decoration-white">
-          {post.title}
-        </h4>
+          <h4 className="text-base font-semibold text-white underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover:decoration-white">
+            {post.title}
+          </h4>
+        </Link>
 
         {tags.length > 0 && (
           <div className="mt-1 flex flex-wrap gap-1.5">
             {tags.map((tag) => (
-              <span
+              <Link
                 key={tag.id}
-                className="border-strapi-gray-700/50 text-strapi-gray-400 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
+                href={`/blog/tags/${tag.slug}`}
+                className="border-strapi-gray-700/50 text-strapi-gray-400 hover:border-strapi-gray-500 hover:text-strapi-gray-200 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase transition-colors"
               >
                 {tag.name}
-              </span>
+              </Link>
             ))}
           </div>
         )}
       </div>
-    </Link>
+    </div>
   )
 }

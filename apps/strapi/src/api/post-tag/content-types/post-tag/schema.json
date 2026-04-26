@@ -21,6 +21,9 @@
       "targetField": "name",
       "required": true
     },
+    "description": {
+      "type": "richtext"
+    },
     "seo": {
       "type": "component",
       "component": "shared.seo",

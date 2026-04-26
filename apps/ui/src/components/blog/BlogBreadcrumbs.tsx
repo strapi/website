@@ -1,4 +1,3 @@
-import { CaretRightIcon } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 
 import { Link } from "@/lib/navigation"
@@ -13,12 +12,18 @@ interface BlogBreadcrumbsProps {
   readonly category?:
     | (CategoryRef & { readonly parent?: CategoryRef | null })
     | null
+  readonly tag?: CategoryRef | null
   readonly current?: string | null
   readonly className?: string
 }
 
+function BlogBreadcrumbSeparator() {
+  return <span className="font-regular opacity-50">/</span>
+}
+
 export function BlogBreadcrumbs({
   category,
+  tag,
   current,
   className,
 }: BlogBreadcrumbsProps) {
@@ -33,7 +38,7 @@ export function BlogBreadcrumbs({
     <nav
       aria-label={t("ariaLabel")}
       className={cn(
-        "text-strapi-gray-400 flex flex-wrap items-center gap-1.5 text-sm",
+        "text-strapi-gray-400 flex flex-wrap items-center gap-1.5 text-base",
         className
       )}
     >
@@ -46,10 +51,10 @@ export function BlogBreadcrumbs({
 
       {parent && (
         <>
-          <CaretRightIcon className="size-3.5 opacity-60" aria-hidden />
+          <BlogBreadcrumbSeparator />
           <Link
             href={`/blog/categories/${parent.slug}`}
-            className="hover:text-strapi-gray-200 transition-colors"
+            className="hover:text-strapi-blue-400 transition-colors"
           >
             {parent.name}
           </Link>
@@ -58,20 +63,34 @@ export function BlogBreadcrumbs({
 
       {category && (
         <>
-          <CaretRightIcon className="size-3.5 opacity-60" aria-hidden />
+          <BlogBreadcrumbSeparator />
           <Link
             href={`/blog/categories/${category.slug}`}
-            className="hover:text-strapi-gray-200 transition-colors"
+            className="text-strapi-blue-500 hover:text-strapi-blue-400 font-medium transition-colors"
           >
             {category.name}
           </Link>
         </>
       )}
 
+      {tag && (
+        <>
+          <BlogBreadcrumbSeparator />
+          <Link
+            href={`/blog/tags/${tag.slug}`}
+            className="text-strapi-blue-500 hover:text-strapi-blue-400 font-medium transition-colors"
+          >
+            {tag.name}
+          </Link>
+        </>
+      )}
+
       {current && (
         <>
-          <CaretRightIcon className="size-3.5 opacity-60" aria-hidden />
-          <span className="text-strapi-gray-200 line-clamp-1">{current}</span>
+          <BlogBreadcrumbSeparator />
+          <span className="hover:text-strapi-blue-400 text-strapi-gray-200 line-clamp-1 font-bold transition-colors">
+            {current}
+          </span>
         </>
       )}
     </nav>

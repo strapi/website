@@ -83,7 +83,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
             {showUpdated && post.updatedAt && (
               <>
                 <span className="text-strapi-gray-400">●</span>
-                <span className="text-strapi-gray-500 text-sm italic">
+                <span className="text-strapi-blue-600 text-sm italic">
                   {t("updatedOn", {
                     date: formatDate(post.updatedAt, BLOG_DATE_FORMAT),
                   })}

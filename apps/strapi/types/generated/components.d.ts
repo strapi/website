@@ -63,6 +63,7 @@ export interface BlogRelatedPosts extends Struct.ComponentSchema {
       "oneToOne",
       "api::post-category.post-category"
     >
+    title: Schema.Attribute.String
   }
 }
 
@@ -121,7 +122,7 @@ export interface CardsFeatureCard extends Struct.ComponentSchema {
   }
   attributes: {
     ctaLinks: Schema.Attribute.Component<"utilities.link", true>
-    description: Schema.Attribute.Text
+    description: Schema.Attribute.RichText
     icon: Schema.Attribute.Component<"utilities.basic-image", false>
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     imagePosition: Schema.Attribute.Enumeration<["left", "right"]> &
@@ -271,7 +272,7 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
     icon: "lightbulb"
   }
   attributes: {
-    description: Schema.Attribute.Text &
+    description: Schema.Attribute.RichText &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1310,7 +1311,7 @@ export interface TestimonialsQuote extends Struct.ComponentSchema {
     authorRole: Schema.Attribute.String
     companyLogo: Schema.Attribute.Component<"utilities.basic-image", false>
     image: Schema.Attribute.Component<"utilities.basic-image", false>
-    quote: Schema.Attribute.Text & Schema.Attribute.Required
+    quote: Schema.Attribute.RichText & Schema.Attribute.Required
     variant: Schema.Attribute.Enumeration<["boxed", "image"]> &
       Schema.Attribute.DefaultTo<"boxed">
   }
@@ -1384,7 +1385,7 @@ export interface UtilitiesLinkDecorations extends Struct.ComponentSchema {
       ["default", "destructive", "outline", "secondary", "ghost", "link"]
     > &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<"link">
+      Schema.Attribute.DefaultTo<"default">
   }
 }
 

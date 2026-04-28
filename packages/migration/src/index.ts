@@ -15,6 +15,7 @@ import { resolveBlogPostRelations } from "./entities/blog-post.ts"
 import { setPageParents } from "./entities/page.ts"
 import { prewarmIdMap, resolveDependencyUids } from "./pipeline/prewarm.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
+import { runBackfillOriginalPublishedAt } from "./scripts/backfill-original-published-at.ts"
 import { runFixPublishedAt } from "./scripts/fix-published-at.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
@@ -374,6 +375,34 @@ program
     await runFixPublishedAt({
       entity,
       sourceEndpoint: config.sourceEndpoint,
+      targetEndpoint: config.targetEndpoint,
+      dryRun: opts.dryRun ?? false,
+      slugFilter: opts.slug,
+      limit: opts.limit,
+      verbose: opts.verbose ?? false,
+    })
+  })
+
+program
+  .command("backfill-original-published-at <entity>")
+  .description(
+    "Copy publishedAt → originalPublishedAt on v5 entities where the latter is null (fixes natively-created posts)"
+  )
+  .option("--dry-run", "Log matches without writing")
+  .option("--slug <pattern>", "Filter by comma-separated slugs")
+  .option("--limit <n>", "Max entries to patch", Number.parseInt)
+  .option("--verbose", "Debug-level logging")
+  .action(async (entity: string, opts) => {
+    const config = ENTITY_CONFIGS[entity]
+
+    if (!config) {
+      throw new Error(
+        `Unknown entity: ${entity}. Available: ${Object.keys(ENTITY_CONFIGS).join(", ")}`
+      )
+    }
+
+    await runBackfillOriginalPublishedAt({
+      entity,
       targetEndpoint: config.targetEndpoint,
       dryRun: opts.dryRun ?? false,
       slugFilter: opts.slug,

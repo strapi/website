@@ -38,9 +38,9 @@
       "component": "media.image",
       "repeatable": false
     },
-    "timelineImage": {
+    "coverImage": {
       "type": "component",
-      "component": "media.image",
+      "component": "utilities.basic-image",
       "repeatable": false
     },
     "author": {

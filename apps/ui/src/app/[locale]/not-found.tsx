@@ -1,25 +1,56 @@
-import { LinkBreakIcon } from "@phosphor-icons/react/ssr"
-import { getTranslations } from "next-intl/server"
+import type { Locale } from "next-intl"
+import { getLocale } from "next-intl/server"
 
+import { Container } from "@/components/elementary/Container"
+import {
+  SectionHeader,
+  SectionTitle,
+} from "@/components/elementary/section-header"
+import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
+import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
+import { buttonVariants } from "@/components/ui/button"
 import { Link } from "@/lib/navigation"
+import { fetchNotFound } from "@/lib/strapi-api/content/server"
+import { cn } from "@/lib/styles"
 
 export default async function NotFound() {
-  const t = await getTranslations("errors.notFound")
+  const locale = (await getLocale()) as Locale
+  const notFound = (await fetchNotFound(locale))?.data
+
+  const title = notFound?.title ?? "Page not found"
+  const backButtonText = notFound?.backButtonText ?? "Back to home"
+  const image = notFound?.image
+  const content = notFound?.content ?? []
 
   return (
-    <div className="flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center gap-2">
-      <LinkBreakIcon className="size-8" weight="bold" />
-      <div className="text-center">
-        <h2 className="mb-4 text-2xl font-semibold">{t("title")}</h2>
-        <p>{t("description")}</p>
-      </div>
-      <p>{t("solution")}</p>
-      <Link
-        className="rounded-xl bg-gray-900 px-4 py-2 text-white transition-colors duration-500 hover:bg-gray-700"
-        href="/"
-      >
-        {t("redirect")}
-      </Link>
-    </div>
+    <>
+      <section className="py-20 lg:py-28">
+        <Container>
+          <SectionHeader
+            size="xl"
+            layout="center"
+            constrain={false}
+            className="gap-16"
+          >
+            <SectionTitle as="h1">{title}</SectionTitle>
+
+            {image && (
+              <StrapiBasicImage component={image} mode="intrinsic" priority />
+            )}
+
+            <Link
+              href="/"
+              className={cn(buttonVariants({ variant: "default", size: "lg" }))}
+            >
+              {backButtonText}
+            </Link>
+          </SectionHeader>
+        </Container>
+      </section>
+
+      {content.length > 0 && (
+        <DynamicZoneRenderer content={content} surface="page" />
+      )}
+    </>
   )
 }

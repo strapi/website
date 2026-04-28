@@ -1,0 +1,63 @@
+{
+  "kind": "singleType",
+  "collectionName": "not_founds",
+  "info": {
+    "singularName": "not-found",
+    "pluralName": "not-founds",
+    "displayName": "404 / Not Found",
+    "description": "Customizable 404 page content"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "backButtonText": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "image": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "content": {
+      "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "components": [
+        "blog.related-posts",
+        "blog.editors-picks",
+        "blog.resource-cta",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.section-header",
+        "sections.feature-card-grid"
+      ]
+    }
+  }
+}

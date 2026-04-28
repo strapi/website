@@ -82,9 +82,7 @@ export function StrapiBlogPostView({ params }: Props) {
         <BlogNavbar locale={locale} />
 
         <HeroContainerContent>
-          <Container>
-            <BlogPostHeader post={post} />
-          </Container>
+          <BlogPostHeader post={post} />
         </HeroContainerContent>
       </HeroContainer>
 

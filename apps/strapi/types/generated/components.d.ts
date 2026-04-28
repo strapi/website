@@ -1385,7 +1385,7 @@ export interface UtilitiesLinkDecorations extends Struct.ComponentSchema {
       ["default", "destructive", "outline", "secondary", "ghost", "link"]
     > &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<"default">
+      Schema.Attribute.DefaultTo<"link">
   }
 }
 

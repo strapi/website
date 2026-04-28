@@ -41,7 +41,7 @@ export function StrapiLink({
   const { newTab = false, label, decorations } = component ?? {}
 
   const {
-    variant = "default",
+    variant = "link",
     size = "default",
     leftIcon,
     rightIcon,

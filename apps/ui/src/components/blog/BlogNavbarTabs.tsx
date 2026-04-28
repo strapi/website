@@ -60,9 +60,6 @@ export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
   const [scrollState, setScrollState] = useState({
     showLeftFade: false,
     showRightFade: false,
-    showDesktopScrollbar: false,
-    thumbWidth: 0,
-    thumbOffset: 0,
   })
 
   const updateScrollState = useCallback(() => {
@@ -77,31 +74,13 @@ export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
     const showLeftFade = canScroll && container.scrollLeft > 2
     const showRightFade = canScroll && container.scrollLeft < maxScroll - 2
 
-    const thumbWidth = canScroll
-      ? Math.max(
-          (container.clientWidth * container.clientWidth) /
-            container.scrollWidth,
-          28
-        )
-      : 0
-    const thumbOffset =
-      canScroll && maxScroll > 0
-        ? ((container.clientWidth - thumbWidth) * container.scrollLeft) /
-          maxScroll
-        : 0
-
     setScrollState({
       showLeftFade,
       showRightFade,
-      showDesktopScrollbar: canScroll,
-      thumbWidth,
-      thumbOffset,
     })
   }, [])
 
   useEffect(() => {
-    updateScrollState()
-
     const container = scrollContainerRef.current
 
     if (!container) {
@@ -116,8 +95,10 @@ export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
 
     resizeObserver.observe(container)
     window.addEventListener("resize", updateScrollState)
+    const frameId = window.requestAnimationFrame(updateScrollState)
 
     return () => {
+      window.cancelAnimationFrame(frameId)
       container.removeEventListener("scroll", updateScrollState)
       resizeObserver.disconnect()
       window.removeEventListener("resize", updateScrollState)
@@ -129,13 +110,13 @@ export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
       <div className="relative">
         <div
           className={cn(
-            "pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-linear-to-r from-black/90 via-black/55 to-transparent transition-opacity sm:hidden",
+            "pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-linear-to-r from-black/90 via-black/55 to-transparent transition-opacity",
             scrollState.showLeftFade ? "opacity-100" : "opacity-0"
           )}
         />
         <div
           className={cn(
-            "pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-linear-to-l from-black/90 via-black/55 to-transparent transition-opacity sm:hidden",
+            "pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-linear-to-l from-black/90 via-black/55 to-transparent transition-opacity",
             scrollState.showRightFade ? "opacity-100" : "opacity-0"
           )}
         />
@@ -164,19 +145,6 @@ export function BlogNavbarTabs({ categories }: BlogNavbarTabsProps) {
               </BlogNavbarLink>
             ))}
         </div>
-
-        {scrollState.showDesktopScrollbar && (
-          <>
-            <div className="pointer-events-none absolute right-0 bottom-0 left-0 hidden h-[3px] rounded-full bg-white/20 sm:block" />
-            <div
-              className="pointer-events-none absolute bottom-0 hidden h-[3px] rounded-full bg-white/55 sm:block"
-              style={{
-                width: `${scrollState.thumbWidth}px`,
-                transform: `translateX(${scrollState.thumbOffset}px)`,
-              }}
-            />
-          </>
-        )}
       </div>
     </div>
   )

@@ -19,6 +19,7 @@ export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::page.page": "/pages",
   "api::blog-post.blog-post": "/blog-posts",
   "api::post-tag.post-tag": "/post-tags",
+  "api::post-category.post-category": "/post-categories",
   "api::blog.blog": "/blog",
   "api::footer.footer": "/footer",
   "api::header.header": "/header",

@@ -7,12 +7,11 @@ import { BlogBreadcrumbs } from "@/components/blog/BlogBreadcrumbs"
 import { BlogNavbar } from "@/components/blog/BlogNavbar"
 import { BlogPostsList } from "@/components/blog/BlogPostsList"
 import { FeaturedBlogPost } from "@/components/blog/FeaturedBlogPost"
-import { Container } from "@/components/elementary/Container"
 import {
   HeroContainer,
   HeroContainerContent,
 } from "@/components/elementary/HeroContainer"
-import { Markdown } from "@/components/elementary/markdown/Markdown"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
 import {
@@ -101,7 +100,7 @@ export default function BlogTagPage(
       <BlogNavbar locale={locale} />
 
       <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-        <Container className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
           <BlogBreadcrumbs tag={{ name: tagName, slug }} />
 
           <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
@@ -110,20 +109,14 @@ export default function BlogTagPage(
 
           {tag?.description && (
             <div className="text-strapi-gray-300 max-w-3xl [&_p]:text-base [&_p:last-child]:mb-0">
-              <Markdown>{tag.description}</Markdown>
+              <InlineMarkdown>{tag.description}</InlineMarkdown>
             </div>
           )}
-        </Container>
+        </div>
 
-        {featuredPost && (
-          <Container>
-            <FeaturedBlogPost post={featuredPost} />
-          </Container>
-        )}
+        {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-        <Container>
-          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
-        </Container>
+        <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
       </HeroContainerContent>
 
       <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">

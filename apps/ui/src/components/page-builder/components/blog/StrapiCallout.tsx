@@ -8,7 +8,7 @@ import {
 import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
-import { Markdown } from "@/components/elementary/markdown/Markdown"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { cn } from "@/lib/styles"
 
 type Variant = "note" | "tip" | "warning" | "info"
@@ -75,7 +75,7 @@ export function StrapiCallout({
             )}
 
             <div className="[&_p]:text-base [&_p]:leading-relaxed [&_p:last-child]:mb-0">
-              <Markdown>{component.content}</Markdown>
+              <InlineMarkdown>{component.content}</InlineMarkdown>
             </div>
           </div>
         </aside>

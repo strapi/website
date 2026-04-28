@@ -37,8 +37,8 @@ export function combineAuthors(
   return [...(author ? [author] : []), ...(coauthors ?? [])]
 }
 
-export function getBlogPostTimelineImage(post: BlogPost) {
-  return post.timelineImage?.image ?? post.image?.image
+export function getBlogPostCoverImage(post: BlogPost) {
+  return post.coverImage ?? post.image?.image
 }
 
 function stripMarkup(content: string): string {

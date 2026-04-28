@@ -9,6 +9,14 @@ function backfillOriginalPublishedAt(
 
   const publishedAt = data["publishedAt"]
 
+  // Strapi v5 sometimes hands publishedAt to lifecycle hooks as a Date,
+  // sometimes as an ISO string — normalize both.
+  if (publishedAt instanceof Date) {
+    data["originalPublishedAt"] = publishedAt.toISOString()
+
+    return
+  }
+
   if (typeof publishedAt === "string" && publishedAt.length > 0) {
     data["originalPublishedAt"] = publishedAt
   }

@@ -27,6 +27,7 @@ const STRAPI_TAGS = {
   global: ["strapi:api::global.global"] as const,
   header: ["strapi:api::header.header"] as const,
   footer: ["strapi:api::footer.footer"] as const,
+  notFound: ["strapi:api::not-found.not-found"] as const,
 } as const
 
 /**
@@ -153,9 +154,7 @@ export async function fetchBlogPost(
           image: {
             populate: { image: { populate: { media: true } } },
           },
-          timelineImage: {
-            populate: { image: { populate: { media: true } } },
-          },
+          coverImage: { populate: { media: true } },
           author: authorPopulate,
           coauthors: authorPopulate,
           category: {
@@ -184,9 +183,7 @@ const blogListPopulate = {
   image: {
     populate: { image: { populate: { media: true } } },
   },
-  timelineImage: {
-    populate: { image: { populate: { media: true } } },
-  },
+  coverImage: { populate: { media: true } },
   author: authorPopulate,
   coauthors: authorPopulate,
   category: true,
@@ -876,6 +873,33 @@ export async function fetchFooter(locale: Locale) {
   } catch (e: unknown) {
     logNonBlockingError({
       message: `Error fetching footer for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+  }
+}
+
+// ------ Not Found (404) fetching function
+
+export async function fetchNotFound(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchOne(
+      "api::not-found.not-found",
+      undefined,
+      {
+        locale,
+        populate: {
+          image: { populate: { media: true } },
+        },
+        populateDynamicZone: { content: true },
+      },
+      withCacheTags(false, STRAPI_TAGS.notFound)
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching not-found for locale '${locale}'`,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,

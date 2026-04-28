@@ -276,7 +276,8 @@ export class TargetClient {
 
   async list(
     endpoint: string,
-    populate: Record<string, unknown> = {}
+    populate: Record<string, unknown> = {},
+    status: "draft" | "published" = "draft"
   ): Promise<V5Entity[]> {
     const all: V5Entity[] = []
     let page = 1
@@ -285,7 +286,7 @@ export class TargetClient {
       const params: Record<string, unknown> = {
         populate,
         pagination: { pageSize: 100, page },
-        status: "draft",
+        status,
         locale: "en",
       }
 

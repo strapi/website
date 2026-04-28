@@ -6,8 +6,8 @@ import {
   type BlogPost,
   calculateReadTime,
   combineAuthors,
+  getBlogPostCoverImage,
   getBlogPostPublishDate,
-  getBlogPostTimelineImage,
   getExcerpt,
 } from "@/lib/blog-utils"
 import { formatDate } from "@/lib/dates"
@@ -24,7 +24,7 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
   const excerpt = post.description?.trim() || getExcerpt(post.content)
   const allAuthors = combineAuthors(post.author, post.coauthors ?? undefined)
   const publishDate = getBlogPostPublishDate(post)
-  const timelineImage = getBlogPostTimelineImage(post)
+  const coverImage = getBlogPostCoverImage(post)
 
   return (
     <HeroContainerBorder asChild>
@@ -71,10 +71,10 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
             </div>
           </div>
 
-          {timelineImage && (
+          {coverImage && (
             <div className="border-strapi-gray-700/50 relative aspect-square overflow-hidden border-l">
               <StrapiBasicImage
-                component={timelineImage}
+                component={coverImage}
                 mode="fill"
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"

@@ -32,6 +32,18 @@ export const metadata: Metadata = {
     template: "%s / Notum Technologies",
     default: "",
   },
+  // TODO: REMOVE BEFORE PRODUCTION DEPLOY — site-wide noindex/nofollow while
+  // hosted on a non-production URL. Drop this `robots` field entirely.
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
 }
 
 export default async function RootLayout({

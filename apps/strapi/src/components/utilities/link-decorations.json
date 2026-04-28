@@ -9,7 +9,7 @@
     "variant": {
       "type": "enumeration",
       "required": true,
-      "default": "link",
+      "default": "default",
       "enum": [
         "default",
         "destructive",

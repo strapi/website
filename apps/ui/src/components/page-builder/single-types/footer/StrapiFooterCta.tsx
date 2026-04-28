@@ -1,11 +1,12 @@
 "use client"
 
+import { ArrowRightIcon } from "@phosphor-icons/react"
 import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
 import { SectionTitle } from "@/components/elementary/section-header"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
+import { StrapiLinkText } from "@/components/page-builder/components/utilities/StrapiLinkText"
 import { useClip } from "@/hooks/useClip"
 
 export function StrapiFooterCta({
@@ -118,7 +119,12 @@ export function StrapiFooterCta({
                       </p>
                     )}
 
-                    <StrapiLink component={card.link} />
+                    <div className="text-strapi-blue-600 flex items-center justify-start gap-2 text-base font-semibold">
+                      <div className="hover:animate-spring inline-flex items-center justify-start gap-2">
+                        <StrapiLinkText component={card.link} className="" />
+                        <ArrowRightIcon className="size-4" weight="bold" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}

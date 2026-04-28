@@ -509,6 +509,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       "plugin::users-permissions.user"
     >
     content: Schema.Attribute.RichText
+    coverImage: Schema.Attribute.Component<"utilities.basic-image", false>
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -565,7 +566,6 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     seo: Schema.Attribute.Component<"shared.seo", false>
     slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
     tags: Schema.Attribute.Relation<"manyToMany", "api::post-tag.post-tag">
-    timelineImage: Schema.Attribute.Component<"media.image", false>
     title: Schema.Attribute.String & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -1141,6 +1141,72 @@ export interface ApiNewsItemNewsItem extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private
     publishedAt: Schema.Attribute.DateTime
     thumbnail: Schema.Attribute.Component<"media.image", false>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
+export interface ApiNotFoundNotFound extends Struct.SingleTypeSchema {
+  collectionName: "not_founds"
+  info: {
+    description: "Customizable 404 page content"
+    displayName: "404 / Not Found"
+    pluralName: "not-founds"
+    singularName: "not-found"
+  }
+  options: {
+    draftAndPublish: false
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    backButtonText: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    content: Schema.Attribute.DynamicZone<
+      [
+        "blog.related-posts",
+        "blog.editors-picks",
+        "blog.resource-cta",
+        "sections.cta-banner",
+        "sections.community-banner",
+        "sections.section-header",
+        "sections.feature-card-grid",
+      ]
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    image: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::not-found.not-found"
+    >
+    publishedAt: Schema.Attribute.DateTime
+    title: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
@@ -2071,6 +2137,7 @@ declare module "@strapi/strapi" {
       "api::hubspot-form.hubspot-form": ApiHubspotFormHubspotForm
       "api::internal-job.internal-job": ApiInternalJobInternalJob
       "api::news-item.news-item": ApiNewsItemNewsItem
+      "api::not-found.not-found": ApiNotFoundNotFound
       "api::page.page": ApiPagePage
       "api::plan-feature.plan-feature": ApiPlanFeaturePlanFeature
       "api::plan.plan": ApiPlanPlan

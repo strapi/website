@@ -25,7 +25,7 @@ export function AppLink({
   startAdornment,
   adornmentClassName,
   openInNewTab = false,
-  variant = "link",
+  variant = "default",
   size = "default",
   ...props
 }: AppLinkProps) {

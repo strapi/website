@@ -56,7 +56,7 @@ export async function StrapiRelatedPosts({
           <div className="relative z-10 px-8 py-10 lg:px-12 lg:py-14">
             <div className="mb-8 flex flex-col items-center justify-between md:flex-row">
               <h4 className="text-3xl font-bold text-white">
-                {category?.name ?? t("relatedPosts")}
+                {component.title ?? category?.name ?? t("relatedPosts")}
               </h4>
 
               {category?.slug && (

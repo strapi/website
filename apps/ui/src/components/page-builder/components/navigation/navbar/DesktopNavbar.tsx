@@ -70,13 +70,17 @@ export function DesktopNavbar({
 
       {navItems?.length ? (
         <NavigationMenu className="static max-w-none flex-initial">
-          <NavigationMenuList>
+          <NavigationMenuList className="gap-0 xl:gap-3">
             {navItems.map((item) => (
               <NavigationMenuItem key={item.id}>
                 {item.sections?.length ? (
-                  <DropdownNavItem bottomLinks={bottomLinks} item={item} />
+                  <DropdownNavItem
+                    className="text-sm xl:text-base"
+                    bottomLinks={bottomLinks}
+                    item={item}
+                  />
                 ) : (
-                  <DirectNavItem item={item} />
+                  <DirectNavItem className="text-sm xl:text-base" item={item} />
                 )}
               </NavigationMenuItem>
             ))}
@@ -86,7 +90,7 @@ export function DesktopNavbar({
       ) : null}
 
       <div className="ml-auto flex items-center gap-2">
-        <GithubStarButton stars={githubStars} />
+        <GithubStarButton stars={githubStars} className="hidden xl:flex" />
         {ctaLinks?.map((link, index) => (
           <StrapiLink
             key={link.id ?? index}

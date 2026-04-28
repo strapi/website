@@ -8,7 +8,7 @@
   "options": {},
   "attributes": {
     "quote": {
-      "type": "text",
+      "type": "richtext",
       "required": true
     },
     "authorName": {

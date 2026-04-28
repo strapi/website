@@ -6,7 +6,6 @@ import { use } from "react"
 import { BlogNavbar } from "@/components/blog/BlogNavbar"
 import { BlogPostsList } from "@/components/blog/BlogPostsList"
 import { FeaturedBlogPost } from "@/components/blog/FeaturedBlogPost"
-import { Container } from "@/components/elementary/Container"
 import {
   HeroContainer,
   HeroContainerContent,
@@ -63,15 +62,9 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
       <BlogNavbar locale={locale} />
 
       <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-        {featuredPost && (
-          <Container>
-            <FeaturedBlogPost post={featuredPost} />
-          </Container>
-        )}
+        {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-        <Container>
-          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
-        </Container>
+        <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
       </HeroContainerContent>
 
       <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">

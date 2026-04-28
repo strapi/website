@@ -1,6 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
 
@@ -47,7 +48,7 @@ export function StrapiTwoColumnsBenefits({
                   </div>
 
                   <p className="text-center text-sm lg:text-left lg:text-base">
-                    {item.description}
+                    <InlineMarkdown>{item.description}</InlineMarkdown>
                   </p>
                 </div>
               </div>

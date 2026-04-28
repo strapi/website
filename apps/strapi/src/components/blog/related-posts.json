@@ -7,6 +7,9 @@
   },
   "options": {},
   "attributes": {
+    "title": {
+      "type": "string"
+    },
     "blogPosts": {
       "type": "relation",
       "relation": "oneToMany",

@@ -2,7 +2,7 @@ import "server-only"
 
 import { cn } from "@/lib/styles"
 
-import { Markdown } from "../elementary/markdown/Markdown"
+import { BlogMarkdown } from "../elementary/markdown/BlogMarkdown"
 
 interface BlogContentProps {
   readonly children?: string | null
@@ -14,7 +14,7 @@ export function BlogContent({ children, className }: BlogContentProps) {
 
   return (
     <div data-slot="blog-content" className={cn("wrap-break-word", className)}>
-      <Markdown>{children}</Markdown>
+      <BlogMarkdown>{children}</BlogMarkdown>
     </div>
   )
 }

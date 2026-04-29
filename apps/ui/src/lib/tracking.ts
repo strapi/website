@@ -3,12 +3,6 @@ interface DataLayerEvent {
   [key: string]: unknown
 }
 
-declare global {
-  interface Window {
-    dataLayer?: DataLayerEvent[]
-  }
-}
-
 export function pushDataLayerEvent(data: DataLayerEvent) {
   if (typeof window === "undefined") return
 

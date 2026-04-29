@@ -91,7 +91,7 @@ export function StrapiMeetTheTeam({
           </div>
         )}
 
-        <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filteredItems.map((item) => (
             <TeamMemberCard
               key={item.id}
@@ -101,7 +101,7 @@ export function StrapiMeetTheTeam({
           ))}
 
           {component.ctaTitle && (
-            <Card className="border-strapi-blue-600 bg-strapi-blue-800 hover:border-strapi-blue-500 flex items-center justify-center p-8">
+            <Card className="bg-strapi-blue-800 flex items-center justify-center p-8">
               <div className="flex flex-col items-center gap-4 text-center">
                 <h3 className="text-xl font-bold text-white">
                   {component.ctaTitle}
@@ -126,11 +126,11 @@ export function StrapiMeetTheTeam({
       >
         <DialogContent
           showCloseButton
-          className="flex max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:max-w-3xl sm:flex-row"
+          className="flex max-w-90 flex-col gap-0 overflow-hidden border-none p-0 sm:max-w-3xl sm:flex-row"
         >
           {selectedMember && (
             <>
-              <div className="bg-strapi-neutral-100 relative aspect-square w-full shrink-0 sm:aspect-auto sm:w-[44%]">
+              <div className="bg-strapi-neutral-100 relative aspect-4/5 w-full shrink-0 sm:w-[44%]">
                 <StrapiBasicImage
                   component={selectedMember.image}
                   mode="fill"
@@ -141,22 +141,22 @@ export function StrapiMeetTheTeam({
                 />
               </div>
 
-              <div className="flex flex-col gap-2 p-8 sm:p-10">
-                <DialogTitle className="text-strapi-blue-700 text-lg font-semibold">
+              <div className="flex flex-col gap-1 p-8 sm:p-10 sm:py-14">
+                <DialogTitle className="text-strapi-blue-800 text-xl font-semibold">
                   {selectedMember.name}
                 </DialogTitle>
-                <DialogDescription className="text-strapi-purple-600 text-base">
+                <DialogDescription className="text-strapi-purple-600 text-lg">
                   {selectedMember.role}
                 </DialogDescription>
 
                 {selectedMember.location && (
-                  <p className="text-strapi-neutral-800 text-sm">
+                  <p className="text-strapi-neutral-800 mt-1 text-lg">
                     📍 {selectedMember.location}
                   </p>
                 )}
 
                 {selectedMember.bio && (
-                  <p className="text-strapi-blue-600 mt-2 text-sm leading-relaxed">
+                  <p className="mt-2 text-sm leading-relaxed">
                     {selectedMember.bio}
                   </p>
                 )}

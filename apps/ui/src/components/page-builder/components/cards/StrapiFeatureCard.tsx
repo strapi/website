@@ -64,7 +64,17 @@ export function StrapiFeatureCard({
             {component.ctaLinks && component.ctaLinks.length > 0 && (
               <FeatureCardCTA spacing={size}>
                 {component.ctaLinks.map((link) => (
-                  <StrapiLink key={link.id} component={link} />
+                  <StrapiLink
+                    key={link.id}
+                    component={{
+                      ...link,
+                      decorations: {
+                        id: link.id ?? "",
+                        variant: "secondary",
+                        ...link?.decorations,
+                      },
+                    }}
+                  />
                 ))}
               </FeatureCardCTA>
             )}

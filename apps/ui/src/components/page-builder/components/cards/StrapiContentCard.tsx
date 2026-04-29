@@ -2,7 +2,7 @@ import type { Data } from "@repo/strapi-types"
 
 import { Container } from "@/components/elementary/Container"
 import { ContentCard } from "@/components/elementary/content-card/ContentCard"
-import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
+import { Markdown } from "@/components/elementary/markdown/Markdown"
 
 export function StrapiContentCard({
   component,
@@ -16,7 +16,7 @@ export function StrapiContentCard({
   return (
     <Container>
       <ContentCard label={component.label} title={component.title}>
-        <InlineMarkdown>{component.content}</InlineMarkdown>
+        <Markdown>{component.content}</Markdown>
       </ContentCard>
     </Container>
   )

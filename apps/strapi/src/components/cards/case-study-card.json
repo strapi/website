@@ -7,29 +7,11 @@
   },
   "options": {},
   "attributes": {
-    "companyName": {
-      "type": "string",
+    "caseStudy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::case-study.case-study",
       "required": true
-    },
-    "title": {
-      "type": "text",
-      "required": true
-    },
-    "image": {
-      "type": "component",
-      "repeatable": false,
-      "component": "utilities.basic-image"
-    },
-    "ctaLink": {
-      "type": "component",
-      "repeatable": false,
-      "component": "utilities.link-text",
-      "required": true
-    },
-    "backgroundImage": {
-      "type": "component",
-      "repeatable": false,
-      "component": "utilities.basic-image"
     }
   }
 }

@@ -11,10 +11,10 @@ interface TeamMemberCardProps {
 export function TeamMemberCard({ item, onClick }: TeamMemberCardProps) {
   return (
     <Card
-      className="cursor-pointer gap-0 p-0 transition-shadow hover:shadow-lg"
+      className="hover:animate-spring-sm cursor-pointer gap-0 p-0 transition-shadow hover:shadow-lg"
       onClick={onClick}
     >
-      <CardImage className="bg-strapi-neutral-100 aspect-[241/286]">
+      <CardImage className="aspect-241/286">
         <StrapiBasicImage
           component={item.image}
           mode="fill"

@@ -77,9 +77,72 @@ function InlineEmbed({ url }: { url: string }) {
   return null
 }
 
+/**
+ * Shared paragraph renderer — wraps content in a styled `<p>` but renders
+ * an inline embed (YouTube / Tweet) when the paragraph is just one link
+ * pointing at a supported URL. Exported so overrides can reuse the embed
+ * behavior while customizing the paragraph className.
+ */
+export function MarkdownParagraph({
+  children,
+  className,
+}: {
+  children?: React.ReactNode
+  className?: string
+}) {
+  const soleLink = extractSoleLink(children)
+
+  if (soleLink && (getYouTubeId(soleLink.href) || getTweetId(soleLink.href))) {
+    return <InlineEmbed url={soleLink.href} />
+  }
+
+  return <p className={className}>{children}</p>
+}
+
+type PreComponentProps = Parameters<
+  Extract<NonNullable<Components["pre"]>, (props: never) => unknown>
+>[0]
+type PreNode = PreComponentProps["node"]
+
+/**
+ * Shared `<pre>` renderer — delegates to CodeHighlighter when a language
+ * class is present on the inner `<code>`, otherwise falls back to a plain
+ * styled `<pre>`. Exported so overrides can customize the fallback className
+ * without losing the highlighter detection.
+ */
+export function MarkdownPre({
+  node,
+  children,
+  className,
+}: {
+  node?: PreNode
+  children?: React.ReactNode
+  className?: string
+}) {
+  const codeChild = node?.children?.[0]
+
+  if (codeChild?.type === "element" && codeChild.tagName === "code") {
+    const classNames = (codeChild.properties?.className ?? []) as string[]
+    const langClass = classNames.find((c) => c.startsWith("language-"))
+    const language = langClass?.replace("language-", "")
+
+    const text = codeChild.children
+      ?.map((child) => (child.type === "text" ? child.value : ""))
+      .join("")
+      .replace(/\n$/, "")
+
+    if (text) {
+      return <CodeHighlighter code={text} language={language} />
+    }
+  }
+
+  return <pre className={className}>{children}</pre>
+}
+
 type MarkdownProps = {
   children?: string | null
   className?: string
+  components?: Partial<Components>
 }
 
 const sanitizeSchema: typeof defaultSchema = {
@@ -109,7 +172,7 @@ const rehypePlugins: PluggableList = [
   [rehypeSanitize, sanitizeSchema],
 ]
 
-function isSafeHref(href: string | undefined): href is string {
+export function isSafeHref(href: string | undefined): href is string {
   if (!href) return false
 
   const trimmed = href.trim().toLowerCase()
@@ -122,9 +185,9 @@ function isSafeHref(href: string | undefined): href is string {
   )
 }
 
-const components: Components = {
+const defaultComponents: Components = {
   h1: ({ children }) => (
-    <h1 className="text-foreground mt-12 mb-6 scroll-mt-24 text-3xl leading-tight font-bold tracking-tight sm:mt-18 sm:mb-8 sm:text-4xl">
+    <h1 className="text-foreground mt-8 mb-4 scroll-mt-24 text-2xl leading-tight font-bold tracking-tight sm:text-3xl">
       {children}
     </h1>
   ),
@@ -132,7 +195,7 @@ const components: Components = {
   h2: ({ children }) => (
     <h2
       id={headingId(children)}
-      className="text-foreground mt-12 mb-5 scroll-mt-24 text-2xl leading-tight font-bold tracking-tight sm:mt-17 sm:mb-7 sm:text-3xl"
+      className="text-foreground mt-6 mb-3 scroll-mt-24 text-xl leading-tight font-bold tracking-tight sm:text-2xl"
     >
       {children}
     </h2>
@@ -141,47 +204,35 @@ const components: Components = {
   h3: ({ children }) => (
     <h3
       id={headingId(children)}
-      className="text-foreground mb-6 scroll-mt-24 text-xl leading-tight font-bold tracking-tight sm:mb-8 sm:text-2xl"
+      className="text-foreground mt-4 mb-3 scroll-mt-24 text-lg leading-tight font-bold tracking-tight sm:text-xl"
     >
       {children}
     </h3>
   ),
 
   h4: ({ children }) => (
-    <h4 className="text-foreground mb-6 text-lg leading-tight font-bold tracking-tight sm:mb-8 sm:text-xl">
+    <h4 className="text-foreground mt-4 mb-2 text-base leading-tight font-bold tracking-tight sm:text-lg">
       {children}
     </h4>
   ),
 
   h5: ({ children }) => (
-    <h5 className="text-foreground mb-6 text-lg leading-tight font-bold tracking-tight">
+    <h5 className="text-foreground mt-4 mb-2 text-base leading-tight font-bold tracking-tight">
       {children}
     </h5>
   ),
 
   h6: ({ children }) => (
-    <h6 className="text-foreground mb-4 text-base leading-tight font-bold tracking-tight">
+    <h6 className="text-foreground mt-4 mb-2 text-sm leading-tight font-bold tracking-tight">
       {children}
     </h6>
   ),
 
-  p: ({ children }) => {
-    const soleLink = extractSoleLink(children)
-
-    if (soleLink) {
-      const embed = <InlineEmbed url={soleLink.href} />
-
-      if (getYouTubeId(soleLink.href) || getTweetId(soleLink.href)) {
-        return embed
-      }
-    }
-
-    return (
-      <p className="text-foreground mb-8 text-base leading-relaxed lg:text-xl">
-        {children}
-      </p>
-    )
-  },
+  p: ({ children }) => (
+    <MarkdownParagraph className="text-foreground mb-4 text-base leading-relaxed">
+      {children}
+    </MarkdownParagraph>
+  ),
 
   strong: ({ children }) => (
     <strong className="text-foreground font-semibold">{children}</strong>
@@ -201,7 +252,7 @@ const components: Components = {
     return (
       <a
         href={safeHref}
-        className="*:text-strapi-purple-600 text-strapi-purple-600 bg-strapi-purple-100 hover:*:text-strapi-purple-700 hover:text-strapi-purple-700 transition-colors *:transition-colors"
+        className="text-strapi-purple-600 hover:text-strapi-purple-700 underline transition-colors"
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
       >
@@ -211,17 +262,19 @@ const components: Components = {
   },
 
   ul: ({ children }) => (
-    <ul className="mb-8 list-disc space-y-1 pl-6">{children}</ul>
+    <ul className="mb-4 list-outside list-disc space-y-1 pl-6">{children}</ul>
   ),
 
   ol: ({ children }) => (
-    <ol className="mb-8 list-decimal space-y-1 pl-6">{children}</ol>
+    <ol className="mb-4 list-outside list-decimal space-y-1 pl-6">
+      {children}
+    </ol>
   ),
 
-  li: ({ children }) => <li className="text-strapi-body-1">{children}</li>,
+  li: ({ children }) => <li className="text-base">{children}</li>,
 
   blockquote: ({ children }) => (
-    <blockquote className="border-strapi-purple-300 text-muted-foreground mb-8 border-l-4 pl-4 italic">
+    <blockquote className="border-strapi-purple-300 text-muted-foreground mb-4 border-l-4 pl-4 italic">
       {children}
     </blockquote>
   ),
@@ -232,33 +285,17 @@ const components: Components = {
     </code>
   ),
 
-  pre: ({ node, children }) => {
-    const codeChild = node?.children?.[0]
-
-    if (codeChild?.type === "element" && codeChild.tagName === "code") {
-      const classNames = (codeChild.properties?.className ?? []) as string[]
-      const langClass = classNames.find((c) => c.startsWith("language-"))
-      const language = langClass?.replace("language-", "")
-
-      const text = codeChild.children
-        ?.map((child) => (child.type === "text" ? child.value : ""))
-        .join("")
-        .replace(/\n$/, "")
-
-      if (text) {
-        return <CodeHighlighter code={text} language={language} />
-      }
-    }
-
-    return (
-      <pre className="bg-muted mb-8 overflow-x-auto rounded-lg p-4 font-mono text-sm [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
-        {children}
-      </pre>
-    )
-  },
+  pre: ({ node, children }) => (
+    <MarkdownPre
+      node={node}
+      className="bg-muted mb-4 overflow-x-auto rounded-lg p-4 font-mono text-sm [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0"
+    >
+      {children}
+    </MarkdownPre>
+  ),
 
   table: ({ children }) => (
-    <div className="mb-8 w-full overflow-x-auto">
+    <div className="mb-4 w-full overflow-x-auto">
       <table className="border-strapi-neutral-500 text-strapi-small-1 w-full border-collapse border">
         {children}
       </table>
@@ -278,10 +315,18 @@ const components: Components = {
   ),
 }
 
-export function Markdown({ children, className }: MarkdownProps) {
+export function Markdown({
+  children,
+  className,
+  components: overrides,
+}: MarkdownProps) {
   if (!children) {
     return null
   }
+
+  const components = overrides
+    ? { ...defaultComponents, ...overrides }
+    : defaultComponents
 
   return (
     <div data-slot="markdown" className={cn(className)}>

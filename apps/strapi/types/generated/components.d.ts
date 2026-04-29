@@ -90,12 +90,11 @@ export interface CardsCaseStudyCard extends Struct.ComponentSchema {
     icon: "star"
   }
   attributes: {
-    backgroundImage: Schema.Attribute.Component<"utilities.basic-image", false>
-    companyName: Schema.Attribute.String & Schema.Attribute.Required
-    ctaLink: Schema.Attribute.Component<"utilities.link-text", false> &
+    caseStudy: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::case-study.case-study"
+    > &
       Schema.Attribute.Required
-    image: Schema.Attribute.Component<"utilities.basic-image", false>
-    title: Schema.Attribute.Text & Schema.Attribute.Required
   }
 }
 

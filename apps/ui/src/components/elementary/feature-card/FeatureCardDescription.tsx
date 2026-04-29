@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
-import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
+import { Markdown } from "@/components/elementary/markdown/Markdown"
 import { cn } from "@/lib/styles"
 
 export const featureCardDescriptionVariants = cva("", {
@@ -34,17 +34,17 @@ export function FeatureCardDescription({
 
   const content =
     typeof children === "string" ? (
-      <InlineMarkdown>{children}</InlineMarkdown>
+      <Markdown>{children}</Markdown>
     ) : (
-      children
+      <p>{children}</p>
     )
 
   return (
-    <p
+    <div
       className={cn(featureCardDescriptionVariants({ size }), className)}
       {...props}
     >
       {content}
-    </p>
+    </div>
   )
 }

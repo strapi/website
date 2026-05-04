@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_sections_dynamic_features_grids",
+  "info": {
+    "displayName": "DynamicFeaturesGrid"
+  },
+  "options": {},
+  "attributes": {
+    "isHidden": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "config": {}
+}

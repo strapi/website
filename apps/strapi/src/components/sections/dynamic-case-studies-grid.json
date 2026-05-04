@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_sections_dynamic_case_studies_grids",
+  "info": {
+    "displayName": "DynamicCaseStudiesGrid"
+  },
+  "options": {},
+  "attributes": {
+    "isHidden": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "config": {}
+}

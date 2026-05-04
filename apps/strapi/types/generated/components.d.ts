@@ -1009,6 +1009,26 @@ export interface SectionsDisclaimer extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsDynamicCaseStudiesGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_dynamic_case_studies_grids"
+  info: {
+    displayName: "DynamicCaseStudiesGrid"
+  }
+  attributes: {
+    isHidden: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+  }
+}
+
+export interface SectionsDynamicFeaturesGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_dynamic_features_grids"
+  info: {
+    displayName: "DynamicFeaturesGrid"
+  }
+  attributes: {
+    isHidden: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
+  }
+}
+
 export interface SectionsFaqSection extends Struct.ComponentSchema {
   collectionName: "components_sections_faq_section"
   info: {
@@ -1557,6 +1577,8 @@ declare module "@strapi/strapi" {
       "sections.comparator-grid": SectionsComparatorGrid
       "sections.cta-banner": SectionsCtaBanner
       "sections.disclaimer": SectionsDisclaimer
+      "sections.dynamic-case-studies-grid": SectionsDynamicCaseStudiesGrid
+      "sections.dynamic-features-grid": SectionsDynamicFeaturesGrid
       "sections.faq-section": SectionsFaqSection
       "sections.feature-card-grid": SectionsFeatureCardGrid
       "sections.hero": SectionsHero

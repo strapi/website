@@ -92,7 +92,9 @@
         "sections.community-banner",
         "sections.comparator-grid",
         "sections.disclaimer",
-        "sections.richtext"
+        "sections.richtext",
+        "sections.dynamic-case-studies-grid",
+        "sections.dynamic-features-grid"
       ]
     },
     "children": {
@@ -109,12 +111,12 @@
     },
     "minimalLayout": {
       "type": "boolean",
-      "default": false,
       "pluginOptions": {
         "i18n": {
           "localized": false
         }
-      }
+      },
+      "default": false
     },
     "seo": {
       "type": "component",

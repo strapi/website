@@ -103,6 +103,11 @@ export default ({ env }) => {
             filterableAttributes: ["pageType", "locale"],
           },
         },
+        "blog-post": {
+          indexName: env.bool("MEILISEARCH_PRODUCTION", false)
+            ? "blog-posts-production"
+            : "blog-posts-testing",
+        },
       },
     },
 

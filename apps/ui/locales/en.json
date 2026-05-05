@@ -102,6 +102,11 @@
     "filterCategoriesLabel": "Categories",
     "loadMore": "See more"
   },
+  "features": {
+    "searchPlaceholder": "Search features...",
+    "loadMore": "See more",
+    "viewFeature": "Learn more"
+  },
   "blog": {
     "title": "Blog",
     "description": "Tutorials, product updates, and engineering insights.",

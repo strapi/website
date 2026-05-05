@@ -32,22 +32,21 @@ interface CaseStudiesGridProps {
 
 const DEFAULT_PAGE_SIZE = 12
 
-function deriveCategoryOptions(
+function collectCategories(
+  into: Map<string, string>,
   items: readonly CaseStudyHit[]
-): readonly { label: string; value: string }[] {
-  const seen = new Map<string, string>()
-
+): Map<string, string> {
   for (const item of items) {
     if (!item.categories) continue
 
     for (const cat of item.categories) {
-      if (cat?.slug && cat.name && !seen.has(cat.slug)) {
-        seen.set(cat.slug, cat.name)
+      if (cat?.slug && cat.name && !into.has(cat.slug)) {
+        into.set(cat.slug, cat.name)
       }
     }
   }
 
-  return [...seen.entries()].map(([value, label]) => ({ label, value }))
+  return into
 }
 
 export function CaseStudiesGrid({
@@ -66,9 +65,27 @@ export function CaseStudiesGrid({
   const [selectedCategories, setSelectedCategories] = useState<
     ReadonlySet<string>
   >(new Set())
+  const [knownCategories, setKnownCategories] = useState<
+    ReadonlyMap<string, string>
+  >(() => collectCategories(new Map(), initialHits))
   const [isPending, startTransition] = useTransition()
 
-  const categoryOptions = useMemo(() => deriveCategoryOptions(hits), [hits])
+  const categoryOptions = useMemo(
+    () =>
+      [...knownCategories.entries()].map(([value, label]) => ({
+        label,
+        value,
+      })),
+    [knownCategories]
+  )
+
+  function mergeCategories(items: readonly CaseStudyHit[]) {
+    setKnownCategories((prev) => {
+      const next = collectCategories(new Map(prev), items)
+
+      return next.size === prev.size ? prev : next
+    })
+  }
 
   const isFirstRender = useRef(true)
   useEffect(() => {
@@ -90,6 +107,7 @@ export function CaseStudiesGrid({
 
         setHits(res.hits)
         setTotal(res.total)
+        mergeCategories(res.hits)
       })
     }, 200)
 
@@ -122,6 +140,7 @@ export function CaseStudiesGrid({
 
       setHits((prev) => [...prev, ...res.hits])
       setTotal(res.total)
+      mergeCategories(res.hits)
     })
   }
 

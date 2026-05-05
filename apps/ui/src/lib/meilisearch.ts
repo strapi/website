@@ -28,3 +28,9 @@ export function getPagesIndexName(): string {
     ? "pages-production"
     : "pages-testing"
 }
+
+export function getBlogPostsIndexName(): string {
+  return process.env.MEILISEARCH_PRODUCTION === "true"
+    ? "blog-posts-production"
+    : "blog-posts-testing"
+}

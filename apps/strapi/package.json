@@ -49,6 +49,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
     "strapi-plugin-config-sync": "2.1.0",
+    "strapi-plugin-meilisearch": "^0.16.2",
     "styled-components": "^6.0.0",
     "vitest": "catalog:",
     "zod": "^4.3.6"

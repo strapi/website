@@ -71,6 +71,19 @@ export default ({ env }) => {
           indexName: env.bool("MEILISEARCH_PRODUCTION", false)
             ? "case-studies-production"
             : "case-studies-testing",
+          entriesQuery: {
+            populate: {
+              coverImage: {
+                populate: { image: { populate: { media: true } } },
+              },
+              categories: { fields: ["name", "slug"] },
+            },
+          },
+          settings: {
+            filterableAttributes: ["categories.slug"],
+            searchableAttributes: ["title", "companyName", "description"],
+            sortableAttributes: ["originalPublishedAt"],
+          },
         },
         page: {
           indexName: env.bool("MEILISEARCH_PRODUCTION", false)

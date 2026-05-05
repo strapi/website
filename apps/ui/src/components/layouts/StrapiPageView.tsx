@@ -60,9 +60,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
     <div className="flex w-full flex-col">
       {minimalLayout && <div data-minimal-layout hidden />}
       {minimalLayout && <MinimalHeader />}
-
       <StrapiStructuredData structuredData={data?.seo?.structuredData} />
-
       <main className={cn("flex w-full flex-col")}>
         <Container>
           <Breadcrumbs

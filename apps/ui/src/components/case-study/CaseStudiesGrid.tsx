@@ -3,7 +3,7 @@
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -11,84 +11,108 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/styles"
 
+import type {
+  CaseStudyHit,
+  SearchCaseStudiesArgs,
+} from "./case-studies-search-types"
 import { CaseStudyCard } from "./CaseStudyCard"
 
 type CaseStudy = Data.ContentType<"api::case-study.case-study">
 
-interface CaseStudyCategory {
-  readonly name?: string | null
-  readonly slug?: string | null
-}
-
 interface CaseStudiesGridProps {
-  readonly items: readonly CaseStudy[]
+  readonly locale: string
+  readonly initialHits: readonly CaseStudyHit[]
+  readonly initialTotal: number
+  readonly pageSize?: number
+  readonly searchAction: (
+    args: SearchCaseStudiesArgs
+  ) => Promise<{ hits: readonly CaseStudyHit[]; total: number }>
   readonly className?: string
 }
 
-const PAGE_SIZE = 12
+const DEFAULT_PAGE_SIZE = 12
 
-function deriveCategoryOptions(
-  items: readonly CaseStudy[]
-): readonly { label: string; value: string }[] {
-  const seen = new Map<string, string>()
-
+function collectCategories(
+  into: Map<string, string>,
+  items: readonly CaseStudyHit[]
+): Map<string, string> {
   for (const item of items) {
-    const categories = (item as { categories?: readonly CaseStudyCategory[] })
-      .categories
+    if (!item.categories) continue
 
-    if (!categories) continue
-
-    for (const cat of categories) {
-      if (cat?.slug && cat.name && !seen.has(cat.slug)) {
-        seen.set(cat.slug, cat.name)
+    for (const cat of item.categories) {
+      if (cat?.slug && cat.name && !into.has(cat.slug)) {
+        into.set(cat.slug, cat.name)
       }
     }
   }
 
-  return [...seen.entries()].map(([value, label]) => ({ label, value }))
+  return into
 }
 
-function itemMatchesCategories(
-  item: CaseStudy,
-  selected: ReadonlySet<string>
-): boolean {
-  if (selected.size === 0) return true
-
-  const categories = (item as { categories?: readonly CaseStudyCategory[] })
-    .categories
-
-  if (!categories || categories.length === 0) return false
-
-  return categories.some((c) => c?.slug != null && selected.has(c.slug))
-}
-
-export function CaseStudiesGrid({ items, className }: CaseStudiesGridProps) {
+export function CaseStudiesGrid({
+  locale,
+  initialHits,
+  initialTotal,
+  pageSize = DEFAULT_PAGE_SIZE,
+  searchAction,
+  className,
+}: CaseStudiesGridProps) {
   const t = useTranslations("caseStudies")
 
+  const [hits, setHits] = useState<readonly CaseStudyHit[]>(initialHits)
+  const [total, setTotal] = useState(initialTotal)
   const [query, setQuery] = useState("")
   const [selectedCategories, setSelectedCategories] = useState<
     ReadonlySet<string>
   >(new Set())
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const [knownCategories, setKnownCategories] = useState<
+    ReadonlyMap<string, string>
+  >(() => collectCategories(new Map(), initialHits))
+  const [isPending, startTransition] = useTransition()
 
-  const categoryOptions = useMemo(() => deriveCategoryOptions(items), [items])
+  const categoryOptions = useMemo(
+    () =>
+      [...knownCategories.entries()].map(([value, label]) => ({
+        label,
+        value,
+      })),
+    [knownCategories]
+  )
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
+  function mergeCategories(items: readonly CaseStudyHit[]) {
+    setKnownCategories((prev) => {
+      const next = collectCategories(new Map(prev), items)
 
-    return items.filter((item) => {
-      if (q.length > 0) {
-        const title = item.title?.toLowerCase() ?? ""
-
-        if (!title.includes(q)) return false
-      }
-
-      return itemMatchesCategories(item, selectedCategories)
+      return next.size === prev.size ? prev : next
     })
-  }, [items, query, selectedCategories])
+  }
 
-  const visible = filtered.slice(0, visibleCount)
-  const hasMore = filtered.length > visibleCount
+  const isFirstRender = useRef(true)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+
+      return
+    }
+
+    const handle = setTimeout(() => {
+      startTransition(async () => {
+        const res = await searchAction({
+          locale,
+          query,
+          categorySlugs: [...selectedCategories],
+          offset: 0,
+          limit: pageSize,
+        })
+
+        setHits(res.hits)
+        setTotal(res.total)
+        mergeCategories(res.hits)
+      })
+    }, 200)
+
+    return () => clearTimeout(handle)
+  }, [query, selectedCategories, locale, pageSize, searchAction])
 
   function toggleCategory(slug: string) {
     setSelectedCategories((prev) => {
@@ -102,13 +126,25 @@ export function CaseStudiesGrid({ items, className }: CaseStudiesGridProps) {
 
       return next
     })
-    setVisibleCount(PAGE_SIZE)
   }
 
-  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setQuery(e.target.value)
-    setVisibleCount(PAGE_SIZE)
+  function loadMore() {
+    startTransition(async () => {
+      const res = await searchAction({
+        locale,
+        query,
+        categorySlugs: [...selectedCategories],
+        offset: hits.length,
+        limit: pageSize,
+      })
+
+      setHits((prev) => [...prev, ...res.hits])
+      setTotal(res.total)
+      mergeCategories(res.hits)
+    })
   }
+
+  const hasMore = hits.length < total
 
   return (
     <div className={cn("flex flex-col gap-8 lg:flex-row", className)}>
@@ -118,7 +154,7 @@ export function CaseStudiesGrid({ items, className }: CaseStudiesGridProps) {
           <Input
             placeholder={t("searchPlaceholder")}
             value={query}
-            onChange={handleSearchChange}
+            onChange={(e) => setQuery(e.target.value)}
             className="pl-9"
           />
         </div>
@@ -156,18 +192,18 @@ export function CaseStudiesGrid({ items, className }: CaseStudiesGridProps) {
 
       <div className="flex min-w-0 flex-1 flex-col gap-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {visible.map((item) => (
-            <CaseStudyCard key={item.slug} caseStudy={item} />
+          {hits.map((item) => (
+            <CaseStudyCard
+              key={item.documentId ?? item.slug}
+              caseStudy={item as unknown as CaseStudy}
+            />
           ))}
         </div>
 
         {hasMore && (
           <div className="flex justify-center">
-            <Button
-              variant="outline"
-              onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-            >
-              {t("loadMore")}
+            <Button variant="outline" onClick={loadMore} disabled={isPending}>
+              {isPending ? `${t("loadMore")}…` : t("loadMore")}
             </Button>
           </div>
         )}

@@ -63,6 +63,54 @@ export default ({ env }) => {
       },
     },
 
+    meilisearch: {
+      config: {
+        host: env("MEILISEARCH_HOST", "http://localhost:7700"),
+        apiKey: env("MEILISEARCH_API_KEY"),
+        "case-study": {
+          indexName: env.bool("MEILISEARCH_PRODUCTION", false)
+            ? "case-studies-production"
+            : "case-studies-testing",
+          entriesQuery: {
+            populate: {
+              coverImage: {
+                populate: { image: { populate: { media: true } } },
+              },
+              categories: { fields: ["name", "slug"] },
+            },
+          },
+          settings: {
+            filterableAttributes: ["categories.slug"],
+            searchableAttributes: ["title", "companyName", "description"],
+            sortableAttributes: ["originalPublishedAt"],
+          },
+        },
+        page: {
+          indexName: env.bool("MEILISEARCH_PRODUCTION", false)
+            ? "pages-production"
+            : "pages-testing",
+          transformEntry({ entry }) {
+            return {
+              ...entry,
+              pageType:
+                typeof entry.fullPath === "string" &&
+                entry.fullPath.startsWith("/features")
+                  ? "feature"
+                  : "page",
+            }
+          },
+          settings: {
+            filterableAttributes: ["pageType", "locale"],
+          },
+        },
+        "blog-post": {
+          indexName: env.bool("MEILISEARCH_PRODUCTION", false)
+            ? "blog-posts-production"
+            : "blog-posts-testing",
+        },
+      },
+    },
+
     // Must be last — registers after custom field plugins (color-picker) to avoid #119
     // https://github.com/strapi-community/plugin-rest-cache/issues/119
     "rest-cache": {

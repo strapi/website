@@ -1271,6 +1271,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.comparator-grid",
         "sections.disclaimer",
         "sections.richtext",
+        "sections.dynamic-case-studies-grid",
+        "sections.dynamic-features-grid",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

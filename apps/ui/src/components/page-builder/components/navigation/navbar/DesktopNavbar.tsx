@@ -2,6 +2,7 @@ import type { Nullable } from "@repo/shared-data"
 import type { Data } from "@repo/strapi-types"
 
 import { GithubStarButton } from "@/components/elementary/GithubStarButton"
+import { GlobalSearch } from "@/components/elementary/GlobalSearch"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import {
   NavigationMenu,
@@ -90,6 +91,7 @@ export function DesktopNavbar({
       ) : null}
 
       <div className="ml-auto flex items-center gap-2">
+        <GlobalSearch />
         <GithubStarButton stars={githubStars} className="hidden xl:flex" />
         {ctaLinks?.map((link, index) => (
           <StrapiLink

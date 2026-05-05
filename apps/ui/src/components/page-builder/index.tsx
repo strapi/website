@@ -22,6 +22,8 @@ import { StrapiPlanComparisonTable } from "@/components/page-builder/components/
 import { StrapiCommunityBanner } from "@/components/page-builder/components/sections/strapi-community-banner/StrapiCommunityBanner"
 import { StrapiConversion } from "@/components/page-builder/components/sections/strapi-conversion"
 import { StrapiDemoConversion } from "@/components/page-builder/components/sections/strapi-demo-conversion"
+import { StrapiDynamicCaseStudiesGrid } from "@/components/page-builder/components/sections/strapi-dynamic-grid/StrapiDynamicCaseStudiesGrid"
+import { StrapiDynamicFeaturesGrid } from "@/components/page-builder/components/sections/strapi-dynamic-grid/StrapiDynamicFeaturesGrid"
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
@@ -76,6 +78,8 @@ export const ContentComponents: Partial<
   "sections.feature-card-grid": StrapiFeatureCardGrid,
   "sections.two-column-grid": StrapiTwoColumnGrid,
   "sections.two-columns-benefits": StrapiTwoColumnsBenefits,
+  "sections.dynamic-case-studies-grid": StrapiDynamicCaseStudiesGrid,
+  "sections.dynamic-features-grid": StrapiDynamicFeaturesGrid,
   // Cards
   "cards.feature-card": StrapiFeatureCard,
   "cards.content-card": StrapiContentCard,

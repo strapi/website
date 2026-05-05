@@ -17,8 +17,18 @@ export interface BlogPostGlobalHit {
   readonly description?: string | null
 }
 
+export interface DocsGlobalHit {
+  readonly url: string
+  readonly hierarchy_lvl0?: string | null
+  readonly hierarchy_lvl1?: string | null
+  readonly hierarchy_lvl2?: string | null
+  readonly hierarchy_lvl3?: string | null
+  readonly anchor?: string | null
+}
+
 export interface GlobalSearchResult {
   readonly caseStudies: readonly CaseStudyGlobalHit[]
   readonly pages: readonly PageGlobalHit[]
   readonly blogPosts: readonly BlogPostGlobalHit[]
+  readonly docs: readonly DocsGlobalHit[]
 }

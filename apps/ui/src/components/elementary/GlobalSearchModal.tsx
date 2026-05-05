@@ -23,10 +23,38 @@ interface GlobalSearchModalProps {
   readonly onOpenChange: (open: boolean) => void
 }
 
+const DEBOUNCE_MS = 350
+
 const EMPTY_RESULT: GlobalSearchResult = {
   caseStudies: [],
   pages: [],
   blogPosts: [],
+  docs: [],
+}
+
+function docsTitle(item: {
+  readonly hierarchy_lvl0?: string | null
+  readonly hierarchy_lvl1?: string | null
+  readonly hierarchy_lvl2?: string | null
+  readonly hierarchy_lvl3?: string | null
+}): string {
+  return (
+    item.hierarchy_lvl3 ||
+    item.hierarchy_lvl2 ||
+    item.hierarchy_lvl1 ||
+    item.hierarchy_lvl0 ||
+    "Untitled"
+  )
+}
+
+function docsBreadcrumb(item: {
+  readonly hierarchy_lvl0?: string | null
+  readonly hierarchy_lvl1?: string | null
+  readonly hierarchy_lvl2?: string | null
+}): string {
+  return [item.hierarchy_lvl0, item.hierarchy_lvl1, item.hierarchy_lvl2]
+    .filter(Boolean)
+    .join(" › ")
 }
 
 const itemClass = cn(
@@ -60,10 +88,18 @@ export function GlobalSearchModal({
 
         setResults(res)
       })
-    }, 200)
+    }, DEBOUNCE_MS)
 
     return () => clearTimeout(handle)
   }, [query, locale])
+
+  function handleQueryChange(next: string) {
+    setQuery(next)
+
+    if (next.trim().length === 0) {
+      setResults(EMPTY_RESULT)
+    }
+  }
 
   function handleOpenChange(next: boolean) {
     if (!next) {
@@ -80,9 +116,10 @@ export function GlobalSearchModal({
   }
 
   const hasAny =
-    results.caseStudies.length > 0 ||
     results.pages.length > 0 ||
-    results.blogPosts.length > 0
+    results.docs.length > 0 ||
+    results.blogPosts.length > 0 ||
+    results.caseStudies.length > 0
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -103,7 +140,7 @@ export function GlobalSearchModal({
             <MagnifyingGlassIcon className="text-muted-foreground size-5 shrink-0" />
             <Command.Input
               value={query}
-              onValueChange={setQuery}
+              onValueChange={handleQueryChange}
               placeholder="Search the site..."
               className="placeholder:text-muted-foreground flex-1 bg-transparent text-base outline-none"
             />
@@ -123,32 +160,6 @@ export function GlobalSearchModal({
               </Command.Empty>
             ) : null}
 
-            {results.caseStudies.length > 0 && (
-              <Command.Group heading="Case Studies" className={groupClass}>
-                {results.caseStudies.map((item) => {
-                  const href = `/user-stories/${item.slug}`
-
-                  return (
-                    <Command.Item
-                      key={`case-${item.slug}`}
-                      value={`case-${item.slug}`}
-                      onSelect={() => navigateAndClose(href)}
-                      className={itemClass}
-                    >
-                      <span className="text-foreground font-medium">
-                        {item.title}
-                      </span>
-                      {item.companyName && (
-                        <span className="text-muted-foreground text-xs">
-                          {item.companyName}
-                        </span>
-                      )}
-                    </Command.Item>
-                  )
-                })}
-              </Command.Group>
-            )}
-
             {results.pages.length > 0 && (
               <Command.Group heading="Pages" className={groupClass}>
                 {results.pages.map((item) => (
@@ -162,10 +173,39 @@ export function GlobalSearchModal({
                       {item.title}
                     </span>
                     <span className="text-muted-foreground text-xs">
-                      {item.fullPath}
+                      {`/${item.slug}`}
                     </span>
                   </Command.Item>
                 ))}
+              </Command.Group>
+            )}
+
+            {results.docs.length > 0 && (
+              <Command.Group heading="Strapi Docs" className={groupClass}>
+                {results.docs.map((item) => {
+                  const breadcrumb = docsBreadcrumb(item)
+
+                  return (
+                    <Command.Item
+                      key={`docs-${item.url}`}
+                      value={`docs-${item.url}`}
+                      onSelect={() => {
+                        handleOpenChange(false)
+                        window.open(item.url, "_blank", "noopener,noreferrer")
+                      }}
+                      className={itemClass}
+                    >
+                      <span className="text-foreground font-medium">
+                        {docsTitle(item)}
+                      </span>
+                      {breadcrumb && (
+                        <span className="text-muted-foreground line-clamp-1 text-xs">
+                          {breadcrumb}
+                        </span>
+                      )}
+                    </Command.Item>
+                  )
+                })}
               </Command.Group>
             )}
 
@@ -187,6 +227,32 @@ export function GlobalSearchModal({
                       {item.description && (
                         <span className="text-muted-foreground line-clamp-1 text-xs">
                           {item.description}
+                        </span>
+                      )}
+                    </Command.Item>
+                  )
+                })}
+              </Command.Group>
+            )}
+
+            {results.caseStudies.length > 0 && (
+              <Command.Group heading="Case Studies" className={groupClass}>
+                {results.caseStudies.map((item) => {
+                  const href = `/user-stories/${item.slug}`
+
+                  return (
+                    <Command.Item
+                      key={`case-${item.slug}`}
+                      value={`case-${item.slug}`}
+                      onSelect={() => navigateAndClose(href)}
+                      className={itemClass}
+                    >
+                      <span className="text-foreground font-medium">
+                        {item.title}
+                      </span>
+                      {item.companyName && (
+                        <span className="text-muted-foreground text-xs">
+                          {item.companyName}
                         </span>
                       )}
                     </Command.Item>

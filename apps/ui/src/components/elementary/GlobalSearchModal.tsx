@@ -1,12 +1,19 @@
 "use client"
 
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
+import {
+  MagnifyingGlassIcon,
+  GlobeIcon,
+  FeatherIcon,
+  BookOpenIcon,
+  AddressBookIcon,
+} from "@phosphor-icons/react/ssr"
 import { Command } from "cmdk"
 import { useLocale } from "next-intl"
 import { useEffect, useState, useTransition } from "react"
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -58,12 +65,12 @@ function docsBreadcrumb(item: {
 }
 
 const itemClass = cn(
-  "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
-  "flex cursor-pointer flex-col gap-0.5 rounded-md px-3 py-2 text-sm outline-none"
+  "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground min-h-[57px]",
+  "flex cursor-pointer items-center gap-0.5 rounded-md gap-3 px-3 py-2 text-sm outline-none border border-accent"
 )
 
 const groupClass = cn(
-  "[&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider"
+  "[&_[cmdk-group-items]]:flex [&_[cmdk-group-items]]:flex-col [&_[cmdk-group-items]]:gap-1 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:mt-4 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-bold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider"
 )
 
 export function GlobalSearchModal({
@@ -75,6 +82,7 @@ export function GlobalSearchModal({
 
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<GlobalSearchResult>(EMPTY_RESULT)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
@@ -87,6 +95,7 @@ export function GlobalSearchModal({
         const res = await globalSearch({ query: trimmed, locale })
 
         setResults(res)
+        setIsWaiting(false)
       })
     }, DEBOUNCE_MS)
 
@@ -98,6 +107,9 @@ export function GlobalSearchModal({
 
     if (next.trim().length === 0) {
       setResults(EMPTY_RESULT)
+      setIsWaiting(false)
+    } else {
+      setIsWaiting(true)
     }
   }
 
@@ -105,6 +117,7 @@ export function GlobalSearchModal({
     if (!next) {
       setQuery("")
       setResults(EMPTY_RESULT)
+      setIsWaiting(false)
     }
 
     onOpenChange(next)
@@ -124,39 +137,55 @@ export function GlobalSearchModal({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
-        className="overflow-hidden p-0 sm:max-w-lg"
+        className="flex h-full max-h-[700px] min-h-[250px] p-0 sm:max-w-[735px]"
         showCloseButton={false}
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Search</DialogTitle>
           <DialogDescription>Search across the site</DialogDescription>
         </DialogHeader>
+
         <Command
           label="Global Search"
           shouldFilter={false}
-          className="flex flex-col"
+          className="flex max-h-full w-full flex-col p-5"
         >
-          <div className="flex items-center gap-2 border-b px-4 py-3">
-            <MagnifyingGlassIcon className="text-muted-foreground size-5 shrink-0" />
-            <Command.Input
-              value={query}
-              onValueChange={handleQueryChange}
-              placeholder="Search the site..."
-              className="placeholder:text-muted-foreground flex-1 bg-transparent text-base outline-none"
-            />
+          <div className="flex gap-4">
+            <div className="border-strapi-purple-500 rounded-strapi-lg flex flex-1 items-center gap-2 border px-4 py-3">
+              <MagnifyingGlassIcon className="text-muted-foreground size-5 min-h-5 min-w-5 shrink-0" />
+              <Command.Input
+                value={query}
+                onValueChange={handleQueryChange}
+                placeholder="Search the site..."
+                className="placeholder:text-muted-foreground flex-1 text-base outline-none"
+              />
+            </div>
+            <DialogClose asChild>
+              <button aria-label="Close search" className="cursor-pointer">
+                Cancel
+              </button>
+            </DialogClose>
           </div>
-          <Command.List className="max-h-100 overflow-y-auto p-2">
+          <Command.List className="overflow-auto">
             {query.trim().length === 0 ? (
-              <p className="text-muted-foreground py-6 text-center text-sm">
-                Start typing to search.
-              </p>
-            ) : isPending && !hasAny ? (
+              <div className="mt-6 flex flex-col items-center">
+                <MagnifyingGlassIcon className="text-muted-foreground size-9" />
+                <p className="text-muted-foreground py-6 text-center text-sm">
+                  Start typing to search.
+                </p>
+              </div>
+            ) : (isWaiting || isPending) && !hasAny ? (
               <p className="text-muted-foreground py-6 text-center text-sm">
                 Searching…
               </p>
             ) : !hasAny ? (
               <Command.Empty className="text-muted-foreground py-6 text-center text-sm">
-                No results found.
+                <div className="flex flex-col items-center">
+                  <MagnifyingGlassIcon className="text-muted-foreground size-9" />
+                  <p className="text-muted-foreground py-6 text-center text-sm">
+                    No results found.
+                  </p>
+                </div>
               </Command.Empty>
             ) : null}
 
@@ -169,12 +198,15 @@ export function GlobalSearchModal({
                     onSelect={() => navigateAndClose(item.fullPath)}
                     className={itemClass}
                   >
-                    <span className="text-foreground font-medium">
-                      {item.title}
-                    </span>
-                    <span className="text-muted-foreground text-xs">
-                      {`/${item.slug}`}
-                    </span>
+                    <GlobeIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                    <div className="flex flex-col">
+                      <span className="text-foreground font-medium">
+                        {item.title}
+                      </span>
+                      <span className="text-muted-foreground text-xs">
+                        {`/${item.slug}`}
+                      </span>
+                    </div>
                   </Command.Item>
                 ))}
               </Command.Group>
@@ -195,14 +227,17 @@ export function GlobalSearchModal({
                       }}
                       className={itemClass}
                     >
-                      <span className="text-foreground font-medium">
-                        {docsTitle(item)}
-                      </span>
-                      {breadcrumb && (
-                        <span className="text-muted-foreground line-clamp-1 text-xs">
-                          {breadcrumb}
+                      <BookOpenIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {docsTitle(item)}
                         </span>
-                      )}
+                        {breadcrumb && (
+                          <span className="text-muted-foreground line-clamp-1 text-xs">
+                            {breadcrumb}
+                          </span>
+                        )}
+                      </div>
                     </Command.Item>
                   )
                 })}
@@ -221,14 +256,17 @@ export function GlobalSearchModal({
                       onSelect={() => navigateAndClose(href)}
                       className={itemClass}
                     >
-                      <span className="text-foreground font-medium">
-                        {item.title}
-                      </span>
-                      {item.description && (
-                        <span className="text-muted-foreground line-clamp-1 text-xs">
-                          {item.description}
+                      <FeatherIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {item.title}
                         </span>
-                      )}
+                        {item.description && (
+                          <span className="text-muted-foreground line-clamp-1 text-xs">
+                            {item.description}
+                          </span>
+                        )}
+                      </div>
                     </Command.Item>
                   )
                 })}
@@ -247,14 +285,17 @@ export function GlobalSearchModal({
                       onSelect={() => navigateAndClose(href)}
                       className={itemClass}
                     >
-                      <span className="text-foreground font-medium">
-                        {item.title}
-                      </span>
-                      {item.companyName && (
-                        <span className="text-muted-foreground text-xs">
-                          {item.companyName}
+                      <AddressBookIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {item.title}
                         </span>
-                      )}
+                        {item.companyName && (
+                          <span className="text-muted-foreground text-xs">
+                            {item.companyName}
+                          </span>
+                        )}
+                      </div>
                     </Command.Item>
                   )
                 })}

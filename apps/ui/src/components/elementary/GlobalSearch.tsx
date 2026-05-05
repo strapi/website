@@ -27,7 +27,7 @@ export function GlobalSearch() {
         type="button"
         aria-label="Open search"
         onClick={() => setOpen(true)}
-        className="hover:text-foreground/80 inline-flex cursor-pointer items-center justify-center transition-colors"
+        className="inline-flex cursor-pointer items-center justify-center transition-colors"
       >
         <MagnifyingGlassIcon className="size-6" />
       </button>

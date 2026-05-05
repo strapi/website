@@ -1,6 +1,12 @@
 "use client"
 
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
+import {
+  MagnifyingGlassIcon,
+  GlobeIcon,
+  FeatherIcon,
+  BookOpenIcon,
+  AddressBookIcon,
+} from "@phosphor-icons/react/ssr"
 import { Command } from "cmdk"
 import { useLocale } from "next-intl"
 import { useEffect, useState, useTransition } from "react"
@@ -60,7 +66,7 @@ function docsBreadcrumb(item: {
 
 const itemClass = cn(
   "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground min-h-[57px]",
-  "flex cursor-pointer flex-col gap-0.5 rounded-md px-3 py-2 text-sm outline-none border border-accent"
+  "flex cursor-pointer items-center gap-0.5 rounded-md gap-3 px-3 py-2 text-sm outline-none border border-accent"
 )
 
 const groupClass = cn(
@@ -146,7 +152,7 @@ export function GlobalSearchModal({
         >
           <div className="flex gap-4">
             <div className="border-strapi-purple-500 rounded-strapi-lg flex flex-1 items-center gap-2 border px-4 py-3">
-              <MagnifyingGlassIcon className="text-muted-foreground size-5 shrink-0" />
+              <MagnifyingGlassIcon className="text-muted-foreground size-5 min-h-5 min-w-5 shrink-0" />
               <Command.Input
                 value={query}
                 onValueChange={handleQueryChange}
@@ -155,7 +161,9 @@ export function GlobalSearchModal({
               />
             </div>
             <DialogClose asChild>
-              <button aria-label="Close search">Cancel</button>
+              <button aria-label="Close search" className="cursor-pointer">
+                Cancel
+              </button>
             </DialogClose>
           </div>
           <Command.List className="overflow-auto">
@@ -190,12 +198,15 @@ export function GlobalSearchModal({
                     onSelect={() => navigateAndClose(item.fullPath)}
                     className={itemClass}
                   >
-                    <span className="text-foreground font-medium">
-                      {item.title}
-                    </span>
-                    <span className="text-muted-foreground text-xs">
-                      {`/${item.slug}`}
-                    </span>
+                    <GlobeIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                    <div className="flex flex-col">
+                      <span className="text-foreground font-medium">
+                        {item.title}
+                      </span>
+                      <span className="text-muted-foreground text-xs">
+                        {`/${item.slug}`}
+                      </span>
+                    </div>
                   </Command.Item>
                 ))}
               </Command.Group>
@@ -216,14 +227,17 @@ export function GlobalSearchModal({
                       }}
                       className={itemClass}
                     >
-                      <span className="text-foreground font-medium">
-                        {docsTitle(item)}
-                      </span>
-                      {breadcrumb && (
-                        <span className="text-muted-foreground line-clamp-1 text-xs">
-                          {breadcrumb}
+                      <BookOpenIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {docsTitle(item)}
                         </span>
-                      )}
+                        {breadcrumb && (
+                          <span className="text-muted-foreground line-clamp-1 text-xs">
+                            {breadcrumb}
+                          </span>
+                        )}
+                      </div>
                     </Command.Item>
                   )
                 })}
@@ -242,14 +256,17 @@ export function GlobalSearchModal({
                       onSelect={() => navigateAndClose(href)}
                       className={itemClass}
                     >
-                      <span className="text-foreground font-medium">
-                        {item.title}
-                      </span>
-                      {item.description && (
-                        <span className="text-muted-foreground line-clamp-1 text-xs">
-                          {item.description}
+                      <FeatherIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {item.title}
                         </span>
-                      )}
+                        {item.description && (
+                          <span className="text-muted-foreground line-clamp-1 text-xs">
+                            {item.description}
+                          </span>
+                        )}
+                      </div>
                     </Command.Item>
                   )
                 })}
@@ -268,14 +285,17 @@ export function GlobalSearchModal({
                       onSelect={() => navigateAndClose(href)}
                       className={itemClass}
                     >
-                      <span className="text-foreground font-medium">
-                        {item.title}
-                      </span>
-                      {item.companyName && (
-                        <span className="text-muted-foreground text-xs">
-                          {item.companyName}
+                      <AddressBookIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {item.title}
                         </span>
-                      )}
+                        {item.companyName && (
+                          <span className="text-muted-foreground text-xs">
+                            {item.companyName}
+                          </span>
+                        )}
+                      </div>
                     </Command.Item>
                   )
                 })}

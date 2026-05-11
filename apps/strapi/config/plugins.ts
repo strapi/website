@@ -108,6 +108,27 @@ export default ({ env }) => {
             ? "blog-posts-production"
             : "blog-posts-testing",
         },
+        feature: {
+          indexName: env.bool("MEILISEARCH_PRODUCTION", false)
+            ? "features-production"
+            : "features-testing",
+          entriesQuery: {
+            populate: {
+              icon: true,
+              feature_tag: { fields: ["title"] },
+            },
+          },
+          transformEntry({ entry }) {
+            return {
+              ...entry,
+              feature_tag: entry.feature_tag?.title ?? null,
+            }
+          },
+          settings: {
+            filterableAttributes: ["feature_tag"],
+            searchableAttributes: ["title", "description"],
+          },
+        },
       },
     },
 

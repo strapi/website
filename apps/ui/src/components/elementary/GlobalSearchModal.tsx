@@ -6,6 +6,7 @@ import {
   FeatherIcon,
   BookOpenIcon,
   AddressBookIcon,
+  LightningIcon,
 } from "@phosphor-icons/react/ssr"
 import { Command } from "cmdk"
 import { useLocale } from "next-intl"
@@ -36,6 +37,7 @@ const EMPTY_RESULT: GlobalSearchResult = {
   caseStudies: [],
   pages: [],
   blogPosts: [],
+  features: [],
   docs: [],
 }
 
@@ -132,7 +134,8 @@ export function GlobalSearchModal({
     results.pages.length > 0 ||
     results.docs.length > 0 ||
     results.blogPosts.length > 0 ||
-    results.caseStudies.length > 0
+    results.caseStudies.length > 0 ||
+    results.features.length > 0
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -264,6 +267,44 @@ export function GlobalSearchModal({
                         {item.description && (
                           <span className="text-muted-foreground line-clamp-1 text-xs">
                             {item.description}
+                          </span>
+                        )}
+                      </div>
+                    </Command.Item>
+                  )
+                })}
+              </Command.Group>
+            )}
+
+            {results.features.length > 0 && (
+              <Command.Group heading="Features" className={groupClass}>
+                {results.features.map((item) => {
+                  const href = item.url ?? ""
+                  const isExternal = /^https?:\/\//.test(href)
+
+                  return (
+                    <Command.Item
+                      key={`feature-${item.title}`}
+                      value={`feature-${item.title}`}
+                      onSelect={() => {
+                        if (!href) return
+                        if (isExternal) {
+                          handleOpenChange(false)
+                          window.open(href, "_blank", "noopener,noreferrer")
+                        } else {
+                          navigateAndClose(href)
+                        }
+                      }}
+                      className={itemClass}
+                    >
+                      <LightningIcon className="text-muted-foreground size-5 min-h-5 min-w-5" />
+                      <div className="flex flex-col">
+                        <span className="text-foreground font-medium">
+                          {item.title}
+                        </span>
+                        {item.feature_tag && (
+                          <span className="text-muted-foreground text-xs">
+                            {item.feature_tag}
                           </span>
                         )}
                       </div>

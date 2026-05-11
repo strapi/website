@@ -53,3 +53,9 @@ export function getBlogPostsIndexName(): string {
     ? "blog-posts-production"
     : "blog-posts-testing"
 }
+
+export function getFeaturesIndexName(): string {
+  return process.env.MEILISEARCH_PRODUCTION === "true"
+    ? "features-production"
+    : "features-testing"
+}

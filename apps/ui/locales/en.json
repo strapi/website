@@ -105,7 +105,8 @@
   "features": {
     "searchPlaceholder": "Search features...",
     "loadMore": "See more",
-    "viewFeature": "Learn more"
+    "viewFeature": "Learn more",
+    "filterTagsLabel": "Categories"
   },
   "blog": {
     "title": "Blog",

@@ -22,6 +22,7 @@ export function StrapiDynamicFeaturesGrid({
     searchFeaturePages({
       locale,
       query: "",
+      featureTagTitles: [],
       offset: 0,
       limit: INITIAL_PAGE_SIZE,
     })

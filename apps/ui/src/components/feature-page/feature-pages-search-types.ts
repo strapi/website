@@ -1,11 +1,19 @@
+export interface FeatureIconMedia {
+  readonly url?: string
+  readonly alternativeText?: string | null
+  readonly width?: number
+  readonly height?: number
+}
+
 export interface FeaturePageHit {
   readonly id?: number
   readonly documentId?: string
-  readonly slug: string
   readonly title: string
-  readonly fullPath: string
+  readonly description?: string | null
+  readonly url?: string | null
+  readonly feature_tag?: string | null
+  readonly icon?: FeatureIconMedia | null
   readonly locale?: string
-  readonly pageType?: string
   readonly [key: string]: unknown
 }
 
@@ -17,6 +25,7 @@ export interface FeaturePagesSearchResult {
 export interface SearchFeaturePagesArgs {
   readonly locale: string
   readonly query: string
+  readonly featureTagTitles: readonly string[]
   readonly offset: number
   readonly limit: number
 }

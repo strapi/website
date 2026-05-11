@@ -1,12 +1,13 @@
 "use client"
 
-import { ArrowRightIcon, MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
+import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
-import { useEffect, useRef, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 
+import { SearchFilterSidebar } from "@/components/elementary/SearchFilterSidebar"
+import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
 import { Link } from "@/lib/navigation"
 import { cn } from "@/lib/styles"
 
@@ -28,6 +29,17 @@ interface FeaturePagesGridProps {
 
 const DEFAULT_PAGE_SIZE = 12
 
+function collectTags(
+  into: Set<string>,
+  items: readonly FeaturePageHit[]
+): Set<string> {
+  for (const item of items) {
+    if (item.feature_tag) into.add(item.feature_tag)
+  }
+
+  return into
+}
+
 export function FeaturePagesGrid({
   locale,
   initialHits,
@@ -41,7 +53,23 @@ export function FeaturePagesGrid({
   const [hits, setHits] = useState<readonly FeaturePageHit[]>(initialHits)
   const [total, setTotal] = useState(initialTotal)
   const [query, setQuery] = useState("")
+  const [selectedTags, setSelectedTags] = useState<ReadonlySet<string>>(
+    new Set()
+  )
+  const [knownTags, setKnownTags] = useState<ReadonlySet<string>>(() =>
+    collectTags(new Set(), initialHits)
+  )
   const [isPending, startTransition] = useTransition()
+
+  const tagOptions = useMemo(() => [...knownTags], [knownTags])
+
+  function mergeTags(items: readonly FeaturePageHit[]) {
+    setKnownTags((prev) => {
+      const next = collectTags(new Set(prev), items)
+
+      return next.size === prev.size ? prev : next
+    })
+  }
 
   const isFirstRender = useRef(true)
   useEffect(() => {
@@ -56,29 +84,47 @@ export function FeaturePagesGrid({
         const res = await searchAction({
           locale,
           query,
+          featureTagTitles: [...selectedTags],
           offset: 0,
           limit: pageSize,
         })
 
         setHits(res.hits)
         setTotal(res.total)
+        mergeTags(res.hits)
       })
     }, 200)
 
     return () => clearTimeout(handle)
-  }, [query, locale, pageSize, searchAction])
+  }, [query, selectedTags, locale, pageSize, searchAction])
+
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) => {
+      const next = new Set(prev)
+
+      if (next.has(tag)) {
+        next.delete(tag)
+      } else {
+        next.add(tag)
+      }
+
+      return next
+    })
+  }
 
   function loadMore() {
     startTransition(async () => {
       const res = await searchAction({
         locale,
         query,
+        featureTagTitles: [...selectedTags],
         offset: hits.length,
         limit: pageSize,
       })
 
       setHits((prev) => [...prev, ...res.hits])
       setTotal(res.total)
+      mergeTags(res.hits)
     })
   }
 
@@ -86,41 +132,68 @@ export function FeaturePagesGrid({
 
   return (
     <div className={cn("flex flex-col gap-8 lg:flex-row", className)}>
-      <aside className="flex flex-col gap-6 lg:w-1/4 lg:shrink-0">
-        <div className="relative">
-          <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-          <Input
-            placeholder={t("searchPlaceholder")}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-      </aside>
+      <SearchFilterSidebar
+        query={query}
+        onQueryChange={setQuery}
+        searchPlaceholder={t("searchPlaceholder")}
+        filterLabel={t("filterTagsLabel")}
+        filterOptions={tagOptions.map((tag) => ({ label: tag, value: tag }))}
+        selectedValues={selectedTags}
+        onToggleValue={toggleTag}
+        idPrefix="feature-tag"
+      />
 
       <div className="flex min-w-0 flex-1 flex-col gap-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {hits.map((item) => (
-            <Card key={item.documentId ?? item.slug}>
-              <Link
-                href={item.fullPath}
-                className="group flex h-full flex-col no-underline"
-              >
-                <CardContent>
-                  <h3 className="text-foreground text-lg font-bold">
-                    {item.title}
-                  </h3>
-                </CardContent>
+          {hits.map((item) => {
+            const href = item.url ?? ""
+            const isExternal = /^https?:\/\//.test(href)
+            const iconComponent = item.icon
+              ? ({
+                  media: item.icon,
+                  alt: item.icon.alternativeText ?? item.title,
+                } as unknown as Data.Component<"utilities.basic-image">)
+              : null
 
-                <CardFooter>
-                  <span className="text-strapi-blue-600 group-hover:text-strapi-blue-700 inline-flex items-center gap-1 text-sm font-medium transition-colors">
-                    {t("viewFeature")}
-                    <ArrowRightIcon className="size-4" />
+            return (
+              <Card key={item.documentId ?? item.title} className="relative">
+                {item.feature_tag && (
+                  <span className="bg-strapi-blue-100 text-strapi-blue-600 absolute top-3 left-3 rounded-sm px-2 py-0.5 text-xs font-medium">
+                    {item.feature_tag}
                   </span>
-                </CardFooter>
-              </Link>
-            </Card>
-          ))}
+                )}
+
+                <Link
+                  href={href || "#"}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className="group flex h-full flex-col items-center justify-center pt-10 no-underline"
+                >
+                  <CardContent className="flex flex-col items-center gap-3 text-center">
+                    {iconComponent && (
+                      <StrapiBasicImage
+                        component={iconComponent}
+                        mode="responsive"
+                        sizes="40px"
+                        className="size-10"
+                        hideWhenMissing
+                      />
+                    )}
+
+                    <h3 className="text-foreground text-lg font-bold">
+                      {item.title}
+                    </h3>
+
+                    {item.description && (
+                      <p className="text-muted-foreground line-clamp-3 text-sm">
+                        {item.description}
+                      </p>
+                    )}
+                  </CardContent>
+                </Link>
+              </Card>
+            )
+          })}
         </div>
 
         {hasMore && (

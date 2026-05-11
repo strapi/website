@@ -1,14 +1,11 @@
 "use client"
 
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 
+import { SearchFilterSidebar } from "@/components/elementary/SearchFilterSidebar"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/styles"
 
 import type {
@@ -148,47 +145,16 @@ export function CaseStudiesGrid({
 
   return (
     <div className={cn("flex flex-col gap-8 lg:flex-row", className)}>
-      <aside className="flex flex-col gap-6 lg:w-1/4 lg:shrink-0">
-        <div className="relative">
-          <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-          <Input
-            placeholder={t("searchPlaceholder")}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-
-        {categoryOptions.length > 0 && (
-          <div className="flex flex-col gap-3">
-            <p className="text-foreground text-sm font-semibold tracking-[0.5px] uppercase">
-              {t("filterCategoriesLabel")}
-            </p>
-
-            <div className="flex flex-col gap-2">
-              {categoryOptions.map((option) => {
-                const isChecked = selectedCategories.has(option.value)
-
-                return (
-                  <div key={option.value} className="flex items-center gap-2">
-                    <Checkbox
-                      id={`case-study-category-${option.value}`}
-                      checked={isChecked}
-                      onCheckedChange={() => toggleCategory(option.value)}
-                    />
-                    <Label
-                      htmlFor={`case-study-category-${option.value}`}
-                      className="cursor-pointer text-base font-normal"
-                    >
-                      {option.label}
-                    </Label>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-      </aside>
+      <SearchFilterSidebar
+        query={query}
+        onQueryChange={setQuery}
+        searchPlaceholder={t("searchPlaceholder")}
+        filterLabel={t("filterCategoriesLabel")}
+        filterOptions={categoryOptions}
+        selectedValues={selectedCategories}
+        onToggleValue={toggleCategory}
+        idPrefix="case-study-category"
+      />
 
       <div className="flex min-w-0 flex-1 flex-col gap-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

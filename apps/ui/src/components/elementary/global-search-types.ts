@@ -17,6 +17,13 @@ export interface BlogPostGlobalHit {
   readonly description?: string | null
 }
 
+export interface FeatureGlobalHit {
+  readonly title: string
+  readonly description?: string | null
+  readonly url?: string | null
+  readonly feature_tag?: string | null
+}
+
 export interface DocsGlobalHit {
   readonly url: string
   readonly hierarchy_lvl0?: string | null
@@ -30,5 +37,6 @@ export interface GlobalSearchResult {
   readonly caseStudies: readonly CaseStudyGlobalHit[]
   readonly pages: readonly PageGlobalHit[]
   readonly blogPosts: readonly BlogPostGlobalHit[]
+  readonly features: readonly FeatureGlobalHit[]
   readonly docs: readonly DocsGlobalHit[]
 }

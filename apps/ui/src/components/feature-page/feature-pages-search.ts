@@ -1,6 +1,6 @@
 "use server"
 
-import { getMeilisearchClient, getPagesIndexName } from "@/lib/meilisearch"
+import { getFeaturesIndexName, getMeilisearchClient } from "@/lib/meilisearch"
 
 import type {
   FeaturePageHit,
@@ -14,18 +14,21 @@ function escape(value: string): string {
 }
 
 export async function searchFeaturePages({
-  locale,
   query,
+  featureTagTitles,
   offset,
   limit,
 }: SearchFeaturePagesArgs): Promise<FeaturePagesSearchResult> {
-  const index =
-    getMeilisearchClient().index<FeaturePageHit>(getPagesIndexName())
+  const index = getMeilisearchClient().index<FeaturePageHit>(
+    getFeaturesIndexName()
+  )
 
-  const filter: string[] = [
-    `pageType = "feature"`,
-    `locale = "${escape(locale)}"`,
-  ]
+  const filter: string[] = []
+
+  if (featureTagTitles.length > 0) {
+    const list = featureTagTitles.map((t) => `"${escape(t)}"`).join(", ")
+    filter.push(`feature_tag IN [${list}]`)
+  }
 
   const res = await index.search(query.trim(), {
     offset,

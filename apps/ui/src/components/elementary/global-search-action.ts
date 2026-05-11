@@ -4,6 +4,7 @@ import {
   DOCS_INDEX_NAME,
   getBlogPostsIndexName,
   getCaseStudiesIndexName,
+  getFeaturesIndexName,
   getMeilisearchClient,
   getMeilisearchDocsClient,
   getPagesIndexName,
@@ -13,6 +14,7 @@ import type {
   BlogPostGlobalHit,
   CaseStudyGlobalHit,
   DocsGlobalHit,
+  FeatureGlobalHit,
   GlobalSearchResult,
   PageGlobalHit,
 } from "./global-search-types"
@@ -35,7 +37,7 @@ export async function globalSearch({
   const trimmed = query.trim()
 
   if (trimmed.length === 0) {
-    return { caseStudies: [], pages: [], blogPosts: [], docs: [] }
+    return { caseStudies: [], pages: [], blogPosts: [], features: [], docs: [] }
   }
 
   const [siteRes, docsRes] = await Promise.all([
@@ -60,6 +62,12 @@ export async function globalSearch({
           limit: PER_INDEX_LIMIT,
           attributesToRetrieve: ["slug", "title", "description"],
         },
+        {
+          indexUid: getFeaturesIndexName(),
+          q: trimmed,
+          limit: PER_INDEX_LIMIT,
+          attributesToRetrieve: ["title", "description", "url", "feature_tag"],
+        },
       ],
     }),
     getMeilisearchDocsClient()
@@ -78,7 +86,7 @@ export async function globalSearch({
       .catch(() => ({ hits: [] })),
   ])
 
-  const [caseStudies, pages, blogPosts] = siteRes.results
+  const [caseStudies, pages, blogPosts, features] = siteRes.results
 
   return {
     caseStudies: (caseStudies?.hits ??
@@ -86,6 +94,7 @@ export async function globalSearch({
     pages: (pages?.hits ?? []) as unknown as readonly PageGlobalHit[],
     blogPosts: (blogPosts?.hits ??
       []) as unknown as readonly BlogPostGlobalHit[],
+    features: (features?.hits ?? []) as unknown as readonly FeatureGlobalHit[],
     docs: (docsRes.hits ?? []) as unknown as readonly DocsGlobalHit[],
   }
 }

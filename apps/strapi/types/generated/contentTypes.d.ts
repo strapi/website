@@ -951,70 +951,6 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
   }
 }
 
-export interface ApiFeatureTagFeatureTag extends Struct.CollectionTypeSchema {
-  collectionName: "feature_tags"
-  info: {
-    displayName: "Feature tag"
-    pluralName: "feature-tags"
-    singularName: "feature-tag"
-  }
-  options: {
-    draftAndPublish: true
-  }
-  attributes: {
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    features: Schema.Attribute.Relation<"oneToMany", "api::feature.feature">
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::feature-tag.feature-tag"
-    > &
-      Schema.Attribute.Private
-    publishedAt: Schema.Attribute.DateTime
-    title: Schema.Attribute.String
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
-export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
-  collectionName: "features"
-  info: {
-    displayName: "Feature"
-    pluralName: "features"
-    singularName: "feature"
-  }
-  options: {
-    draftAndPublish: true
-  }
-  attributes: {
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    description: Schema.Attribute.Text
-    feature_tag: Schema.Attribute.Relation<
-      "manyToOne",
-      "api::feature-tag.feature-tag"
-    >
-    icon: Schema.Attribute.Media<"images">
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::feature.feature"
-    > &
-      Schema.Attribute.Private
-    publishedAt: Schema.Attribute.DateTime
-    title: Schema.Attribute.String
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    url: Schema.Attribute.String
-  }
-}
-
 export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   collectionName: "footers"
   info: {
@@ -2197,8 +2133,6 @@ declare module "@strapi/strapi" {
       "api::cms-comparison.cms-comparison": ApiCmsComparisonCmsComparison
       "api::cms.cms": ApiCmsCms
       "api::country.country": ApiCountryCountry
-      "api::feature-tag.feature-tag": ApiFeatureTagFeatureTag
-      "api::feature.feature": ApiFeatureFeature
       "api::footer.footer": ApiFooterFooter
       "api::global.global": ApiGlobalGlobal
       "api::header.header": ApiHeaderHeader

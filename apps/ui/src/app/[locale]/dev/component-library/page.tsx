@@ -42,6 +42,7 @@ import { StrapiCommunityBanner } from "@/components/page-builder/components/sect
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
+import { StrapiCompanyStatList } from "@/components/page-builder/components/sections/StrapiCompanyStatList"
 import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiDisclaimer } from "@/components/page-builder/components/sections/StrapiDisclaimer"
@@ -191,6 +192,7 @@ const TOC = [
   { id: "command-cta", label: "CommandCTA" },
   { id: "two-columns-benefits", label: "TwoColumnsBenefits" },
   { id: "two-column-grid", label: "TwoColumnGrid" },
+  { id: "company-stat-list", label: "CompanyStatList" },
   { id: "top-banner", label: "TopBanner" },
   { id: "content-card", label: "ContentCard" },
   { id: "box", label: "Box" },
@@ -436,6 +438,52 @@ const twoColumnGridLightExample = {
   ...twoColumnGridDefaultExample,
   background: "light",
 } as Data.Component<"sections.two-column-grid">
+
+const companyStatListDefaultExample = {
+  section: {
+    title: "Growing fast, healthily.",
+    variant: "default",
+    size: "default",
+    layout: "center",
+  },
+  items: [
+    {
+      id: 1,
+      value: "2015",
+      description:
+        "The year it all started. Since then, we've been focused on building a useful piece of software and a caring team that makes an impact.",
+    },
+    {
+      id: 2,
+      value: "58",
+      description:
+        "The current number of teammates, affectionately called Strapiers, has already passed half a hundred (and we're looking for more!).",
+    },
+    {
+      id: 3,
+      value: "135",
+      description:
+        "It's the ranking of the Strapi repo among 28 million public GitHub repositories. We are humbled by this and it fuels our energy to do the best for the Strapi community.",
+    },
+    {
+      id: 4,
+      value: "20",
+      description: "The number of languages spoken. Looking for more!",
+    },
+    {
+      id: 5,
+      value: "36",
+      description:
+        "It's the percentage of women in our team. It's not enough. We are making our best to create a safe place to thrive and actively trying to reduce this gender gap.",
+    },
+    {
+      id: 6,
+      value: "19",
+      description:
+        "We love our Strapi Pets, and as a remote-first company, they often work with us. Or on us. So feel free to invite them to join meetings too!",
+    },
+  ],
+} as Data.Component<"sections.company-stat-list">
 
 const newsletterBannerShortExample = {
   hubspotForm: null,
@@ -1380,6 +1428,17 @@ export default function ComponentLibraryPage() {
 
           <Variant label="Light background">
             <StrapiTwoColumnGrid component={twoColumnGridLightExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* CompanyStatList                                                   */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="company-stat-list" title="CompanyStatList">
+        <div className="-mx-6">
+          <Variant label="Default">
+            <StrapiCompanyStatList component={companyStatListDefaultExample} />
           </Variant>
         </div>
       </Section>

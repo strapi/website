@@ -166,6 +166,31 @@ export interface ElementsBrandLogoGridItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsCompanyStatItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_company_stat_items"
+  info: {
+    description: ""
+    displayName: "CompanyStatItem"
+    icon: "chartCircle"
+  }
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    value: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface ElementsConversionFeature extends Struct.ComponentSchema {
   collectionName: "components_elements_conversion_features"
   info: {
@@ -970,6 +995,31 @@ export interface SectionsCommunityBanner extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsCompanyStatList extends Struct.ComponentSchema {
+  collectionName: "components_sections_company_stat_list"
+  info: {
+    description: ""
+    displayName: "CompanyStatList"
+    icon: "chartBubble"
+  }
+  attributes: {
+    items: Schema.Attribute.Component<"elements.company-stat-item", true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface SectionsComparatorGrid extends Struct.ComponentSchema {
   collectionName: "components_sections_comparator_grids"
   info: {
@@ -1530,6 +1580,7 @@ declare module "@strapi/strapi" {
       "cards.feature-card": CardsFeatureCard
       "cms.field-entry": CmsFieldEntry
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem
+      "elements.company-stat-item": ElementsCompanyStatItem
       "elements.conversion-feature": ElementsConversionFeature
       "elements.conversion-info-block": ElementsConversionInfoBlock
       "elements.conversion-info-item": ElementsConversionInfoItem
@@ -1574,6 +1625,7 @@ declare module "@strapi/strapi" {
       "plans.pricing-card-sso": PlansPricingCardSso
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.community-banner": SectionsCommunityBanner
+      "sections.company-stat-list": SectionsCompanyStatList
       "sections.comparator-grid": SectionsComparatorGrid
       "sections.cta-banner": SectionsCtaBanner
       "sections.disclaimer": SectionsDisclaimer

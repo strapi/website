@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-04-22
+> Auto-updated by skills. Last updated: 2026-05-21
 
 ## Registry Freshness Policy
 
@@ -100,6 +100,8 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `sections.comparator-grid`              | sections      | ComparatorGrid              | title:string (opt, default "Compare"), linkTitle:string (opt, default "See all our comparators") — fetches all CMS comparisons at render time                                                                                                                                                                   |
 | `sections.disclaimer`                   | sections      | Disclaimer                  | title:string (req), content:text (req) — inline markdown rendered on frontend via InlineMarkdown                                                                                                                                                                                                                |
 | `sections.richtext`                     | sections      | Richtext                    | content:richtext (req) — freeform markdown block rendered via shared Markdown component                                                                                                                                                                                                                         |
+| `sections.company-stat-list`            | sections      | CompanyStatList             | section:utilities.section-header (req), items:repeatable elements.company-stat-item (req)                                                                                                                                                                                                                       |
+| `elements.company-stat-item`            | elements      | CompanyStatItem             | value:string (req), description:text (req)                                                                                                                                                                                                                                                                      |
 
 ## React Elementary Components
 
@@ -178,6 +180,7 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.comparator-grid`      | StrapiComparatorGrid      | `page-builder/components/sections/StrapiComparatorGrid`                          | Page         |
 | `sections.disclaimer`           | StrapiDisclaimer          | `page-builder/components/sections/StrapiDisclaimer`                              | Page         |
 | `sections.richtext`             | StrapiRichtext            | `page-builder/components/sections/StrapiRichtext`                                | Page         |
+| `sections.company-stat-list`    | StrapiCompanyStatList     | `page-builder/components/sections/StrapiCompanyStatList`                         | Page         |
 | `footer.footer-main`            | StrapiFooterMain          | `page-builder/single-types/footer/StrapiFooterMain`                              | Footer       |
 | `footer.footer-cta`             | StrapiFooterCta           | `page-builder/single-types/footer/StrapiFooterCta`                               | Footer       |
 | `navigation.top-banner`         | StrapiTopBanner           | `page-builder/components/navigation/top-banner/StrapiTopBanner`                  | Header       |

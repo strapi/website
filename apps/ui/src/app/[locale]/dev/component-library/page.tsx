@@ -48,6 +48,7 @@ import { StrapiDisclaimer } from "@/components/page-builder/components/sections/
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiNewsList } from "@/components/page-builder/components/sections/StrapiNewsList"
 import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
@@ -190,6 +191,7 @@ const TOC = [
   { id: "newsletter-banner", label: "NewsletterBanner" },
   { id: "command-cta", label: "CommandCTA" },
   { id: "two-columns-benefits", label: "TwoColumnsBenefits" },
+  { id: "news-list", label: "NewsList" },
   { id: "two-column-grid", label: "TwoColumnGrid" },
   { id: "top-banner", label: "TopBanner" },
   { id: "content-card", label: "ContentCard" },
@@ -393,6 +395,66 @@ const twoColumnsBenefitsExample = {
     },
   ],
 } as Data.Component<"sections.two-columns-benefits">
+
+const newsListExample = {
+  section: {
+    title: "Newsroom",
+    description: "Strapi in the press.",
+    variant: "default",
+    size: "default",
+    layout: "left",
+  },
+  loadMoreLabel: "Load More",
+  pageSize: 5,
+  items: [
+    {
+      id: 1,
+      title:
+        "Strapi Unveils Live Preview, Strapi AI, Native Integrations, and Free Cloud Plan at StrapiConf",
+      url: "https://www.businesswire.com/news/home/20250513073644/en/",
+      date: "2025-05-13",
+      source: "BusinessWire",
+    },
+    {
+      id: 2,
+      title:
+        "Strapi Introduces Version 5, Improving Both Content Management and Developer Efficiency",
+      url: "https://www.businesswire.com/news/home/20240924033608/en/",
+      date: "2024-09-24",
+      source: "BusinessWire",
+    },
+    {
+      id: 3,
+      title: "Headless CMS startup Strapi launches Strapi Cloud",
+      url: "https://techcrunch.com/2023/03/01/headless-cms-startup-strapi-launches-strapi-cloud/",
+      date: "2023-03-01",
+      source: "TechCrunch",
+    },
+    {
+      id: 4,
+      title: "Strapi lands $31M for its headless cms platform",
+      url: "https://techcrunch.com/2022/06/22/strapi-lands-31m-for-its-headless-cms-platform/",
+      date: "2022-06-22",
+      source: "TechCrunch",
+    },
+    {
+      id: 5,
+      title:
+        "Strapi Releases v4, Offering New Design System, User Interface and More",
+      url: "https://www.cmswire.com/digital-experience/strapi-releases-v4/",
+      date: "2021-12-08",
+      source: "CMSWire",
+    },
+    {
+      id: 6,
+      title:
+        "Strapi is recognized as one of the hottest startups in Paris 2021",
+      url: "https://www.wired.co.uk/article/paris-hottest-startups-2021",
+      date: "2021-08-10",
+      source: "WIRED",
+    },
+  ],
+} as Data.Component<"sections.news-list">
 
 const twoColumnGridDefaultExample = {
   section: {
@@ -1365,6 +1427,17 @@ export default function ComponentLibraryPage() {
         <div className="-mx-6 space-y-6">
           <Variant label="Default (left-aligned header + benefit items)">
             <StrapiTwoColumnsBenefits component={twoColumnsBenefitsExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* NewsList                                                          */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="news-list" title="NewsList">
+        <div className="-mx-6">
+          <Variant label="Default (press rows + Load More)">
+            <StrapiNewsList component={newsListExample} />
           </Variant>
         </div>
       </Section>

@@ -1337,6 +1337,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.richtext",
         "sections.dynamic-case-studies-grid",
         "sections.dynamic-features-grid",
+        "sections.news-list",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

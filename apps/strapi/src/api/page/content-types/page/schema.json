@@ -94,7 +94,8 @@
         "sections.disclaimer",
         "sections.richtext",
         "sections.dynamic-case-studies-grid",
-        "sections.dynamic-features-grid"
+        "sections.dynamic-features-grid",
+        "sections.news-list"
       ]
     },
     "children": {

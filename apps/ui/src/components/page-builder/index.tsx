@@ -34,6 +34,7 @@ import { StrapiFaqSection } from "@/components/page-builder/components/sections/
 import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sections/StrapiFeatureCardGrid"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiNewsList } from "@/components/page-builder/components/sections/StrapiNewsList"
 import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
@@ -80,6 +81,7 @@ export const ContentComponents: Partial<
   "sections.two-columns-benefits": StrapiTwoColumnsBenefits,
   "sections.dynamic-case-studies-grid": StrapiDynamicCaseStudiesGrid,
   "sections.dynamic-features-grid": StrapiDynamicFeaturesGrid,
+  "sections.news-list": StrapiNewsList,
   // Cards
   "cards.feature-card": StrapiFeatureCard,
   "cards.content-card": StrapiContentCard,

@@ -294,6 +294,50 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
   }
 }
 
+export interface ElementsNewsItem extends Struct.ComponentSchema {
+  collectionName: "components_elements_news_items"
+  info: {
+    description: ""
+    displayName: "NewsItem"
+    icon: "newspaper"
+  }
+  attributes: {
+    date: Schema.Attribute.Date &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    logo: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    source: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    url: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }>
+  }
+}
+
 export interface ElementsTeamMemberItem extends Struct.ComponentSchema {
   collectionName: "components_elements_team_member_items"
   info: {
@@ -1144,6 +1188,43 @@ export interface SectionsMeetTheTeam extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsNewsList extends Struct.ComponentSchema {
+  collectionName: "components_sections_news_list"
+  info: {
+    description: ""
+    displayName: "NewsList"
+    icon: "bullhorn"
+  }
+  attributes: {
+    items: Schema.Attribute.Component<"elements.news-item", true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    loadMoreLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    pageSize: Schema.Attribute.Integer &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<10>
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface SectionsRichtext extends Struct.ComponentSchema {
   collectionName: "components_sections_richtexts"
   info: {
@@ -1538,6 +1619,7 @@ declare module "@strapi/strapi" {
       "elements.hero-home-feature": ElementsHeroHomeFeature
       "elements.hero-home-testimonials": ElementsHeroHomeTestimonials
       "elements.how-it-works-item": ElementsHowItWorksItem
+      "elements.news-item": ElementsNewsItem
       "elements.team-member-item": ElementsTeamMemberItem
       "elements.testimony-item": ElementsTestimonyItem
       "footer.footer-cta": FooterFooterCta
@@ -1585,6 +1667,7 @@ declare module "@strapi/strapi" {
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
       "sections.meet-the-team": SectionsMeetTheTeam
+      "sections.news-list": SectionsNewsList
       "sections.richtext": SectionsRichtext
       "sections.section-header": SectionsSectionHeader
       "sections.testimonies": SectionsTestimonies

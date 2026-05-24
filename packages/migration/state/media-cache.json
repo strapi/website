@@ -1,1 +1,3069 @@
-{}
+{
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Strapi_Logo_dark_ff2db7a0fb.png": {
+    "id": 5855,
+    "hash": "Strapi_Logo_dark_ff2db7a0fb_ae0ddc6b5c"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Wordpress_290a185d99.png": {
+    "id": 5856,
+    "hash": "Property_1_Wordpress_290a185d99_d97867727e"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Directus_7cb6029246.png": {
+    "id": 5857,
+    "hash": "Property_1_Directus_7cb6029246_ba2cb2db36"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Contentful_fc7cab87b7.png": {
+    "id": 5858,
+    "hash": "Property_1_Contentful_fc7cab87b7_81b5f83dd8"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Sanity_7a8e0923d4.png": {
+    "id": 5859,
+    "hash": "Property_1_Sanity_7a8e0923d4_5fca2b51e2"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Prismic_e4941b6546.png": {
+    "id": 5860,
+    "hash": "Property_1_Prismic_e4941b6546_7066b1ea93"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Keystone_471d1b0c51.png": {
+    "id": 5861,
+    "hash": "Property_1_Keystone_471d1b0c51_b3dafef09c"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Property_1_Dato_a48c750401.png": {
+    "id": 5862,
+    "hash": "Property_1_Dato_a48c750401_f319db4252"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/payload_cms_logo_dca883f7fa.png": {
+    "id": 5863,
+    "hash": "payload_cms_logo_dca883f7fa_693158c189"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/butter_cms_logo_272706c7a8.png": {
+    "id": 5864,
+    "hash": "butter_cms_logo_272706c7a8_892a6ecd2b"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Logo_Full_Default_064ca1d517.png": {
+    "id": 5865,
+    "hash": "Logo_Full_Default_064ca1d517_8b50aa3a8d"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/storyblok_96c4bf7dd1.svg": {
+    "id": 5866,
+    "hash": "storyblok_96c4bf7dd1_618d106afa"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/agility_cms_logo_bf8aa06331.png": {
+    "id": 5867,
+    "hash": "agility_cms_logo_bf8aa06331_472a3faf0b"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/kentico_logo_b41c333a1d.png": {
+    "id": 5868,
+    "hash": "kentico_logo_b41c333a1d_9f1b0ce2d9"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/craft_seeklogo_ae3e100da6.svg": {
+    "id": 5869,
+    "hash": "craft_seeklogo_ae3e100da6_8dfd3fd3d0"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/ghost_cms_logo_7c754a2343.png": {
+    "id": 5870,
+    "hash": "ghost_cms_logo_7c754a2343_0ada905f41"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/contentstack0logo_20908e56f2.svg": {
+    "id": 5871,
+    "hash": "contentstack0logo_20908e56f2_42d7c43f4b"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/contentstack_da88523a4d.jpg": {
+    "id": 5872,
+    "hash": "contentstack_da88523a4d_2616b39bd0"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/dot_CMS_9d0208e8fc.png": {
+    "id": 5873,
+    "hash": "dot_CMS_9d0208e8fc_f14408e07c"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Hygraph_83113665b8.jpeg": {
+    "id": 5874,
+    "hash": "Hygraph_83113665b8_4b0c793baa"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/kontent_7cc4704b69.jpeg": {
+    "id": 5875,
+    "hash": "kontent_7cc4704b69_193f734420"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/Magnolia_1a105cef88.png": {
+    "id": 5876,
+    "hash": "Magnolia_1a105cef88_2e70c2fa84"
+  },
+  "https://delicate-dawn-ac25646e6d.media.strapiapp.com/umbraco_fda535c625.png": {
+    "id": 5877,
+    "hash": "umbraco_fda535c625_2b3b4a2e34"
+  },
+  "https://api-prod.strapi.io/uploads/demo_c802631069.gif": {
+    "id": 5878,
+    "hash": "demo_c802631069_66cc5ac934",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_c802631069_66cc5ac934.gif"
+  },
+  "https://api-prod.strapi.io/uploads/astro_website_5b24d0e174.png": {
+    "id": 5879,
+    "hash": "astro_website_5b24d0e174_61ad772ba7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_website_5b24d0e174_61ad772ba7.png"
+  },
+  "https://api-prod.strapi.io/uploads/astro_index_file_sections_1e45d83566.png": {
+    "id": 5880,
+    "hash": "astro_index_file_sections_1e45d83566_b44262b7b8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_index_file_sections_1e45d83566_b44262b7b8.png"
+  },
+  "https://api-prod.strapi.io/uploads/astro_top_section_bottom_section_demo_8c2e91fe2d.png": {
+    "id": 5881,
+    "hash": "astro_top_section_bottom_section_demo_8c2e91fe2d_c408dd0cd4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_top_section_bottom_section_demo_8c2e91fe2d_c408dd0cd4.png"
+  },
+  "https://api-prod.strapi.io/uploads/astro_component_and_layout_demo_b47b9b100a.gif": {
+    "id": 5882,
+    "hash": "astro_component_and_layout_demo_b47b9b100a_bcce9e04f4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_component_and_layout_demo_b47b9b100a_bcce9e04f4.gif"
+  },
+  "https://api-prod.strapi.io/uploads/astro_dynamic_rendering_40eb49fe27.png": {
+    "id": 5883,
+    "hash": "astro_dynamic_rendering_40eb49fe27_c599ee139a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_dynamic_rendering_40eb49fe27_c599ee139a.png"
+  },
+  "https://api-prod.strapi.io/uploads/products_api_endpoint_f01abbf0b7.png": {
+    "id": 5884,
+    "hash": "products_api_endpoint_f01abbf0b7_dc0acbf5ad",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/products_api_endpoint_f01abbf0b7_dc0acbf5ad.png"
+  },
+  "https://api-prod.strapi.io/uploads/products_page_1888f67470.png": {
+    "id": 5885,
+    "hash": "products_page_1888f67470_4861a272b3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/products_page_1888f67470_4861a272b3.png"
+  },
+  "https://api-prod.strapi.io/uploads/astro_dynamic_data_update_043db26bf8.gif": {
+    "id": 5886,
+    "hash": "astro_dynamic_data_update_043db26bf8_778704241b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_dynamic_data_update_043db26bf8_778704241b.gif"
+  },
+  "https://api-prod.strapi.io/uploads/strapi_custom_installation_78cdce151a.png": {
+    "id": 5887,
+    "hash": "strapi_custom_installation_78cdce151a_fdf9325da4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/strapi_custom_installation_78cdce151a_fdf9325da4.png"
+  },
+  "https://api-prod.strapi.io/uploads/database_name_error_6ba20bbe06.png": {
+    "id": 5888,
+    "hash": "database_name_error_6ba20bbe06_66d0ab408f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/database_name_error_6ba20bbe06_66d0ab408f.png"
+  },
+  "https://api-prod.strapi.io/uploads/strapi_successful_installation_ee8720dc6c.png": {
+    "id": 5889,
+    "hash": "strapi_successful_installation_ee8720dc6c_7342d469dc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/strapi_successful_installation_ee8720dc6c_7342d469dc.png"
+  },
+  "https://api-prod.strapi.io/uploads/strapi_login_7ff2a611fd.png": {
+    "id": 5890,
+    "hash": "strapi_login_7ff2a611fd_e7881334af",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/strapi_login_7ff2a611fd_e7881334af.png"
+  },
+  "https://api-prod.strapi.io/uploads/create_blog_collection_c625d256bb.png": {
+    "id": 5891,
+    "hash": "create_blog_collection_c625d256bb_9331e2448b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/create_blog_collection_c625d256bb_9331e2448b.png"
+  },
+  "https://api-prod.strapi.io/uploads/enable_internalization_db1e8768de.png": {
+    "id": 5892,
+    "hash": "enable_internalization_db1e8768de_d6ff879acd",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/enable_internalization_db1e8768de_d6ff879acd.png"
+  },
+  "https://api-prod.strapi.io/uploads/rich_text_markdown_1fe5251b8a.png": {
+    "id": 5893,
+    "hash": "rich_text_markdown_1fe5251b8a_4fa7428e98",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/rich_text_markdown_1fe5251b8a_4fa7428e98.png"
+  },
+  "https://api-prod.strapi.io/uploads/astro_strapi_create_entry_title_and_markdown_content_c69643b45f.png": {
+    "id": 5894,
+    "hash": "astro_strapi_create_entry_title_and_markdown_content_c69643b45f_592b95aec3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_strapi_create_entry_title_and_markdown_content_c69643b45f_592b95aec3.png"
+  },
+  "https://api-prod.strapi.io/uploads/astro_strapi_generate_slug_449f21547d.png": {
+    "id": 5895,
+    "hash": "astro_strapi_generate_slug_449f21547d_6aca905d39",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/astro_strapi_generate_slug_449f21547d_6aca905d39.png"
+  },
+  "https://api-prod.strapi.io/uploads/empty_image_library_astro_strapi_7fcc4362cc.png": {
+    "id": 5896,
+    "hash": "empty_image_library_astro_strapi_7fcc4362cc_365bd68fa8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/empty_image_library_astro_strapi_7fcc4362cc_365bd68fa8.png"
+  },
+  "https://api-prod.strapi.io/uploads/images_upload_cd4d8a0fe7.gif": {
+    "id": 5897,
+    "hash": "images_upload_cd4d8a0fe7_0cc28e88d2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/images_upload_cd4d8a0fe7_0cc28e88d2.gif"
+  },
+  "https://api-prod.strapi.io/uploads/add_internalization_in_strapi_85ddccfed9.png": {
+    "id": 5898,
+    "hash": "add_internalization_in_strapi_85ddccfed9_d461f53b58",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_internalization_in_strapi_85ddccfed9_d461f53b58.png"
+  },
+  "https://api-prod.strapi.io/uploads/select_languages_135dbfe58d.png": {
+    "id": 5899,
+    "hash": "select_languages_135dbfe58d_32afe30a8a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/select_languages_135dbfe58d_32afe30a8a.png"
+  },
+  "https://api-prod.strapi.io/uploads/toggle_between_locales_b053a0cf69.png": {
+    "id": 5900,
+    "hash": "toggle_between_locales_b053a0cf69_980341a5e9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/toggle_between_locales_b053a0cf69_980341a5e9.png"
+  },
+  "https://api-prod.strapi.io/uploads/fill_from_another_locale_869aa1926f.png": {
+    "id": 5901,
+    "hash": "fill_from_another_locale_869aa1926f_b54bbe6701",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/fill_from_another_locale_869aa1926f_b54bbe6701.png"
+  },
+  "https://api-prod.strapi.io/uploads/spanish_translation_1721d31c16.png": {
+    "id": 5902,
+    "hash": "spanish_translation_1721d31c16_b329818b40",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/spanish_translation_1721d31c16_b329818b40.png"
+  },
+  "https://api-prod.strapi.io/uploads/enable_public_access_dfc0eb6e4e.png": {
+    "id": 5903,
+    "hash": "enable_public_access_dfc0eb6e4e_02a7833e71",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/enable_public_access_dfc0eb6e4e_02a7833e71.png"
+  },
+  "https://api-prod.strapi.io/uploads/populate_blog_post_result_76ce4ec379.png": {
+    "id": 5904,
+    "hash": "populate_blog_post_result_76ce4ec379_9b5e4d3851",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/populate_blog_post_result_76ce4ec379_9b5e4d3851.png"
+  },
+  "https://api-prod.strapi.io/uploads/click_dynamic_zone_849cd7ba31.png": {
+    "id": 5905,
+    "hash": "click_dynamic_zone_849cd7ba31_e7b9cc1350",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/click_dynamic_zone_849cd7ba31_e7b9cc1350.png"
+  },
+  "https://api-prod.strapi.io/uploads/add_new_dynamic_zone_dcde9a1a16.png": {
+    "id": 5906,
+    "hash": "add_new_dynamic_zone_dcde9a1a16_87a808959b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_new_dynamic_zone_dcde9a1a16_87a808959b.png"
+  },
+  "https://api-prod.strapi.io/uploads/add_new_component_to_dynamic_zone_d8e572f617.png": {
+    "id": 5907,
+    "hash": "add_new_component_to_dynamic_zone_d8e572f617_3cbe60ce53",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_new_component_to_dynamic_zone_d8e572f617_3cbe60ce53.png"
+  },
+  "https://api-prod.strapi.io/uploads/add_fields_to_component_f7b1f6c778.png": {
+    "id": 5908,
+    "hash": "add_fields_to_component_f7b1f6c778_519dd6893c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_fields_to_component_f7b1f6c778_519dd6893c.png"
+  },
+  "https://api-prod.strapi.io/uploads/landing_page_dynamic_zone_76b5b2d6a7.png": {
+    "id": 5909,
+    "hash": "landing_page_dynamic_zone_76b5b2d6a7_ba5e5dc189",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/landing_page_dynamic_zone_76b5b2d6a7_ba5e5dc189.png"
+  },
+  "https://api-prod.strapi.io/uploads/hero_and_about_dynamic_components_792cc8d69b.png": {
+    "id": 5910,
+    "hash": "hero_and_about_dynamic_components_792cc8d69b_02121664cf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/hero_and_about_dynamic_components_792cc8d69b_02121664cf.png"
+  },
+  "https://api-prod.strapi.io/uploads/add_entry_to_landing_page_c6b7abe603.png": {
+    "id": 5911,
+    "hash": "add_entry_to_landing_page_c6b7abe603_f96d3c0458",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_entry_to_landing_page_c6b7abe603_f96d3c0458.png"
+  },
+  "https://api-prod.strapi.io/uploads/add_hero_text_and_description_848094fdc3.png": {
+    "id": 5912,
+    "hash": "add_hero_text_and_description_848094fdc3_3bd3d92924",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_hero_text_and_description_848094fdc3_3bd3d92924.png"
+  },
+  "https://api-prod.strapi.io/uploads/add_about_text_and_image_7ee39e02e5.png": {
+    "id": 5913,
+    "hash": "add_about_text_and_image_7ee39e02e5_fd44c75250",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/add_about_text_and_image_7ee39e02e5_fd44c75250.png"
+  },
+  "https://api-prod.strapi.io/uploads/enable_public_access_for_page_collection_2d7e443b63.png": {
+    "id": 5914,
+    "hash": "enable_public_access_for_page_collection_2d7e443b63_8c81ea3be5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/enable_public_access_for_page_collection_2d7e443b63_8c81ea3be5.png"
+  },
+  "https://api-prod.strapi.io/uploads/get_all_pages_b78cf352d8.png": {
+    "id": 5915,
+    "hash": "get_all_pages_b78cf352d8_9bfc1f4a0b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/get_all_pages_b78cf352d8_9bfc1f4a0b.png"
+  },
+  "https://api-prod.strapi.io/uploads/shadcn_ui_0f155fbb09.png": {
+    "id": 5916,
+    "hash": "shadcn_ui_0f155fbb09_fd82f02b74",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/shadcn_ui_0f155fbb09_fd82f02b74.png"
+  },
+  "https://api-prod.strapi.io/uploads/we_have_a_button_773bb330f5.png": {
+    "id": 5917,
+    "hash": "we_have_a_button_773bb330f5_01000c265e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/we_have_a_button_773bb330f5_01000c265e.png"
+  },
+  "https://api-prod.strapi.io/uploads/our_new_button_d6e34ed415.png": {
+    "id": 5918,
+    "hash": "our_new_button_d6e34ed415_29c49a9aee",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/our_new_button_d6e34ed415_29c49a9aee.png"
+  },
+  "https://api-prod.strapi.io/uploads/register_user_d6d80f13ec.png": {
+    "id": 5919,
+    "hash": "register_user_d6d80f13ec_f9fd6b612e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/register_user_d6d80f13ec_f9fd6b612e.png"
+  },
+  "https://api-prod.strapi.io/uploads/home_page_layout_ce7c66f130.png": {
+    "id": 5920,
+    "hash": "home_page_layout_ce7c66f130_54f986f7c2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/home_page_layout_ce7c66f130_54f986f7c2.png"
+  },
+  "https://api-prod.strapi.io/uploads/home_page_next_0fd7778971.png": {
+    "id": 5921,
+    "hash": "home_page_next_0fd7778971_04e7fc0406",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/home_page_next_0fd7778971_04e7fc0406.png"
+  },
+  "https://api-prod.strapi.io/uploads/our_first_data_63fd644587.png": {
+    "id": 5922,
+    "hash": "our_first_data_63fd644587_cd1cdbbfe7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/our_first_data_63fd644587_cd1cdbbfe7.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_zod_2b7c405de4.png": {
+    "id": 5923,
+    "hash": "001_zod_2b7c405de4_1e6b3f9cf4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_zod_2b7c405de4_1e6b3f9cf4.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_nextjs_installation_6dfd208429.png": {
+    "id": 5924,
+    "hash": "002_nextjs_installation_6dfd208429_978d6e5832",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_nextjs_installation_6dfd208429_978d6e5832.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_signup_form_ef91a126c5.png": {
+    "id": 5925,
+    "hash": "003_signup_form_ef91a126c5_78b1f2170b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_signup_form_ef91a126c5_78b1f2170b.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_zod_form_schema_b2df7333ab.png": {
+    "id": 5926,
+    "hash": "004_zod_form_schema_b2df7333ab_9aa5cf2f23",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_zod_form_schema_b2df7333ab_9aa5cf2f23.png"
+  },
+  "https://api-prod.strapi.io/uploads/demo_gif_cff9e58e3b.gif": {
+    "id": 5927,
+    "hash": "demo_gif_cff9e58e3b_f8fe4465a4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_gif_cff9e58e3b_f8fe4465a4.gif"
+  },
+  "https://api-prod.strapi.io/uploads/013_header_7a5c928abe.png": {
+    "id": 5928,
+    "hash": "013_header_7a5c928abe_6b62c1556c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_header_7a5c928abe_6b62c1556c.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_footer_b469acebc1.png": {
+    "id": 5929,
+    "hash": "014_footer_b469acebc1_1d78c34b73",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_footer_b469acebc1_1d78c34b73.png"
+  },
+  "https://api-prod.strapi.io/uploads/020_footer_a56d630928.png": {
+    "id": 5930,
+    "hash": "020_footer_a56d630928_771a2679ff",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/020_footer_a56d630928_771a2679ff.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_5_most_aniticipated_new_features_950d66ca6a.webp": {
+    "id": 5931,
+    "hash": "Strapi_5_most_aniticipated_new_features_950d66ca6a_f41eae036f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_5_most_aniticipated_new_features_950d66ca6a_f41eae036f.webp"
+  },
+  "https://api-prod.strapi.io/uploads/strapi_v5_content_versioning_db60c8f102.webp": {
+    "id": 5932,
+    "hash": "strapi_v5_content_versioning_db60c8f102_44caed5748",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/strapi_v5_content_versioning_db60c8f102_44caed5748.webp"
+  },
+  "https://api-prod.strapi.io/uploads/strapi_v5_content_history_91898aa2d0.webp": {
+    "id": 5933,
+    "hash": "strapi_v5_content_history_91898aa2d0_e113e48329",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/strapi_v5_content_history_91898aa2d0_e113e48329.webp"
+  },
+  "https://api-prod.strapi.io/uploads/Dynamic_Menus_with_Strapi_420abb2d8c.png": {
+    "id": 5934,
+    "hash": "Dynamic_Menus_with_Strapi_420abb2d8c_88afcc2b2d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Dynamic_Menus_with_Strapi_420abb2d8c_88afcc2b2d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Setup_Build_a_menu_on_Strapi_e526308c95.png": {
+    "id": 5935,
+    "hash": "Setup_Build_a_menu_on_Strapi_e526308c95_3c0004a865",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Setup_Build_a_menu_on_Strapi_e526308c95_3c0004a865.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_Sections_as_Collection_Types_in_Strapi_2c4ebd0ae4.png": {
+    "id": 5936,
+    "hash": "Creating_Sections_as_Collection_Types_in_Strapi_2c4ebd0ae4_498cac1c94",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_Sections_as_Collection_Types_in_Strapi_2c4ebd0ae4_498cac1c94.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_Sections_as_Collection_Types_in_Strapi2_0febdbe122.png": {
+    "id": 5937,
+    "hash": "Creating_Sections_as_Collection_Types_in_Strapi2_0febdbe122_6ec45ffae4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_Sections_as_Collection_Types_in_Strapi2_0febdbe122_6ec45ffae4.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_Sections_as_Collection_Types_in_Strapi3_a38d240c1e.png": {
+    "id": 5938,
+    "hash": "Creating_Sections_as_Collection_Types_in_Strapi3_a38d240c1e_d106cda53f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_Sections_as_Collection_Types_in_Strapi3_a38d240c1e_d106cda53f.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_Sections_as_Collection_Types_in_Strapi4_ef3990d647.png": {
+    "id": 5939,
+    "hash": "Creating_Sections_as_Collection_Types_in_Strapi4_ef3990d647_04bde5adbf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_Sections_as_Collection_Types_in_Strapi4_ef3990d647_04bde5adbf.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_the_Dropdown_Component_6e0238949d.png": {
+    "id": 5940,
+    "hash": "Creating_the_Dropdown_Component_6e0238949d_fbe2627c51",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_the_Dropdown_Component_6e0238949d_fbe2627c51.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_the_Menu_Link_Component_69b54c43b8.png": {
+    "id": 5941,
+    "hash": "Creating_the_Menu_Link_Component_69b54c43b8_2b0b3e6c4f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_the_Menu_Link_Component_69b54c43b8_2b0b3e6c4f.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_the_Button_Component_7923d9d0a8.png": {
+    "id": 5942,
+    "hash": "Creating_the_Button_Component_7923d9d0a8_01c54d2719",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_the_Button_Component_7923d9d0a8_01c54d2719.png"
+  },
+  "https://api-prod.strapi.io/uploads/Constructing_the_Menu_a0e56a24b1.png": {
+    "id": 5943,
+    "hash": "Constructing_the_Menu_a0e56a24b1_805dac1b39",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Constructing_the_Menu_a0e56a24b1_805dac1b39.png"
+  },
+  "https://api-prod.strapi.io/uploads/Build_a_menu_on_Strapi_8dc32ce522.png": {
+    "id": 5944,
+    "hash": "Build_a_menu_on_Strapi_8dc32ce522_9f4a6ecff3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Build_a_menu_on_Strapi_8dc32ce522_9f4a6ecff3.png"
+  },
+  "https://api-prod.strapi.io/uploads/Google_Trends_for_Rust_6a5138ab81.png": {
+    "id": 5945,
+    "hash": "Google_Trends_for_Rust_6a5138ab81_dc8f314f46",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Google_Trends_for_Rust_6a5138ab81_dc8f314f46.png"
+  },
+  "https://api-prod.strapi.io/uploads/stackoverflow_rust_most_loved_language_52fce31f94.png": {
+    "id": 5946,
+    "hash": "stackoverflow_rust_most_loved_language_52fce31f94_13bd0e68e9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/stackoverflow_rust_most_loved_language_52fce31f94_13bd0e68e9.png"
+  },
+  "https://api-prod.strapi.io/uploads/stackoverflow_rust_top_performing_languages_d76bc97305.png": {
+    "id": 5947,
+    "hash": "stackoverflow_rust_top_performing_languages_d76bc97305_ef2fac552f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/stackoverflow_rust_top_performing_languages_d76bc97305_ef2fac552f.png"
+  },
+  "https://api-prod.strapi.io/uploads/popular_companies_that_use_rust_c340758443.png": {
+    "id": 5948,
+    "hash": "popular_companies_that_use_rust_c340758443_49ff570688",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/popular_companies_that_use_rust_c340758443_49ff570688.png"
+  },
+  "https://api-prod.strapi.io/uploads/responders_response_top_relational_databases_faebbc171d.png": {
+    "id": 5949,
+    "hash": "responders_response_top_relational_databases_faebbc171d_3b853f7695",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/responders_response_top_relational_databases_faebbc171d_3b853f7695.png"
+  },
+  "https://api-prod.strapi.io/uploads/top_relational_databases_comparison_3b3c7da921.png": {
+    "id": 5950,
+    "hash": "top_relational_databases_comparison_3b3c7da921_0747a5b943",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/top_relational_databases_comparison_3b3c7da921_0747a5b943.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_comparisons_of_cloud_computing_37235718cf.png": {
+    "id": 5951,
+    "hash": "001_comparisons_of_cloud_computing_37235718cf_0275734e82",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_comparisons_of_cloud_computing_37235718cf_0275734e82.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_typical_iaas_setup_9cc854eb5f.png": {
+    "id": 5952,
+    "hash": "002_typical_iaas_setup_9cc854eb5f_847df14c41",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_typical_iaas_setup_9cc854eb5f_847df14c41.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_paas_deployment_ae1bad8b61.png": {
+    "id": 5953,
+    "hash": "003_paas_deployment_ae1bad8b61_d0d5376e32",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_paas_deployment_ae1bad8b61_d0d5376e32.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_faas_model_703469ccee.png": {
+    "id": 5954,
+    "hash": "004_faas_model_703469ccee_abb50a7398",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_faas_model_703469ccee_abb50a7398.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_jwt_generation_9380cdca6a.png": {
+    "id": 5955,
+    "hash": "001_jwt_generation_9380cdca6a_767fd958c2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_jwt_generation_9380cdca6a_767fd958c2.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_jwt_encoder_2b58387eee.png": {
+    "id": 5956,
+    "hash": "002_jwt_encoder_2b58387eee_18cc9978d2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_jwt_encoder_2b58387eee_18cc9978d2.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_cookie_storage_128c8ee224.png": {
+    "id": 5957,
+    "hash": "003_cookie_storage_128c8ee224_c240b21471",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_cookie_storage_128c8ee224_c240b21471.png"
+  },
+  "https://api-prod.strapi.io/uploads/gif_247c4e399e.gif": {
+    "id": 5958,
+    "hash": "gif_247c4e399e_d06c8afc96",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/gif_247c4e399e_d06c8afc96.gif"
+  },
+  "https://api-prod.strapi.io/uploads/image2_2a77fedfbc.png": {
+    "id": 5959,
+    "hash": "image2_2a77fedfbc_e93116679d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image2_2a77fedfbc_e93116679d.png"
+  },
+  "https://api-prod.strapi.io/uploads/image1_21ff3af7b7.png": {
+    "id": 5960,
+    "hash": "image1_21ff3af7b7_e214a092f7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image1_21ff3af7b7_e214a092f7.png"
+  },
+  "https://api-prod.strapi.io/uploads/image4_932adb6ad4.png": {
+    "id": 5961,
+    "hash": "image4_932adb6ad4_2d79667311",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image4_932adb6ad4_2d79667311.png"
+  },
+  "https://api-prod.strapi.io/uploads/ezgif.com-optimize_f68ab6758d.gif": {
+    "id": 5962,
+    "hash": "ezgif_com_optimize_f68ab6758d_84660c57eb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/ezgif_com_optimize_f68ab6758d_84660c57eb.gif"
+  },
+  "https://api-prod.strapi.io/uploads/image2_1b392684c8.png": {
+    "id": 5963,
+    "hash": "image2_1b392684c8_20b01ede3b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image2_1b392684c8_20b01ede3b.png"
+  },
+  "https://api-prod.strapi.io/uploads/screen11tyshot_1ff7ce4c71.png": {
+    "id": 5964,
+    "hash": "screen11tyshot_1ff7ce4c71_9f18025e71",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/screen11tyshot_1ff7ce4c71_9f18025e71.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_policies_nextjs_db20ccf825.png": {
+    "id": 5965,
+    "hash": "001_policies_nextjs_db20ccf825_9ca397d0cc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_policies_nextjs_db20ccf825_9ca397d0cc.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_policies_nextjs_e9816a29dc.png": {
+    "id": 5966,
+    "hash": "002_policies_nextjs_e9816a29dc_085b090df3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_policies_nextjs_e9816a29dc_085b090df3.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_policies_nextjs_b3dba1c777.png": {
+    "id": 5967,
+    "hash": "003_policies_nextjs_b3dba1c777_debf2aa0e5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_policies_nextjs_b3dba1c777_debf2aa0e5.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_5_policies_nextjs_209ea9c981.png": {
+    "id": 5968,
+    "hash": "003_5_policies_nextjs_209ea9c981_5749b76e95",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_5_policies_nextjs_209ea9c981_5749b76e95.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_policies_nextjs_f4b75f2a7c.png": {
+    "id": 5969,
+    "hash": "004_policies_nextjs_f4b75f2a7c_4410df2533",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_policies_nextjs_f4b75f2a7c_4410df2533.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_policies_nextjs_a79eec1aea.png": {
+    "id": 5970,
+    "hash": "005_policies_nextjs_a79eec1aea_7c5d68d2d7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_policies_nextjs_a79eec1aea_7c5d68d2d7.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_policies_nextjs_95bf6e8248.png": {
+    "id": 5971,
+    "hash": "006_policies_nextjs_95bf6e8248_e777315e8b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_policies_nextjs_95bf6e8248_e777315e8b.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_policies_nextjs_27150ec46e.png": {
+    "id": 5972,
+    "hash": "007_policies_nextjs_27150ec46e_32ca7a5f2e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_policies_nextjs_27150ec46e_32ca7a5f2e.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_policies_nextjs_896bbc9794.png": {
+    "id": 5973,
+    "hash": "008_policies_nextjs_896bbc9794_2a5fd739c1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_policies_nextjs_896bbc9794_2a5fd739c1.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_policies_nextjs_90db6da46d.png": {
+    "id": 5974,
+    "hash": "009_policies_nextjs_90db6da46d_f2b649a117",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_policies_nextjs_90db6da46d_f2b649a117.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_policies_nextjs_dedb43460c.png": {
+    "id": 5975,
+    "hash": "010_policies_nextjs_dedb43460c_3481d0aa8e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_policies_nextjs_dedb43460c_3481d0aa8e.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_policies_nextjs_5ebf4ee82a.png": {
+    "id": 5976,
+    "hash": "011_policies_nextjs_5ebf4ee82a_f1854c42b1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_policies_nextjs_5ebf4ee82a_f1854c42b1.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_policies_nextjs_664a797bfd.png": {
+    "id": 5977,
+    "hash": "012_policies_nextjs_664a797bfd_bf644acdd3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_policies_nextjs_664a797bfd_bf644acdd3.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_policies_nextjs_0e0bbec96a.png": {
+    "id": 5978,
+    "hash": "013_policies_nextjs_0e0bbec96a_62cf1bf670",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_policies_nextjs_0e0bbec96a_62cf1bf670.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_policies_nextjs_676196bc00.png": {
+    "id": 5979,
+    "hash": "014_policies_nextjs_676196bc00_470715b94a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_policies_nextjs_676196bc00_470715b94a.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_policies_nextjs_e49c6c5f9c.png": {
+    "id": 5980,
+    "hash": "015_policies_nextjs_e49c6c5f9c_7fced911ad",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_policies_nextjs_e49c6c5f9c_7fced911ad.png"
+  },
+  "https://api-prod.strapi.io/uploads/016_policies_nextjs_8c741315b1.png": {
+    "id": 5981,
+    "hash": "016_policies_nextjs_8c741315b1_ff66bf697b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_policies_nextjs_8c741315b1_ff66bf697b.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_landing_page_overview_7c4a409fad.png": {
+    "id": 5982,
+    "hash": "001_landing_page_overview_7c4a409fad_d8df7dbac7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_landing_page_overview_7c4a409fad_d8df7dbac7.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_v0_credits_be81d839e4.png": {
+    "id": 5983,
+    "hash": "002_v0_credits_be81d839e4_dd04cf314e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_v0_credits_be81d839e4_dd04cf314e.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_v0_home_page_f82654154e.png": {
+    "id": 5984,
+    "hash": "003_v0_home_page_f82654154e_40d70c277d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_v0_home_page_f82654154e_40d70c277d.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_v0_explore_page_776a90ed25.png": {
+    "id": 5985,
+    "hash": "004_v0_explore_page_776a90ed25_6dfaccb243",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_v0_explore_page_776a90ed25_6dfaccb243.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_v0_generation_page_8a5a88933d.png": {
+    "id": 5986,
+    "hash": "005_v0_generation_page_8a5a88933d_efa4c15c5b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_v0_generation_page_8a5a88933d_efa4c15c5b.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_v0_profile_page_b13e9e2cda.png": {
+    "id": 5987,
+    "hash": "006_v0_profile_page_b13e9e2cda_4a744c095b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_v0_profile_page_b13e9e2cda_4a744c095b.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_v0_starred_generations_81bf1fd4af.png": {
+    "id": 5988,
+    "hash": "007_v0_starred_generations_81bf1fd4af_bd368da8bf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_v0_starred_generations_81bf1fd4af_bd368da8bf.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_v0_generate_prompt_d75ad9378f.png": {
+    "id": 5989,
+    "hash": "008_v0_generate_prompt_d75ad9378f_36eae86584",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_v0_generate_prompt_d75ad9378f_36eae86584.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_generate_ui_b9d40e7ac0.png": {
+    "id": 5990,
+    "hash": "009_generate_ui_b9d40e7ac0_3afde341bc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_generate_ui_b9d40e7ac0_3afde341bc.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_v0_image_input_e5de5dd540.png": {
+    "id": 5991,
+    "hash": "010_v0_image_input_e5de5dd540_ba3e02ebcb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_v0_image_input_e5de5dd540_ba3e02ebcb.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_v0_image_input_2_2463bf7376.png": {
+    "id": 5992,
+    "hash": "011_v0_image_input_2_2463bf7376_f14e9e6043",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_v0_image_input_2_2463bf7376_f14e9e6043.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_regenerate_output_668a81f1bd.png": {
+    "id": 5993,
+    "hash": "012_regenerate_output_668a81f1bd_953770c084",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_regenerate_output_668a81f1bd_953770c084.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_v0_regenerate_button_1c586b65d8.png": {
+    "id": 5994,
+    "hash": "013_v0_regenerate_button_1c586b65d8_ff5b8e9172",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_v0_regenerate_button_1c586b65d8_ff5b8e9172.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_apply_theming_2aa1c6563d.png": {
+    "id": 5995,
+    "hash": "014_apply_theming_2aa1c6563d_5b26550207",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_apply_theming_2aa1c6563d_5b26550207.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_fork_v0_generation_1ba757b751.png": {
+    "id": 5996,
+    "hash": "015_fork_v0_generation_1ba757b751_b865e4885a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_fork_v0_generation_1ba757b751_b865e4885a.png"
+  },
+  "https://api-prod.strapi.io/uploads/016_v0_pick_and_edit_tool_668b0323bb.png": {
+    "id": 5997,
+    "hash": "016_v0_pick_and_edit_tool_668b0323bb_9617327185",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_v0_pick_and_edit_tool_668b0323bb_9617327185.png"
+  },
+  "https://api-prod.strapi.io/uploads/copy_v0_command_cd6529552b.png": {
+    "id": 5998,
+    "hash": "copy_v0_command_cd6529552b_a5b7d53653",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/copy_v0_command_cd6529552b_a5b7d53653.png"
+  },
+  "https://api-prod.strapi.io/uploads/Build_a_Landing_Page_with_v0_A_aaa2a1825c.gif": {
+    "id": 5999,
+    "hash": "Build_a_Landing_Page_with_v0_A_aaa2a1825c_315572c305",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Build_a_Landing_Page_with_v0_A_aaa2a1825c_315572c305.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_strapi_installation_bf23af03d5.png": {
+    "id": 6000,
+    "hash": "001_strapi_installation_bf23af03d5_7accfbccce",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_strapi_installation_bf23af03d5_7accfbccce.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_strapi_welcome_on_board_5dcfb7dc89.png": {
+    "id": 6001,
+    "hash": "002_strapi_welcome_on_board_5dcfb7dc89_ef8408301e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_strapi_welcome_on_board_5dcfb7dc89_ef8408301e.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_create_collect_type_e62465fe28.png": {
+    "id": 6002,
+    "hash": "003_create_collect_type_e62465fe28_ee6c92e206",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_create_collect_type_e62465fe28_ee6c92e206.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_select_field_for_collection_type_19dc95ab6e.png": {
+    "id": 6003,
+    "hash": "004_select_field_for_collection_type_19dc95ab6e_a1014947d5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_select_field_for_collection_type_19dc95ab6e_a1014947d5.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_add_new_text_field_fd7e74ce17.png": {
+    "id": 6004,
+    "hash": "005_add_new_text_field_fd7e74ce17_da243c2ed9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_add_new_text_field_fd7e74ce17_da243c2ed9.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_create_an_entry_58fbf01658.png": {
+    "id": 6005,
+    "hash": "006_create_an_entry_58fbf01658_b72323bf61",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_create_an_entry_58fbf01658_b72323bf61.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_recipe_collection_type_with_entries_5158e4b615.png": {
+    "id": 6006,
+    "hash": "007_recipe_collection_type_with_entries_5158e4b615_c430398f18",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_recipe_collection_type_with_entries_5158e4b615_c430398f18.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_allow_public_access_b324303899.png": {
+    "id": 6007,
+    "hash": "008_allow_public_access_b324303899_57ea2c911b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_allow_public_access_b324303899_57ea2c911b.png"
+  },
+  "https://api-prod.strapi.io/uploads/0010_welcome_to_nextjs_f097d6c715.png": {
+    "id": 6008,
+    "hash": "0010_welcome_to_nextjs_f097d6c715_7e5f872e11",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/0010_welcome_to_nextjs_f097d6c715_7e5f872e11.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_custom_api_8aa23df42a.png": {
+    "id": 6009,
+    "hash": "009_custom_api_8aa23df42a_fc329e0da7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_custom_api_8aa23df42a_fc329e0da7.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_recipe_app_homepage_b5a7961eba.png": {
+    "id": 6010,
+    "hash": "011_recipe_app_homepage_b5a7961eba_899657244e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_recipe_app_homepage_b5a7961eba_899657244e.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_modal_for_recipe_details_a248c4b465.png": {
+    "id": 6011,
+    "hash": "012_modal_for_recipe_details_a248c4b465_8f36dae314",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_modal_for_recipe_details_a248c4b465_8f36dae314.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_add_ai_functionality_b5585d1c77.png": {
+    "id": 6012,
+    "hash": "013_add_ai_functionality_b5585d1c77_b8c20d44b8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_add_ai_functionality_b5585d1c77_b8c20d44b8.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_welcome_to_strapi_7afd7c79c0.jpeg": {
+    "id": 6013,
+    "hash": "001_welcome_to_strapi_7afd7c79c0_481ff44e8c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_welcome_to_strapi_7afd7c79c0_481ff44e8c.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/002_create_faq_collection_4796027461.jpeg": {
+    "id": 6014,
+    "hash": "002_create_faq_collection_4796027461_8343c8183f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_create_faq_collection_4796027461_8343c8183f.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/003_faq_and_fields_dea017cae7.jpeg": {
+    "id": 6015,
+    "hash": "003_faq_and_fields_dea017cae7_36624152b9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_faq_and_fields_dea017cae7_36624152b9.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/004_create_an_entry_31a3fb56d5.jpeg": {
+    "id": 6016,
+    "hash": "004_create_an_entry_31a3fb56d5_6415cbb59b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_create_an_entry_31a3fb56d5_6415cbb59b.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/005_expose_collection_api_bbf4fa0dbc.jpeg": {
+    "id": 6017,
+    "hash": "005_expose_collection_api_bbf4fa0dbc_214b13030d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_expose_collection_api_bbf4fa0dbc_214b13030d.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/006_select_find_and_findone_e0f25325ac.jpeg": {
+    "id": 6018,
+    "hash": "006_select_find_and_findone_e0f25325ac_d3210ce147",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_select_find_and_findone_e0f25325ac_d3210ce147.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/007_api_requests_64c64db646.jpeg": {
+    "id": 6019,
+    "hash": "007_api_requests_64c64db646_7caa5eb4d7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_api_requests_64c64db646_7caa5eb4d7.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/008_get_open_ai_api_keys_b263a1f2e0.jpeg": {
+    "id": 6020,
+    "hash": "008_get_open_ai_api_keys_b263a1f2e0_4d9a49a87e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_get_open_ai_api_keys_b263a1f2e0_4d9a49a87e.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/009_rag_and_llm_31df563bfb.jpeg": {
+    "id": 6021,
+    "hash": "009_rag_and_llm_31df563bfb_d03aae9d53",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_rag_and_llm_31df563bfb_d03aae9d53.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/010_demo_718a7a8c02.gif": {
+    "id": 6022,
+    "hash": "010_demo_718a7a8c02_d26e201d85",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_demo_718a7a8c02_d26e201d85.gif"
+  },
+  "https://api-prod.strapi.io/uploads/htmx_demo_545dc63b05.gif": {
+    "id": 6023,
+    "hash": "htmx_demo_545dc63b05_e445631dc3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/htmx_demo_545dc63b05_e445631dc3.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_api_token_cycle_c15da0c9a5.png": {
+    "id": 6024,
+    "hash": "001_api_token_cycle_c15da0c9a5_df06ab6ffa",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_api_token_cycle_c15da0c9a5_df06ab6ffa.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_jwt_token_cycle_76ffbc03bd.png": {
+    "id": 6025,
+    "hash": "002_jwt_token_cycle_76ffbc03bd_2c4a3dcdbc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_jwt_token_cycle_76ffbc03bd_2c4a3dcdbc.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_difference_between_api_token_and_jwt_token_66017b0a90.png": {
+    "id": 6026,
+    "hash": "003_difference_between_api_token_and_jwt_token_66017b0a90_39e2184702",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_difference_between_api_token_and_jwt_token_66017b0a90_39e2184702.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_create_api_token_53c943bbfd.png": {
+    "id": 6027,
+    "hash": "007_create_api_token_53c943bbfd_244df0bc4c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_create_api_token_53c943bbfd_244df0bc4c.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_full_access_490f1328c7.png": {
+    "id": 6028,
+    "hash": "008_full_access_490f1328c7_f87d40e9e7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_full_access_490f1328c7_f87d40e9e7.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_custom_access_89fe961403.png": {
+    "id": 6029,
+    "hash": "009_custom_access_89fe961403_f0f67779d8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_custom_access_89fe961403_f0f67779d8.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_read_only_a7a9a7f803.png": {
+    "id": 6030,
+    "hash": "010_read_only_a7a9a7f803_b193ce2122",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_read_only_a7a9a7f803_b193ce2122.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_create_an_api_token_67fd023e36.png": {
+    "id": 6031,
+    "hash": "011_create_an_api_token_67fd023e36_68210e77fa",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_create_an_api_token_67fd023e36_68210e77fa.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_fetch_all_products_ab1cacb955.png": {
+    "id": 6032,
+    "hash": "012_fetch_all_products_ab1cacb955_418225baf7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_fetch_all_products_ab1cacb955_418225baf7.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_fetch_all_products_authenticated_6dfdb9d871.png": {
+    "id": 6033,
+    "hash": "013_fetch_all_products_authenticated_6dfdb9d871_0a60c53a7c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_fetch_all_products_authenticated_6dfdb9d871_0a60c53a7c.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_add_authorization_header_2_268265f7f4.png": {
+    "id": 6034,
+    "hash": "014_add_authorization_header_2_268265f7f4_98c07d1e1c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_add_authorization_header_2_268265f7f4_98c07d1e1c.png"
+  },
+  "https://api-prod.strapi.io/uploads/016_api_token_to_put_request_d6d967da8c.png": {
+    "id": 6035,
+    "hash": "016_api_token_to_put_request_d6d967da8c_4d793ae82f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_api_token_to_put_request_d6d967da8c_4d793ae82f.png"
+  },
+  "https://api-prod.strapi.io/uploads/018_set_public_endpoints_25d96a89d8.png": {
+    "id": 6036,
+    "hash": "018_set_public_endpoints_25d96a89d8_ad89eb9f5d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/018_set_public_endpoints_25d96a89d8_ad89eb9f5d.png"
+  },
+  "https://api-prod.strapi.io/uploads/019_set_authenticated_endpoints_2843b0d9bd.png": {
+    "id": 6037,
+    "hash": "019_set_authenticated_endpoints_2843b0d9bd_5a02d4a303",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/019_set_authenticated_endpoints_2843b0d9bd_5a02d4a303.png"
+  },
+  "https://api-prod.strapi.io/uploads/020_post_request_create_user_1bec3479e7.png": {
+    "id": 6038,
+    "hash": "020_post_request_create_user_1bec3479e7_105d88f5ff",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/020_post_request_create_user_1bec3479e7_105d88f5ff.png"
+  },
+  "https://api-prod.strapi.io/uploads/022_login_request_c76451e49d.png": {
+    "id": 6039,
+    "hash": "022_login_request_c76451e49d_b0a1b6c98a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/022_login_request_c76451e49d_b0a1b6c98a.png"
+  },
+  "https://api-prod.strapi.io/uploads/024_add_jwt_to_authorization_header_195219d09e.png": {
+    "id": 6040,
+    "hash": "024_add_jwt_to_authorization_header_195219d09e_2de3c77eb8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/024_add_jwt_to_authorization_header_195219d09e_2de3c77eb8.png"
+  },
+  "https://api-prod.strapi.io/uploads/025_post_request_to_create_product_c095677249.png": {
+    "id": 6041,
+    "hash": "025_post_request_to_create_product_c095677249_060b983aab",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/025_post_request_to_create_product_c095677249_060b983aab.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_strapi_installation_ff963b7967.png": {
+    "id": 6042,
+    "hash": "001_strapi_installation_ff963b7967_2fc45402d7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_strapi_installation_ff963b7967_2fc45402d7.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_strapi_login_7692816559.png": {
+    "id": 6043,
+    "hash": "002_strapi_login_7692816559_93d0082db5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_strapi_login_7692816559_93d0082db5.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_create_collection_type_6055cee373.png": {
+    "id": 6044,
+    "hash": "003_create_collection_type_6055cee373_a30f1d320c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_create_collection_type_6055cee373_a30f1d320c.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_create_content_types_2cc397d85c.png": {
+    "id": 6045,
+    "hash": "004_create_content_types_2cc397d85c_b53c018fe0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_create_content_types_2cc397d85c_b53c018fe0.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_content_types_99edb18562.png": {
+    "id": 6046,
+    "hash": "005_content_types_99edb18562_10240b0dfc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_content_types_99edb18562_10240b0dfc.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_enable_public_access_e5b56ca1ab.png": {
+    "id": 6047,
+    "hash": "006_enable_public_access_e5b56ca1ab_71fd6ff4fe",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_enable_public_access_e5b56ca1ab_71fd6ff4fe.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_create_news_with_postman_5d9a7d3d29.png": {
+    "id": 6048,
+    "hash": "007_create_news_with_postman_5d9a7d3d29_1f62e990d7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_create_news_with_postman_5d9a7d3d29_1f62e990d7.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_get_all_news_with_postman_4c5c33de0c.png": {
+    "id": 6049,
+    "hash": "008_get_all_news_with_postman_4c5c33de0c_da8de1553d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_get_all_news_with_postman_4c5c33de0c_da8de1553d.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_get_news_by_id_with_postman_0650ffdd6a.png": {
+    "id": 6050,
+    "hash": "009_get_news_by_id_with_postman_0650ffdd6a_a0559d4a5c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_get_news_by_id_with_postman_0650ffdd6a_a0559d4a5c.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_edit_new_with_postman_970552a95c.png": {
+    "id": 6051,
+    "hash": "010_edit_new_with_postman_970552a95c_7d7b728d24",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_edit_new_with_postman_970552a95c_7d7b728d24.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_delete_news_with_postman_b25488d835.png": {
+    "id": 6052,
+    "hash": "011_delete_news_with_postman_b25488d835_df459e9b07",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_delete_news_with_postman_b25488d835_df459e9b07.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_create_news_form_1343cfc97d.png": {
+    "id": 6053,
+    "hash": "012_create_news_form_1343cfc97d_1a1319ede5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_create_news_form_1343cfc97d_1a1319ede5.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_notification_modal_6be2487186.png": {
+    "id": 6054,
+    "hash": "013_notification_modal_6be2487186_fb98431c2b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_notification_modal_6be2487186_fb98431c2b.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_news_display_8bd2b5b765.png": {
+    "id": 6055,
+    "hash": "014_news_display_8bd2b5b765_244202f273",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_news_display_8bd2b5b765_244202f273.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_news_details_ca2a0add1d.png": {
+    "id": 6056,
+    "hash": "015_news_details_ca2a0add1d_20bbecbb3d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_news_details_ca2a0add1d_20bbecbb3d.png"
+  },
+  "https://api-prod.strapi.io/uploads/demo_f0a1b183e3.gif": {
+    "id": 6057,
+    "hash": "demo_f0a1b183e3_9ecb4c0fb7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_f0a1b183e3_9ecb4c0fb7.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_welcome_to_strapi_bd6b20b354.png": {
+    "id": 6058,
+    "hash": "001_welcome_to_strapi_bd6b20b354_6645237906",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_welcome_to_strapi_bd6b20b354_6645237906.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_create_nextjs_project_05747076fd.png": {
+    "id": 6059,
+    "hash": "002_create_nextjs_project_05747076fd_d152d986a4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_create_nextjs_project_05747076fd_d152d986a4.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_algolia_signup_f60c3a4fc4.png": {
+    "id": 6060,
+    "hash": "003_algolia_signup_f60c3a4fc4_5ab44c6616",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_algolia_signup_f60c3a4fc4_5ab44c6616.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_algolia_api_keys_0979f13caa.png": {
+    "id": 6061,
+    "hash": "004_algolia_api_keys_0979f13caa_0480e87909",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_algolia_api_keys_0979f13caa_0480e87909.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_create_product_collection_00414826dc.png": {
+    "id": 6062,
+    "hash": "005_create_product_collection_00414826dc_0cea0554ab",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_create_product_collection_00414826dc_0cea0554ab.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_product_entry_fields_5ff854d8a4.png": {
+    "id": 6063,
+    "hash": "006_product_entry_fields_5ff854d8a4_e21ed29fde",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_product_entry_fields_5ff854d8a4_e21ed29fde.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_import_search_component_bbd8912e22.gif": {
+    "id": 6064,
+    "hash": "007_import_search_component_bbd8912e22_dadaad44e8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_import_search_component_bbd8912e22_dadaad44e8.gif"
+  },
+  "https://api-prod.strapi.io/uploads/008_add_algolia_facets_e9a1461b00.png": {
+    "id": 6065,
+    "hash": "008_add_algolia_facets_e9a1461b00_ecd79e5f36",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_add_algolia_facets_e9a1461b00_ecd79e5f36.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_filter_products_021088dfb4.gif": {
+    "id": 6066,
+    "hash": "009_filter_products_021088dfb4_678fd2846a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_filter_products_021088dfb4_678fd2846a.gif"
+  },
+  "https://api-prod.strapi.io/uploads/010_add_replica_f0232e04d9.png": {
+    "id": 6067,
+    "hash": "010_add_replica_f0232e04d9_dde0671806",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_add_replica_f0232e04d9_dde0671806.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_add_sorting_for_each_replica_897058f851.gif": {
+    "id": 6068,
+    "hash": "011_add_sorting_for_each_replica_897058f851_9f27a5d053",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_add_sorting_for_each_replica_897058f851_9f27a5d053.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_search_pagination_8f67ded833.png": {
+    "id": 6069,
+    "hash": "001_search_pagination_8f67ded833_a801d4cadb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_search_pagination_8f67ded833_a801d4cadb.png"
+  },
+  "https://api-prod.strapi.io/uploads/DZ-img-1__d04c021150.png": {
+    "id": 6070,
+    "hash": "DZ_img_1_d04c021150_40e9d0d472",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/DZ_img_1_d04c021150_40e9d0d472.png"
+  },
+  "https://api-prod.strapi.io/uploads/Constructing_the_Menu_005dc533ae.png": {
+    "id": 6071,
+    "hash": "Constructing_the_Menu_005dc533ae_bb1f847c8e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Constructing_the_Menu_005dc533ae_bb1f847c8e.png"
+  },
+  "https://api-prod.strapi.io/uploads/Constructing_the_Menu_e27939fa0b.png": {
+    "id": 6072,
+    "hash": "Constructing_the_Menu_e27939fa0b_8e1d77e11f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Constructing_the_Menu_e27939fa0b_8e1d77e11f.png"
+  },
+  "https://api-prod.strapi.io/uploads/Constructing_the_Menu_730ca2f89f.png": {
+    "id": 6073,
+    "hash": "Constructing_the_Menu_730ca2f89f_24c13bbd2f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Constructing_the_Menu_730ca2f89f_24c13bbd2f.png"
+  },
+  "https://api-prod.strapi.io/uploads/Generating_the_JSON_Data_for_Front_End_Access_0fa1352550.png": {
+    "id": 6074,
+    "hash": "Generating_the_JSON_Data_for_Front_End_Access_0fa1352550_efb5a993d1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Generating_the_JSON_Data_for_Front_End_Access_0fa1352550_efb5a993d1.png"
+  },
+  "https://api-prod.strapi.io/uploads/01_webhooks_57e10beee3.png": {
+    "id": 6075,
+    "hash": "01_webhooks_57e10beee3_85f0396407",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/01_webhooks_57e10beee3_85f0396407.png"
+  },
+  "https://api-prod.strapi.io/uploads/02_webhooks_621f7756e9.png": {
+    "id": 6076,
+    "hash": "02_webhooks_621f7756e9_0ffdaa67d7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/02_webhooks_621f7756e9_0ffdaa67d7.png"
+  },
+  "https://api-prod.strapi.io/uploads/03_webhooks_162bf363ef.png": {
+    "id": 6077,
+    "hash": "03_webhooks_162bf363ef_2122a3e0f0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/03_webhooks_162bf363ef_2122a3e0f0.png"
+  },
+  "https://api-prod.strapi.io/uploads/04_webhooks_ffae2396b1.png": {
+    "id": 6078,
+    "hash": "04_webhooks_ffae2396b1_5420f89099",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/04_webhooks_ffae2396b1_5420f89099.png"
+  },
+  "https://api-prod.strapi.io/uploads/05_webhooks_844f92920e.png": {
+    "id": 6079,
+    "hash": "05_webhooks_844f92920e_55452c82b2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/05_webhooks_844f92920e_55452c82b2.png"
+  },
+  "https://api-prod.strapi.io/uploads/06_webhooks_480138243e.png": {
+    "id": 6080,
+    "hash": "06_webhooks_480138243e_318795e438",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/06_webhooks_480138243e_318795e438.png"
+  },
+  "https://api-prod.strapi.io/uploads/07_webhooks_2c66cd38e6.png": {
+    "id": 6081,
+    "hash": "07_webhooks_2c66cd38e6_7917024891",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/07_webhooks_2c66cd38e6_7917024891.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_ssr_example_92235dd1c6.png": {
+    "id": 6082,
+    "hash": "001_ssr_example_92235dd1c6_39e4c88d27",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_ssr_example_92235dd1c6_39e4c88d27.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_Page_source_of_the_Node_JS_SSR_Example_648db2f211.png": {
+    "id": 6083,
+    "hash": "002_Page_source_of_the_Node_JS_SSR_Example_648db2f211_2769647684",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_Page_source_of_the_Node_JS_SSR_Example_648db2f211_2769647684.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_Preview_Tab_SSR_check_4bb17047b3.png": {
+    "id": 6084,
+    "hash": "003_Preview_Tab_SSR_check_4bb17047b3_c3e00f2280",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_Preview_Tab_SSR_check_4bb17047b3_c3e00f2280.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_Next_JS_SSR_Hybrid_Example_1214358131.png": {
+    "id": 6085,
+    "hash": "004_Next_JS_SSR_Hybrid_Example_1214358131_3dcf720643",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_Next_JS_SSR_Hybrid_Example_1214358131_3dcf720643.png"
+  },
+  "https://api-prod.strapi.io/uploads/new_001_next_ssr_hybrid_a20429f4d1.png": {
+    "id": 6086,
+    "hash": "new_001_next_ssr_hybrid_a20429f4d1_490b4381a3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/new_001_next_ssr_hybrid_a20429f4d1_490b4381a3.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_React_CSR_Img_11677f3d0b.png": {
+    "id": 6087,
+    "hash": "006_React_CSR_Img_11677f3d0b_62cbe6c182",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_React_CSR_Img_11677f3d0b_62cbe6c182.png"
+  },
+  "https://api-prod.strapi.io/uploads/new_002_page_source_for_code_above_06cce46be5.png": {
+    "id": 6088,
+    "hash": "new_002_page_source_for_code_above_06cce46be5_107306087f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/new_002_page_source_for_code_above_06cce46be5_107306087f.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_CSR_React_View_Page_Source_69e84c5508.png": {
+    "id": 6089,
+    "hash": "007_CSR_React_View_Page_Source_69e84c5508_5436dc5f8f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_CSR_React_View_Page_Source_69e84c5508_5436dc5f8f.png"
+  },
+  "https://api-prod.strapi.io/uploads/1_a575862593.png": {
+    "id": 6090,
+    "hash": "1_a575862593_3efd9dde8a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/1_a575862593_3efd9dde8a.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_create_account_collection_5e19918a49.png": {
+    "id": 6091,
+    "hash": "001_create_account_collection_5e19918a49_dacb833e0e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_create_account_collection_5e19918a49_dacb833e0e.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_add_new_field_702347bacd.png": {
+    "id": 6092,
+    "hash": "002_add_new_field_702347bacd_9b6284cea9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_add_new_field_702347bacd_9b6284cea9.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_account_collection_type_fields_75295e1845.png": {
+    "id": 6093,
+    "hash": "003_account_collection_type_fields_75295e1845_5bfa5611b8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_account_collection_type_fields_75295e1845_5bfa5611b8.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_chatrooom_type_fields_506e446a7a.png": {
+    "id": 6094,
+    "hash": "004_chatrooom_type_fields_506e446a7a_35ac870262",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_chatrooom_type_fields_506e446a7a_35ac870262.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_collection_type_permissions_64fc183d53.png": {
+    "id": 6095,
+    "hash": "005_collection_type_permissions_64fc183d53_08cb7adbe5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_collection_type_permissions_64fc183d53_08cb7adbe5.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_firebase_click_web_option_c254a02009.png": {
+    "id": 6096,
+    "hash": "006_firebase_click_web_option_c254a02009_ecf7af60f7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_firebase_click_web_option_c254a02009_ecf7af60f7.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_copy_firebase_configurations_f955e98848.png": {
+    "id": 6097,
+    "hash": "007_copy_firebase_configurations_f955e98848_986b85a452",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_copy_firebase_configurations_f955e98848_986b85a452.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_other_home_screen_eb7e561f73.png": {
+    "id": 6098,
+    "hash": "009_other_home_screen_eb7e561f73_2348bc5785",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_other_home_screen_eb7e561f73_2348bc5785.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_project_demo_7181661045.gif": {
+    "id": 6099,
+    "hash": "008_project_demo_7181661045_9cf4b6fa85",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_project_demo_7181661045_9cf4b6fa85.gif"
+  },
+  "https://api-prod.strapi.io/uploads/15_hero_section_component_51ed378126.png": {
+    "id": 6100,
+    "hash": "15_hero_section_component_51ed378126_5dda5ee164",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/15_hero_section_component_51ed378126_5dda5ee164.png"
+  },
+  "https://api-prod.strapi.io/uploads/Headless_Architecture_vs_Monolithic_Architecture_040b5164e2.png": {
+    "id": 6101,
+    "hash": "Headless_Architecture_vs_Monolithic_Architecture_040b5164e2_359b9aa046",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Headless_Architecture_vs_Monolithic_Architecture_040b5164e2_359b9aa046.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Architecture_0f03d820f5.png": {
+    "id": 6102,
+    "hash": "Strapi_Architecture_0f03d820f5_de178b8e7a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Architecture_0f03d820f5_de178b8e7a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Build_and_request_diagram_49d51310a8.png": {
+    "id": 6103,
+    "hash": "Build_and_request_diagram_49d51310a8_f9b94533b3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Build_and_request_diagram_49d51310a8_f9b94533b3.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_create_project_331dc7d09e.png": {
+    "id": 6104,
+    "hash": "001_create_project_331dc7d09e_b9b25ae71a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_create_project_331dc7d09e_b9b25ae71a.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_vscode_command_pallete_24de122f7b.png": {
+    "id": 6105,
+    "hash": "002_vscode_command_pallete_24de122f7b_d9d4aadd79",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_vscode_command_pallete_24de122f7b_d9d4aadd79.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_vscode_terminal_7f0d9718f0.png": {
+    "id": 6106,
+    "hash": "003_vscode_terminal_7f0d9718f0_b3e9c79d8e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_vscode_terminal_7f0d9718f0_b3e9c79d8e.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_folder_structure_91579b231d.png": {
+    "id": 6107,
+    "hash": "004_folder_structure_91579b231d_cecacd42f5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_folder_structure_91579b231d_cecacd42f5.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_create_ui_components_7eca225b64.png": {
+    "id": 6108,
+    "hash": "005_create_ui_components_7eca225b64_92638f2bd5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_create_ui_components_7eca225b64_92638f2bd5.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_create_goal_card_b97777fcbc.png": {
+    "id": 6109,
+    "hash": "006_create_goal_card_b97777fcbc_c81756359a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_create_goal_card_b97777fcbc_c81756359a.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_start_goal_page_44db93d33d.png": {
+    "id": 6110,
+    "hash": "007_start_goal_page_44db93d33d_7f8a246076",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_start_goal_page_44db93d33d_7f8a246076.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_add_goal_page_3d327468c7.png": {
+    "id": 6111,
+    "hash": "008_add_goal_page_3d327468c7_a48c100e9d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_add_goal_page_3d327468c7_a48c100e9d.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_edit_goal_page_a076efd1e2.png": {
+    "id": 6112,
+    "hash": "009_edit_goal_page_a076efd1e2_b363d81dd5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_edit_goal_page_a076efd1e2_b363d81dd5.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_install_strapi_a860f1323b.png": {
+    "id": 6113,
+    "hash": "010_install_strapi_a860f1323b_f45f3f3c4a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_install_strapi_a860f1323b_f45f3f3c4a.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_log_in_to_strapi_55ec7c1d22.png": {
+    "id": 6114,
+    "hash": "011_log_in_to_strapi_55ec7c1d22_8e3381c32b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_log_in_to_strapi_55ec7c1d22_8e3381c32b.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_create_collection_type_0e7d6eb4da.png": {
+    "id": 6115,
+    "hash": "012_create_collection_type_0e7d6eb4da_675e00c436",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_create_collection_type_0e7d6eb4da_675e00c436.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_collection_type_fields_143c934a60.png": {
+    "id": 6116,
+    "hash": "013_collection_type_fields_143c934a60_0812485809",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_collection_type_fields_143c934a60_0812485809.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_set_permissions_cdfcc0226c.png": {
+    "id": 6117,
+    "hash": "014_set_permissions_cdfcc0226c_798e342199",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_set_permissions_cdfcc0226c_798e342199.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_graphql_playground_6e4d794542.png": {
+    "id": 6118,
+    "hash": "015_graphql_playground_6e4d794542_ece7345081",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_graphql_playground_6e4d794542_ece7345081.png"
+  },
+  "https://api-prod.strapi.io/uploads/016_edit_configuration_abd357f0b1.png": {
+    "id": 6119,
+    "hash": "016_edit_configuration_abd357f0b1_33f0b75d0b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_edit_configuration_abd357f0b1_33f0b75d0b.png"
+  },
+  "https://api-prod.strapi.io/uploads/personal_tracker_gif_d57e162343.gif": {
+    "id": 6120,
+    "hash": "personal_tracker_gif_d57e162343_bb525cb910",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/personal_tracker_gif_d57e162343_bb525cb910.gif"
+  },
+  "https://api-prod.strapi.io/uploads/002_shared_routes_777a620c19.png": {
+    "id": 6121,
+    "hash": "002_shared_routes_777a620c19_5fc8764a6d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_shared_routes_777a620c19_5fc8764a6d.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_input_example_cdefd4f8f5.png": {
+    "id": 6122,
+    "hash": "006_input_example_cdefd4f8f5_c9cd5b51b7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_input_example_cdefd4f8f5_c9cd5b51b7.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_cookie_2b6f783a69.png": {
+    "id": 6123,
+    "hash": "015_cookie_2b6f783a69_80b3be0695",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_cookie_2b6f783a69_80b3be0695.png"
+  },
+  "https://api-prod.strapi.io/uploads/Screenshot_2023_12_27_at_14_43_17_ae5f0cd7c7.png": {
+    "id": 6124,
+    "hash": "Screenshot_2023_12_27_at_14_43_17_ae5f0cd7c7_c70538d0e3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screenshot_2023_12_27_at_14_43_17_ae5f0cd7c7_c70538d0e3.png"
+  },
+  "https://api-prod.strapi.io/uploads/Page_Builder_6ff4e9ece5.png": {
+    "id": 6125,
+    "hash": "Page_Builder_6ff4e9ece5_d1a03b336b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Page_Builder_6ff4e9ece5_d1a03b336b.png"
+  },
+  "https://api-prod.strapi.io/uploads/Heading_Area_d5d0a27dc1.png": {
+    "id": 6126,
+    "hash": "Heading_Area_d5d0a27dc1_1dc0d4720f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Heading_Area_d5d0a27dc1_1dc0d4720f.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Dynamic_zone_d0991cbfd1.png": {
+    "id": 6127,
+    "hash": "Strapi_Dynamic_zone_d0991cbfd1_f37c18b961",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Dynamic_zone_d0991cbfd1_f37c18b961.png"
+  },
+  "https://api-prod.strapi.io/uploads/Bottom_Area_c8108641c5.png": {
+    "id": 6128,
+    "hash": "Bottom_Area_c8108641c5_2baaa1c909",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Bottom_Area_c8108641c5_2baaa1c909.png"
+  },
+  "https://api-prod.strapi.io/uploads/Icons_for_orientation_226b6e01dd.png": {
+    "id": 6129,
+    "hash": "Icons_for_orientation_226b6e01dd_69104c59d6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Icons_for_orientation_226b6e01dd_69104c59d6.png"
+  },
+  "https://api-prod.strapi.io/uploads/Preview_Function_2603fd28d8.png": {
+    "id": 6130,
+    "hash": "Preview_Function_2603fd28d8_efb268e916",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Preview_Function_2603fd28d8_efb268e916.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Marketplace_864009d03d.png": {
+    "id": 6131,
+    "hash": "Strapi_Marketplace_864009d03d_158ef8629a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Marketplace_864009d03d_158ef8629a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Editors_Components_UX_05cdafedde.png": {
+    "id": 6132,
+    "hash": "Editors_Components_UX_05cdafedde_ac267aa8c2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Editors_Components_UX_05cdafedde_ac267aa8c2.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_a_new_Page_f3d67917c7.png": {
+    "id": 6133,
+    "hash": "Creating_a_new_Page_f3d67917c7_aadd2fd3eb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_a_new_Page_f3d67917c7_aadd2fd3eb.png"
+  },
+  "https://api-prod.strapi.io/uploads/Editor_interface_10453867c6.png": {
+    "id": 6134,
+    "hash": "Editor_interface_10453867c6_7199e0566d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Editor_interface_10453867c6_7199e0566d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Setting_SEO_Data_and_Theme_dd9e15f8d6.png": {
+    "id": 6135,
+    "hash": "Setting_SEO_Data_and_Theme_dd9e15f8d6_6681c01895",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Setting_SEO_Data_and_Theme_dd9e15f8d6_6681c01895.png"
+  },
+  "https://api-prod.strapi.io/uploads/Creating_Content_c9f5571326.png": {
+    "id": 6136,
+    "hash": "Creating_Content_c9f5571326_dfa76d3ead",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Creating_Content_c9f5571326_dfa76d3ead.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_npm_chart_c738f9dad4.png": {
+    "id": 6137,
+    "hash": "001_npm_chart_c738f9dad4_c310451c63",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_npm_chart_c738f9dad4_c310451c63.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_pupeeteer_819cdc901a.png": {
+    "id": 6138,
+    "hash": "002_pupeeteer_819cdc901a_50c916acc9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_pupeeteer_819cdc901a_50c916acc9.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_playwright_ea19add19a.png": {
+    "id": 6139,
+    "hash": "003_playwright_ea19add19a_9b50fb58dd",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_playwright_ea19add19a_9b50fb58dd.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_L_Equipe_website_ae256cd76c.png": {
+    "id": 6140,
+    "hash": "004_L_Equipe_website_ae256cd76c_9d38411115",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_L_Equipe_website_ae256cd76c_9d38411115.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_inspect_website_62486f4a23.webp": {
+    "id": 6141,
+    "hash": "005_inspect_website_62486f4a23_1632adf97c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_inspect_website_62486f4a23_1632adf97c.webp"
+  },
+  "https://api-prod.strapi.io/uploads/006_spin_up_website_with_pupeeteer_45aec8cb7e.png": {
+    "id": 6142,
+    "hash": "006_spin_up_website_with_pupeeteer_45aec8cb7e_afbb6ac819",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_spin_up_website_with_pupeeteer_45aec8cb7e_afbb6ac819.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_spin_up_website_with_playwright_b6a1542cfa.png": {
+    "id": 6143,
+    "hash": "007_spin_up_website_with_playwright_b6a1542cfa_9706885d20",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_spin_up_website_with_playwright_b6a1542cfa_9706885d20.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_scraped_result_2fe37ebeda.png": {
+    "id": 6144,
+    "hash": "008_scraped_result_2fe37ebeda_0bf6e042d6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_scraped_result_2fe37ebeda_0bf6e042d6.png"
+  },
+  "https://api-prod.strapi.io/uploads/q_JGBDXA_51aa0271c4.png": {
+    "id": 6145,
+    "hash": "q_JGBDXA_51aa0271c4_361fcd3f59",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/q_JGBDXA_51aa0271c4_361fcd3f59.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_diagram_global_middlewares_fdf47427fb.png": {
+    "id": 6146,
+    "hash": "002_diagram_global_middlewares_fdf47427fb_c971ee8e37",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_diagram_global_middlewares_fdf47427fb_c971ee8e37.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Plugins_blog_post_14ad4882ad.png": {
+    "id": 6147,
+    "hash": "Strapi_Plugins_blog_post_14ad4882ad_a70825cf68",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Plugins_blog_post_14ad4882ad_a70825cf68.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_enable_api_access_0fe06d4348.png": {
+    "id": 6148,
+    "hash": "001_enable_api_access_0fe06d4348_a0a937c94a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_enable_api_access_0fe06d4348_a0a937c94a.png"
+  },
+  "https://api-prod.strapi.io/uploads/media_upload_plugin_239d107942.png": {
+    "id": 6149,
+    "hash": "media_upload_plugin_239d107942_50245f65a2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/media_upload_plugin_239d107942_50245f65a2.png"
+  },
+  "https://api-prod.strapi.io/uploads/media_library_831fd7250b.png": {
+    "id": 6150,
+    "hash": "media_library_831fd7250b_74e186dd0d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/media_library_831fd7250b_74e186dd0d.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_image_media_library_f1d4486c9e.png": {
+    "id": 6151,
+    "hash": "002_image_media_library_f1d4486c9e_49e7c30a40",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_image_media_library_f1d4486c9e_49e7c30a40.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_image_upload_8905739c66.png": {
+    "id": 6152,
+    "hash": "003_image_upload_8905739c66_64759cb973",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_image_upload_8905739c66_64759cb973.png"
+  },
+  "https://api-prod.strapi.io/uploads/demofileupload_ezgif_com_optimize_51e39fe6a7.gif": {
+    "id": 6153,
+    "hash": "demofileupload_ezgif_com_optimize_51e39fe6a7_c78a646487",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demofileupload_ezgif_com_optimize_51e39fe6a7_c78a646487.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_app_overview_3a8cecca62.png": {
+    "id": 6154,
+    "hash": "001_app_overview_3a8cecca62_2dcdf98ddd",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_app_overview_3a8cecca62_2dcdf98ddd.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_welcome_to_strapi_3ad73101f6.png": {
+    "id": 6155,
+    "hash": "002_welcome_to_strapi_3ad73101f6_78eb6614dc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_welcome_to_strapi_3ad73101f6_78eb6614dc.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_create_invoices_collection_dc516ee214.png": {
+    "id": 6156,
+    "hash": "003_create_invoices_collection_dc516ee214_cff17c16c8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_create_invoices_collection_dc516ee214_cff17c16c8.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_collection_content_types_10d9246e8f.png": {
+    "id": 6157,
+    "hash": "004_collection_content_types_10d9246e8f_c1fd1bedcf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_collection_content_types_10d9246e8f_c1fd1bedcf.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_create_an_entry_6729757e5a.png": {
+    "id": 6158,
+    "hash": "005_create_an_entry_6729757e5a_69c89fe8b3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_create_an_entry_6729757e5a_69c89fe8b3.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_enable_public_access_f7f9f7d966.png": {
+    "id": 6159,
+    "hash": "006_enable_public_access_f7f9f7d966_b193acca42",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_enable_public_access_f7f9f7d966_b193acca42.png"
+  },
+  "https://api-prod.strapi.io/uploads/demo_1_4607210db7.gif": {
+    "id": 6160,
+    "hash": "demo_1_4607210db7_85a9e04448",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_1_4607210db7_85a9e04448.gif"
+  },
+  "https://api-prod.strapi.io/uploads/demo_2_685749384d.gif": {
+    "id": 6161,
+    "hash": "demo_2_685749384d_2dccff1ba7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_2_685749384d_2dccff1ba7.gif"
+  },
+  "https://api-prod.strapi.io/uploads/demo_3_283809d602.gif": {
+    "id": 6162,
+    "hash": "demo_3_283809d602_99cf83de74",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_3_283809d602_99cf83de74.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_vercel_20b3e34bd3.png": {
+    "id": 6163,
+    "hash": "001_vercel_20b3e34bd3_d6db6200e3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_vercel_20b3e34bd3_d6db6200e3.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_create_account_360e0044f2.gif": {
+    "id": 6164,
+    "hash": "002_create_account_360e0044f2_8e3c102b7e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_create_account_360e0044f2_8e3c102b7e.gif"
+  },
+  "https://api-prod.strapi.io/uploads/003_strapi_url_d40ca515d6.gif": {
+    "id": 6165,
+    "hash": "003_strapi_url_d40ca515d6_2a57fb4d7b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_strapi_url_d40ca515d6_2a57fb4d7b.gif"
+  },
+  "https://api-prod.strapi.io/uploads/004_error_177f8ee4df.png": {
+    "id": 6166,
+    "hash": "004_error_177f8ee4df_430286db7e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_error_177f8ee4df_430286db7e.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_set_up_git_dfd60f643d.gif": {
+    "id": 6167,
+    "hash": "007_set_up_git_dfd60f643d_51d5e3bd8b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_set_up_git_dfd60f643d_51d5e3bd8b.gif"
+  },
+  "https://api-prod.strapi.io/uploads/008_setup_folder_19878da6bb.gif": {
+    "id": 6168,
+    "hash": "008_setup_folder_19878da6bb_657e2049e4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_setup_folder_19878da6bb_657e2049e4.gif"
+  },
+  "https://api-prod.strapi.io/uploads/012_env_72ac26e524.png": {
+    "id": 6169,
+    "hash": "012_env_72ac26e524_54857357d5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_env_72ac26e524_54857357d5.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_deploying_a41d23df1c.png": {
+    "id": 6170,
+    "hash": "010_deploying_a41d23df1c_f7a9ab2132",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_deploying_a41d23df1c_f7a9ab2132.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_redeploy_bf4a25c381.gif": {
+    "id": 6171,
+    "hash": "013_redeploy_bf4a25c381_11fe855f07",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_redeploy_bf4a25c381_11fe855f07.gif"
+  },
+  "https://api-prod.strapi.io/uploads/014_setting_cookies_912ad30245.gif": {
+    "id": 6172,
+    "hash": "014_setting_cookies_912ad30245_30270dcd2e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_setting_cookies_912ad30245_30270dcd2e.gif"
+  },
+  "https://api-prod.strapi.io/uploads/015_timeout_error_0b5cd148d6.gif": {
+    "id": 6173,
+    "hash": "015_timeout_error_0b5cd148d6_2b5c471b99",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_timeout_error_0b5cd148d6_2b5c471b99.gif"
+  },
+  "https://api-prod.strapi.io/uploads/016_run_time_7425b25d84.png": {
+    "id": 6174,
+    "hash": "016_run_time_7425b25d84_75799c6af8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_run_time_7425b25d84_75799c6af8.png"
+  },
+  "https://api-prod.strapi.io/uploads/017_demo_c174bd79f5.gif": {
+    "id": 6175,
+    "hash": "017_demo_c174bd79f5_c92c6d8e1c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/017_demo_c174bd79f5_c92c6d8e1c.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_postman_79330c9aed.png": {
+    "id": 6176,
+    "hash": "001_postman_79330c9aed_70dc306498",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_postman_79330c9aed_70dc306498.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_postman_72acee0d34.png": {
+    "id": 6177,
+    "hash": "002_postman_72acee0d34_b6faaccccf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_postman_72acee0d34_b6faaccccf.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_admin_ff5eec72a4.png": {
+    "id": 6178,
+    "hash": "003_admin_ff5eec72a4_98b5ccccc6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_admin_ff5eec72a4_98b5ccccc6.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_ngrok_90c8070957.png": {
+    "id": 6179,
+    "hash": "004_ngrok_90c8070957_5585072f9d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_ngrok_90c8070957_5585072f9d.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_postman_eef6658854.png": {
+    "id": 6180,
+    "hash": "005_postman_eef6658854_088a43af8e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_postman_eef6658854_088a43af8e.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_typeform_f11475d702.png": {
+    "id": 6181,
+    "hash": "006_typeform_f11475d702_802771b10e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_typeform_f11475d702_802771b10e.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_create_form_630b6e0947.png": {
+    "id": 6182,
+    "hash": "007_create_form_630b6e0947_0345ce1c98",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_create_form_630b6e0947_0345ce1c98.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_form_a2395c8b8b.png": {
+    "id": 6183,
+    "hash": "008_form_a2395c8b8b_ca44d6d714",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_form_a2395c8b8b_ca44d6d714.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_form_step_1_84d74e7199.png": {
+    "id": 6184,
+    "hash": "009_form_step_1_84d74e7199_572ee31e1a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_form_step_1_84d74e7199_572ee31e1a.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_form_step_2_53d7a66cb4.png": {
+    "id": 6185,
+    "hash": "010_form_step_2_53d7a66cb4_ce34356a18",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_form_step_2_53d7a66cb4_ce34356a18.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_form_step_3_0067a54e74.png": {
+    "id": 6186,
+    "hash": "011_form_step_3_0067a54e74_7841fd40eb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_form_step_3_0067a54e74_7841fd40eb.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_form_step_4_49a95b9c96.png": {
+    "id": 6187,
+    "hash": "012_form_step_4_49a95b9c96_bd6e0158cf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_form_step_4_49a95b9c96_bd6e0158cf.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_form_step_5_e0eaf36129.png": {
+    "id": 6188,
+    "hash": "013_form_step_5_e0eaf36129_f1e7eac55a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_form_step_5_e0eaf36129_f1e7eac55a.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_form_step_6_87b2808853.png": {
+    "id": 6189,
+    "hash": "014_form_step_6_87b2808853_4ddd989af6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_form_step_6_87b2808853_4ddd989af6.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_make_step_1_97b7b00748.png": {
+    "id": 6190,
+    "hash": "015_make_step_1_97b7b00748_4132d64131",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_make_step_1_97b7b00748_4132d64131.png"
+  },
+  "https://api-prod.strapi.io/uploads/016_make_step_2_dfc256e91d.png": {
+    "id": 6191,
+    "hash": "016_make_step_2_dfc256e91d_6d101d6015",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_make_step_2_dfc256e91d_6d101d6015.png"
+  },
+  "https://api-prod.strapi.io/uploads/017_make_step_3_d140c24fce.png": {
+    "id": 6192,
+    "hash": "017_make_step_3_d140c24fce_10b00104ed",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/017_make_step_3_d140c24fce_10b00104ed.png"
+  },
+  "https://api-prod.strapi.io/uploads/018_make_step_4_7ee9baeed7.png": {
+    "id": 6193,
+    "hash": "018_make_step_4_7ee9baeed7_d06fb24617",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/018_make_step_4_7ee9baeed7_d06fb24617.png"
+  },
+  "https://api-prod.strapi.io/uploads/019_make_step_5_b247542435.png": {
+    "id": 6194,
+    "hash": "019_make_step_5_b247542435_ff843c15d1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/019_make_step_5_b247542435_ff843c15d1.png"
+  },
+  "https://api-prod.strapi.io/uploads/020_make_step_6_d4a379cae0.png": {
+    "id": 6195,
+    "hash": "020_make_step_6_d4a379cae0_f17f30511a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/020_make_step_6_d4a379cae0_f17f30511a.png"
+  },
+  "https://api-prod.strapi.io/uploads/021_make_step_7_eb9253baf2.png": {
+    "id": 6196,
+    "hash": "021_make_step_7_eb9253baf2_6ff41d3092",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/021_make_step_7_eb9253baf2_6ff41d3092.png"
+  },
+  "https://api-prod.strapi.io/uploads/022_webhook_209a79904d.png": {
+    "id": 6197,
+    "hash": "022_webhook_209a79904d_d34218f56f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/022_webhook_209a79904d_d34218f56f.png"
+  },
+  "https://api-prod.strapi.io/uploads/023_webhook_2_ff83e2e42f.png": {
+    "id": 6198,
+    "hash": "023_webhook_2_ff83e2e42f_e062270c3c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/023_webhook_2_ff83e2e42f_e062270c3c.png"
+  },
+  "https://api-prod.strapi.io/uploads/024_make_step_8_e7b10f0516.png": {
+    "id": 6199,
+    "hash": "024_make_step_8_e7b10f0516_caef194dcd",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/024_make_step_8_e7b10f0516_caef194dcd.png"
+  },
+  "https://api-prod.strapi.io/uploads/025_make_step_8_1_635196fb49.png": {
+    "id": 6200,
+    "hash": "025_make_step_8_1_635196fb49_23a0fd355f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/025_make_step_8_1_635196fb49_23a0fd355f.png"
+  },
+  "https://api-prod.strapi.io/uploads/026_makle_step_8_2_c4c6037cdc.png": {
+    "id": 6201,
+    "hash": "026_makle_step_8_2_c4c6037cdc_31d3f8c944",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/026_makle_step_8_2_c4c6037cdc_31d3f8c944.png"
+  },
+  "https://api-prod.strapi.io/uploads/027_test_step_1_85aac9641b.png": {
+    "id": 6202,
+    "hash": "027_test_step_1_85aac9641b_232bdca534",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/027_test_step_1_85aac9641b_232bdca534.png"
+  },
+  "https://api-prod.strapi.io/uploads/028_test_step_2_b3079b3331.png": {
+    "id": 6203,
+    "hash": "028_test_step_2_b3079b3331_cfc88e1db2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/028_test_step_2_b3079b3331_cfc88e1db2.png"
+  },
+  "https://api-prod.strapi.io/uploads/029_terminal_aede762a03.png": {
+    "id": 6204,
+    "hash": "029_terminal_aede762a03_a1644b8b3d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/029_terminal_aede762a03_a1644b8b3d.png"
+  },
+  "https://api-prod.strapi.io/uploads/030_user_a2faac5972.png": {
+    "id": 6205,
+    "hash": "030_user_a2faac5972_d17627ac28",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/030_user_a2faac5972_d17627ac28.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_welcome_to_strapi_85de6ddde5.png": {
+    "id": 6206,
+    "hash": "001_welcome_to_strapi_85de6ddde5_7a922f2af5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_welcome_to_strapi_85de6ddde5_7a922f2af5.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_strapi_dashboard_388c2938f4.png": {
+    "id": 6207,
+    "hash": "002_strapi_dashboard_388c2938f4_b2c7d334e4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_strapi_dashboard_388c2938f4_b2c7d334e4.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_create_collection_type_9d709da429.png": {
+    "id": 6208,
+    "hash": "003_create_collection_type_9d709da429_946ac59ec1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_create_collection_type_9d709da429_946ac59ec1.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_add_relation_844c53d3ae.png": {
+    "id": 6209,
+    "hash": "004_add_relation_844c53d3ae_871926a186",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_add_relation_844c53d3ae_871926a186.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_article_collection_fields_62257291cd.png": {
+    "id": 6210,
+    "hash": "005_article_collection_fields_62257291cd_87bf5673cb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_article_collection_fields_62257291cd_87bf5673cb.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_empty_article_collection_type_03fbd12f42.png": {
+    "id": 6211,
+    "hash": "006_empty_article_collection_type_03fbd12f42_511a33429b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_empty_article_collection_type_03fbd12f42_511a33429b.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_author_collection_6797dd3279.png": {
+    "id": 6212,
+    "hash": "007_author_collection_6797dd3279_465f2c4fc9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_author_collection_6797dd3279_465f2c4fc9.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_create_author_entry_fe0ca228c7.png": {
+    "id": 6213,
+    "hash": "008_create_author_entry_fe0ca228c7_161f61eeb7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_create_author_entry_fe0ca228c7_161f61eeb7.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_api_result_7e16c46330.png": {
+    "id": 6214,
+    "hash": "009_api_result_7e16c46330_1322450d27",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_api_result_7e16c46330_1322450d27.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_welcom_to_astro_cdf7e36b05.png": {
+    "id": 6215,
+    "hash": "010_welcom_to_astro_cdf7e36b05_9a778164e3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_welcom_to_astro_cdf7e36b05_9a778164e3.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_article_detials_9e3eb0f48a.gif": {
+    "id": 6216,
+    "hash": "011_article_detials_9e3eb0f48a_2eab19749b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_article_detials_9e3eb0f48a_2eab19749b.gif"
+  },
+  "https://api-prod.strapi.io/uploads/012_demo_get_summary_574bc83f8e.gif": {
+    "id": 6217,
+    "hash": "012_demo_get_summary_574bc83f8e_ed477c3bb8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_demo_get_summary_574bc83f8e_ed477c3bb8.gif"
+  },
+  "https://api-prod.strapi.io/uploads/013_get_summary_static_82536912a3.png": {
+    "id": 6218,
+    "hash": "013_get_summary_static_82536912a3_0e4931b368",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_get_summary_static_82536912a3_0e4931b368.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_admin_pan_f83d6a7683.png": {
+    "id": 6219,
+    "hash": "002_admin_pan_f83d6a7683_b54bd41381",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_admin_pan_f83d6a7683_b54bd41381.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_create_collection_9d4b94ef34.png": {
+    "id": 6220,
+    "hash": "003_create_collection_9d4b94ef34_f641180799",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_create_collection_9d4b94ef34_f641180799.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_create_collection_d99d2a061a.png": {
+    "id": 6221,
+    "hash": "004_create_collection_d99d2a061a_b38387130a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_create_collection_d99d2a061a_b38387130a.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_elect_fields_ca90dba487.png": {
+    "id": 6222,
+    "hash": "005_elect_fields_ca90dba487_d1e4a2ff4e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_elect_fields_ca90dba487_d1e4a2ff4e.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_blog_fields_324174d422.png": {
+    "id": 6223,
+    "hash": "006_blog_fields_324174d422_9f20a4cee4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_blog_fields_324174d422_9f20a4cee4.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_step_complete_6cb2ed6ca7.png": {
+    "id": 6224,
+    "hash": "007_step_complete_6cb2ed6ca7_35452267d8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_step_complete_6cb2ed6ca7_35452267d8.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_create_post_165f44bcc5.png": {
+    "id": 6225,
+    "hash": "008_create_post_165f44bcc5_43b843e958",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_create_post_165f44bcc5_43b843e958.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_add_internationilazation_0ec9da5342.png": {
+    "id": 6226,
+    "hash": "009_add_internationilazation_0ec9da5342_2d48881c3f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_add_internationilazation_0ec9da5342_2d48881c3f.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_add_locale_a5f0959e73.png": {
+    "id": 6227,
+    "hash": "010_add_locale_a5f0959e73_763175aaf1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_add_locale_a5f0959e73_763175aaf1.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_create_translation_636a2b1ca0.png": {
+    "id": 6228,
+    "hash": "011_create_translation_636a2b1ca0_073ad030b7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_create_translation_636a2b1ca0_073ad030b7.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_add_permission_4e3ce56e21.png": {
+    "id": 6229,
+    "hash": "012_add_permission_4e3ce56e21_0fd14d19ce",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_add_permission_4e3ce56e21_0fd14d19ce.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_public_access_966872698b.png": {
+    "id": 6230,
+    "hash": "013_public_access_966872698b_22da3955f9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_public_access_966872698b_22da3955f9.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_create_next_app_f9911d4e76.png": {
+    "id": 6231,
+    "hash": "014_create_next_app_f9911d4e76_1033a83ff6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_create_next_app_f9911d4e76_1033a83ff6.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_demo_a26dd0eab0.gif": {
+    "id": 6232,
+    "hash": "015_demo_a26dd0eab0_eb6e6518ea",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_demo_a26dd0eab0_eb6e6518ea.gif"
+  },
+  "https://api-prod.strapi.io/uploads/git_hub_page_6bbb7a4c91.png": {
+    "id": 6233,
+    "hash": "git_hub_page_6bbb7a4c91_283dbbcac1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/git_hub_page_6bbb7a4c91_283dbbcac1.png"
+  },
+  "https://api-prod.strapi.io/uploads/seed_data_219dffc5d3.png": {
+    "id": 6234,
+    "hash": "seed_data_219dffc5d3_fcd5863528",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/seed_data_219dffc5d3_fcd5863528.png"
+  },
+  "https://api-prod.strapi.io/uploads/admin_22b786be5b.png": {
+    "id": 6235,
+    "hash": "admin_22b786be5b_91189b9449",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/admin_22b786be5b_91189b9449.png"
+  },
+  "https://api-prod.strapi.io/uploads/dashboard_6a318e0e6a.gif": {
+    "id": 6236,
+    "hash": "dashboard_6a318e0e6a_614c230b3a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/dashboard_6a318e0e6a_614c230b3a.gif"
+  },
+  "https://api-prod.strapi.io/uploads/strapi_types_4db3372783.png": {
+    "id": 6237,
+    "hash": "strapi_types_4db3372783_5cef6e96ce",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/strapi_types_4db3372783_5cef6e96ce.png"
+  },
+  "https://api-prod.strapi.io/uploads/frontend_types_d3f5dba2b7.png": {
+    "id": 6238,
+    "hash": "frontend_types_d3f5dba2b7_aea255d121",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/frontend_types_d3f5dba2b7_aea255d121.png"
+  },
+  "https://api-prod.strapi.io/uploads/types_demo_b848ca3ef2.gif": {
+    "id": 6239,
+    "hash": "types_demo_b848ca3ef2_db7ffc9517",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/types_demo_b848ca3ef2_db7ffc9517.gif"
+  },
+  "https://api-prod.strapi.io/uploads/enum_dd4a8d72ee.png": {
+    "id": 6240,
+    "hash": "enum_dd4a8d72ee_a6c15fcf41",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/enum_dd4a8d72ee_a6c15fcf41.png"
+  },
+  "https://api-prod.strapi.io/uploads/updated_tyopes_e32a9f5f6d.png": {
+    "id": 6241,
+    "hash": "updated_tyopes_e32a9f5f6d_bd1f2fcdfb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/updated_tyopes_e32a9f5f6d_bd1f2fcdfb.png"
+  },
+  "https://api-prod.strapi.io/uploads/politician_trust_meter_db_f7b83036eb.jpeg": {
+    "id": 6242,
+    "hash": "politician_trust_meter_db_f7b83036eb_516234d0c8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/politician_trust_meter_db_f7b83036eb_516234d0c8.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/john_doe_5074b7bbcf.jpeg": {
+    "id": 6243,
+    "hash": "john_doe_5074b7bbcf_aac37cf5db",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/john_doe_5074b7bbcf_aac37cf5db.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/Releases_Short_01a141671f.gif": {
+    "id": 6244,
+    "hash": "Releases_Short_01a141671f_0c0b992b54",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Releases_Short_01a141671f_0c0b992b54.gif"
+  },
+  "https://api-prod.strapi.io/uploads/Manual_Backups_715545f958.png": {
+    "id": 6245,
+    "hash": "Manual_Backups_715545f958_b12f7c8236",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Manual_Backups_715545f958_b12f7c8236.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi-Quote_c445be8de5.png": {
+    "id": 6246,
+    "hash": "Strapi_Quote_c445be8de5_22e6377038",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Quote_c445be8de5_22e6377038.png"
+  },
+  "https://api-prod.strapi.io/uploads/Screen_Shot_2020-05-19_at_22.16.35_5ee31a544c.png": {
+    "id": 6247,
+    "hash": "Screen_Shot_2020_05_19_at_22_16_35_5ee31a544c_5102930a27",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screen_Shot_2020_05_19_at_22_16_35_5ee31a544c_5102930a27.png"
+  },
+  "https://api-prod.strapi.io/uploads/victorkevin_f2958b5ab9.png": {
+    "id": 6248,
+    "hash": "victorkevin_f2958b5ab9_d7290bd3ed",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/victorkevin_f2958b5ab9_d7290bd3ed.png"
+  },
+  "https://api-prod.strapi.io/uploads/mu-april-2_3aad1ff0bf.png": {
+    "id": 6249,
+    "hash": "mu_april_2_3aad1ff0bf_8c82a310ee",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/mu_april_2_3aad1ff0bf_8c82a310ee.png"
+  },
+  "https://api-prod.strapi.io/uploads/Capture-d-e-cran-2020-05-05-a--16.41.01_f2d23f05aa.png": {
+    "id": 6250,
+    "hash": "Capture_d_e_cran_2020_05_05_a_16_41_01_f2d23f05aa_64c559952a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Capture_d_e_cran_2020_05_05_a_16_41_01_f2d23f05aa_64c559952a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Capture-d-e-cran-2020-04-21-a--15.20.32_7f21e946d5.png": {
+    "id": 6251,
+    "hash": "Capture_d_e_cran_2020_04_21_a_15_20_32_7f21e946d5_4bc0a47e5a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Capture_d_e_cran_2020_04_21_a_15_20_32_7f21e946d5_4bc0a47e5a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Capture-d-e-cran-2020-04-22-a--17.35.24_b9a9b82cd1.png": {
+    "id": 6252,
+    "hash": "Capture_d_e_cran_2020_04_22_a_17_35_24_b9a9b82cd1_3f573a6190",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Capture_d_e_cran_2020_04_22_a_17_35_24_b9a9b82cd1_3f573a6190.png"
+  },
+  "https://api-prod.strapi.io/uploads/Capture-d-e-cran-2020-05-06-a--16.29.45_eaee63ddde.png": {
+    "id": 6253,
+    "hash": "Capture_d_e_cran_2020_05_06_a_16_29_45_eaee63ddde_d4fd50f7f4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Capture_d_e_cran_2020_05_06_a_16_29_45_eaee63ddde_d4fd50f7f4.png"
+  },
+  "https://api-prod.strapi.io/uploads/P2261323_a5ce48fed3.jpeg": {
+    "id": 6254,
+    "hash": "P2261323_a5ce48fed3_536999c3f4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/P2261323_a5ce48fed3_536999c3f4.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/Screen_Shot_2020-05-19_at_22.07.55_1fee93643e.png": {
+    "id": 6255,
+    "hash": "Screen_Shot_2020_05_19_at_22_07_55_1fee93643e_e0cb7569dd",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screen_Shot_2020_05_19_at_22_07_55_1fee93643e_e0cb7569dd.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_welcome_to_strapi_0ad3860440.png": {
+    "id": 6256,
+    "hash": "001_welcome_to_strapi_0ad3860440_0a0819097f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_welcome_to_strapi_0ad3860440_0a0819097f.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_create_collection_4e80c37e26.png": {
+    "id": 6257,
+    "hash": "002_create_collection_4e80c37e26_60cba09783",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_create_collection_4e80c37e26_60cba09783.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_add_collection_type_fields_2870a60bb5.png": {
+    "id": 6258,
+    "hash": "003_add_collection_type_fields_2870a60bb5_30de2e5093",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_add_collection_type_fields_2870a60bb5_30de2e5093.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_add_reviewer_rating_field_67ec4a03c9.png": {
+    "id": 6259,
+    "hash": "004_add_reviewer_rating_field_67ec4a03c9_5f97979b93",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_add_reviewer_rating_field_67ec4a03c9_5f97979b93.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_the_review_collection_field_37619d7de0.png": {
+    "id": 6260,
+    "hash": "005_the_review_collection_field_37619d7de0_9e9f16b051",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_the_review_collection_field_37619d7de0_9e9f16b051.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_collection_type_fields_70886d75ff.png": {
+    "id": 6261,
+    "hash": "006_collection_type_fields_70886d75ff_fc6669c882",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_collection_type_fields_70886d75ff_fc6669c882.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_enable_public_access_ad5dbb20b7.png": {
+    "id": 6262,
+    "hash": "007_enable_public_access_ad5dbb20b7_4eeb9c7108",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_enable_public_access_ad5dbb20b7_4eeb9c7108.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_create_an_entry_afff7431b1.png": {
+    "id": 6263,
+    "hash": "008_create_an_entry_afff7431b1_9330e0081e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_create_an_entry_afff7431b1_9330e0081e.png"
+  },
+  "https://api-prod.strapi.io/uploads/demo_fc0448a1fd.gif": {
+    "id": 6264,
+    "hash": "demo_fc0448a1fd_1103b52057",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/demo_fc0448a1fd_1103b52057.gif"
+  },
+  "https://api-prod.strapi.io/uploads/next_js14_e9c1de1bf0.gif": {
+    "id": 6265,
+    "hash": "next_js14_e9c1de1bf0_d50fec1737",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/next_js14_e9c1de1bf0_d50fec1737.gif"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_NPM_Downloads_e0bb34f321.png": {
+    "id": 6266,
+    "hash": "Strapi_NPM_Downloads_e0bb34f321_938f0d9f8e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_NPM_Downloads_e0bb34f321_938f0d9f8e.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Git_Hub_Stars_9e82f63520.png": {
+    "id": 6267,
+    "hash": "Strapi_Git_Hub_Stars_9e82f63520_81717794eb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Git_Hub_Stars_9e82f63520_81717794eb.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Keyboard_Shortcuts_c605855ca9.gif": {
+    "id": 6268,
+    "hash": "Strapi_Keyboard_Shortcuts_c605855ca9_176afbeefa",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Keyboard_Shortcuts_c605855ca9_176afbeefa.gif"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_tutorial_digital_ocean_1_fcee7fb7e2.png": {
+    "id": 6269,
+    "hash": "Strapi_tutorial_digital_ocean_1_fcee7fb7e2_012ef6402a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_tutorial_digital_ocean_1_fcee7fb7e2_012ef6402a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Tutorial_collection_cbb11dc043.png": {
+    "id": 6270,
+    "hash": "Tutorial_collection_cbb11dc043_e61ba1dc8d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Tutorial_collection_cbb11dc043_e61ba1dc8d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Relation_field_ff8b31c805.png": {
+    "id": 6271,
+    "hash": "Relation_field_ff8b31c805_6318df5679",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Relation_field_ff8b31c805_6318df5679.png"
+  },
+  "https://api-prod.strapi.io/uploads/User_4f357e5c5b.png": {
+    "id": 6272,
+    "hash": "User_4f357e5c5b_27c25c8021",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/User_4f357e5c5b_27c25c8021.png"
+  },
+  "https://api-prod.strapi.io/uploads/Movie_f5cb3735b2.png": {
+    "id": 6273,
+    "hash": "Movie_f5cb3735b2_df01c24a93",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Movie_f5cb3735b2_df01c24a93.png"
+  },
+  "https://api-prod.strapi.io/uploads/Actor_9bddb840cc.png": {
+    "id": 6274,
+    "hash": "Actor_9bddb840cc_f06e656263",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Actor_9bddb840cc_f06e656263.png"
+  },
+  "https://api-prod.strapi.io/uploads/Public_b0bc397462.png": {
+    "id": 6275,
+    "hash": "Public_b0bc397462_25af5d83ba",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Public_b0bc397462_25af5d83ba.png"
+  },
+  "https://api-prod.strapi.io/uploads/Authorization_Rules_8b211dc80d.png": {
+    "id": 6276,
+    "hash": "Authorization_Rules_8b211dc80d_5ee801fbe6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Authorization_Rules_8b211dc80d_5ee801fbe6.png"
+  },
+  "https://api-prod.strapi.io/uploads/Digital_Ocean_Default_Homepage_9b0010b5fe.png": {
+    "id": 6277,
+    "hash": "Digital_Ocean_Default_Homepage_9b0010b5fe_8badf2ecb5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Digital_Ocean_Default_Homepage_9b0010b5fe_8badf2ecb5.png"
+  },
+  "https://api-prod.strapi.io/uploads/Region_Selection_b9e5d88a9d.png": {
+    "id": 6278,
+    "hash": "Region_Selection_b9e5d88a9d_e8036d7c95",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Region_Selection_b9e5d88a9d_e8036d7c95.png"
+  },
+  "https://api-prod.strapi.io/uploads/OS_selection_4188e878c9.png": {
+    "id": 6279,
+    "hash": "OS_selection_4188e878c9_4203e1afe2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/OS_selection_4188e878c9_4203e1afe2.png"
+  },
+  "https://api-prod.strapi.io/uploads/Publish_SSH_2df44cb393.png": {
+    "id": 6280,
+    "hash": "Publish_SSH_2df44cb393_a0f44ad118",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Publish_SSH_2df44cb393_a0f44ad118.png"
+  },
+  "https://api-prod.strapi.io/uploads/Droplet_Analytics_8c638f6b43.png": {
+    "id": 6281,
+    "hash": "Droplet_Analytics_8c638f6b43_0047b773eb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Droplet_Analytics_8c638f6b43_0047b773eb.png"
+  },
+  "https://api-prod.strapi.io/uploads/Postgres_Installation_output_403864e97a.png": {
+    "id": 6282,
+    "hash": "Postgres_Installation_output_403864e97a_73dd2abb8d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Postgres_Installation_output_403864e97a_73dd2abb8d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Summary_of_all_pipelines_d3a3117e87.png": {
+    "id": 6283,
+    "hash": "Summary_of_all_pipelines_d3a3117e87_1edec58c2f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Summary_of_all_pipelines_d3a3117e87_1edec58c2f.png"
+  },
+  "https://api-prod.strapi.io/uploads/An_example_of_a_pipeline_running_after_updating_the_master_branch_c0c0591b31.png": {
+    "id": 6284,
+    "hash": "An_example_of_a_pipeline_running_after_updating_the_master_branch_c0c0591b31_b24cd41df4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/An_example_of_a_pipeline_running_after_updating_the_master_branch_c0c0591b31_b24cd41df4.png"
+  },
+  "https://api-prod.strapi.io/uploads/API_Response_in_Production_1796ba5f92.png": {
+    "id": 6285,
+    "hash": "API_Response_in_Production_1796ba5f92_dd3eab921a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/API_Response_in_Production_1796ba5f92_dd3eab921a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Welcome_to_Strapi_page_2629998031.png": {
+    "id": 6286,
+    "hash": "Welcome_to_Strapi_page_2629998031_1766f88d78",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Welcome_to_Strapi_page_2629998031_1766f88d78.png"
+  },
+  "https://api-prod.strapi.io/uploads/Screenshot_2024_06_05_at_11_30_02_AM_b02d334c8a.png": {
+    "id": 6287,
+    "hash": "Screenshot_2024_06_05_at_11_30_02_AM_b02d334c8a_2eaba17363",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screenshot_2024_06_05_at_11_30_02_AM_b02d334c8a_2eaba17363.png"
+  },
+  "https://api-prod.strapi.io/uploads/Screenshot_2024_06_05_at_11_34_19_AM_c1c8abb381.png": {
+    "id": 6288,
+    "hash": "Screenshot_2024_06_05_at_11_34_19_AM_c1c8abb381_5fb948b7a8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screenshot_2024_06_05_at_11_34_19_AM_c1c8abb381_5fb948b7a8.png"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_a63dbaa971.jpeg": {
+    "id": 6289,
+    "hash": "build_a_landing_page_in_Strapi_a63dbaa971_82c2e0c922",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_a63dbaa971_82c2e0c922.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_2_2f998f6d7d.jpeg": {
+    "id": 6290,
+    "hash": "build_a_landing_page_in_Strapi_2_2f998f6d7d_0a777d3d21",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_2_2f998f6d7d_0a777d3d21.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_3_640514e20b.jpeg": {
+    "id": 6291,
+    "hash": "build_a_landing_page_in_Strapi_3_640514e20b_019af97687",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_3_640514e20b_019af97687.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_4_7e317c14b4.jpeg": {
+    "id": 6292,
+    "hash": "build_a_landing_page_in_Strapi_4_7e317c14b4_60e86ad0a5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_4_7e317c14b4_60e86ad0a5.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_5_4f8b432f34.jpeg": {
+    "id": 6293,
+    "hash": "build_a_landing_page_in_Strapi_5_4f8b432f34_0e517d9a5b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_5_4f8b432f34_0e517d9a5b.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_6_60c6c90fbc.jpeg": {
+    "id": 6294,
+    "hash": "build_a_landing_page_in_Strapi_6_60c6c90fbc_738adbeb73",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_6_60c6c90fbc_738adbeb73.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_7_5a676f1f2a.jpeg": {
+    "id": 6295,
+    "hash": "build_a_landing_page_in_Strapi_7_5a676f1f2a_9a04183dd4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_7_5a676f1f2a_9a04183dd4.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_8_c7bbb64967.jpeg": {
+    "id": 6296,
+    "hash": "build_a_landing_page_in_Strapi_8_c7bbb64967_06c57a97a6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_8_c7bbb64967_06c57a97a6.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_9_c886b2998a.jpeg": {
+    "id": 6297,
+    "hash": "build_a_landing_page_in_Strapi_9_c886b2998a_debaaf9f5d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_9_c886b2998a_debaaf9f5d.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/build_a_landing_page_in_Strapi_10_3024af0074.jpeg": {
+    "id": 6298,
+    "hash": "build_a_landing_page_in_Strapi_10_3024af0074_b38f4cc482",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/build_a_landing_page_in_Strapi_10_3024af0074_b38f4cc482.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Cloud_Active_Projects_6081b89933.png": {
+    "id": 6299,
+    "hash": "Strapi_Cloud_Active_Projects_6081b89933_8c1e31d979",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Cloud_Active_Projects_6081b89933_8c1e31d979.png"
+  },
+  "https://api-prod.strapi.io/uploads/Company_Onsite_Picture_9b89cc516f.png": {
+    "id": 6300,
+    "hash": "Company_Onsite_Picture_9b89cc516f_8623085ddf",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Company_Onsite_Picture_9b89cc516f_8623085ddf.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Editing_Experience_Preview_a70a0b6320.png": {
+    "id": 6301,
+    "hash": "Strapi_Editing_Experience_Preview_a70a0b6320_ef22753639",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Editing_Experience_Preview_a70a0b6320_ef22753639.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_s_launch_9f0606a1dd.png": {
+    "id": 6302,
+    "hash": "Strapi_s_launch_9f0606a1dd_88f36b31ef",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_s_launch_9f0606a1dd_88f36b31ef.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_s_timeline_8417477e48.png": {
+    "id": 6303,
+    "hash": "Strapi_s_timeline_8417477e48_b6d23ef98a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_s_timeline_8417477e48_b6d23ef98a.png"
+  },
+  "https://api-prod.strapi.io/uploads/Open_Core_vs_Saa_S_d92ba6fb75.png": {
+    "id": 6304,
+    "hash": "Open_Core_vs_Saa_S_d92ba6fb75_b297eab4df",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Open_Core_vs_Saa_S_d92ba6fb75_b297eab4df.png"
+  },
+  "https://api-prod.strapi.io/uploads/Open_Core_vs_Saa_S_d3c2ef0501.png": {
+    "id": 6305,
+    "hash": "Open_Core_vs_Saa_S_d3c2ef0501_d9902f6bd4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Open_Core_vs_Saa_S_d3c2ef0501_d9902f6bd4.png"
+  },
+  "https://api-prod.strapi.io/uploads/Strapi_Motions_7fe76eb9b3.png": {
+    "id": 6306,
+    "hash": "Strapi_Motions_7fe76eb9b3_c627141ee3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Strapi_Motions_7fe76eb9b3_c627141ee3.png"
+  },
+  "https://api-prod.strapi.io/uploads/Soft_delete_gif_bea3634690.gif": {
+    "id": 6307,
+    "hash": "Soft_delete_gif_bea3634690_4423a10b3b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Soft_delete_gif_bea3634690_4423a10b3b.gif"
+  },
+  "https://api-prod.strapi.io/uploads/Collection_in_Strapi_b3a7499f0e.png": {
+    "id": 6308,
+    "hash": "Collection_in_Strapi_b3a7499f0e_25e08ff79d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Collection_in_Strapi_b3a7499f0e_25e08ff79d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Installing_Next_js_App_Router_9d7815c32a.png": {
+    "id": 6309,
+    "hash": "Installing_Next_js_App_Router_9d7815c32a_d85dd9b89b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Installing_Next_js_App_Router_9d7815c32a_d85dd9b89b.png"
+  },
+  "https://api-prod.strapi.io/uploads/Next_js_Running_on_Localhost_4e287f6a11.png": {
+    "id": 6310,
+    "hash": "Next_js_Running_on_Localhost_4e287f6a11_dd94f68d4d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Next_js_Running_on_Localhost_4e287f6a11_dd94f68d4d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Homepage_a12c6b8c3a.png": {
+    "id": 6311,
+    "hash": "Homepage_a12c6b8c3a_006b454a87",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Homepage_a12c6b8c3a_006b454a87.png"
+  },
+  "https://api-prod.strapi.io/uploads/Recycle_Bin_b9a2569021.png": {
+    "id": 6312,
+    "hash": "Recycle_Bin_b9a2569021_56f71e5835",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Recycle_Bin_b9a2569021_56f71e5835.png"
+  },
+  "https://api-prod.strapi.io/uploads/Soft_delete_7faa2f97a3.gif": {
+    "id": 6313,
+    "hash": "Soft_delete_7faa2f97a3_c1a0cc3576",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Soft_delete_7faa2f97a3_c1a0cc3576.gif"
+  },
+  "https://api-prod.strapi.io/uploads/image22_cd2b65dd83.png": {
+    "id": 6314,
+    "hash": "image22_cd2b65dd83_7cf40891da",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image22_cd2b65dd83_7cf40891da.png"
+  },
+  "https://api-prod.strapi.io/uploads/image21_f143b04e90.png": {
+    "id": 6315,
+    "hash": "image21_f143b04e90_3f7e3e1d67",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image21_f143b04e90_3f7e3e1d67.png"
+  },
+  "https://api-prod.strapi.io/uploads/image13_1b7e40c2c7.png": {
+    "id": 6316,
+    "hash": "image13_1b7e40c2c7_28b9717250",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image13_1b7e40c2c7_28b9717250.png"
+  },
+  "https://api-prod.strapi.io/uploads/image12_ee08495a24.png": {
+    "id": 6317,
+    "hash": "image12_ee08495a24_9e5a05c91e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image12_ee08495a24_9e5a05c91e.png"
+  },
+  "https://api-prod.strapi.io/uploads/image23_a650465dd9.png": {
+    "id": 6318,
+    "hash": "image23_a650465dd9_910d96043c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image23_a650465dd9_910d96043c.png"
+  },
+  "https://api-prod.strapi.io/uploads/Git_Repo_e8be46ebf0.png": {
+    "id": 6319,
+    "hash": "Git_Repo_e8be46ebf0_031ee91f19",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Git_Repo_e8be46ebf0_031ee91f19.png"
+  },
+  "https://api-prod.strapi.io/uploads/image10_c65fc94579.png": {
+    "id": 6320,
+    "hash": "image10_c65fc94579_5b8d64b5d9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image10_c65fc94579_5b8d64b5d9.png"
+  },
+  "https://api-prod.strapi.io/uploads/image18_1da4116030.png": {
+    "id": 6321,
+    "hash": "image18_1da4116030_e31d0aba07",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image18_1da4116030_e31d0aba07.png"
+  },
+  "https://api-prod.strapi.io/uploads/App_Service_e1708515417886_c9778861fa.png": {
+    "id": 6322,
+    "hash": "App_Service_e1708515417886_c9778861fa_7bc54b421c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/App_Service_e1708515417886_c9778861fa_7bc54b421c.png"
+  },
+  "https://api-prod.strapi.io/uploads/App_Service1_e1708515514970_52d7f2a904.png": {
+    "id": 6323,
+    "hash": "App_Service1_e1708515514970_52d7f2a904_219eaa5034",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/App_Service1_e1708515514970_52d7f2a904_219eaa5034.png"
+  },
+  "https://api-prod.strapi.io/uploads/App_Service_Overview_99c4a1cd4b.png": {
+    "id": 6324,
+    "hash": "App_Service_Overview_99c4a1cd4b_0ea3fa4f53",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/App_Service_Overview_99c4a1cd4b_0ea3fa4f53.png"
+  },
+  "https://api-prod.strapi.io/uploads/image28_dc0f1cdb24.png": {
+    "id": 6325,
+    "hash": "image28_dc0f1cdb24_f973e698b0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image28_dc0f1cdb24_f973e698b0.png"
+  },
+  "https://api-prod.strapi.io/uploads/Azure_DB_1_e1708515904892_3d665afd36.png": {
+    "id": 6326,
+    "hash": "Azure_DB_1_e1708515904892_3d665afd36_a056fde301",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Azure_DB_1_e1708515904892_3d665afd36_a056fde301.png"
+  },
+  "https://api-prod.strapi.io/uploads/image19_eb5af76010.png": {
+    "id": 6327,
+    "hash": "image19_eb5af76010_8623107801",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image19_eb5af76010_8623107801.png"
+  },
+  "https://api-prod.strapi.io/uploads/Storage_Account_e1708516282215_05806954e1.png": {
+    "id": 6328,
+    "hash": "Storage_Account_e1708516282215_05806954e1_1b90f1ec57",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Storage_Account_e1708516282215_05806954e1_1b90f1ec57.png"
+  },
+  "https://api-prod.strapi.io/uploads/Storage_Account1_e1708516252350_f2d1f473ea.png": {
+    "id": 6329,
+    "hash": "Storage_Account1_e1708516252350_f2d1f473ea_701a12c496",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Storage_Account1_e1708516252350_f2d1f473ea_701a12c496.png"
+  },
+  "https://api-prod.strapi.io/uploads/Storage_Account_Overview_e16fa4f34f.png": {
+    "id": 6330,
+    "hash": "Storage_Account_Overview_e16fa4f34f_4d492c15fb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Storage_Account_Overview_e16fa4f34f_4d492c15fb.png"
+  },
+  "https://api-prod.strapi.io/uploads/Deployment_Center_e1708516404513_2df311b1e8.png": {
+    "id": 6331,
+    "hash": "Deployment_Center_e1708516404513_2df311b1e8_6c53a085c4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Deployment_Center_e1708516404513_2df311b1e8_6c53a085c4.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway_e1708516592303_48044a226e.png": {
+    "id": 6332,
+    "hash": "Application_Gateway_e1708516592303_48044a226e_d857d95391",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway_e1708516592303_48044a226e_d857d95391.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway1_e1708516645495_37171016c7.png": {
+    "id": 6333,
+    "hash": "Application_Gateway1_e1708516645495_37171016c7_229507c867",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway1_e1708516645495_37171016c7_229507c867.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway2_b2029f413e.png": {
+    "id": 6334,
+    "hash": "Application_Gateway2_b2029f413e_ee797d0ac9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway2_b2029f413e_ee797d0ac9.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway3_e1708516782591_938abe3e1c.png": {
+    "id": 6335,
+    "hash": "Application_Gateway3_e1708516782591_938abe3e1c_b0ff183982",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway3_e1708516782591_938abe3e1c_b0ff183982.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway4_2f7b94a0e7.png": {
+    "id": 6336,
+    "hash": "Application_Gateway4_2f7b94a0e7_627a5f2832",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway4_2f7b94a0e7_627a5f2832.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway5_7e0c7a6c19.png": {
+    "id": 6337,
+    "hash": "Application_Gateway5_7e0c7a6c19_71aaab2dd8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway5_7e0c7a6c19_71aaab2dd8.png"
+  },
+  "https://api-prod.strapi.io/uploads/Application_Gateway_Overview_172be7b792.png": {
+    "id": 6338,
+    "hash": "Application_Gateway_Overview_172be7b792_4b2dbf3c42",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Application_Gateway_Overview_172be7b792_4b2dbf3c42.png"
+  },
+  "https://api-prod.strapi.io/uploads/WAF_Policy_e1708516963243_fa9a6d4761.png": {
+    "id": 6339,
+    "hash": "WAF_Policy_e1708516963243_fa9a6d4761_f1061c92f0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/WAF_Policy_e1708516963243_fa9a6d4761_f1061c92f0.png"
+  },
+  "https://api-prod.strapi.io/uploads/WAF_Policy1_5b993a2015.png": {
+    "id": 6340,
+    "hash": "WAF_Policy1_5b993a2015_309858176d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/WAF_Policy1_5b993a2015_309858176d.png"
+  },
+  "https://api-prod.strapi.io/uploads/WAF_Policy2_e1708517115592_28a7678eb6.png": {
+    "id": 6341,
+    "hash": "WAF_Policy2_e1708517115592_28a7678eb6_b581f42154",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/WAF_Policy2_e1708517115592_28a7678eb6_b581f42154.png"
+  },
+  "https://api-prod.strapi.io/uploads/WAF_Overview_024672142e.png": {
+    "id": 6342,
+    "hash": "WAF_Overview_024672142e_7aca3fbf9c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/WAF_Overview_024672142e_7aca3fbf9c.png"
+  },
+  "https://api-prod.strapi.io/uploads/CDN_044051d081.png": {
+    "id": 6343,
+    "hash": "CDN_044051d081_94cfe57312",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/CDN_044051d081_94cfe57312.png"
+  },
+  "https://api-prod.strapi.io/uploads/CDN_1_7ee8d23295.png": {
+    "id": 6344,
+    "hash": "CDN_1_7ee8d23295_9ed65fbe3c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/CDN_1_7ee8d23295_9ed65fbe3c.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_music_app_demo_15d0a8a322.gif": {
+    "id": 6345,
+    "hash": "001_music_app_demo_15d0a8a322_13c7b02aa2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_music_app_demo_15d0a8a322_13c7b02aa2.gif"
+  },
+  "https://api-prod.strapi.io/uploads/002_strapi_backend_d101fb5a31.gif": {
+    "id": 6346,
+    "hash": "002_strapi_backend_d101fb5a31_2ff4783f0c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_strapi_backend_d101fb5a31_2ff4783f0c.gif"
+  },
+  "https://api-prod.strapi.io/uploads/003_clone_the_repo_cfd102ce74.gif": {
+    "id": 6347,
+    "hash": "003_clone_the_repo_cfd102ce74_eb0e3956ee",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_clone_the_repo_cfd102ce74_eb0e3956ee.gif"
+  },
+  "https://api-prod.strapi.io/uploads/005_strapi_backend_672ef144e8.png": {
+    "id": 6348,
+    "hash": "005_strapi_backend_672ef144e8_f74a969e3f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_strapi_backend_672ef144e8_f74a969e3f.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_populate_hero_c6e18612e1.gif": {
+    "id": 6349,
+    "hash": "006_populate_hero_c6e18612e1_0c9fa992e0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_populate_hero_c6e18612e1_0c9fa992e0.gif"
+  },
+  "https://api-prod.strapi.io/uploads/007_hero_section_a49ae3583c.png": {
+    "id": 6350,
+    "hash": "007_hero_section_a49ae3583c_e3d6ed46e5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_hero_section_a49ae3583c_e3d6ed46e5.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_added_music_section_e2434b7a5b.png": {
+    "id": 6351,
+    "hash": "008_added_music_section_e2434b7a5b_4468d207ee",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_added_music_section_e2434b7a5b_4468d207ee.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_search_field_b4d8891f6d.png": {
+    "id": 6352,
+    "hash": "009_search_field_b4d8891f6d_e1860623fd",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_search_field_b4d8891f6d_e1860623fd.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_search_query_fab921a7ce.gif": {
+    "id": 6353,
+    "hash": "010_search_query_fab921a7ce_b75654e18e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_search_query_fab921a7ce_b75654e18e.gif"
+  },
+  "https://api-prod.strapi.io/uploads/011_search_demo_207ec1e001.gif": {
+    "id": 6354,
+    "hash": "011_search_demo_207ec1e001_1bce662fb6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_search_demo_207ec1e001_1bce662fb6.gif"
+  },
+  "https://api-prod.strapi.io/uploads/012_pagination_b6e43c09da.gif": {
+    "id": 6355,
+    "hash": "012_pagination_b6e43c09da_728a7dd090",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_pagination_b6e43c09da_728a7dd090.gif"
+  },
+  "https://api-prod.strapi.io/uploads/013_loading_spinner_c873f43a69.gif": {
+    "id": 6356,
+    "hash": "013_loading_spinner_c873f43a69_d513585eba",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_loading_spinner_c873f43a69_d513585eba.gif"
+  },
+  "https://api-prod.strapi.io/uploads/014_oh_no_error_4513b5ade2.png": {
+    "id": 6357,
+    "hash": "014_oh_no_error_4513b5ade2_15ca09b7d9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_oh_no_error_4513b5ade2_15ca09b7d9.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_pretty_error_d6a3e340a1.png": {
+    "id": 6358,
+    "hash": "015_pretty_error_d6a3e340a1_f76b4d38a9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_pretty_error_d6a3e340a1_f76b4d38a9.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_admin_ba1770be0d.png": {
+    "id": 6359,
+    "hash": "002_admin_ba1770be0d_ddd21c87d7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_admin_ba1770be0d_ddd21c87d7.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_dashboard_7f53fbeaa2.png": {
+    "id": 6360,
+    "hash": "003_dashboard_7f53fbeaa2_f92dcb28c7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_dashboard_7f53fbeaa2_f92dcb28c7.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_menu_a850309ef1.png": {
+    "id": 6361,
+    "hash": "004_menu_a850309ef1_a02e88f77a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_menu_a850309ef1_a02e88f77a.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_create_collection_8488b13c37.png": {
+    "id": 6362,
+    "hash": "005_create_collection_8488b13c37_fd053e5205",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_create_collection_8488b13c37_fd053e5205.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_addtext_field_f42b8bb02e.png": {
+    "id": 6363,
+    "hash": "006_addtext_field_f42b8bb02e_107b8c5f1b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_addtext_field_f42b8bb02e_107b8c5f1b.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_layout_1796019f4a.png": {
+    "id": 6364,
+    "hash": "007_layout_1796019f4a_e3f1b99c05",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_layout_1796019f4a_e3f1b99c05.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_content_builder_3eeaa4cd28.png": {
+    "id": 6365,
+    "hash": "008_content_builder_3eeaa4cd28_381e76392e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_content_builder_3eeaa4cd28_381e76392e.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_menu_ce41f0cdec.png": {
+    "id": 6366,
+    "hash": "009_menu_ce41f0cdec_725e5d0da1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_menu_ce41f0cdec_725e5d0da1.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_create_comp_07f5211ae4.png": {
+    "id": 6367,
+    "hash": "010_create_comp_07f5211ae4_dfcb1645e1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_create_comp_07f5211ae4_dfcb1645e1.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_content_builder_d3e5ade5bf.png": {
+    "id": 6368,
+    "hash": "011_content_builder_d3e5ade5bf_ccf75945ca",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_content_builder_d3e5ade5bf_ccf75945ca.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_fields_001c0804c9.png": {
+    "id": 6369,
+    "hash": "012_fields_001c0804c9_672ae22e70",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_fields_001c0804c9_672ae22e70.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_add_component_dcc6fff267.png": {
+    "id": 6370,
+    "hash": "013_add_component_dcc6fff267_d35abcea93",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_add_component_dcc6fff267_d35abcea93.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_content_builder_e5e7a5133a.png": {
+    "id": 6371,
+    "hash": "014_content_builder_e5e7a5133a_f070a4d999",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_content_builder_e5e7a5133a_f070a4d999.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_content_builder_9e23ac0019.png": {
+    "id": 6372,
+    "hash": "015_content_builder_9e23ac0019_86d44fa1fc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_content_builder_9e23ac0019_86d44fa1fc.png"
+  },
+  "https://api-prod.strapi.io/uploads/018_pricing_bcbfd3c0ea.png": {
+    "id": 6373,
+    "hash": "018_pricing_bcbfd3c0ea_dc82a9816e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/018_pricing_bcbfd3c0ea_dc82a9816e.png"
+  },
+  "https://api-prod.strapi.io/uploads/015_cta_0ef3ad4b07.png": {
+    "id": 6374,
+    "hash": "015_cta_0ef3ad4b07_427e34c81f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/015_cta_0ef3ad4b07_427e34c81f.png"
+  },
+  "https://api-prod.strapi.io/uploads/016_dynamic_zone_0529cfbe75.png": {
+    "id": 6375,
+    "hash": "016_dynamic_zone_0529cfbe75_1aceb5870a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/016_dynamic_zone_0529cfbe75_1aceb5870a.png"
+  },
+  "https://api-prod.strapi.io/uploads/017_dynamix_zone_11f44b7b9b.png": {
+    "id": 6376,
+    "hash": "017_dynamix_zone_11f44b7b9b_ffbc315feb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/017_dynamix_zone_11f44b7b9b_ffbc315feb.png"
+  },
+  "https://api-prod.strapi.io/uploads/Draft_and_Publish_466c549e73.png": {
+    "id": 6377,
+    "hash": "Draft_and_Publish_466c549e73_3bd8eaf4cc",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Draft_and_Publish_466c549e73_3bd8eaf4cc.png"
+  },
+  "https://api-prod.strapi.io/uploads/Vite_Support_7960176922.png": {
+    "id": 6378,
+    "hash": "Vite_Support_7960176922_8ebfcb161e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Vite_Support_7960176922_8ebfcb161e.png"
+  },
+  "https://api-prod.strapi.io/uploads/Easy_plugin_creation_dc76f69243.png": {
+    "id": 6379,
+    "hash": "Easy_plugin_creation_dc76f69243_8298040306",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Easy_plugin_creation_dc76f69243_8298040306.png"
+  },
+  "https://api-prod.strapi.io/uploads/API_format_4x_c8cd769a5f.png": {
+    "id": 6380,
+    "hash": "API_format_4x_c8cd769a5f_24b35836b4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/API_format_4x_c8cd769a5f_24b35836b4.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_current_state_ea5cc79957.png": {
+    "id": 6381,
+    "hash": "002_current_state_ea5cc79957_dea27fc3d2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_current_state_ea5cc79957_dea27fc3d2.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_account_form_092d852c0b.png": {
+    "id": 6382,
+    "hash": "005_account_form_092d852c0b_6db17a6818",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_account_form_092d852c0b_6db17a6818.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_forbidden_f1e5bdb870.png": {
+    "id": 6383,
+    "hash": "010_forbidden_f1e5bdb870_ee6370df7d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_forbidden_f1e5bdb870_ee6370df7d.png"
+  },
+  "https://api-prod.strapi.io/uploads/2024_04_10_16_51_40_2_d970e09d0e.gif": {
+    "id": 6384,
+    "hash": "2024_04_10_16_51_40_2_d970e09d0e_3b59065a8c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/2024_04_10_16_51_40_2_d970e09d0e_3b59065a8c.gif"
+  },
+  "https://api-prod.strapi.io/uploads/001_open_ai_specification_3c49aef72a.png": {
+    "id": 6385,
+    "hash": "001_open_ai_specification_3c49aef72a_10761088e9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_open_ai_specification_3c49aef72a_10761088e9.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_documentation_plugin_9ef4245b75.png": {
+    "id": 6386,
+    "hash": "002_documentation_plugin_9ef4245b75_76302a4bf9",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_documentation_plugin_9ef4245b75_76302a4bf9.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_strapi_documentation_swagger_ui_d8f3e57414.png": {
+    "id": 6387,
+    "hash": "003_strapi_documentation_swagger_ui_d8f3e57414_23af6cca8f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_strapi_documentation_swagger_ui_d8f3e57414_23af6cca8f.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_openai_specification_for_documentation_plugin_f3629b832b.png": {
+    "id": 6388,
+    "hash": "004_openai_specification_for_documentation_plugin_f3629b832b_4a8bddf655",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_openai_specification_for_documentation_plugin_f3629b832b_4a8bddf655.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_response_schema_for_pages_571809f542.png": {
+    "id": 6389,
+    "hash": "005_response_schema_for_pages_571809f542_8615347381",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_response_schema_for_pages_571809f542_8615347381.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_actual_page_schema_1951717833.png": {
+    "id": 6390,
+    "hash": "006_actual_page_schema_1951717833_9e83196254",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_actual_page_schema_1951717833_9e83196254.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_page_collection_type_6d74594c6d.png": {
+    "id": 6391,
+    "hash": "007_page_collection_type_6d74594c6d_732ede4f20",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_page_collection_type_6d74594c6d_732ede4f20.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_generated_type_93eb81ffd8.png": {
+    "id": 6392,
+    "hash": "008_generated_type_93eb81ffd8_dad6a12214",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_generated_type_93eb81ffd8_dad6a12214.png"
+  },
+  "https://api-prod.strapi.io/uploads/009_page_collection_interface_347f824ba1.png": {
+    "id": 6393,
+    "hash": "009_page_collection_interface_347f824ba1_b190572b90",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_page_collection_interface_347f824ba1_b190572b90.png"
+  },
+  "https://api-prod.strapi.io/uploads/010_content_image_text_component_d52683c652.png": {
+    "id": 6394,
+    "hash": "010_content_image_text_component_d52683c652_5f0abbf907",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_content_image_text_component_d52683c652_5f0abbf907.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_types_in_react_ef5ff3fa31.png": {
+    "id": 6395,
+    "hash": "011_types_in_react_ef5ff3fa31_3b5cf686c6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_types_in_react_ef5ff3fa31_3b5cf686c6.png"
+  },
+  "https://api-prod.strapi.io/uploads/012_autocomplete_paths_00381f5489.png": {
+    "id": 6396,
+    "hash": "012_autocomplete_paths_00381f5489_ee9209b93d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/012_autocomplete_paths_00381f5489_ee9209b93d.png"
+  },
+  "https://api-prod.strapi.io/uploads/013_type_error_77b49426e4.png": {
+    "id": 6397,
+    "hash": "013_type_error_77b49426e4_f393685794",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/013_type_error_77b49426e4_f393685794.png"
+  },
+  "https://api-prod.strapi.io/uploads/014_autocomplete_types_983ea67e20.png": {
+    "id": 6398,
+    "hash": "014_autocomplete_types_983ea67e20_e749000592",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/014_autocomplete_types_983ea67e20_e749000592.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_perceivable_e295ebffd1.png": {
+    "id": 6399,
+    "hash": "001_perceivable_e295ebffd1_024510e035",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_perceivable_e295ebffd1_024510e035.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_operable_d4dd0c4497.png": {
+    "id": 6400,
+    "hash": "002_operable_d4dd0c4497_20478c05b8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_operable_d4dd0c4497_20478c05b8.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_understandable_9d4b465a9d.png": {
+    "id": 6401,
+    "hash": "003_understandable_9d4b465a9d_c7cce40fab",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_understandable_9d4b465a9d_c7cce40fab.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_robust_9bec5114bb.png": {
+    "id": 6402,
+    "hash": "004_robust_9bec5114bb_87795f865e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_robust_9bec5114bb_87795f865e.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_all_in_one_accessibility_bc5588aaf3.jpeg": {
+    "id": 6403,
+    "hash": "005_all_in_one_accessibility_bc5588aaf3_bce94db7b2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_all_in_one_accessibility_bc5588aaf3_bce94db7b2.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/006_alternate_text_dog_f804ebae06.jpeg": {
+    "id": 6404,
+    "hash": "006_alternate_text_dog_f804ebae06_d763612a5a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_alternate_text_dog_f804ebae06_d763612a5a.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/001_welcome_to_strapi_771c0c5ad9.jpeg": {
+    "id": 6405,
+    "hash": "001_welcome_to_strapi_771c0c5ad9_e08c46a289",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_welcome_to_strapi_771c0c5ad9_e08c46a289.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/002_strapi_admin_dashboard_18263d5cfb.jpeg": {
+    "id": 6406,
+    "hash": "002_strapi_admin_dashboard_18263d5cfb_1f2e4ca2d5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_strapi_admin_dashboard_18263d5cfb_1f2e4ca2d5.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/003_create_collection_type_d130fc2c4c.jpeg": {
+    "id": 6407,
+    "hash": "003_create_collection_type_d130fc2c4c_6416da6148",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_create_collection_type_d130fc2c4c_6416da6148.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/004_create_collection_type_fields_20f93c551b.jpeg": {
+    "id": 6408,
+    "hash": "004_create_collection_type_fields_20f93c551b_b9c028bc62",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_create_collection_type_fields_20f93c551b_b9c028bc62.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/005_create_an_entry_fa4f5bef8e.jpeg": {
+    "id": 6409,
+    "hash": "005_create_an_entry_fa4f5bef8e_260b0573f4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_create_an_entry_fa4f5bef8e_260b0573f4.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/006_enable_public_access_7b068210a0.jpeg": {
+    "id": 6410,
+    "hash": "006_enable_public_access_7b068210a0_c0fa9ec088",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_enable_public_access_7b068210a0_c0fa9ec088.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/007_enable_public_access_2_ea6fde6c25.jpeg": {
+    "id": 6411,
+    "hash": "007_enable_public_access_2_ea6fde6c25_e8f287b964",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_enable_public_access_2_ea6fde6c25_e8f287b964.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/008_strapi_sample_data_930c0462c7.jpeg": {
+    "id": 6412,
+    "hash": "008_strapi_sample_data_930c0462c7_89b8a123de",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_strapi_sample_data_930c0462c7_89b8a123de.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/009_next_js_installation_fbbb5502ae.jpeg": {
+    "id": 6413,
+    "hash": "009_next_js_installation_fbbb5502ae_1b7ddbc975",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/009_next_js_installation_fbbb5502ae_1b7ddbc975.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/010_custom_marker_6857274dda.png": {
+    "id": 6414,
+    "hash": "010_custom_marker_6857274dda_2e79b908ae",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/010_custom_marker_6857274dda_2e79b908ae.png"
+  },
+  "https://api-prod.strapi.io/uploads/011_app_home_page_d91c4dfdb6.jpeg": {
+    "id": 6415,
+    "hash": "011_app_home_page_d91c4dfdb6_e45dd782ac",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/011_app_home_page_d91c4dfdb6_e45dd782ac.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/giphy_3668b20b1a.gif": {
+    "id": 6416,
+    "hash": "giphy_3668b20b1a_4784a939e7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/giphy_3668b20b1a_4784a939e7.gif"
+  },
+  "https://api-prod.strapi.io/uploads/04_strapi_cloud_a325da3186.png": {
+    "id": 6417,
+    "hash": "04_strapi_cloud_a325da3186_ac7de1dd41",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/04_strapi_cloud_a325da3186_ac7de1dd41.png"
+  },
+  "https://api-prod.strapi.io/uploads/05_auth_cloud_bb5081574b.png": {
+    "id": 6418,
+    "hash": "05_auth_cloud_bb5081574b_e3eac315ce",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/05_auth_cloud_bb5081574b_e3eac315ce.png"
+  },
+  "https://api-prod.strapi.io/uploads/06_create_project_dbeec64a3e.png": {
+    "id": 6419,
+    "hash": "06_create_project_dbeec64a3e_8f92cf48db",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/06_create_project_dbeec64a3e_8f92cf48db.png"
+  },
+  "https://api-prod.strapi.io/uploads/08_github_import_ae43f1fc76.png": {
+    "id": 6420,
+    "hash": "08_github_import_ae43f1fc76_b1fa17d759",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/08_github_import_ae43f1fc76_b1fa17d759.png"
+  },
+  "https://api-prod.strapi.io/uploads/15_message_972e6702fe.png": {
+    "id": 6421,
+    "hash": "15_message_972e6702fe_e0da990979",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/15_message_972e6702fe_e0da990979.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_shopify_plus_logo_black_90ba0650df.png": {
+    "id": 6422,
+    "hash": "001_shopify_plus_logo_black_90ba0650df_7270f6b268",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_shopify_plus_logo_black_90ba0650df_7270f6b268.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_Big_Commerce_logo_dark_43023fe59c.png": {
+    "id": 6423,
+    "hash": "002_Big_Commerce_logo_dark_43023fe59c_21324333a5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_Big_Commerce_logo_dark_43023fe59c_21324333a5.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_Commerce_JS_8b33ea72e1.png": {
+    "id": 6424,
+    "hash": "003_Commerce_JS_8b33ea72e1_b4e8870cde",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_Commerce_JS_8b33ea72e1_b4e8870cde.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_magento_0bf9b3241b.png": {
+    "id": 6425,
+    "hash": "004_magento_0bf9b3241b_b947f1d95d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_magento_0bf9b3241b_b947f1d95d.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_woocommerce_logo_black_af1ca0c51f.png": {
+    "id": 6426,
+    "hash": "005_woocommerce_logo_black_af1ca0c51f_d7f3307ee2",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_woocommerce_logo_black_af1ca0c51f_d7f3307ee2.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_strapi_features_0446187351.png": {
+    "id": 6427,
+    "hash": "006_strapi_features_0446187351_5f5185f0d8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_strapi_features_0446187351_5f5185f0d8.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_clerk_e3af5d3fcd.png": {
+    "id": 6428,
+    "hash": "001_clerk_e3af5d3fcd_69a7be98e4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_clerk_e3af5d3fcd_69a7be98e4.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_nextauth_01316ec4f1.png": {
+    "id": 6429,
+    "hash": "002_nextauth_01316ec4f1_0bf8755d33",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_nextauth_01316ec4f1_0bf8755d33.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_maze_9726fc506e.png": {
+    "id": 6430,
+    "hash": "003_maze_9726fc506e_f9758a456e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_maze_9726fc506e_f9758a456e.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_auth_O_ca96a775e8.jpeg": {
+    "id": 6431,
+    "hash": "004_auth_O_ca96a775e8_54bca3d3d4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_auth_O_ca96a775e8_54bca3d3d4.jpeg"
+  },
+  "https://api-prod.strapi.io/uploads/005_supabase_1_bf02f7e489.png": {
+    "id": 6432,
+    "hash": "005_supabase_1_bf02f7e489_72c306dec3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_supabase_1_bf02f7e489_72c306dec3.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_firebase_de0a70ef23.png": {
+    "id": 6433,
+    "hash": "006_firebase_de0a70ef23_f882bec271",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_firebase_de0a70ef23_f882bec271.png"
+  },
+  "https://api-prod.strapi.io/uploads/007_supertokens_76601e62f4.png": {
+    "id": 6434,
+    "hash": "007_supertokens_76601e62f4_d0bcafc7ac",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/007_supertokens_76601e62f4_d0bcafc7ac.png"
+  },
+  "https://api-prod.strapi.io/uploads/008_passport_b048c711bb.png": {
+    "id": 6435,
+    "hash": "008_passport_b048c711bb_79d46cdc48",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/008_passport_b048c711bb_79d46cdc48.png"
+  },
+  "https://api-prod.strapi.io/uploads/install_strapi_e81189dc93.png": {
+    "id": 6436,
+    "hash": "install_strapi_e81189dc93_f326b27be6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/install_strapi_e81189dc93_f326b27be6.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_api_creation_f30834c9f3.png": {
+    "id": 6437,
+    "hash": "001_api_creation_f30834c9f3_0322a0087d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_api_creation_f30834c9f3_0322a0087d.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_enable_strapi_api_public_78dde774bd.png": {
+    "id": 6438,
+    "hash": "002_enable_strapi_api_public_78dde774bd_a216379e3c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_enable_strapi_api_public_78dde774bd_a216379e3c.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_nodemailer_configuration_afa9293341.png": {
+    "id": 6439,
+    "hash": "003_nodemailer_configuration_afa9293341_8bc6b1377c",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_nodemailer_configuration_afa9293341_8bc6b1377c.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_add_email_to_aws_ses_cc0379bd8d.png": {
+    "id": 6440,
+    "hash": "004_add_email_to_aws_ses_cc0379bd8d_8880108ebb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_add_email_to_aws_ses_cc0379bd8d_8880108ebb.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_add_sending_domain_to_aws_ses_87151d47c3.png": {
+    "id": 6441,
+    "hash": "005_add_sending_domain_to_aws_ses_87151d47c3_508d7ab86f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_add_sending_domain_to_aws_ses_87151d47c3_508d7ab86f.png"
+  },
+  "https://api-prod.strapi.io/uploads/006_mailgun_homepage_6b5db05855.png": {
+    "id": 6442,
+    "hash": "006_mailgun_homepage_6b5db05855_fc62c4e746",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/006_mailgun_homepage_6b5db05855_fc62c4e746.png"
+  },
+  "https://api-prod.strapi.io/uploads/001_vite_60e468b324.png": {
+    "id": 6443,
+    "hash": "001_vite_60e468b324_c5e064579f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/001_vite_60e468b324_c5e064579f.png"
+  },
+  "https://api-prod.strapi.io/uploads/002_parcel_6c377bea6c.png": {
+    "id": 6444,
+    "hash": "002_parcel_6c377bea6c_2dedfcb9b8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/002_parcel_6c377bea6c_2dedfcb9b8.png"
+  },
+  "https://api-prod.strapi.io/uploads/003_rollup_51ab0ef211.png": {
+    "id": 6445,
+    "hash": "003_rollup_51ab0ef211_175d812efb",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/003_rollup_51ab0ef211_175d812efb.png"
+  },
+  "https://api-prod.strapi.io/uploads/004_esbuild_aa26d82406.png": {
+    "id": 6446,
+    "hash": "004_esbuild_aa26d82406_a6169bd25a",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/004_esbuild_aa26d82406_a6169bd25a.png"
+  },
+  "https://api-prod.strapi.io/uploads/005_browserify_08fa177eed.png": {
+    "id": 6447,
+    "hash": "005_browserify_08fa177eed_eb36eed5b8",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/005_browserify_08fa177eed_eb36eed5b8.png"
+  },
+  "https://api-prod.strapi.io/uploads/Content_Blocks_Blog_8355d3596c.gif": {
+    "id": 6448,
+    "hash": "Content_Blocks_Blog_8355d3596c_df9d186936",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Content_Blocks_Blog_8355d3596c_df9d186936.gif"
+  },
+  "https://api-prod.strapi.io/uploads/Feature_Flags_4816277cb4.jpg": {
+    "id": 6449,
+    "hash": "Feature_Flags_4816277cb4_1575d2bf9e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Feature_Flags_4816277cb4_1575d2bf9e.jpg"
+  },
+  "https://api-prod.strapi.io/uploads/Scheduling_Short_98c47bc6d0.gif": {
+    "id": 6450,
+    "hash": "Scheduling_Short_98c47bc6d0_37ac66676b",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Scheduling_Short_98c47bc6d0_37ac66676b.gif"
+  },
+  "https://api-prod.strapi.io/uploads/Add_to_release_c0b07ed43e.jpg": {
+    "id": 6451,
+    "hash": "Add_to_release_c0b07ed43e_a93542baf6",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Add_to_release_c0b07ed43e_a93542baf6.jpg"
+  },
+  "https://api-prod.strapi.io/uploads/s_6448A710DA98D1FDC3D0FB6AFE08240D2392F76132A6C116AECB2872384C6CEF_1595067095277_Annotation_2020-07-_c11e8e02c6.png": {
+    "id": 6452,
+    "hash": "s_6448_A710_DA_98_D1_FDC_3_D0_FB_6_AFE_08240_D2392_F76132_A6_C116_AECB_2872384_C6_CEF_1595067095277_Annotation_2020_07_c11e8e02c6_c6368835d5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/s_6448_A710_DA_98_D1_FDC_3_D0_FB_6_AFE_08240_D2392_F76132_A6_C116_AECB_2872384_C6_CEF_1595067095277_Annotation_2020_07_c11e8e02c6_c6368835d5.png"
+  },
+  "https://api-prod.strapi.io/uploads/tweet_this_769d55f1bb.png": {
+    "id": 6453,
+    "hash": "tweet_this_769d55f1bb_31025fc0be",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/tweet_this_769d55f1bb_31025fc0be.png"
+  },
+  "https://api-prod.strapi.io/uploads/Group_500_eb2d4afb68.png": {
+    "id": 6454,
+    "hash": "Group_500_eb2d4afb68_a5965220da",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Group_500_eb2d4afb68_a5965220da.png"
+  },
+  "https://api-prod.strapi.io/uploads/Quote_35c30e90cb.png": {
+    "id": 6455,
+    "hash": "Quote_35c30e90cb_ff0dc3a3b5",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Quote_35c30e90cb_ff0dc3a3b5.png"
+  },
+  "https://api-prod.strapi.io/uploads/CTB_4189e0bcd4.png": {
+    "id": 6456,
+    "hash": "CTB_4189e0bcd4_4e29c854e0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/CTB_4189e0bcd4_4e29c854e0.png"
+  },
+  "https://api-prod.strapi.io/uploads/Content_Manager_9b281594c8.png": {
+    "id": 6457,
+    "hash": "Content_Manager_9b281594c8_08fb2748e4",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Content_Manager_9b281594c8_08fb2748e4.png"
+  },
+  "https://api-prod.strapi.io/uploads/DZ_7e0e2377aa.png": {
+    "id": 6458,
+    "hash": "DZ_7e0e2377aa_6b59783f29",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/DZ_7e0e2377aa_6b59783f29.png"
+  },
+  "https://api-prod.strapi.io/uploads/Media_Library_d0fb2f75fa.png": {
+    "id": 6459,
+    "hash": "Media_Library_d0fb2f75fa_96d14be4c7",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Media_Library_d0fb2f75fa_96d14be4c7.png"
+  },
+  "https://api-prod.strapi.io/uploads/partners-logos_98c7b0f63e.png": {
+    "id": 6460,
+    "hash": "partners_logos_98c7b0f63e_d108deda8d",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/partners_logos_98c7b0f63e_d108deda8d.png"
+  },
+  "https://api-prod.strapi.io/uploads/Screenshot_2024_04_24_at_3_45_51_PM_643a1ca8b5.png": {
+    "id": 6461,
+    "hash": "Screenshot_2024_04_24_at_3_45_51_PM_643a1ca8b5_af0428a39e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screenshot_2024_04_24_at_3_45_51_PM_643a1ca8b5_af0428a39e.png"
+  },
+  "https://api-prod.strapi.io/uploads/Screenshot_2024_04_24_at_3_45_28_PM_7e8068fbe3.png": {
+    "id": 6462,
+    "hash": "Screenshot_2024_04_24_at_3_45_28_PM_7e8068fbe3_4a7fa34766",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Screenshot_2024_04_24_at_3_45_28_PM_7e8068fbe3_4a7fa34766.png"
+  },
+  "https://api-prod.strapi.io/uploads/image3_ed823c96d0.png": {
+    "id": 6463,
+    "hash": "image3_ed823c96d0_f1b4a498b3",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image3_ed823c96d0_f1b4a498b3.png"
+  },
+  "https://api-prod.strapi.io/uploads/image5_692c196c52.png": {
+    "id": 6464,
+    "hash": "image5_692c196c52_705a1ea517",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image5_692c196c52_705a1ea517.png"
+  },
+  "https://api-prod.strapi.io/uploads/image4_72bbe700d9.png": {
+    "id": 6465,
+    "hash": "image4_72bbe700d9_08113d931e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image4_72bbe700d9_08113d931e.png"
+  },
+  "https://api-prod.strapi.io/uploads/image1_03b4f804ad.png": {
+    "id": 6466,
+    "hash": "image1_03b4f804ad_4d550f440f",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image1_03b4f804ad_4d550f440f.png"
+  },
+  "https://api-prod.strapi.io/uploads/image2_3db1688b5b.png": {
+    "id": 6467,
+    "hash": "image2_3db1688b5b_a6c09987e0",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/image2_3db1688b5b_a6c09987e0.png"
+  },
+  "https://api-prod.strapi.io/uploads/Headless_vs_Decoupled_vs_Monolithic_4_1_912e5e8395.jpg": {
+    "id": 6468,
+    "hash": "Headless_vs_Decoupled_vs_Monolithic_4_1_912e5e8395_8521bc1b7e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Headless_vs_Decoupled_vs_Monolithic_4_1_912e5e8395_8521bc1b7e.jpg"
+  },
+  "https://api-prod.strapi.io/uploads/static-performance_75a92c41d7.svg": {
+    "id": 6469,
+    "hash": "static_performance_75a92c41d7_a99adb7691",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/static_performance_75a92c41d7_a99adb7691.svg"
+  },
+  "https://api-prod.strapi.io/uploads/2_colonnes_1_1_e066269626.jpg": {
+    "id": 6470,
+    "hash": "2_colonnes_1_1_e066269626_9ad0838ff1",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/2_colonnes_1_1_e066269626_9ad0838ff1.jpg"
+  },
+  "https://api-prod.strapi.io/uploads/static_security_no_shadow_5677692867_7154b8415b.svg": {
+    "id": 6471,
+    "hash": "static_security_no_shadow_5677692867_7154b8415b_9dd940b76e",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/static_security_no_shadow_5677692867_7154b8415b_9dd940b76e.svg"
+  },
+  "https://api-prod.strapi.io/uploads/Untitled_(1)_4d7d381e83.png": {
+    "id": 6472,
+    "hash": "Untitled_1_4d7d381e83_ecb9806719",
+    "url": "https://automatic-life-0194aa0342.media.strapiapp.com/Untitled_1_4d7d381e83_ecb9806719.png"
+  }
+}

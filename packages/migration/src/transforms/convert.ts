@@ -1,4 +1,5 @@
 import type { TransformFn } from "./base.ts"
+import { absoluteSourceMediaUrl } from "../config/env.ts"
 
 /** Generate a URL-safe slug from a string */
 export function slugify(str: string): string {
@@ -46,10 +47,12 @@ export function ensureSlug(sourceField = "name"): TransformFn {
   }
 }
 
-const MEDIA_CDN = "https://delicate-dawn-ac25646e6d.media.strapiapp.com"
-
+/**
+ * Resolve a (possibly relative) v4 media URL to absolute. Backed by
+ * `SOURCE_MEDIA_URL` (with the legacy Strapi Cloud CDN as the default).
+ */
 export function absoluteUrl(url: string): string {
-  return url.startsWith("http") ? url : `${MEDIA_CDN}${url}`
+  return absoluteSourceMediaUrl(url)
 }
 
 /** Extract URL + metadata from various v4 media formats */

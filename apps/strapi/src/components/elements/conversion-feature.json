@@ -13,8 +13,7 @@
       "repeatable": false
     },
     "label": {
-      "type": "string",
-      "required": true
+      "type": "string"
     }
   }
 }

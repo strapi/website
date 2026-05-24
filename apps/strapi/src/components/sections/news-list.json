@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_sections_news_lists",
+  "info": {
+    "displayName": "News List",
+    "icon": "newspaper",
+    "description": "Auto-fetched chronological list of all News Items (logo, date, title)."
+  },
+  "options": {},
+  "attributes": {}
+}

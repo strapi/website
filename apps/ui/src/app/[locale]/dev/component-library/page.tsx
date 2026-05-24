@@ -41,14 +41,22 @@ import { StrapiTopBanner } from "@/components/page-builder/components/navigation
 import { StrapiCommunityBanner } from "@/components/page-builder/components/sections/strapi-community-banner/StrapiCommunityBanner"
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
+import { StrapiReviews } from "@/components/page-builder/components/sections/strapi-reviews/StrapiReviews"
+import { StrapiTabbedFeatureOverview } from "@/components/page-builder/components/sections/strapi-tabbed-feature-overview"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiDisclaimer } from "@/components/page-builder/components/sections/StrapiDisclaimer"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
+import { StrapiFeatureOverview } from "@/components/page-builder/components/sections/StrapiFeatureOverview"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import {
+  NewsListView,
+  type PopulatedNewsItem,
+} from "@/components/page-builder/components/sections/StrapiNewsList"
 import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
+import { StrapiThreeColumnGrid } from "@/components/page-builder/components/sections/StrapiThreeColumnGrid"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
 import {
@@ -186,11 +194,14 @@ const TOC = [
   { id: "section-header-container", label: "SectionHeaderContainer" },
   { id: "feature-card", label: "FeatureCard" },
   { id: "feature-card-grid", label: "FeatureCardGrid" },
+  { id: "feature-overview", label: "FeatureOverview" },
+  { id: "tabbed-feature-overview", label: "TabbedFeatureOverview" },
   { id: "quote", label: "Quote" },
   { id: "newsletter-banner", label: "NewsletterBanner" },
   { id: "command-cta", label: "CommandCTA" },
   { id: "two-columns-benefits", label: "TwoColumnsBenefits" },
   { id: "two-column-grid", label: "TwoColumnGrid" },
+  { id: "three-column-grid", label: "ThreeColumnGrid" },
   { id: "top-banner", label: "TopBanner" },
   { id: "content-card", label: "ContentCard" },
   { id: "box", label: "Box" },
@@ -212,6 +223,7 @@ const TOC = [
   { id: "cta-banner", label: "CtaBanner" },
   { id: "community-banner", label: "CommunityBanner" },
   { id: "comparator-grid", label: "ComparatorGrid" },
+  { id: "news-list", label: "NewsList" },
   { id: "blog-post-header", label: "BlogPostHeader" },
   { id: "callout", label: "Callout" },
   { id: "disclaimer", label: "Disclaimer" },
@@ -436,6 +448,383 @@ const twoColumnGridLightExample = {
   ...twoColumnGridDefaultExample,
   background: "light",
 } as Data.Component<"sections.two-column-grid">
+
+const twoColumnGridXlExample = {
+  section: {
+    title: "Growing fast, healthily.",
+    variant: "default",
+    size: "default",
+    layout: "center",
+  },
+  items: [
+    {
+      id: 1,
+      title: "2015",
+      description:
+        "The year it all started. Since then, we've been focused on building a useful piece of software and a caring team that makes an impact.",
+    },
+    {
+      id: 2,
+      title: "58",
+      description:
+        "The current number of teammates, affectionately called Strapiers, has already passed half a hundred (and we're looking for more!).",
+    },
+  ],
+  background: "none",
+  variant: "default",
+  size: "xl",
+} as Data.Component<"sections.two-column-grid">
+
+const featureOverviewDefaultExample = {
+  label: "Create APIs",
+  labelIcon: mockBasicImage(
+    "/images/logo/strapi-monogram-logo.svg",
+    "Code icon",
+    { width: 24, height: 24 }
+  ),
+  title: "Simplify API Creation, Content Modeling, and Delivery",
+  description:
+    "Build and manage your content model and infrastructure with the Content-Type Builder and Custom Fields. Skip tedious setup. Design content structures and relations in a no-code UI. Deliver content efficiently with our REST and GraphQL APIs. Ensure your content is structured and accessible.",
+  image: mockBasicImage(
+    "https://picsum.photos/seed/feature-overview/1200/1200",
+    "Create APIs illustration",
+    { width: 1200, height: 1200 }
+  ),
+  ctaLinks: [
+    {
+      id: 1,
+      type: "external",
+      label: "Learn more",
+      href: "https://strapi.io/create-apis",
+      newTab: false,
+    },
+  ],
+  items: [
+    {
+      id: 1,
+      title: "Content Type Builder",
+      description:
+        "Create and manage content models through a user-friendly interface, simplifying the development process.",
+      icon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Layout icon",
+        { width: 24, height: 24 }
+      ),
+    },
+    {
+      id: 2,
+      title: "Dynamic Zones",
+      description:
+        "Give editors the flexibility to quickly adjust web pages structure, without the help of developers.",
+      icon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Infinity icon",
+        { width: 24, height: 24 }
+      ),
+    },
+    {
+      id: 3,
+      title: "Custom Fields",
+      description:
+        "Add any type of fields to your project, customizing data structures to suit your specific requirements.",
+      icon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Pencil ruler icon",
+        { width: 24, height: 24 }
+      ),
+    },
+  ],
+} as unknown as Data.Component<"sections.feature-overview">
+
+const featureOverviewMinimalExample = {
+  title: "Just a title and three items",
+  image: mockBasicImage(
+    "https://picsum.photos/seed/feature-overview-minimal/1200/1200",
+    "Minimal illustration",
+    { width: 1200, height: 1200 }
+  ),
+  items: [
+    {
+      id: 1,
+      title: "First item",
+      description: "Short description of the first item.",
+    },
+    {
+      id: 2,
+      title: "Second item",
+      description: "Short description of the second item.",
+    },
+    {
+      id: 3,
+      title: "Third item",
+      description: "Short description of the third item.",
+    },
+  ],
+} as unknown as Data.Component<"sections.feature-overview">
+
+const tabbedFeatureOverviewDefaultExample = {
+  section: {
+    label: "Other Capabilities",
+    title: "Explore more capabilities",
+    description:
+      "API creation and content modeling is just the start. See what else you can do with Strapi.",
+    layout: "center",
+    size: "default",
+    variant: "default",
+  },
+  tabs: [
+    {
+      id: 1,
+      tabLabel: "Content Management",
+      tabIcon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Content Management icon",
+        { width: 16, height: 16 }
+      ),
+      content: {
+        title: "Create & Manage Content",
+        description:
+          "Craft and assemble experiences with user-friendly authoring tools. Complete control over editing, publishing, and translation.",
+        image: mockBasicImage(
+          "https://picsum.photos/seed/tab-content-management/1200/1200",
+          "Content Management illustration",
+          { width: 1200, height: 1200 }
+        ),
+        ctaLinks: [
+          {
+            id: 1,
+            type: "external",
+            label: "Learn more",
+            href: "https://strapi.io/content-management",
+            newTab: false,
+          },
+        ],
+      },
+    },
+    {
+      id: 2,
+      tabLabel: "Collaboration",
+      tabIcon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Collaboration icon",
+        { width: 16, height: 16 }
+      ),
+      content: {
+        title: "Collaborate With Your Team",
+        description: "Work together easily on code and content.",
+        image: mockBasicImage(
+          "https://picsum.photos/seed/tab-collaboration/1200/1200",
+          "Collaboration illustration",
+          { width: 1200, height: 1200 }
+        ),
+        ctaLinks: [
+          {
+            id: 2,
+            type: "external",
+            label: "Learn more",
+            href: "https://strapi.io/collaboration",
+            newTab: false,
+          },
+        ],
+      },
+    },
+    {
+      id: 3,
+      tabLabel: "Customization",
+      tabIcon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Customization icon",
+        { width: 16, height: 16 }
+      ),
+      content: {
+        title: "Customize CMS Features",
+        description:
+          "Personalize your CMS to meet your project's unique requirements.",
+        image: mockBasicImage(
+          "https://picsum.photos/seed/tab-customization/1200/1200",
+          "Customization illustration",
+          { width: 1200, height: 1200 }
+        ),
+        ctaLinks: [
+          {
+            id: 3,
+            type: "external",
+            label: "Learn more",
+            href: "https://strapi.io/customization",
+            newTab: false,
+          },
+        ],
+      },
+    },
+    {
+      id: 4,
+      tabLabel: "Hosting",
+      tabIcon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Hosting icon",
+        { width: 16, height: 16 }
+      ),
+      content: {
+        title: "Deploy With Confidence",
+        description:
+          "Launch your projects on robust, secure servers in minutes.",
+        image: mockBasicImage(
+          "https://picsum.photos/seed/tab-hosting/1200/1200",
+          "Hosting illustration",
+          { width: 1200, height: 1200 }
+        ),
+        ctaLinks: [
+          {
+            id: 4,
+            type: "external",
+            label: "Learn more",
+            href: "https://strapi.io/hosting",
+            newTab: false,
+          },
+        ],
+      },
+    },
+    {
+      id: 5,
+      tabLabel: "Security",
+      tabIcon: mockBasicImage(
+        "/images/logo/strapi-monogram-logo.svg",
+        "Security icon",
+        { width: 16, height: 16 }
+      ),
+      content: {
+        title: "Secure Your Data",
+        description:
+          "Implement robust security measures to protect your information.",
+        image: mockBasicImage(
+          "https://picsum.photos/seed/tab-security/1200/1200",
+          "Security illustration",
+          { width: 1200, height: 1200 }
+        ),
+        ctaLinks: [
+          {
+            id: 5,
+            type: "external",
+            label: "Learn more",
+            href: "https://strapi.io/security",
+            newTab: false,
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as Data.Component<"sections.tabbed-feature-overview">
+
+const threeColumnGridDefaultExample = {
+  section: {
+    title: "Growing fast, healthily.",
+    variant: "default",
+    size: "default",
+    layout: "center",
+  },
+  items: [
+    {
+      id: 1,
+      title: "2015",
+      description:
+        "The year it all started. Since then, we've been focused on building a useful piece of software and a caring team that makes an impact.",
+    },
+    {
+      id: 2,
+      title: "58",
+      description:
+        "The current number of teammates, affectionately called Strapiers, has already passed half a hundred (and we're looking for more!).",
+    },
+    {
+      id: 3,
+      title: "135",
+      description:
+        "It's the ranking of the Strapi repo among 28 million public GitHub repositories. We are humbled by this and it fuels our energy to do the best for the Strapi community.",
+    },
+    {
+      id: 4,
+      title: "20",
+      description: "The number of languages spoken. Looking for more!",
+    },
+    {
+      id: 5,
+      title: "36",
+      description:
+        "It's the percentage of women in our team. It's not enough. We are making our best to create a safe place to thrive and actively trying to reduce this gender gap.",
+    },
+    {
+      id: 6,
+      title: "19",
+      description:
+        "We love our Strapi Pets, and as a remote-first company, they often work with us. Or on us. So feel free to invite them to join meetings too!",
+    },
+  ],
+  background: "none",
+  variant: "default",
+  size: "default",
+} as Data.Component<"sections.three-column-grid">
+
+const threeColumnGridXlExample = {
+  ...threeColumnGridDefaultExample,
+  size: "xl",
+} as Data.Component<"sections.three-column-grid">
+
+const threeColumnGridLightExample = {
+  ...threeColumnGridDefaultExample,
+  background: "light",
+} as Data.Component<"sections.three-column-grid">
+
+const ICON_SIZE_BORDERED = { width: 24, height: 24 }
+
+const threeColumnGridBorderedExample = {
+  section: {
+    title: "Building your websites and apps the way you want is hard",
+    description: "because your legacy or custom CMS is holding you back.",
+    label: "The problem",
+    variant: "default",
+    size: "default",
+    layout: "center",
+  },
+  items: [
+    {
+      id: 1,
+      title: "Lack of customization",
+      description:
+        "You're unable to customize or extend the CMS to fit your unique project needs.",
+      icon: mockBasicImage(
+        "/images/dev/three-column-grid-bordered/code.svg",
+        "Code icon",
+        ICON_SIZE_BORDERED
+      ),
+    },
+    {
+      id: 2,
+      title: "Lack of plugins",
+      description:
+        "You are not able to use your favorite tools, and lack plugins or integrations.",
+      icon: mockBasicImage(
+        "/images/dev/three-column-grid-bordered/puzzle-piece.svg",
+        "Puzzle piece icon",
+        ICON_SIZE_BORDERED
+      ),
+    },
+    {
+      id: 3,
+      title: "Lack of community",
+      description:
+        "You're dealing with a CMS that lacks a large, active community of developers.",
+      icon: mockBasicImage(
+        "/images/dev/three-column-grid-bordered/users-three.svg",
+        "Three users icon",
+        ICON_SIZE_BORDERED
+      ),
+    },
+  ],
+  background: "none",
+  variant: "default",
+  size: "default",
+  itemStyle: "bordered",
+} as unknown as Data.Component<"sections.three-column-grid">
 
 const newsletterBannerShortExample = {
   hubspotForm: null,
@@ -665,6 +1054,76 @@ const communityBannerDefaultExample = {
     newTab: true,
   },
 } as Data.Component<"sections.community-banner">
+
+const NEWS_LOGO_SIZE = { width: 160, height: 40 }
+
+const newsListMockItems: readonly PopulatedNewsItem[] = [
+  {
+    id: 1,
+    documentId: "news-1",
+    date: "2026-05-20",
+    thumbnail: {
+      id: 1,
+      image: mockBasicImage(
+        "https://picsum.photos/seed/news-techcrunch/240/60",
+        "TechCrunch",
+        NEWS_LOGO_SIZE
+      ),
+      alignment: "center",
+    } as Data.Component<"media.image">,
+    link: {
+      id: 1,
+      type: "external",
+      label: "Strapi raises $31M Series C to grow its open-source headless CMS",
+      href: "https://strapi.io/blog/series-c",
+      newTab: true,
+    } as Data.Component<"utilities.link">,
+  },
+  {
+    id: 2,
+    documentId: "news-2",
+    date: "2026-04-12",
+    thumbnail: {
+      id: 2,
+      image: mockBasicImage(
+        "https://picsum.photos/seed/news-forbes/240/60",
+        "Forbes",
+        NEWS_LOGO_SIZE
+      ),
+      alignment: "center",
+    } as Data.Component<"media.image">,
+    link: {
+      id: 2,
+      type: "external",
+      label:
+        "How headless CMS platforms are reshaping enterprise content strategy",
+      href: "https://strapi.io/press",
+      newTab: true,
+    } as Data.Component<"utilities.link">,
+  },
+  {
+    id: 3,
+    documentId: "news-3",
+    date: "2026-02-28",
+    thumbnail: {
+      id: 3,
+      image: mockBasicImage(
+        "https://picsum.photos/seed/news-theverge/240/60",
+        "The Verge",
+        NEWS_LOGO_SIZE
+      ),
+      alignment: "center",
+    } as Data.Component<"media.image">,
+    link: {
+      id: 3,
+      type: "external",
+      label:
+        "Open-source CMS Strapi launches v5 with content history and drafts",
+      href: "https://strapi.io/v5",
+      newTab: true,
+    } as Data.Component<"utilities.link">,
+  },
+]
 
 // ---------------------------------------------------------------------------
 // Page
@@ -1245,6 +1704,33 @@ export default function ComponentLibraryPage() {
       </Section>
 
       {/* ----------------------------------------------------------------- */}
+      {/* FeatureOverview                                                   */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="feature-overview" title="FeatureOverview">
+        <div className="space-y-12">
+          <Variant label="Default (label + icon + CTA + 3 items)">
+            <StrapiFeatureOverview component={featureOverviewDefaultExample} />
+          </Variant>
+          <Variant label="Minimal (no label, no CTA, plain items)">
+            <StrapiFeatureOverview component={featureOverviewMinimalExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* TabbedFeatureOverview                                             */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="tabbed-feature-overview" title="TabbedFeatureOverview">
+        <div className="space-y-6">
+          <Variant label="Default (5 tabs, pill switcher, nested feature-overview content)">
+            <StrapiTabbedFeatureOverview
+              component={tabbedFeatureOverviewDefaultExample}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
       {/* Quote                                                             */}
       {/* ----------------------------------------------------------------- */}
       <Section id="quote" title="Quote">
@@ -1380,6 +1866,33 @@ export default function ComponentLibraryPage() {
 
           <Variant label="Light background">
             <StrapiTwoColumnGrid component={twoColumnGridLightExample} />
+          </Variant>
+
+          <Variant label="Size: xl (43px titles, 19px body — matches strapi.io)">
+            <StrapiTwoColumnGrid component={twoColumnGridXlExample} />
+          </Variant>
+        </div>
+      </Section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* ThreeColumnGrid                                                   */}
+      {/* ----------------------------------------------------------------- */}
+      <Section id="three-column-grid" title="ThreeColumnGrid">
+        <div className="-mx-6 space-y-10">
+          <Variant label="Default (no background)">
+            <StrapiThreeColumnGrid component={threeColumnGridDefaultExample} />
+          </Variant>
+
+          <Variant label="Light background">
+            <StrapiThreeColumnGrid component={threeColumnGridLightExample} />
+          </Variant>
+
+          <Variant label="Size: xl (replicates strapi.io/careers 'Growing fast, healthily.')">
+            <StrapiThreeColumnGrid component={threeColumnGridXlExample} />
+          </Variant>
+
+          <Variant label="itemStyle: bordered (replicates strapi.io homepage 'The problem' section — vertical line decoration on each item)">
+            <StrapiThreeColumnGrid component={threeColumnGridBorderedExample} />
           </Variant>
         </div>
       </Section>
@@ -1670,6 +2183,97 @@ export default function ComponentLibraryPage() {
                     },
                   ],
                 } as Data.Component<"sections.testimonies">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="reviews" title="Reviews">
+        <div className="-mx-6 space-y-10">
+          <Variant label="3 reviews (Developers love Strapi)">
+            <StrapiReviews
+              component={
+                {
+                  id: 300,
+                  __component: "sections.reviews",
+                  subTitle: "REVIEWS",
+                  title: "Developers love Strapi",
+                  description: null,
+                  reviews: [
+                    {
+                      id: 1,
+                      documentId: "mock-review-vercel",
+                      quote:
+                        "Strapi and Next.js both build on the same philosophy: open source is the path to success. Combine them with Vercel deployment and you have a stack with virtually infinite scalability, global performance, and security.",
+                      authorName: "Guillermo Rauch",
+                      authorRole: "CEO",
+                      authorAvatar: mockMedia(
+                        "https://delicate-dawn-ac25646e6d.media.strapiapp.com/1549659251156_5e6d212538.jpeg",
+                        { width: 200, height: 200 }
+                      ),
+                      logo: mockMedia(
+                        "https://delicate-dawn-ac25646e6d.media.strapiapp.com/vercel_logotype_dark_bdcc70f85c.png",
+                        { width: 8875, height: 2000 }
+                      ),
+                      link: {
+                        id: 1,
+                        type: "external",
+                        label: "",
+                        newTab: false,
+                        href: "/integrations/nextjs-cms",
+                      },
+                    },
+                    {
+                      id: 2,
+                      documentId: "mock-review-tesco",
+                      quote:
+                        "With Strapi, we can be sure that the solution can be customized to always fit our needs. It helped us reduce time-to-market and deliver the project on time.",
+                      authorName: "Michał Pawłowski",
+                      authorRole:
+                        "Head of Software Development @Tesco Technology",
+                      authorAvatar: mockMedia(
+                        "https://delicate-dawn-ac25646e6d.media.strapiapp.com/7b92b9a925c614c47808554fcdc6d62220925c71_ca340226c2.jpg",
+                        { width: 470, height: 400 }
+                      ),
+                      logo: mockMedia(
+                        "https://delicate-dawn-ac25646e6d.media.strapiapp.com/2560px_Tesco_Logo_svg_aaf4397a54_d6671f2b78.png",
+                        { width: 2560, height: 721 }
+                      ),
+                      link: {
+                        id: 2,
+                        type: "external",
+                        label: "",
+                        newTab: false,
+                        href: "https://strapi.io/user-stories/tesco",
+                      },
+                    },
+                    {
+                      id: 3,
+                      documentId: "mock-review-sg",
+                      quote:
+                        "Strapi has turned out to be a great choice so far: technical setup was really quick, and in a few days we were able to have a drafted site up & running, leveraging Strapi main functionalities.",
+                      authorName: "Jérôme Chauveau",
+                      authorRole: "DevOps Team Lead",
+                      authorAvatar: mockMedia(
+                        "https://delicate-dawn-ac25646e6d.media.strapiapp.com/jerome_chauveau_723cb44e8e.png",
+                        { width: 1296, height: 1296 }
+                      ),
+                      logo: mockMedia(
+                        "https://delicate-dawn-ac25646e6d.media.strapiapp.com/societe-generale_2219adc9d6.svg",
+                        { width: 345, height: 70 },
+                        { mime: "image/svg+xml" }
+                      ),
+                      link: {
+                        id: 3,
+                        type: "external",
+                        label: "",
+                        newTab: false,
+                        href: "/user-stories/societe-generale-e-training-platform",
+                      },
+                    },
+                  ],
+                } as unknown as Data.Component<"sections.reviews">
               }
             />
           </Variant>
@@ -2303,6 +2907,22 @@ export default function ComponentLibraryPage() {
         <div className="space-y-6">
           <Variant label="Default (fetches all CMS comparisons)">
             <StrapiComparatorGrid />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="news-list" title="NewsList">
+        <div className="space-y-6">
+          <Variant label="Default (rows: logo · headline · date) — dark background">
+            <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
+              <NewsListView items={newsListMockItems} />
+            </div>
+          </Variant>
+
+          <Variant label="Single item">
+            <div className="bg-strapi-gray-950 -mx-6 rounded-2xl p-6 lg:p-10">
+              <NewsListView items={newsListMockItems.slice(0, 1)} />
+            </div>
           </Variant>
         </div>
       </Section>

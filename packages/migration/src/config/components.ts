@@ -1,3 +1,4 @@
+import { absoluteSourceMediaUrl } from "./env.ts"
 import type { TransformContext } from "../transforms/base.ts"
 
 export interface ComponentMapping {
@@ -183,15 +184,11 @@ function wrapBasicImage(media: unknown): Record<string, unknown> | undefined {
   const actual = extractV4Media(media)
   if (!actual?.url) return undefined
 
-  const absoluteUrl = (actual.url as string).startsWith("http")
-    ? actual.url
-    : `https://delicate-dawn-ac25646e6d.media.strapiapp.com${actual.url}`
-
   return {
     alt: actual.alternativeText ?? "",
     width: actual.width ?? null,
     height: actual.height ?? null,
-    fallbackSrc: absoluteUrl,
+    fallbackSrc: absoluteSourceMediaUrl(actual.url as string),
   }
 }
 

@@ -16,8 +16,7 @@
       ]
     },
     "label": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "newTab": {
       "type": "boolean",

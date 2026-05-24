@@ -1310,6 +1310,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.section-header",
         "sections.two-columns-benefits",
         "sections.two-column-grid",
+        "sections.three-column-grid",
         "cards.feature-card",
         "cards.content-card",
         "cards.case-study-card",
@@ -1319,6 +1320,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "testimonials.quote",
         "forms.newsletter",
         "sections.testimonies",
+        "sections.reviews",
         "sections.meet-the-team",
         "media.video",
         "sections.hero",
@@ -1337,6 +1339,9 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.richtext",
         "sections.dynamic-case-studies-grid",
         "sections.dynamic-features-grid",
+        "sections.feature-overview",
+        "sections.tabbed-feature-overview",
+        "sections.news-list",
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

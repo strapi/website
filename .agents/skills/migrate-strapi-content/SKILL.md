@@ -17,30 +17,41 @@ If something truly cannot be decided from defaults + schema inspection (e.g. tar
 
 Override is possible only if the user explicitly writes `interactive` or `ask me` in the prompt — then (and only then) you may ask.
 
-## Visual mapping reference
+## Mapping references
 
-A live component library is available at **https://website-ui-omega.vercel.app/dev/component-library**. When uncertain which v5 component fits a v4 slice, fetch that page (Playwright or WebFetch) and match by rendered appearance. Prefer a real v5 component over `migration.data-sink`.
+**Authoritative cheatsheet**: `components-cheatsheet.csv` next to this file. One row per old slice / root field, with the v5 target, variant/layout flags, and a short `notes` field describing the field-mapping rule. Step 6 below is the code-form expansion of those rows — when CSV and Step 6 disagree, the CSV is the source of truth and Step 6 should be updated to match.
+
+**Visual reference**: a live component library is available at **https://website-ui-omega.vercel.app/dev/component-library**. When uncertain how a v5 component renders, fetch that page (Playwright or WebFetch) and compare against the v4 source. Prefer a real v5 component over `migration.data-sink`.
 
 ## Default mapping heuristic (use this as your mental model)
 
-Most of the content in old slices falls into a handful of shapes. Before checking the detailed mapping table, ask which of these the old slice renders as:
+Most of the content in old slices falls into a handful of shapes. Before checking the detailed table, ask which of these the old slice renders as:
 
 1. **Columns / grid of cards (each with title + description)** → `sections.feature-card-grid`
    - Use when the slice has a repeatable `cards[]`, `features[]`, `items[]`, or `integrations[]` array of tiles.
    - The optional `section` field (utilities.section-header) carries the heading + description above the grid.
 2. **Single boxed content block (title + description + optional CTA + optional image position)** → `cards.feature-card`
    - Use when the slice is a standalone content panel with one title and one body of text.
-   - Examples: `slices.section-with-image`, `slices.text-next-to-image`.
+   - Examples: `slices.section-with-image`, `slices.text-next-to-image`, `slices.simple-text-next-to-image`, `slices.text-next-to-big-image`, `slices.text-with-image-and-gradient`.
 3. **Multi-column feature list with a shared heading (smaller text-only tiles, not full cards)** → `sections.two-column-grid`
    - Use when items are short title+description pairs tightly grouped under one heading — no images, no CTAs.
-   - Items are `elements.how-it-works-item` (title + description, both required).
-4. **Self-contained heading / section separator (no grid below it)** → `sections.section-header`
+   - Items are `elements.how-it-works-item` (title + description). The grid's `section` field is REQUIRED — always populate it from the slice's intro/title.
+4. **Self-contained heading / section separator** → `sections.section-header`
    - Use for standalone label+title+description blocks that introduce a section but don't contain items.
-   - Also the fallback for `slices.brands-with-intro` when logos can't be migrated — emit only the intro as a section-header.
+   - Background/boxed variants live here too (e.g. interview's "dark + boxed" wrapper).
 5. **Paragraphs of markdown text** → `sections.richtext`
-6. **Hero at the top of a page** → `sections.hero`
-7. **Quote** → `testimonials.quote`
-8. **Reference to a case study** → `cards.case-study-card` (with target lookup for `companyName`/`title`)
+6. **Hero at the top of a page** → `sections.hero` (slices OR root-level fields like `useCaseHero`, `homeHero`, `whiteHero`, `careersHero`, `featuresHero`, `communityHero` — all PREPENDED to newContent)
+7. **CTA banner with title/text/button** → `sections.cta-banner` (background=dark|dark-inverse; the only "light" variant is achieved via `sections.section-header` with background=light instead)
+8. **Quote** → `testimonials.quote`
+9. **Reference to a case study** → `cards.case-study-card` (with target lookup for `companyName`/`title`)
+10. **Logo / brand grid** → `media.brand-logo-grid` (logos are uploaded from old CDN, deduped by filename)
+11. **Image gallery / slider** → `media.image-gallery` (images uploaded same way as brand logos)
+12. **Newsletter signup** → `forms.newsletter` (limited — only the `hubspotForm` relation is migrated; frontend renders fixed copy)
+13. **Disclaimer notice** → `sections.disclaimer` (title + content; SKIP if the v5 frontend renders it hardcoded for the route)
+14. **3-column stat/issue grid (required heading)** → `sections.three-column-grid` (items = `elements.how-it-works-item`; `itemStyle: "bordered"` for emphasis variants like `slices.issues-header`)
+15. **Tabbed feature strip (pill tabs, one feature-overview per tab)** → `sections.tabbed-feature-overview` (each tab requires an image — uploaded via the brand-logo routine; tabs without images get SKIPPED)
+16. **Customer reviews carousel** → `sections.reviews` (title required; reviews relation resolved against `api::review.review` by author match; relation left empty for manual follow-up if no matches)
+17. **Auto-fetched chronological list (no fields)** → `sections.news-list` (empty payload — frontend handles fetching)
 
 Everything else → `migration.data-sink` (if allowed) or SKIP.
 
@@ -143,81 +154,197 @@ Do NOT query `populate: { content: { fields: [...] } }` — 500 error on Strapi 
 
 ### 6. Slice → component mapping
 
-The following map was validated across case-study, blog-post, and page (use-case + universal) migrations. Prefer the real target component over `migration.data-sink` — only fall back to data-sink if **no real v5 component fits**, and the target schema allows `migration.data-sink`.
+The rules below expand `components-cheatsheet.csv` into runnable code-form. Prefer the real target component over `migration.data-sink` — only fall back to data-sink if **no real v5 component fits** and the target schema allows `migration.data-sink`.
 
 **Rich text / text**
 
-| Old                            | Target              | Rule                                                                                                               |
-| ------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `slices.universal-rich-text`   | `sections.richtext` | `{ content: richText }`. SKIP if empty.                                                                            |
-| `slices.text-slice`            | `sections.richtext` | Markdown from `content.label` (bold), `content.title` (H2), `content.text`. SKIP if all empty.                     |
-| `slices.text-with-key-numbers` | `sections.richtext` | `"## Key Numbers\n\n" + keyNumber.map(k => "- **"+k.number+"** — "+k.text).join("\n")`. SKIP if `keyNumber` empty. |
+| Old                            | Target              | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.universal-rich-text`   | `sections.richtext` | `{ content: richText }`. SKIP if empty.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `slices.text-slice`            | conditional (3-way) | Dispatch on slice fields: (a) if `content.button` (or top-level `button`) is present → `sections.cta-banner` with `section: utilities.section-header` from `{label, title, description: text, ctaLinks: [resolveLink(button)]}` and `background: "dark-inverse"`; (b) if `theme === "purple"` or equivalent → `sections.section-header` with the inner `utilities.section-header` carrying `variant: "purple"`; (c) otherwise → `sections.richtext` with markdown from `label` (bold), `title` (H2), `text`. SKIP if all of label/title/text/button are empty. |
+| `slices.text-with-key-numbers` | SKIP                | No v5 component currently fits the `{number, text}[]` shape cleanly. Report in `skipped` with reason `"awaiting key-numbers component"` so the user can build it and revisit. (Avoid the old richtext-bullets workaround — the user is intentionally retiring it.)                                                                                                                                                                                                                                                                                             |
 
 **Hero / intro**
 
-| Old                                            | Target          | Rule                                                                                                                                         |
-| ---------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.intro`                                 | `sections.hero` | from `content.{label, title, text, button}` (NOTE: v4 `slices.intro` wraps fields inside `content`, not at the top level). SKIP if no title. |
-| root field `useCaseHero` (on use-case records) | `sections.hero` | PREPEND to newContent. Build from `useCaseHero.hero.intro.{label, title, text, button}`. SKIP if no `useCaseHero.hero.intro.title`.          |
+`slices.intro` is position-dependent because v4 conflated "page hero" and "section heading" into one slice. Use the position in `slices[]` plus the presence of a root-field hero to decide:
 
-**Cards**
+| Old                | Target                                       | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------ | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.intro`     | `sections.hero` OR `sections.section-header` | If this is the FIRST entry of `slices[]` AND the record has no root-field hero (no `useCaseHero` / `homeHero` / `whiteHero` / etc. with a title) → emit `sections.hero` from `content.{label, title, text, button}`. Otherwise → emit `sections.section-header` with `background: "none", boxed: false` and inner `utilities.section-header` from the same fields (layout=center). SKIP if no title in either case. (v4 `slices.intro` wraps fields inside `content`, not at the top level.) |
+| `slices.new-intro` | `sections.section-header`                    | Heading-only block. `utilities.section-header` from `{label, title, description: text, ctaLinks: button ? [resolveLink(button)] : []}`. SKIP if no title.                                                                                                                                                                                                                                                                                                                                    |
 
-| Old                         | Target               | Rule                                                                                                                                                                                                                                                                                                        |
-| --------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.section-with-image` | `cards.feature-card` | `{ title, description: text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", size: "default", layout: "full", ctaLinks: button?.link ? [link] : [] }`. **Note the inversion**: v4 `textPosition` = where text is; v5 `imagePosition` = where image is. Flip it. SKIP if no title. |
-| `slices.text-next-to-image` | `cards.feature-card` | `{ title: title \|\| content?.title, description: text \|\| content?.text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", size: "default", layout: "full", ctaLinks: (content?.button \|\| []).map(resolveLink) }`. SKIP if no title.                                            |
+**Root-level hero fields** (handled outside `slices[]`, always PREPENDED to newContent so the hero sits at the top of the page):
+
+| Field                                 | Target                                    | Rule                                                                                                                                                                                                                      |
+| ------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useCaseHero` (use-case records)      | `sections.hero`                           | Build from `useCaseHero.hero.intro.{label, title, text, button}`. SKIP if no `useCaseHero.hero.intro.title`. **Unchanged.**                                                                                               |
+| `homeHero` (home universal)           | `sections.hero`                           | Build from `homeHero.{label, title, text, button}` (or nested `.hero.intro.*` — verify per record before mapping).                                                                                                        |
+| `whiteHero` (relevant universals)     | `sections.hero`                           | Same as `homeHero`. Use `background: "light"` if the hero schema supports it; otherwise rely on default.                                                                                                                  |
+| `careersHero` (careers universal)     | `sections.hero`                           | Same fields. If `careersHero.image` (or `.coverImage`) is present, upload it via the media policy (`reuse-existing` by default) and attach.                                                                               |
+| `featuresHero` (relevant universals)  | `sections.hero`                           | Same as `homeHero`.                                                                                                                                                                                                       |
+| `communityHero` (community universal) | `sections.hero` + `media.brand-logo-grid` | PREPEND `sections.hero` from `communityHero.hero.intro.{label, title, text, button}`. Then, if `communityHero.brandsWithIntro` is present, APPEND a `media.brand-logo-grid` built from its logos (see Brand logos below). |
+
+Always populate this set in the explicit populate spec (Step 8) for the relevant content types — `populate=*` won't reach into `useCaseHero.hero.intro` etc.
+
+**Cards (single tile, no grid wrapper)**
+
+The v5 `cards.feature-card` `layout` enum is `full | half | third`. CSV terminology "split image right/left" means the visual style where the card has text on one side and image on the other — that's `layout: "full"` with `imagePosition` set. There is no `split` layout value.
+
+| Old                                   | Target                                                      | Rule                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.section-with-image`           | `cards.feature-card`                                        | `{ title, description: text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", size: "default", layout: "full", ctaLinks: button?.link ? [resolveLink(button)] : [] }`. **Note the inversion**: v4 `textPosition` = where text is; v5 `imagePosition` = where image is. Flip it. SKIP if no title. |
+| `slices.text-next-to-image`           | `cards.feature-card`                                        | Same as section-with-image. `{ title: title \|\| content?.title, description: text \|\| content?.text, imagePosition: textPosition==="left"?"right":"left", variant: "bordered", layout: "full", ctaLinks: (content?.button \|\| []).map(resolveLink) }`. SKIP if no title.                                                |
+| `slices.text-next-to-big-image`       | `cards.feature-card`                                        | `{ title, description: text, imagePosition: "right", variant: "bordered", layout: "full", ctaLinks: [...] }`. Single card, image right. SKIP if no title.                                                                                                                                                                  |
+| `slices.simple-text-next-to-image`    | `cards.feature-card`                                        | `{ title, description: text, imagePosition: "left", variant: "bordered", layout: "full", ctaLinks: [...] }`. Single card, image LEFT. SKIP if no title.                                                                                                                                                                    |
+| `slices.text-with-image-and-gradient` | `cards.feature-card`                                        | `{ title, description: text, imagePosition: "right", variant: "bordered", layout: "full", ctaLinks: [...] }`. The v4 `DownloadLink` (or `button.download`) becomes a ctaLink — preserve its `href` and `label`. SKIP if no title.                                                                                          |
+| `slices.side-hero-with-image`         | composite: `sections.section-header` + `cards.feature-card` | Emit `sections.section-header` first (from intro/label/title/text), then `cards.feature-card` (variant=bordered, layout=full, imagePosition=right) carrying the main content. SKIP whichever fragment is empty; if both are empty, SKIP the whole slice.                                                                   |
 
 **Grids of features / cards**
 
-| Old                             | Target                       | Rule                                                                                                                                                                                                                                                                                                                            |
-| ------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.top-features`           | `sections.feature-card-grid` | `section` from `intro` or `{ title: "Features" }`; `items` = `features[]` filtered by `title`, each mapped to feature-card with `variant: "plain", layout: "third"`, `ctaLinks` from `.links`. SKIP entire slice if no items have title.                                                                                        |
-| `slices.features-slice`         | `sections.feature-card-grid` | `section: s.title ? { title: s.title, layout: "center" } : undefined`; `items` = `cards[]` filtered by `title`, layout `s.layout==="two"?"half":"third"`, `variant: "plain"`. SKIP if empty. Omit `section` key when undefined.                                                                                                 |
-| `slices.stacking-cards`         | `sections.feature-card-grid` | `section: s.title ? { title: s.title } : undefined`; items from `cards[]` filtered by title, `variant: "bordered", layout: "half"`. SKIP if empty.                                                                                                                                                                              |
-| `slices.integration-cards-grid` | `sections.feature-card-grid` | `section` from `intro` if present; `items` = `integrations.data[]` filtered by `attributes.title`, cap at 12, map to feature-card with `title: attributes.title, description: attributes.description, ctaLinks: [{ type:"external", label:"Learn more", href:"/integrations/"+attributes.slug, newTab:false }]`. SKIP if empty. |
+Two patterns here:
 
-**Brand logos**
+- Single-component grids: emit one `sections.feature-card-grid` or `sections.two-column-grid`. The grid's `section` field carries the heading — no separate `sections.section-header` needed.
+- Composites: emit a standalone `sections.section-header` when the heading needs styling the built-in `section` field can't provide (e.g. boxed + dark wrapper). Otherwise prefer single-component.
 
-| Old                        | Target                    | Rule                                                                                                                                                                                                                                                   |
-| -------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `slices.brands-with-intro` | `sections.section-header` | Emit ONLY the intro as section-header — logo rendering requires media uploads, which is out of scope by default. `{ section: { label, title, description: intro.text, layout: "center" }, background: "none", boxed: false }`. SKIP if intro is empty. |
-| `slices.brands`            | SKIP                      | Pure-logo slice with no title — media upload needed. Skip + report.                                                                                                                                                                                    |
+`sections.feature-card-grid.items` is required and must be `cards.feature-card` — content-cards cannot be grid items. If the design calls for content-cards, emit them as N standalone `cards.content-card` entries in the dynamic zone (allowed by the page schema).
 
-**Quotes**
+`sections.two-column-grid.section` is REQUIRED — always populate it. Items are `elements.how-it-works-item` (icon + title + description); the `icon` field is optional and matches v4 `feature.icon` when present.
 
-| Old                                        | Target               | Rule                                                                                                                              |
-| ------------------------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.full-width-quote` / `slices.quote` | `testimonials.quote` | `{ quote, authorName: author?.name \|\| "Strapi", authorRole: author?.description \|\| "", variant: "boxed" }`. SKIP if no quote. |
+| Old                             | Target                                                          | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.top-features`           | `sections.two-column-grid`                                      | Single component. `section: utilities.section-header` from `intro` (or `{ title: "Features" }` as fallback — REQUIRED). `items` = `features[]` filtered by `title`, each `{ title: feature.title, description: feature.description, icon: feature.icon ? { media: <uploaded>, alt: feature.icon.alt } : undefined }`. SKIP entire slice if no items have title. (Feature `.links` are dropped — how-it-works-item has no ctaLinks. If preserving links is critical for a given migration, the caller can explicitly opt into `sections.feature-card-grid` instead.) |
+| `slices.large-features-slice`   | `sections.two-column-grid`                                      | Same shape as top-features. Single component.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `slices.features-slice`         | `sections.feature-card-grid`                                    | `section: s.title ? { title: s.title, layout: "center" } : undefined`; `items` = `cards[]` filtered by `title`, `layout: s.layout==="two"?"half":"third"`, `variant: "plain"`. SKIP if empty.                                                                                                                                                                                                                                                                                                                                                                       |
+| `slices.stacking-cards`         | composite: `sections.section-header` + N × `cards.content-card` | Emit `sections.section-header` from `s.title/label/intro` (skip if empty). Then for each `card` in `cards[]` filtered by title, emit one `cards.content-card` directly into the dynamic zone with `{ label: card.label, title: card.title, content: card.description \|\| card.text }` (content is required — SKIP cards with no body).                                                                                                                                                                                                                             |
+| `slices.text-with-cards`        | `sections.feature-card-grid`                                    | Single component. `section` from `title/intro`. `items` = `cards[]` filtered by title, each `{ title, description, icon: card.icon ? <upload> : undefined, variant: "plain", size: "sm", layout: "third" }`. SKIP if empty.                                                                                                                                                                                                                                                                                                                                         |
+| `slices.features-card`          | `sections.feature-card-grid`                                    | Single component on light background. `section` from intro if present. `items` = `cards[]` filtered by title, each `{ title, description, imagePosition: "right", variant: "bordered", layout: "third" }`. SKIP if empty.                                                                                                                                                                                                                                                                                                                                           |
+| `slices.getting-started-grid`   | `sections.feature-card-grid`                                    | `section` from intro/title if present. `items` = `cards[]` (or `features[]` — whichever the slice uses) filtered by title, each `{ title, description, variant: "bordered", layout: "third" }`. SKIP if empty.                                                                                                                                                                                                                                                                                                                                                      |
+| `slices.integration-cards-grid` | `sections.feature-card-grid`                                    | `section` from `intro` if present; `items` = `integrations.data[]` filtered by `attributes.title`, cap at 12, each `{ title: attributes.title, description: attributes.description, ctaLinks: [{ type:"external", label:"Learn more", href:"/integrations/"+attributes.slug, newTab:false }] }`. SKIP if empty. **Unchanged.**                                                                                                                                                                                                                                      |
+| `slices.company-stat-list`      | `sections.three-column-grid`                                    | Single component. `section: utilities.section-header` REQUIRED — fall back to `{ title: "Company Stats" }` if slice intro is empty. `items` = `stats[]` (or `companyStats[]` — whichever the slice uses) filtered by having any text, each `{ title: stat.value \|\| stat.number, description: stat.label \|\| stat.text }`. `itemStyle: "default"`. SKIP if no items survive. **Note**: on the Careers content type this may also appear as a root field — populate accordingly in Step 8 if so.                                                                   |
+| `slices.issues-header`          | `sections.three-column-grid`                                    | Single component, `itemStyle: "bordered"`. `section` REQUIRED — fall back to slice intro/title, then `{ title: "Issues" }`. `items` = `issues[]` (or `items[]`) filtered by title, each `{ title: issue.title, description: issue.description }`. SKIP if no items survive.                                                                                                                                                                                                                                                                                         |
+
+**Tabbed content**
+
+| Old                                 | Target                             | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ----------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.capabilities-dynamic-cards` | `sections.tabbed-feature-overview` | `section: utilities.section-header` REQUIRED — from slice intro/title (fall back to `{ title: "Capabilities" }`). `tabs[]` = `capabilities[]` (or `cards[]`) mapped to `elements.tabbed-feature` each: `{ tabLabel: capability.label \|\| capability.title (REQUIRED — SKIP tab if absent), tabIcon: capability.icon ? <upload> : undefined, content: sections.feature-overview { label: capability.label, title: capability.title (REQUIRED), description: capability.description, ctaLinks: (capability.button \|\| []).map(resolveLink), image: <upload — REQUIRED, SKIP tab if no image survives>, items: (capability.features \|\| []).map(f => ({ title: f.title, description: f.description, icon: f.icon ? <upload> : undefined })) } }`. SKIP whole slice if no tabs survive. Image uploads use the same find-before-upload routine from Step 6 brand logos. |
+
+**Auto-fetched lists**
+
+These components have empty schemas — the frontend auto-fetches data. Migration just registers the component on the page.
+
+| Old                | Target               | Rule                                                                                                                                                                                |
+| ------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.news-list` | `sections.news-list` | Emit `{ __component: "sections.news-list" }` with no fields. The target schema has zero attributes — frontend auto-fetches news items chronologically. Always succeeds; never SKIP. |
+
+**Reviews**
+
+| Old                     | Target             | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.reviews-slider` | `sections.reviews` | `{ title: slice.title \|\| "What customers say" (REQUIRED — must be non-empty), subTitle: slice.label \|\| slice.subTitle, description: slice.text \|\| slice.description, reviews: <resolved relation ids> }`. To resolve the relation: take old `slice.reviews.data[]`, look up each on the target server: `api/reviews?filters[author][$eq]=<author>&fields=id,author`. Collect matching documentIds. If zero matches, leave `reviews` empty and add a `manual_followup` entry so reviews can be linked by hand. Component still emits as long as title resolves. |
+
+**Section header / heading-only blocks**
+
+For any slice that's essentially a label+title+description with no items below, emit `sections.section-header`. The inner `utilities.section-header` carries label/title/description/ctaLinks; the outer wrapper controls background and boxed treatment.
+
+| Old                          | Target                    | Rule                                                                                                                                                   |
+| ---------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `slices.chili-piper`         | `sections.section-header` | `{ section: { label, title, description: text, ctaLinks: button ? [resolveLink(button)] : [] }, background: "none", boxed: false }`. SKIP if no title. |
+| `slices.content-videos-list` | `sections.section-header` | Same shape. The video items themselves are not migrated (out of scope unless caller opts into video uploads).                                          |
+
+**CTA banners**
+
+`sections.cta-banner.background` enum is `dark | dark-inverse` (default `dark-inverse`) — there is no light variant. If a v4 CTA needs a light treatment, fall through to `sections.section-header` with `background: "light"` instead.
+
+| Old                      | Target                | Rule                                                                                                                                                                |
+| ------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.dark-cta-banner` | `sections.cta-banner` | `{ section: { label, title, description: text, ctaLinks: button ? [resolveLink(button)] : [] }, background: "dark" }`. Section field is REQUIRED. SKIP if no title. |
+
+**Forms**
+
+| Old                        | Target             | Rule                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `slices.newsletter-banner` | `forms.newsletter` | Limited migration. `forms.newsletter` has only a `hubspotForm` relation — frontend renders fixed copy. Resolve the v4 slice's HubSpot form id against the target's `api::hubspot-form.hubspot-form` collection (match on form id or name). If unresolvable, SKIP and report under `skipped` with reason `"newsletter has no resolvable hubspot-form"`. |
+| `slices.embed-form`        | SKIP (by default)  | `forms.hubspot-form` requires a relation to an existing `api::hubspot-form.hubspot-form` record. Without a mapping config, skip + report. **Unchanged.**                                                                                                                                                                                               |
+
+**Disclaimer**
+
+| Old                 | Target                | Rule                                                                                                                                                                                                                                             |
+| ------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `slices.disclaimer` | `sections.disclaimer` | `{ title: slice.title, content: slice.content \|\| slice.text }`. `content` is REQUIRED — SKIP if empty. If the route is one where the frontend renders disclaimer copy hardcoded, the caller should pass an explicit skip list; otherwise emit. |
+
+**Brand logos** — media uploads enabled
+
+Brand-logo slices used to be SKIPPED to avoid media uploads. That non-goal has been retired: the skill now uploads logos from the old CDN, deduping by filename to avoid creating duplicate media entries.
+
+| Old                        | Target                                                         | Rule                                                                                                                                                                                                                                                                                                                                   |
+| -------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.brands-with-intro` | composite: `sections.section-header` + `media.brand-logo-grid` | Emit `sections.section-header` from intro (`{label, title, description: intro.text, layout: "center"}`). Then emit `media.brand-logo-grid` populated by the upload-and-dedupe routine below. If the grid ends up with zero items (all uploads failed), emit only the section-header; if the intro is also empty, SKIP the whole slice. |
+| `slices.brands`            | `media.brand-logo-grid`                                        | No intro available — emit just the grid. SKIP if no items survive upload.                                                                                                                                                                                                                                                              |
+
+**Logo upload routine** (also used by `media.image-gallery` and root-level hero images):
+
+```
+for each logo in source.logos[]:
+  url      = logo.image.data.attributes.url  (absolute on old CDN if it starts with http; otherwise prefix with old CDN host)
+  name     = derive filename from url (e.g. "rocket.svg" → "rocket")
+  altText  = logo.image.data.attributes.alternativeText ?? logo.name ?? ""
+
+  # find-before-upload (dedupe by filename)
+  existing = GET /api/upload/files?filters[name][$containsi]=<name> on target_server
+  if existing.length:
+    mediaId = existing[0].id
+  else:
+    downloaded = curl -L <url> → temp file
+    mediaId    = mcp__strapi-local__strapi_upload_media({
+                   server: target_server,
+                   filePath: temp file,
+                   name, alternativeText: altText
+                 }).id
+
+  items.push({
+    image: { media: mediaId, alt: altText },
+    hasLink: !!logo.link,
+    link: logo.link ? resolveLink(logo.link) : undefined,
+    tooltip: logo.tooltip ? { content: logo.tooltip } : undefined
+  })
+```
+
+If a single logo fails to upload (network/permission), keep the item out of the grid and continue — the report's `mediaUploaded` field aggregates per-page upload results.
 
 **Media**
 
-| Old                  | Target        | Rule                                                   |
-| -------------------- | ------------- | ------------------------------------------------------ |
-| `slices.large-video` | `media.video` | `{ url, alignment: "center" }`. SKIP if `url` missing. |
+| Old                   | Target                | Rule                                                                                                                                                                                            |
+| --------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.large-video`  | `media.video`         | `{ url, alignment: "center" }`. SKIP if `url` missing. **Unchanged.**                                                                                                                           |
+| `slices.image-slider` | `media.image-gallery` | `images[]` populated via the upload-and-dedupe routine (same as brand logos). `variant: "contained"` (or `"full-bleed"` if the slice has a `fullBleed` flag). SKIP if no images survive upload. |
+
+**Quotes**
+
+| Old                       | Target               | Rule                                                                                                                              |
+| ------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.quote`            | `testimonials.quote` | `{ quote, authorName: author?.name \|\| "Strapi", authorRole: author?.description \|\| "", variant: "boxed" }`. SKIP if no quote. |
+| `slices.full-width-quote` | `testimonials.quote` | Same fields, `variant: "fullwidth"`. SKIP if no quote.                                                                            |
 
 **FAQ / interview**
 
-| Old                | Target                 | Rule                                                                                                  |
-| ------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------- |
-| `slices.interview` | `sections.faq-section` | `{ items: questionAnswer.filter(qa => qa.question && qa.answer).map(qa => ({ question, answer })) }`. |
+The interview slice now gets a dark/boxed wrapper around the Q&A list. We keep `sections.faq-section` for the Q&A semantics (`utilities.accordions.{question, answer}` shape) but prepend a section-header for the visual treatment.
+
+| Old                | Target                                                        | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slices.interview` | composite: `sections.section-header` + `sections.faq-section` | Emit `sections.section-header` first with `{ section: { label: slice.label, title: slice.title, description: slice.intro \|\| slice.text }, background: "dark", boxed: true }`. Skip header if all of label/title/intro are empty. Then emit `sections.faq-section` with `{ items: questionAnswer.filter(qa => qa.question && qa.answer).map(qa => ({ question, answer })) }`. SKIP the FAQ fragment if `questionAnswer` is empty after filter; SKIP the whole composite if both fragments would be empty. |
 
 **Case study reference**
 
-| Old                      | Target                  | Rule                                                                                                                                                                                                                                                                                                                                          |
-| ------------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.case-study-card` | `cards.case-study-card` | `slug = card?.data?.attributes?.slug`. Look up on **target** server: `api/case-studies?filters[slug][$eq]=<slug>&fields=companyName,title,slug`. If found: `{ companyName, title, ctaLink: { type:"external", label: buttonText \|\| "Read story", href: "/user-stories/"+slug, newTab: false } }`. SKIP if slug missing or target not found. |
+| Old                      | Target                  | Rule                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `slices.case-study-card` | `cards.case-study-card` | `slug = card?.data?.attributes?.slug`. Look up on **target** server: `api/case-studies?filters[slug][$eq]=<slug>&fields=companyName,title,slug`. If found: `{ companyName, title, ctaLink: { type:"external", label: buttonText \|\| "Read story", href: "/user-stories/"+slug, newTab: false } }`. SKIP if slug missing or target not found. **Unchanged.** |
 
 **Algorithmic / always-skip**
 
-| Old                           | Target | Rule                                      |
-| ----------------------------- | ------ | ----------------------------------------- |
-| `slices.related-case-studies` | SKIP   | Rendered algorithmically on the frontend. |
-
-**HubSpot forms**
-
-| Old                 | Target            | Rule                                                                                                                                      |
-| ------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `slices.embed-form` | SKIP (by default) | `forms.hubspot-form` requires a relation to an existing `api::hubspot-form.hubspot-form` record. Without a mapping config, skip + report. |
+| Old                           | Target | Rule                                                                                          |
+| ----------------------------- | ------ | --------------------------------------------------------------------------------------------- |
+| `slices.related-case-studies` | SKIP   | Rendered algorithmically on the frontend; migrating creates duplicate content. **Unchanged.** |
 
 **Fallback**
 
@@ -229,6 +356,7 @@ Required-field validation:
 
 - Fragments whose required fields cannot be filled are SKIPPED (never sent with null values).
 - Skipped fragments append to the report's `skipped` array with a reason + sliceType.
+- Composites that produce two output components: if one fragment is invalid but the other is fine, emit the valid one and skip the invalid one (report each independently).
 
 ### 7. Content-length validation
 
@@ -241,17 +369,33 @@ On PUT validation failure, retry **once** without `seo`; then retry wrapping all
 
 ### 8. Deep populate — critical gotcha
 
-Strapi v4 `populate=*` only goes one level deep. `populate=deep,N` sometimes works but is unreliable (does not always reach nested component fields like `useCaseHero.hero.intro`, and in some cases returns only the root fields). Always use **explicit nested populate** for the slices and any root-level components containing slices/intros:
+Strapi v4 `populate=*` only goes one level deep. `populate=deep,N` sometimes works but is unreliable (does not always reach nested component fields like `useCaseHero.hero.intro`, and in some cases returns only the root fields). Always use **explicit nested populate** for the slices and any root-level components containing slices/intros. Tailor the populate per content type — pages built on `api/universals` need the home/white/careers/features/community hero fields populated; use-case pages need `useCaseHero`.
 
 ```
 populate: {
   slices: { populate: "*" },
-  useCaseHero: { populate: { hero: { populate: { intro: { populate: "*" } } } } },
+  // include only the root-hero fields that exist on the content type being fetched
+  useCaseHero:    { populate: { hero: { populate: { intro: { populate: "*" } } } } },
+  homeHero:       { populate: "*" },
+  whiteHero:      { populate: "*" },
+  careersHero:    { populate: { image: true, button: { populate: "*" } } },
+  featuresHero:   { populate: "*" },
+  communityHero:  { populate: { hero: { populate: { intro: { populate: "*" } } }, brandsWithIntro: { populate: { intro: { populate: "*" }, logos: { populate: { image: true, link: true } } } } } },
   seo: true
 }
 ```
 
-Verify by spot-checking one record in the batch: the `slices[].cards[].title`, `slices[].features[].title`, `slices[].integrations.data[].attributes.title`, and `useCaseHero.hero.intro.title` fields must all be present when the source has them. If they come back empty or missing, the populate spec is wrong — fix before launching agents.
+Verify by spot-checking one record in the batch: `slices[].cards[].title`, `slices[].features[].title`, `slices[].integrations.data[].attributes.title`, `useCaseHero.hero.intro.title`, and the relevant `<x>Hero.title` (or `.hero.intro.title`) must all be present when the source has them. If they come back empty or missing, the populate spec is wrong — fix before launching agents.
+
+**Special case — `slices.capabilities-dynamic-cards`**: each capability nests `image`, `icon`, `features[]`, and `button[]` underneath. `slices: { populate: "*" }` reaches the capabilities but stops there. For batches that include capabilities-dynamic-cards, swap to:
+
+```
+slices: { populate: { __all__: "*", capabilities: { populate: { image: true, icon: true, features: { populate: "*" }, button: { populate: "*" } } } } }
+```
+
+Or pre-fetch one record with that explicit populate to confirm `capabilities[].image.data.attributes.url` resolves.
+
+**Special case — `slices.reviews-slider`**: needs `slices.<reviews-slider>.reviews: { populate: "*" }` to reach author/text on each related review (otherwise you only get review ids and can't match them against target).
 
 ### 9. Launch one parallel agent per URL
 
@@ -264,10 +408,11 @@ Each agent's prompt must contain:
 3. The dynamic-zone allowlist from Step 3.
 4. The explicit populate spec from Step 8.
 5. The target content length limits from Step 7.
-6. The rule "never publish from within the agent — only update the draft."
-7. The rule "never emit `migration.data-sink` if a real component fits from the mapping; only use it as a LAST resort when `migration.data-sink` is explicitly allowed and the slice has no mapping."
-8. The rule "DO NOT overwrite target `title`, `slug`, `fullPath`, `breadcrumbTitle`, `parent`, `children`, `companyName`, `coverImage`, `logoImage` — only send `content` and (optionally) `seo`."
-9. A strict JSON report format (see Step 11).
+6. The brand-logo / image-gallery upload routine from Step 6 (find-before-upload by filename).
+7. The rule "never publish from within the agent — only update the draft."
+8. The rule "never emit `migration.data-sink` if a real component fits from the mapping; only use it as a LAST resort when `migration.data-sink` is explicitly allowed and the slice has no mapping."
+9. The rule "DO NOT overwrite target `title`, `slug`, `fullPath`, `breadcrumbTitle`, `parent`, `children`, `companyName`, `coverImage`, `logoImage` — only send `content` and (optionally) `seo`."
+10. A strict JSON report format (see Step 11).
 
 The agent should:
 
@@ -275,9 +420,10 @@ The agent should:
 - GET old record with the populate spec from Step 8.
 - GET target record: `api/<plural>/<documentId>?populate[content]=true&populate[seo]=true&status=draft`.
 - Map dynamic-zone per rules.
-- Upload cover/logo only if (old has URL) AND (target is null) — otherwise skip.
+- For each `slices.brands` / `slices.brands-with-intro` / `slices.image-slider` and any root-hero with an image: run the find-before-upload routine, deduping by filename via `GET /api/upload/files?filters[name][$containsi]=<name>` before downloading + uploading.
+- Upload cover/logo on the root record only if (old has URL) AND (target is null) — otherwise skip.
 - PUT with `status=draft` and `userAuthorized=true`.
-- Return the report JSON.
+- Return the report JSON (including a per-page `logosUploaded` / `galleryImagesUploaded` count).
 
 Wait on background notifications — do NOT poll or tail the output files.
 
@@ -333,11 +479,11 @@ Plus a top-level `unmatchedUrls` list for URLs whose path couldn't be mapped.
 
 ## Non-goals
 
-- **No inline-image migration**: markdown image URLs keep pointing at the old CDN.
+- **No inline-image migration**: markdown image URLs inside `sections.richtext` body keep pointing at the old CDN. (Brand logos, gallery images, and hero images ARE uploaded — see Step 6.)
 - **No HTML scraping of strapi.io**: source data comes exclusively from the old Strapi MCP's API.
-- **No media uploads for brand logos**: `slices.brands` is always skipped. If the user wants logos migrated, that's a follow-up pass (upload media → build `media.brand-logo-grid.items[]`).
-- **No HubSpot form mapping**: `slices.embed-form` is always skipped unless the user provides a hubspot-form relation map.
+- **No HubSpot form mapping**: `slices.embed-form` is always skipped unless the user provides a hubspot-form relation map. `slices.newsletter-banner` is migrated only when its HubSpot form id can be resolved against the target's `api::hubspot-form.hubspot-form` collection — otherwise skipped.
 - **No schema changes**: if a required target component is missing, skip the fragment and report — do NOT propose schema edits. That's the `/create-content-component` skill's job.
+- **No retroactive re-render of frontend-hardcoded content**: if the v5 frontend renders disclaimers, related case studies, or newsletter copy from code rather than CMS, the corresponding slice migration produces nothing (those rows are explicit SKIPs in Step 6).
 
 ## Example invocations
 

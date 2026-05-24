@@ -37,6 +37,11 @@
       "type": "component",
       "repeatable": false,
       "component": "utilities.basic-image"
+    },
+    "link": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.link"
     }
   }
 }

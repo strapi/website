@@ -8,8 +8,7 @@
   "options": {},
   "attributes": {
     "title": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "description": {
       "type": "richtext"
@@ -26,22 +25,36 @@
     },
     "imagePosition": {
       "type": "enumeration",
-      "enum": ["left", "right"],
+      "enum": [
+        "left",
+        "right"
+      ],
       "default": "right"
     },
     "variant": {
       "type": "enumeration",
-      "enum": ["plain", "bordered"],
+      "enum": [
+        "plain",
+        "bordered"
+      ],
       "default": "plain"
     },
     "size": {
       "type": "enumeration",
-      "enum": ["sm", "default", "lg"],
+      "enum": [
+        "sm",
+        "default",
+        "lg"
+      ],
       "default": "default"
     },
     "layout": {
       "type": "enumeration",
-      "enum": ["full", "half", "third"],
+      "enum": [
+        "full",
+        "half",
+        "third"
+      ],
       "default": "full"
     },
     "ctaLinks": {

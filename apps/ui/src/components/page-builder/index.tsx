@@ -26,16 +26,21 @@ import { StrapiDynamicCaseStudiesGrid } from "@/components/page-builder/componen
 import { StrapiDynamicFeaturesGrid } from "@/components/page-builder/components/sections/strapi-dynamic-grid/StrapiDynamicFeaturesGrid"
 import { StrapiHeroHome } from "@/components/page-builder/components/sections/strapi-hero-home/StrapiHeroHome"
 import { StrapiMeetTheTeam } from "@/components/page-builder/components/sections/strapi-meet-the-team/StrapiMeetTheTeam"
+import { StrapiReviews } from "@/components/page-builder/components/sections/strapi-reviews/StrapiReviews"
+import { StrapiTabbedFeatureOverview } from "@/components/page-builder/components/sections/strapi-tabbed-feature-overview"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiDisclaimer } from "@/components/page-builder/components/sections/StrapiDisclaimer"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
 import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sections/StrapiFeatureCardGrid"
+import { StrapiFeatureOverview } from "@/components/page-builder/components/sections/StrapiFeatureOverview"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiNewsList } from "@/components/page-builder/components/sections/StrapiNewsList"
 import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
+import { StrapiThreeColumnGrid } from "@/components/page-builder/components/sections/StrapiThreeColumnGrid"
 import { StrapiTwoColumnGrid } from "@/components/page-builder/components/sections/StrapiTwoColumnGrid"
 import { StrapiTwoColumnsBenefits } from "@/components/page-builder/components/sections/StrapiTwoColumnsBenefits"
 import { StrapiQuote } from "@/components/page-builder/components/testimonials/strapi-quote/StrapiQuote"
@@ -76,7 +81,10 @@ export const ContentComponents: Partial<
   "sections.how-it-works": StrapiHowItWorks,
   "sections.section-header": StrapiSectionHeader,
   "sections.feature-card-grid": StrapiFeatureCardGrid,
+  "sections.feature-overview": StrapiFeatureOverview,
+  "sections.tabbed-feature-overview": StrapiTabbedFeatureOverview,
   "sections.two-column-grid": StrapiTwoColumnGrid,
+  "sections.three-column-grid": StrapiThreeColumnGrid,
   "sections.two-columns-benefits": StrapiTwoColumnsBenefits,
   "sections.dynamic-case-studies-grid": StrapiDynamicCaseStudiesGrid,
   "sections.dynamic-features-grid": StrapiDynamicFeaturesGrid,
@@ -94,12 +102,14 @@ export const ContentComponents: Partial<
 
   // Sections (continued)
   "sections.testimonies": StrapiTestimonies,
+  "sections.reviews": StrapiReviews,
   "sections.meet-the-team": StrapiMeetTheTeam,
   "sections.cta-banner": StrapiCtaBanner,
   "sections.community-banner": StrapiCommunityBanner,
   "sections.comparator-grid": StrapiComparatorGrid,
   "sections.disclaimer": StrapiDisclaimer,
   "sections.richtext": StrapiRichtext,
+  "sections.news-list": StrapiNewsList,
 
   // Testimonials
   "testimonials.quote": StrapiQuote,

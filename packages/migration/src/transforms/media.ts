@@ -102,7 +102,11 @@ async function uploadAndLink(
     return basicImage
   }
 
-  ctx.mediaCache.set(fallbackSrc, result)
+  ctx.mediaCache.set(fallbackSrc, {
+    id: result.id,
+    hash: result.hash,
+    url: result.url,
+  })
 
   // Periodically save cache
   if (ctx.mediaCache.size % 20 === 0) {

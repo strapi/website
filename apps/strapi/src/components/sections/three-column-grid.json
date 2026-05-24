@@ -1,0 +1,72 @@
+{
+  "collectionName": "components_sections_three_column_grid",
+  "info": {
+    "displayName": "ThreeColumnGrid",
+    "icon": "apps",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "repeatable": false,
+      "required": true,
+      "component": "utilities.section-header",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "elements.how-it-works-item",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "background": {
+      "type": "enumeration",
+      "enum": ["none", "light"],
+      "default": "none",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": ["default", "purple"],
+      "default": "default",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": ["default", "lg", "xl"],
+      "default": "default",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "itemStyle": {
+      "type": "enumeration",
+      "enum": ["default", "bordered"],
+      "default": "default",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    }
+  }
+}

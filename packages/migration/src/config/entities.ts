@@ -21,6 +21,7 @@ import {
 import { remapDynamicZone } from "../transforms/dynamic-zone.ts"
 import { dropFields, renameFields } from "../transforms/fields.ts"
 import { flattenV4 } from "../transforms/flatten-v4.ts"
+import { processMarkdownImages } from "../transforms/markdown-images.ts"
 import { uploadMedia } from "../transforms/media.ts"
 import { resolveRelations } from "../transforms/relations.ts"
 import { transformBlogSeo, transformSeo } from "../transforms/seo.ts"
@@ -209,9 +210,7 @@ function wrapV4Media(media: unknown): Record<string, unknown> | undefined {
         alt: (attrs["alternativeText"] as string) ?? "",
         width: attrs["width"] ?? null,
         height: attrs["height"] ?? null,
-        fallbackSrc: url.startsWith("http")
-          ? url
-          : `https://delicate-dawn-ac25646e6d.media.strapiapp.com${url}`,
+        fallbackSrc: absoluteUrl(url),
       }
     }
   }
@@ -231,9 +230,7 @@ function wrapV4Media(media: unknown): Record<string, unknown> | undefined {
       alt: (m["alternativeText"] as string) ?? "",
       width: m["width"] ?? null,
       height: m["height"] ?? null,
-      fallbackSrc: (m["url"] as string).startsWith("http")
-        ? (m["url"] as string)
-        : `https://delicate-dawn-ac25646e6d.media.strapiapp.com${m["url"]}`,
+      fallbackSrc: absoluteUrl(m["url"] as string),
     }
   }
 
@@ -446,9 +443,7 @@ const enrichCaseStudyCards: TransformFn = async (entity, ctx) => {
           alt: (coverMedia["alternativeText"] as string) ?? "",
           width: coverMedia["width"] ?? null,
           height: coverMedia["height"] ?? null,
-          fallbackSrc: url.startsWith("http")
-            ? url
-            : `https://delicate-dawn-ac25646e6d.media.strapiapp.com${url}`,
+          fallbackSrc: absoluteUrl(url),
         }
       }
 
@@ -793,6 +788,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
 
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -897,6 +893,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       ),
       ensureSlug("name"),
       transformSeo,
+      processMarkdownImages,
     ],
   },
 
@@ -971,6 +968,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       ),
       ensureSlug("name"),
       transformSeo,
+      processMarkdownImages,
     ],
   },
 
@@ -1021,9 +1019,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
           : undefined
 
         if (reviewLogoMedia) {
-          result["_logoUrl"] = reviewLogoMedia.url.startsWith("http")
-            ? reviewLogoMedia.url
-            : `https://delicate-dawn-ac25646e6d.media.strapiapp.com${reviewLogoMedia.url}`
+          result["_logoUrl"] = absoluteUrl(reviewLogoMedia.url)
         } else if (person.logoUrl) {
           result["_logoUrl"] = person.logoUrl
         }
@@ -1111,6 +1107,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       // Convert v4 thumbnail (media.image component) → v5 media.image
       convertMediaImageFields("thumbnail"),
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1176,6 +1173,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         return entity
       }) as TransformFn,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1299,6 +1297,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       remapDynamicZone("slices", "content"),
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1459,24 +1458,19 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
 
         return result
       }) as TransformFn,
-      // Preserve v4 publish date in a user-defined field. Strapi v5's system
-      // `publishedAt` is server-managed on publish and ignores client values,
-      // so historical dates land here instead. Frontend reads
-      // `originalPublishedAt ?? publishedAt`.
-      ((entity) => {
-        const result = { ...entity }
-
-        if (typeof result["publishedAt"] === "string") {
-          result["originalPublishedAt"] = result["publishedAt"]
-        }
-
-        return result
-      }) as TransformFn,
+      // MUST remove `publishedAt` from the payload — Strapi v5 publishes any
+      // POST whose body carries this key, which would override v4 draft state.
+      // Re-publishing v4-published entries happens later in `fix-published-at`.
+      // Frontend reads `originalPublishedAt ?? publishedAt`.
+      renameFields({ publishedAt: "originalPublishedAt" }),
       // Dynamic zone: slices → sections
       remapDynamicZone("slices", "sections"),
       resolveHubspotForms,
       transformBlogSeo,
       uploadMedia,
+      // After structured media is handled, walk richtext strings (top-level
+      // content + sections.* markdown) and re-host v4-CDN ![alt](url) refs to v5.
+      processMarkdownImages,
     ],
   },
 
@@ -1517,6 +1511,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       uploadDirectMediaFields("logo"),
       remapDynamicZone("slices", "sections"),
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1560,6 +1555,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       remapDynamicZone("slices", "content"),
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1652,6 +1648,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1702,6 +1699,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1752,6 +1750,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1823,6 +1822,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       resolveHubspotForms,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1869,6 +1869,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1910,6 +1911,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1960,6 +1962,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -1985,6 +1988,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       remapDynamicZone("slices", "content"),
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2035,6 +2039,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2076,6 +2081,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2119,6 +2125,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2145,6 +2152,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       remapDynamicZone("slices", "content"),
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2217,6 +2225,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2240,6 +2249,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       remapDynamicZone("slices", "content"),
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2344,6 +2354,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         }
       }) as TransformFn,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2473,6 +2484,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
         return { content }
       }) as TransformFn,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 
@@ -2517,6 +2529,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
       }) as TransformFn,
       transformSeo,
       uploadMedia,
+      processMarkdownImages,
     ],
   },
 }

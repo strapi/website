@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_sections_tabbed_feature_overview",
+  "info": {
+    "displayName": "TabbedFeatureOverview",
+    "icon": "layer",
+    "description": "Section header + horizontal pill tab strip switching between bordered FeatureOverview cards"
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "component",
+      "repeatable": false,
+      "required": true,
+      "component": "utilities.section-header",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "tabs": {
+      "type": "component",
+      "repeatable": true,
+      "required": true,
+      "component": "elements.tabbed-feature",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

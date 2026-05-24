@@ -28,7 +28,7 @@ export interface BlogEditorsPicks extends Struct.ComponentSchema {
       "oneToMany",
       "api::blog-post.blog-post"
     >
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -78,7 +78,7 @@ export interface BlogResourceCta extends Struct.ComponentSchema {
     badge: Schema.Attribute.String
     ctaLink: Schema.Attribute.Component<"utilities.link", false>
     description: Schema.Attribute.Text
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -108,7 +108,7 @@ export interface CardsContentCard extends Struct.ComponentSchema {
   attributes: {
     content: Schema.Attribute.RichText & Schema.Attribute.Required
     label: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -130,7 +130,7 @@ export interface CardsFeatureCard extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<"full">
     size: Schema.Attribute.Enumeration<["sm", "default", "lg"]> &
       Schema.Attribute.DefaultTo<"default">
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
     variant: Schema.Attribute.Enumeration<["plain", "bordered"]> &
       Schema.Attribute.DefaultTo<"plain">
   }
@@ -175,7 +175,7 @@ export interface ElementsConversionFeature extends Struct.ComponentSchema {
   }
   attributes: {
     icon: Schema.Attribute.Component<"utilities.basic-image", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    label: Schema.Attribute.String
   }
 }
 
@@ -190,7 +190,7 @@ export interface ElementsConversionInfoBlock extends Struct.ComponentSchema {
     description: Schema.Attribute.Text
     items: Schema.Attribute.Component<"elements.conversion-info-item", true>
     logos: Schema.Attribute.Component<"utilities.basic-image", true>
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -204,7 +204,7 @@ export interface ElementsConversionInfoItem extends Struct.ComponentSchema {
   attributes: {
     description: Schema.Attribute.String
     image: Schema.Attribute.Component<"utilities.basic-image", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    label: Schema.Attribute.String
     value: Schema.Attribute.String
   }
 }
@@ -218,7 +218,7 @@ export interface ElementsFooterItem extends Struct.ComponentSchema {
   }
   attributes: {
     links: Schema.Attribute.Component<"utilities.link-text", true>
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -246,7 +246,7 @@ export interface ElementsHeroHomeFeature extends Struct.ComponentSchema {
     icon: Schema.Attribute.Component<"utilities.basic-image", false>
     media: Schema.Attribute.Media<"images" | "videos"> &
       Schema.Attribute.Required
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -272,7 +272,6 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
   }
   attributes: {
     description: Schema.Attribute.RichText &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -285,6 +284,31 @@ export interface ElementsHowItWorksItem extends Struct.ComponentSchema {
         }
       }>
     title: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
+export interface ElementsTabbedFeature extends Struct.ComponentSchema {
+  collectionName: "components_elements_tabbed_feature"
+  info: {
+    description: "Single tab inside TabbedFeatureOverview \u2014 pill label + nested feature-overview content"
+    displayName: "TabbedFeature"
+    icon: "tag"
+  }
+  attributes: {
+    content: Schema.Attribute.Component<"sections.feature-overview", false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    tabIcon: Schema.Attribute.Component<"utilities.basic-image", false>
+    tabLabel: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -306,7 +330,7 @@ export interface ElementsTeamMemberItem extends Struct.ComponentSchema {
     department: Schema.Attribute.String
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     location: Schema.Attribute.String
-    name: Schema.Attribute.String & Schema.Attribute.Required
+    name: Schema.Attribute.String
     role: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
@@ -357,7 +381,6 @@ export interface FooterFooterCta extends Struct.ComponentSchema {
         }
       }>
     heading: Schema.Attribute.String &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -381,7 +404,6 @@ export interface FooterFooterCtaBadge extends Struct.ComponentSchema {
         }
       }>
     text: Schema.Attribute.String &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -417,7 +439,6 @@ export interface FooterFooterCtaCard extends Struct.ComponentSchema {
         }
       }>
     title: Schema.Attribute.String &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -966,7 +987,7 @@ export interface SectionsCommunityBanner extends Struct.ComponentSchema {
   attributes: {
     ctaLink: Schema.Attribute.Component<"utilities.link", false>
     description: Schema.Attribute.RichText
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -1005,7 +1026,7 @@ export interface SectionsDisclaimer extends Struct.ComponentSchema {
   }
   attributes: {
     content: Schema.Attribute.Text & Schema.Attribute.Required
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -1062,6 +1083,41 @@ export interface SectionsFeatureCardGrid extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsFeatureOverview extends Struct.ComponentSchema {
+  collectionName: "components_sections_feature_overview"
+  info: {
+    description: "Bordered feature card with image and a 3-column item grid below"
+    displayName: "FeatureOverview"
+    icon: "puzzle"
+  }
+  attributes: {
+    ctaLinks: Schema.Attribute.Component<"utilities.link", true>
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    image: Schema.Attribute.Component<"utilities.basic-image", false> &
+      Schema.Attribute.Required
+    items: Schema.Attribute.Component<"elements.how-it-works-item", true>
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    labelIcon: Schema.Attribute.Component<"utilities.basic-image", false>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface SectionsHero extends Struct.ComponentSchema {
   collectionName: "components_sections_heroes"
   info: {
@@ -1074,7 +1130,7 @@ export interface SectionsHero extends Struct.ComponentSchema {
     description: Schema.Attribute.RichText
     image: Schema.Attribute.Component<"utilities.basic-image", false>
     label: Schema.Attribute.String
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -1093,7 +1149,7 @@ export interface SectionsHeroHome extends Struct.ComponentSchema {
       "elements.hero-home-testimonials",
       false
     >
-    title: Schema.Attribute.String & Schema.Attribute.Required
+    title: Schema.Attribute.String
   }
 }
 
@@ -1112,7 +1168,6 @@ export interface SectionsHowItWorks extends Struct.ComponentSchema {
         }
       }>
     heading: Schema.Attribute.String &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true
@@ -1141,6 +1196,31 @@ export interface SectionsMeetTheTeam extends Struct.ComponentSchema {
       Schema.Attribute.Required
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
+  }
+}
+
+export interface SectionsNewsList extends Struct.ComponentSchema {
+  collectionName: "components_sections_news_lists"
+  info: {
+    description: "Auto-fetched chronological list of all News Items (logo, date, title)."
+    displayName: "News List"
+    icon: "newspaper"
+  }
+  attributes: {}
+}
+
+export interface SectionsReviews extends Struct.ComponentSchema {
+  collectionName: "components_sections_reviews"
+  info: {
+    description: ""
+    displayName: "Reviews"
+    icon: "star"
+  }
+  attributes: {
+    description: Schema.Attribute.Text
+    reviews: Schema.Attribute.Relation<"oneToMany", "api::review.review">
+    subTitle: Schema.Attribute.String
+    title: Schema.Attribute.String & Schema.Attribute.Required
   }
 }
 
@@ -1174,6 +1254,31 @@ export interface SectionsSectionHeader extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsTabbedFeatureOverview extends Struct.ComponentSchema {
+  collectionName: "components_sections_tabbed_feature_overview"
+  info: {
+    description: "Section header + horizontal pill tab strip switching between bordered FeatureOverview cards"
+    displayName: "TabbedFeatureOverview"
+    icon: "layer"
+  }
+  attributes: {
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    tabs: Schema.Attribute.Component<"elements.tabbed-feature", true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+  }
+}
+
 export interface SectionsTestimonies extends Struct.ComponentSchema {
   collectionName: "components_sections_testimonies"
   info: {
@@ -1183,6 +1288,58 @@ export interface SectionsTestimonies extends Struct.ComponentSchema {
   }
   attributes: {
     items: Schema.Attribute.Component<"elements.testimony-item", true>
+  }
+}
+
+export interface SectionsThreeColumnGrid extends Struct.ComponentSchema {
+  collectionName: "components_sections_three_column_grid"
+  info: {
+    description: ""
+    displayName: "ThreeColumnGrid"
+    icon: "apps"
+  }
+  attributes: {
+    background: Schema.Attribute.Enumeration<["none", "light"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"none">
+    items: Schema.Attribute.Component<"elements.how-it-works-item", true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    itemStyle: Schema.Attribute.Enumeration<["default", "bordered"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"default">
+    section: Schema.Attribute.Component<"utilities.section-header", false> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    size: Schema.Attribute.Enumeration<["default", "lg", "xl"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"default">
+    variant: Schema.Attribute.Enumeration<["default", "purple"]> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false
+        }
+      }> &
+      Schema.Attribute.DefaultTo<"default">
   }
 }
 
@@ -1214,7 +1371,7 @@ export interface SectionsTwoColumnGrid extends Struct.ComponentSchema {
           localized: true
         }
       }>
-    size: Schema.Attribute.Enumeration<["default", "lg"]> &
+    size: Schema.Attribute.Enumeration<["default", "lg", "xl"]> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: false
@@ -1330,6 +1487,7 @@ export interface TestimonialsQuote extends Struct.ComponentSchema {
     authorRole: Schema.Attribute.String
     companyLogo: Schema.Attribute.Component<"utilities.basic-image", false>
     image: Schema.Attribute.Component<"utilities.basic-image", false>
+    link: Schema.Attribute.Component<"utilities.link", false>
     quote: Schema.Attribute.RichText & Schema.Attribute.Required
     variant: Schema.Attribute.Enumeration<["boxed", "image"]> &
       Schema.Attribute.DefaultTo<"boxed">
@@ -1372,7 +1530,7 @@ export interface UtilitiesLink extends Struct.ComponentSchema {
   attributes: {
     decorations: Schema.Attribute.Component<"utilities.link-decorations", false>
     href: Schema.Attribute.String & Schema.Attribute.Required
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    label: Schema.Attribute.String
     newTab: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>
@@ -1417,7 +1575,7 @@ export interface UtilitiesLinkImage extends Struct.ComponentSchema {
   attributes: {
     href: Schema.Attribute.String & Schema.Attribute.Required
     image: Schema.Attribute.Component<"utilities.basic-image", false>
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    label: Schema.Attribute.String
     newTab: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>
@@ -1436,7 +1594,7 @@ export interface UtilitiesLinkText extends Struct.ComponentSchema {
   }
   attributes: {
     href: Schema.Attribute.String & Schema.Attribute.Required
-    label: Schema.Attribute.String & Schema.Attribute.Required
+    label: Schema.Attribute.String
     newTab: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>
@@ -1538,6 +1696,7 @@ declare module "@strapi/strapi" {
       "elements.hero-home-feature": ElementsHeroHomeFeature
       "elements.hero-home-testimonials": ElementsHeroHomeTestimonials
       "elements.how-it-works-item": ElementsHowItWorksItem
+      "elements.tabbed-feature": ElementsTabbedFeature
       "elements.team-member-item": ElementsTeamMemberItem
       "elements.testimony-item": ElementsTestimonyItem
       "footer.footer-cta": FooterFooterCta
@@ -1581,13 +1740,18 @@ declare module "@strapi/strapi" {
       "sections.dynamic-features-grid": SectionsDynamicFeaturesGrid
       "sections.faq-section": SectionsFaqSection
       "sections.feature-card-grid": SectionsFeatureCardGrid
+      "sections.feature-overview": SectionsFeatureOverview
       "sections.hero": SectionsHero
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
       "sections.meet-the-team": SectionsMeetTheTeam
+      "sections.news-list": SectionsNewsList
+      "sections.reviews": SectionsReviews
       "sections.richtext": SectionsRichtext
       "sections.section-header": SectionsSectionHeader
+      "sections.tabbed-feature-overview": SectionsTabbedFeatureOverview
       "sections.testimonies": SectionsTestimonies
+      "sections.three-column-grid": SectionsThreeColumnGrid
       "sections.two-column-grid": SectionsTwoColumnGrid
       "sections.two-columns-benefits": SectionsTwoColumnsBenefits
       "seo-utilities.social-icons": SeoUtilitiesSocialIcons

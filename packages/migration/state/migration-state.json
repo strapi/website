@@ -1,4 +1,21 @@
 {
-  "entities": {},
-  "lastRun": ""
+  "entities": {
+    "cms-pages": {
+      "total": 24,
+      "migrated": 22,
+      "skipped": 2,
+      "failed": 0,
+      "lastProcessedId": 40,
+      "errors": []
+    },
+    "cms-comparisons": {
+      "total": 132,
+      "migrated": 132,
+      "skipped": 0,
+      "failed": 0,
+      "lastProcessedId": 208,
+      "errors": []
+    }
+  },
+  "lastRun": "2026-05-23T13:45:40.292Z"
 }

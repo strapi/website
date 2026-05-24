@@ -13,8 +13,7 @@
       "component": "utilities.basic-image"
     },
     "name": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "role": {
       "type": "string",

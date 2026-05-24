@@ -44,6 +44,45 @@ pnpm migrate status
 pnpm migrate reset
 ```
 
+### Incremental catch-up (articles published since last migration)
+
+`run <entity>` is incremental: resume tracks `lastProcessedId`, so new v4 articles (higher IDs) get picked up, and dedup-by-slug skips anything already on v5. Use this sequence to sync new articles, re-resolve related-posts, and fix publish dates.
+
+```bash
+# 1) Refresh taxonomies/authors first — new articles may reference new ones.
+pnpm migrate run users
+pnpm migrate run post-categories
+pnpm migrate run post-sub-categories
+pnpm migrate run post-tags
+# (For case-studies, add: case-study-categories, tech-stacks)
+
+# 2) Incremental article migration. Resume + dedup skip what's already there.
+pnpm migrate run blog-posts
+pnpm migrate run case-studies
+
+# 3) Wire blog-post → blog-post related-posts (needs all docs to exist).
+pnpm migrate resolve-blog-relations
+
+# 4) Backfill real v4 publish dates onto migrated articles.
+#    Also fixes new rows from step 2, whose lifecycle hook set originalPublishedAt = NOW
+#    (Strapi v5 overwrites publishedAt on create).
+pnpm migrate fix-published-at blog-posts
+pnpm migrate fix-published-at case-studies
+
+# 5) Catch any v5-native rows where originalPublishedAt is still null.
+pnpm migrate backfill-original-published-at blog-posts
+pnpm migrate backfill-original-published-at case-studies
+```
+
+Append `--dry-run` to each step first; drop it once the output looks right.
+
+**Order matters**:
+
+- 1 → 2: blog-posts depends on `users`, `post-categories`, `post-sub-categories`, `post-tags`.
+- 2 → 3: related-posts resolution needs every v5 blog-post to exist.
+- 2 → 4: new posts from step 2 land with `originalPublishedAt = NOW`; step 4 overwrites with the real v4 date.
+- 4 → 5: `backfill-original-published-at` only writes where the field is null, so it cleanly handles v5-native articles created after the migration.
+
 ### Available entities
 
 | Entity      | v4 source  | v5 target | Dedup field |

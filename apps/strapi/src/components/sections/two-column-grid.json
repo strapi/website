@@ -50,7 +50,7 @@
     },
     "size": {
       "type": "enumeration",
-      "enum": ["default", "lg"],
+      "enum": ["default", "lg", "xl"],
       "default": "default",
       "pluginOptions": {
         "i18n": {

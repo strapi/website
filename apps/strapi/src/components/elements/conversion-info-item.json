@@ -16,8 +16,7 @@
       "type": "string"
     },
     "label": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "description": {
       "type": "string"

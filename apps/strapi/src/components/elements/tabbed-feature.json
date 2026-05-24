@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_elements_tabbed_feature",
+  "info": {
+    "displayName": "TabbedFeature",
+    "icon": "tag",
+    "description": "Single tab inside TabbedFeatureOverview — pill label + nested feature-overview content"
+  },
+  "options": {},
+  "attributes": {
+    "tabLabel": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "tabIcon": {
+      "type": "component",
+      "repeatable": false,
+      "component": "utilities.basic-image"
+    },
+    "content": {
+      "type": "component",
+      "repeatable": false,
+      "required": true,
+      "component": "sections.feature-overview",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

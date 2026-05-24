@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_sections_reviews",
+  "info": {
+    "displayName": "Reviews",
+    "icon": "star",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "subTitle": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review"
+    }
+  }
+}

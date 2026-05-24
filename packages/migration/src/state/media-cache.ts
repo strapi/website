@@ -7,6 +7,8 @@ const CACHE_FILE = path.join(STATE_DIR, "media-cache.json")
 export interface MediaCacheEntry {
   id: number
   hash: string
+  /** v5 absolute URL — populated for uploads done after markdown-image support was added. */
+  url?: string
 }
 
 /** URL → { id, hash } — hash is used to verify the media still exists in v5 */

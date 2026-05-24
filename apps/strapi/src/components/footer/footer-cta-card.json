@@ -19,7 +19,6 @@
     },
     "title": {
       "type": "string",
-      "required": true,
       "pluginOptions": {
         "i18n": {
           "localized": true

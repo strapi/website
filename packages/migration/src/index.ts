@@ -16,7 +16,9 @@ import { setPageParents } from "./entities/page.ts"
 import { prewarmIdMap, resolveDependencyUids } from "./pipeline/prewarm.ts"
 import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
 import { runBackfillOriginalPublishedAt } from "./scripts/backfill-original-published-at.ts"
+import { runFixMarkdownImages } from "./scripts/fix-markdown-images.ts"
 import { runFixPublishedAt } from "./scripts/fix-published-at.ts"
+import { runUnpublishWrongDrafts } from "./scripts/unpublish-wrong-drafts.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
 import {
@@ -86,23 +88,36 @@ program
       `Migrating: ${entity}${flags.length > 0 ? ` (${flags.join(", ")})` : ""}`
     )
 
-    if (opts.prewarm !== false && config.dependencies?.length) {
-      const depUids = resolveDependencyUids(ENTITY_CONFIGS, config.dependencies)
-      logger.info(
-        chalk.gray(
-          `Prewarming IdMap for dependencies: ${config.dependencies.join(", ")}`
+    if (opts.prewarm !== false) {
+      const depUids = config.dependencies?.length
+        ? resolveDependencyUids(ENTITY_CONFIGS, config.dependencies)
+        : []
+
+      // Also prewarm the entity itself so the runner can skip already-migrated
+      // ones without a deep fetch each. --force keeps the full pass.
+      const selfUids = opts.force ? [] : [config.sourceUid]
+      const only = [...depUids, ...selfUids]
+
+      if (only.length > 0) {
+        const label = [
+          depUids.length > 0 && `deps: ${config.dependencies!.join(", ")}`,
+          selfUids.length > 0 && `self: ${entity}`,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+
+        logger.info(chalk.gray(`Prewarming IdMap (${label})`))
+        const warmed = await prewarmIdMap(
+          { env, idMap, logger },
+          Object.values(ENTITY_CONFIGS),
+          { only }
         )
-      )
-      const warmed = await prewarmIdMap(
-        { env, idMap, logger },
-        Object.values(ENTITY_CONFIGS),
-        { only: depUids }
-      )
-      logger.info(
-        chalk.gray(
-          `IdMap prewarmed: ${warmed.prewarmed} types · ${warmed.matched} matched · ${warmed.unmatched} unmatched`
+        logger.info(
+          chalk.gray(
+            `IdMap prewarmed: ${warmed.prewarmed} types · ${warmed.matched} matched · ${warmed.unmatched} unmatched`
+          )
         )
-      )
+      }
     }
 
     const result = await runEntityMigration(config, ctx, entity)
@@ -180,21 +195,28 @@ program
         noResume: opts.resume === false,
       })
 
-      if (opts.prewarm !== false && config.dependencies?.length) {
-        const depUids = resolveDependencyUids(
-          ENTITY_CONFIGS,
-          config.dependencies
-        )
-        logger.info(
-          chalk.gray(
-            `Prewarming IdMap for ${name} deps: ${config.dependencies.join(", ")}`
+      if (opts.prewarm !== false) {
+        const depUids = config.dependencies?.length
+          ? resolveDependencyUids(ENTITY_CONFIGS, config.dependencies)
+          : []
+        const selfUids = opts.force ? [] : [config.sourceUid]
+        const only = [...depUids, ...selfUids]
+
+        if (only.length > 0) {
+          const label = [
+            depUids.length > 0 && `deps: ${config.dependencies!.join(", ")}`,
+            selfUids.length > 0 && `self: ${name}`,
+          ]
+            .filter(Boolean)
+            .join(" · ")
+
+          logger.info(chalk.gray(`Prewarming IdMap for ${name} (${label})`))
+          await prewarmIdMap(
+            { env, idMap, logger },
+            Object.values(ENTITY_CONFIGS),
+            { only }
           )
-        )
-        await prewarmIdMap(
-          { env, idMap, logger },
-          Object.values(ENTITY_CONFIGS),
-          { only: depUids }
-        )
+        }
       }
 
       logger.header(`Migrating: ${name}`)
@@ -406,6 +428,58 @@ program
       targetEndpoint: config.targetEndpoint,
       dryRun: opts.dryRun ?? false,
       slugFilter: opts.slug,
+      limit: opts.limit,
+      verbose: opts.verbose ?? false,
+    })
+  })
+
+program
+  .command("fix-markdown-images <entity>")
+  .description(
+    "Re-host v4-CDN images inside richtext/markdown fields (![alt](url), <img src>) onto v5 media library and rewrite URLs in-place. Dry-run by default."
+  )
+  .option("--apply", "Actually upload + write (default: dry-run)")
+  .option("--limit <n>", "Max rows per status to process", Number.parseInt)
+  .option("--verbose", "Debug-level logging")
+  .action(async (entity: string, opts) => {
+    const config = ENTITY_CONFIGS[entity]
+
+    if (!config) {
+      throw new Error(
+        `Unknown entity: ${entity}. Available: ${Object.keys(ENTITY_CONFIGS).join(", ")}`
+      )
+    }
+
+    await runFixMarkdownImages({
+      entity,
+      targetEndpoint: config.targetEndpoint,
+      apply: opts.apply ?? false,
+      limit: opts.limit,
+      verbose: opts.verbose ?? false,
+    })
+  })
+
+program
+  .command("unpublish-wrong-drafts <entity>")
+  .description(
+    "Unpublish v5 entries with originalPublishedAt=null (v4 drafts wrongly auto-published by the old blog-posts transform). Dry-run by default."
+  )
+  .option("--apply", "Actually perform the unpublish (default: dry-run)")
+  .option("--limit <n>", "Max entries to unpublish", Number.parseInt)
+  .option("--verbose", "Debug-level logging")
+  .action(async (entity: string, opts) => {
+    const config = ENTITY_CONFIGS[entity]
+
+    if (!config) {
+      throw new Error(
+        `Unknown entity: ${entity}. Available: ${Object.keys(ENTITY_CONFIGS).join(", ")}`
+      )
+    }
+
+    await runUnpublishWrongDrafts({
+      entity,
+      targetEndpoint: config.targetEndpoint,
+      apply: opts.apply ?? false,
       limit: opts.limit,
       verbose: opts.verbose ?? false,
     })

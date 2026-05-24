@@ -114,12 +114,13 @@ export class TargetClient {
 
   /**
    * Download an image from a URL and upload it to the v5 media library.
-   * Returns { id, hash } on success, or undefined if the upload fails.
+   * Returns { id, hash, url } on success, or undefined if the upload fails.
+   * `url` is the absolute v5 URL (prefixed with baseUrl if the response is relative).
    */
   async uploadMedia(
     sourceUrl: string,
     fileName?: string
-  ): Promise<{ id: number; hash: string } | undefined> {
+  ): Promise<{ id: number; hash: string; url: string } | undefined> {
     try {
       const imageRes = await fetch(sourceUrl)
 
@@ -158,12 +159,21 @@ export class TargetClient {
         return undefined
       }
 
-      const data = (await res.json()) as { id: number; hash: string }[]
+      const data = (await res.json()) as {
+        id: number
+        hash: string
+        url: string
+      }[]
       const entry = data[0]
 
       if (!entry) return undefined
 
-      return { id: entry.id, hash: entry.hash }
+      // Strapi may return relative URLs for self-hosted setups
+      const absoluteUrl = entry.url.startsWith("http")
+        ? entry.url
+        : `${this.baseUrl}${entry.url}`
+
+      return { id: entry.id, hash: entry.hash, url: absoluteUrl }
     } catch (error) {
       this.logger.warn(
         `Media upload error for ${sourceUrl}: ${error instanceof Error ? error.message : String(error)}`

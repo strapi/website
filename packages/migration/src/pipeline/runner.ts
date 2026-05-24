@@ -90,14 +90,39 @@ export async function runEntityMigration(
   }
 
   const startTime = Date.now()
-  const entities = config.customExtract
+  const allEntities = config.customExtract
     ? await config.customExtract(ctx)
     : await extractAll(config, ctx)
 
   // Sort ascending by ID — v4 API may return descending, and resume logic relies on ascending order
-  entities.sort((a, b) => a.id - b.id)
+  allEntities.sort((a, b) => a.id - b.id)
 
-  state.total = entities.length
+  // Skip entities already present in IdMap (populated by prewarm). Avoids one
+  // deep fetch + transform + findByField per already-migrated entity. --force
+  // disables the filter so the full pass updates existing entries.
+  let skippedAsMigrated = 0
+  const entities = ctx.force
+    ? allEntities
+    : allEntities.filter((e) => {
+        if (ctx.idMap.get(config.sourceUid, e.id)) {
+          skippedAsMigrated++
+
+          return false
+        }
+
+        return true
+      })
+
+  if (skippedAsMigrated > 0) {
+    ctx.logger.info(
+      chalk.gray(
+        `Skipping ${skippedAsMigrated} already-migrated entities (use --force to re-process)`
+      )
+    )
+  }
+
+  state.total = allEntities.length
+  state.skipped += skippedAsMigrated
 
   let resumedCount = 0
   let processedIndex = 0
@@ -248,7 +273,9 @@ export async function runEntityMigration(
       )
 
       if (transformed) {
-        console.log(
+        // Failure payload is part of the FAIL output; keep it visible at the
+        // default level (info), not gated on --verbose.
+        ctx.logger.info(
           chalk.gray(
             `  · Payload: ${JSON.stringify(transformed, null, 2).slice(0, 2000)}`
           )

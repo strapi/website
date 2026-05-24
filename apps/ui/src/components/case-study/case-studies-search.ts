@@ -1,5 +1,7 @@
 "use server"
 
+import * as Sentry from "@sentry/nextjs"
+
 import {
   getCaseStudiesIndexName,
   getMeilisearchClient,
@@ -33,15 +35,23 @@ export async function searchCaseStudies({
     filter.push(`categories.slug IN [${list}]`)
   }
 
-  const res = await index.search(query.trim(), {
-    offset,
-    limit,
-    filter,
-    sort: ["originalPublishedAt:desc"],
-  })
+  // Resilient against a missing/unavailable Meilisearch index so SSG doesn't break the build.
+  try {
+    const res = await index.search(query.trim(), {
+      offset,
+      limit,
+      filter,
+      sort: ["originalPublishedAt:desc"],
+    })
 
-  return {
-    hits: res.hits,
-    total: res.estimatedTotalHits ?? res.hits.length,
+    return {
+      hits: res.hits,
+      total: res.estimatedTotalHits ?? res.hits.length,
+    }
+  } catch (error) {
+    console.error("[searchCaseStudies] Meilisearch error", error)
+    Sentry.captureException(error)
+
+    return { hits: [], total: 0 }
   }
 }

@@ -1,5 +1,7 @@
 "use server"
 
+import * as Sentry from "@sentry/nextjs"
+
 import {
   DOCS_INDEX_NAME,
   getBlogPostsIndexName,
@@ -40,36 +42,50 @@ export async function globalSearch({
     return { caseStudies: [], pages: [], blogPosts: [], features: [], docs: [] }
   }
 
+  // Multi-search fails atomically — if any single index is missing/unavailable, the entire
+  // request throws. Wrap so the global-search modal degrades gracefully instead of blowing up.
   const [siteRes, docsRes] = await Promise.all([
-    getMeilisearchClient().multiSearch({
-      queries: [
-        {
-          indexUid: getCaseStudiesIndexName(),
-          q: trimmed,
-          limit: PER_INDEX_LIMIT,
-          attributesToRetrieve: ["slug", "title", "companyName"],
-        },
-        {
-          indexUid: getPagesIndexName(),
-          q: trimmed,
-          limit: PAGES_LIMIT,
-          filter: [`locale = "${escape(locale)}"`],
-          attributesToRetrieve: ["slug", "title", "fullPath", "pageType"],
-        },
-        {
-          indexUid: getBlogPostsIndexName(),
-          q: trimmed,
-          limit: PER_INDEX_LIMIT,
-          attributesToRetrieve: ["slug", "title", "description"],
-        },
-        {
-          indexUid: getFeaturesIndexName(),
-          q: trimmed,
-          limit: PER_INDEX_LIMIT,
-          attributesToRetrieve: ["title", "description", "url", "feature_tag"],
-        },
-      ],
-    }),
+    getMeilisearchClient()
+      .multiSearch({
+        queries: [
+          {
+            indexUid: getCaseStudiesIndexName(),
+            q: trimmed,
+            limit: PER_INDEX_LIMIT,
+            attributesToRetrieve: ["slug", "title", "companyName"],
+          },
+          {
+            indexUid: getPagesIndexName(),
+            q: trimmed,
+            limit: PAGES_LIMIT,
+            filter: [`locale = "${escape(locale)}"`],
+            attributesToRetrieve: ["slug", "title", "fullPath", "pageType"],
+          },
+          {
+            indexUid: getBlogPostsIndexName(),
+            q: trimmed,
+            limit: PER_INDEX_LIMIT,
+            attributesToRetrieve: ["slug", "title", "description"],
+          },
+          {
+            indexUid: getFeaturesIndexName(),
+            q: trimmed,
+            limit: PER_INDEX_LIMIT,
+            attributesToRetrieve: [
+              "title",
+              "description",
+              "url",
+              "feature_tag",
+            ],
+          },
+        ],
+      })
+      .catch((error: unknown) => {
+        console.error("[globalSearch] Meilisearch multi-search error", error)
+        Sentry.captureException(error)
+
+        return { results: [] }
+      }),
     getMeilisearchDocsClient()
       .index(DOCS_INDEX_NAME)
       .search(trimmed, {
@@ -83,7 +99,12 @@ export async function globalSearch({
           "anchor",
         ],
       })
-      .catch(() => ({ hits: [] })),
+      .catch((error: unknown) => {
+        console.error("[globalSearch] Meilisearch docs search error", error)
+        Sentry.captureException(error)
+
+        return { hits: [] }
+      }),
   ])
 
   const [caseStudies, pages, blogPosts, features] = siteRes.results

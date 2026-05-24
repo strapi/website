@@ -1,5 +1,7 @@
 "use server"
 
+import * as Sentry from "@sentry/nextjs"
+
 import { getFeaturesIndexName, getMeilisearchClient } from "@/lib/meilisearch"
 
 import type {
@@ -30,14 +32,23 @@ export async function searchFeaturePages({
     filter.push(`feature_tag IN [${list}]`)
   }
 
-  const res = await index.search(query.trim(), {
-    offset,
-    limit,
-    filter,
-  })
+  // Resilient against a missing/unavailable Meilisearch index so SSG (e.g. /[locale]/features
+  // via StrapiDynamicFeaturesGrid) doesn't break the build. Returns empty result and reports.
+  try {
+    const res = await index.search(query.trim(), {
+      offset,
+      limit,
+      filter,
+    })
 
-  return {
-    hits: res.hits,
-    total: res.estimatedTotalHits ?? res.hits.length,
+    return {
+      hits: res.hits,
+      total: res.estimatedTotalHits ?? res.hits.length,
+    }
+  } catch (error) {
+    console.error("[searchFeaturePages] Meilisearch error", error)
+    Sentry.captureException(error)
+
+    return { hits: [], total: 0 }
   }
 }

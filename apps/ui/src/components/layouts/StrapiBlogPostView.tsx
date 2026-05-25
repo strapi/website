@@ -11,6 +11,7 @@ import { BlogAutoRelatedPosts } from "@/components/blog/BlogAutoRelatedPosts"
 import { BlogContent } from "@/components/blog/BlogContent"
 import { BlogSocialShare } from "@/components/blog/BlogSocialShare"
 import { Container } from "@/components/elementary/Container"
+import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { extractHeadings, type BlogPost } from "@/lib/blog-utils"
 import { getEnvVar } from "@/lib/env-vars"
@@ -63,18 +64,25 @@ export function StrapiBlogPostView({ params }: Props) {
     ? new URL(`${localePath}/blog/${slug}`, siteUrl).toString()
     : `${localePath}/blog/${slug}`
 
-  const jsonLd = buildBlogPostingJsonLd({
-    post,
-    url: postUrl,
-    siteUrl: siteUrl || undefined,
-  })
+  const hasStrapiStructuredData = Boolean(post.seo?.structuredData)
+  const jsonLd = hasStrapiStructuredData
+    ? null
+    : buildBlogPostingJsonLd({
+        post,
+        url: postUrl,
+        siteUrl: siteUrl || undefined,
+      })
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <StrapiSeoStructuredDataFromSeo seo={post.seo} />
+      {jsonLd && (
+        <script
+          id="blogPostingStructuredData"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
 
       {content && <BlogReadingProgress />}
 

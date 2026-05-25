@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import type { Locale } from "next-intl"
 import { getLocale } from "next-intl/server"
 
@@ -9,9 +10,16 @@ import {
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { buttonVariants } from "@/components/ui/button"
+import { getMetadataFromStrapi } from "@/lib/metadata"
 import { Link } from "@/lib/navigation"
 import { fetchNotFound } from "@/lib/strapi-api/content/server"
 import { cn } from "@/lib/styles"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = (await getLocale()) as Locale
+
+  return (await getMetadataFromStrapi({ locale })) ?? {}
+}
 
 export default async function NotFound() {
   const locale = (await getLocale()) as Locale

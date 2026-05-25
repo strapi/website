@@ -4,7 +4,7 @@ import { use } from "react"
 import { CmsComparisonView } from "@/components/cms-comparison/CmsComparisonView"
 import { createFallbackPath, debugStaticParams } from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
-import { getCmsComparisonMetadata } from "@/lib/metadata/cms-comparison"
+import { getCmsComparisonMetadata } from "@/lib/metadata"
 import { fetchAllCmsComparisons } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"

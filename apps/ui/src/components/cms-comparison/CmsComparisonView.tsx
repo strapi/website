@@ -1,3 +1,4 @@
+import type { Data } from "@repo/strapi-types"
 import { notFound } from "next/navigation"
 import type { Locale } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
@@ -6,6 +7,7 @@ import { use } from "react"
 import { Container } from "@/components/elementary/Container"
 import { Disclaimer } from "@/components/elementary/disclaimer/Disclaimer"
 import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
+import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import {
   buildComparatorWithCMS,
@@ -52,7 +54,9 @@ export function CmsComparisonView({ params }: CmsComparisonViewProps) {
     ])
   )
 
-  const comparison = comparisonRes?.data
+  const comparison = comparisonRes?.data as
+    | Data.ContentType<"api::cms-comparison.cms-comparison">
+    | undefined
 
   if (!comparison) {
     notFound()
@@ -66,6 +70,7 @@ export function CmsComparisonView({ params }: CmsComparisonViewProps) {
 
   return (
     <>
+      <StrapiSeoStructuredDataFromSeo seo={comparison.seo} />
       <HeroContainer affectsNavbarTheme>
         <HeroContainerContent>
           <HeroContainerBorder>

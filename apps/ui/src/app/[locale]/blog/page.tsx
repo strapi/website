@@ -11,8 +11,9 @@ import {
   HeroContainerContent,
 } from "@/components/elementary/HeroContainer"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
+import { StrapiSeoStructuredDataByFullPath } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
-import { routing } from "@/lib/navigation"
+import { getBlogIndexMetadata } from "@/lib/metadata"
 import { fetchBlog, fetchBlogPostsList } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"
@@ -21,22 +22,8 @@ export async function generateMetadata(props: {
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({
-    locale: locale as "en",
-    namespace: "blog",
-  })
 
-  const localePath = routing.defaultLocale !== locale ? `/${locale}` : ""
-
-  return {
-    title: t("title"),
-    description: t("description"),
-    alternates: {
-      types: {
-        "application/rss+xml": `${localePath}/blog/rss.xml`,
-      },
-    },
-  }
+  return (await getBlogIndexMetadata({ locale: locale as Locale })) ?? {}
 }
 
 export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
@@ -58,18 +45,21 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   const remainingPosts: BlogPost[] = allPosts?.data.slice(1) ?? []
 
   return (
-    <HeroContainer affectsNavbarTheme className="gap-0">
-      <BlogNavbar locale={locale} />
+    <>
+      <StrapiSeoStructuredDataByFullPath fullPath="/blog" locale={locale} />
+      <HeroContainer affectsNavbarTheme className="gap-0">
+        <BlogNavbar locale={locale} />
 
-      <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-        {featuredPost && <FeaturedBlogPost post={featuredPost} />}
+        <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
+          {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-        <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
-      </HeroContainerContent>
+          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
+        </HeroContainerContent>
 
-      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
-        <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
-      </HeroContainerContent>
-    </HeroContainer>
+        <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
+          <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
+        </HeroContainerContent>
+      </HeroContainer>
+    </>
   )
 }

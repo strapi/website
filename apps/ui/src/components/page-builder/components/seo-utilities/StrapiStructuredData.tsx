@@ -2,8 +2,10 @@ import type { Data } from "@repo/strapi-types"
 
 export function StrapiStructuredData({
   structuredData,
+  id = "strapiStructuredData",
 }: {
   structuredData: Data.Component<"shared.seo">["structuredData"]
+  id?: string
 }) {
   if (structuredData) {
     // we need to use a plain `script` tag instead of the `Script` component
@@ -12,7 +14,7 @@ export function StrapiStructuredData({
     // - if no id is specified, a new script tag will be added with the new content, which schema validators are not able to parse.
     // `script` tag is properly re-rendered and replaced with the new content
     return (
-      <script id="articleStructuredData" type="application/ld+json">
+      <script id={id} type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>
     )

@@ -7,7 +7,7 @@ import { use } from "react"
 import { Breadcrumbs } from "@/components/elementary/Breadcrumbs"
 import { Container } from "@/components/elementary/Container"
 import { MinimalHeader } from "@/components/layouts/MinimalHeader"
-import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
+import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { fetchPage } from "@/lib/strapi-api/content/server"
 import { cn } from "@/lib/styles"
@@ -60,7 +60,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
     <div className="flex w-full flex-col">
       {minimalLayout && <div data-minimal-layout hidden />}
       {minimalLayout && <MinimalHeader />}
-      <StrapiStructuredData structuredData={data?.seo?.structuredData} />
+      <StrapiSeoStructuredDataFromSeo seo={data?.seo} />
       <main className={cn("flex w-full flex-col")}>
         <Container>
           <Breadcrumbs

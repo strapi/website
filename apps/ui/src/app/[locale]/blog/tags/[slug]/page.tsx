@@ -13,7 +13,10 @@ import {
 } from "@/components/elementary/HeroContainer"
 import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
+import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
+import { getPostTagMetadata } from "@/lib/metadata"
+import type { SeoComponent } from "@/lib/metadata/build-from-seo"
 import {
   fetchAllPostTags,
   fetchBlog,
@@ -25,11 +28,7 @@ type TagWithExtras = {
   name?: string | null
   slug?: string | null
   description?: string | null
-  seo?: {
-    metaTitle?: string | null
-    metaDescription?: string | null
-    keywords?: string | null
-  } | null
+  seo?: SeoComponent | null
 }
 
 export const dynamic = "force-static"
@@ -53,20 +52,8 @@ export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { slug, locale } = await props.params
-  const res = await fetchPostTag(slug, locale as Locale)
-  const tag = res?.data as TagWithExtras | undefined
-  const seo = tag?.seo
 
-  const fallbackName = slug
-    .replaceAll("-", " ")
-    .replaceAll(/\b\w/g, (c) => c.toUpperCase())
-  const name = tag?.name ?? fallbackName
-
-  return {
-    title: seo?.metaTitle || `${name} — Blog`,
-    description: seo?.metaDescription ?? undefined,
-    keywords: seo?.keywords ?? undefined,
-  }
+  return (await getPostTagMetadata({ slug, locale: locale as Locale })) ?? {}
 }
 
 export default function BlogTagPage(
@@ -96,32 +83,35 @@ export default function BlogTagPage(
   const tagName = tag?.name ?? slug
 
   return (
-    <HeroContainer affectsNavbarTheme className="gap-0">
-      <BlogNavbar locale={locale} />
+    <>
+      <StrapiSeoStructuredDataFromSeo seo={tag?.seo} />
+      <HeroContainer affectsNavbarTheme className="gap-0">
+        <BlogNavbar locale={locale} />
 
-      <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-        <div className="flex flex-col gap-6">
-          <BlogBreadcrumbs tag={{ name: tagName, slug }} />
+        <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
+          <div className="flex flex-col gap-6">
+            <BlogBreadcrumbs tag={{ name: tagName, slug }} />
 
-          <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {tagName}
-          </h1>
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {tagName}
+            </h1>
 
-          {tag?.description && (
-            <div className="text-strapi-gray-300 max-w-3xl [&_p]:text-base [&_p:last-child]:mb-0">
-              <InlineMarkdown>{tag.description}</InlineMarkdown>
-            </div>
-          )}
-        </div>
+            {tag?.description && (
+              <div className="text-strapi-gray-300 max-w-3xl [&_p]:text-base [&_p:last-child]:mb-0">
+                <InlineMarkdown>{tag.description}</InlineMarkdown>
+              </div>
+            )}
+          </div>
 
-        {featuredPost && <FeaturedBlogPost post={featuredPost} />}
+          {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-        <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
-      </HeroContainerContent>
+          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
+        </HeroContainerContent>
 
-      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
-        <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
-      </HeroContainerContent>
-    </HeroContainer>
+        <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
+          <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
+        </HeroContainerContent>
+      </HeroContainer>
+    </>
   )
 }

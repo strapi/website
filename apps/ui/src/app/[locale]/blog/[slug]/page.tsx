@@ -4,7 +4,7 @@ import { use } from "react"
 import { StrapiBlogPostView } from "@/components/layouts/StrapiBlogPostView"
 import { createFallbackPath, debugStaticParams } from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
-import { getBlogPostMetadata } from "@/lib/metadata/blog"
+import { getBlogPostMetadata } from "@/lib/metadata"
 import { fetchAllBlogPosts } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"

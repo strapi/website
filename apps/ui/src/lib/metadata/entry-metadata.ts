@@ -79,6 +79,13 @@ export async function getCmsComparisonMetadata({
     locale,
     fullPath,
     seo: comparison?.seo,
+    fallbackMeta: {
+      title: comparison?.seo?.metaTitle ?? comparison?.title ?? undefined,
+      description:
+        comparison?.seo?.metaDescription ??
+        comparison?.description ??
+        undefined,
+    },
   })
 }
 

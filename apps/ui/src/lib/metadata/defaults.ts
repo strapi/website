@@ -26,13 +26,17 @@ export function getDefaultOgMeta(
   fullPath: string | undefined,
   t: TranslateFn
 ): Metadata["openGraph"] {
+  const image = t("og.image")
+
   return {
     type: "website",
     locale: locale,
     siteName: t("og.siteName"),
     title: t("og.title"),
     description: t("og.description"),
-    images: [t("og.image")],
+    // Only emit the tag when a default image is configured, otherwise we'd
+    // render an empty/broken og:image on every page without its own SEO.
+    ...(image ? { images: [image] } : {}),
     url: [routing.defaultLocale !== locale ? locale : null, fullPath ?? ""]
       .filter(Boolean)
       .join("/"),
@@ -40,13 +44,19 @@ export function getDefaultOgMeta(
 }
 
 export function getDefaultTwitterMeta(t: TranslateFn): Metadata["twitter"] {
+  const image = t("twitter.imageUrl")
+  const siteId = t("twitter.siteId")
+  const creator = t("twitter.creator")
+  const creatorId = t("twitter.creatorId")
+
+  // Spread optional fields only when set so we never emit empty meta tags.
   return {
     card: t("twitter.card"),
     title: t("twitter.title"),
     description: t("twitter.description"),
-    siteId: t("twitter.siteId"),
-    creator: t("twitter.creator"),
-    creatorId: t("twitter.creatorId"),
-    images: [t("twitter.imageUrl")],
+    ...(siteId ? { siteId } : {}),
+    ...(creator ? { creator } : {}),
+    ...(creatorId ? { creatorId } : {}),
+    ...(image ? { images: [image] } : {}),
   } as Metadata["twitter"]
 }

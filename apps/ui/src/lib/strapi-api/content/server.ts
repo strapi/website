@@ -4,6 +4,7 @@ import type { FindFirst, UID } from "@repo/strapi-types"
 import { draftMode } from "next/headers"
 import type { Locale } from "next-intl"
 
+import type { BlogPost } from "@/lib/blog-utils"
 import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 import type { CustomFetchOptions } from "@/types/general"
@@ -261,6 +262,89 @@ export async function fetchBlogPostsList(
     })
 
     return { data: [] }
+  }
+}
+
+export interface BlogPostsPage {
+  readonly posts: BlogPost[]
+  readonly total: number
+}
+
+/**
+ * Offset-paginated blog post fetch used by the blog index "Load More" flow.
+ * Unlike {@link fetchBlogPostsList} (which caps at a single `pageSize`), this
+ * returns a window `[offset, offset + limit)` plus the total count so the
+ * caller can decide whether more posts remain.
+ */
+export async function fetchBlogPostsPage(
+  locale: Locale,
+  options: {
+    readonly offset: number
+    readonly limit: number
+    readonly categorySlug?: string | readonly string[]
+    readonly tagSlug?: string
+  }
+): Promise<BlogPostsPage> {
+  const { offset, limit, categorySlug, tagSlug } = options
+  const dm = await draftMode()
+
+  const slugs = Array.isArray(categorySlug)
+    ? categorySlug
+    : categorySlug
+      ? [categorySlug as string]
+      : null
+
+  const conditions: Record<string, unknown>[] = []
+  if (slugs && slugs.length > 0) {
+    conditions.push({ category: { slug: { $in: slugs } } })
+  }
+  if (tagSlug) {
+    conditions.push({ tags: { slug: { $eq: tagSlug } } })
+  }
+
+  const filters = conditions.length > 0 ? { filters: { $and: conditions } } : {}
+
+  const cacheTags = tagSlug
+    ? [...STRAPI_TAGS.blogPost, ...STRAPI_TAGS.postTag]
+    : STRAPI_TAGS.blogPost
+  const requestInit = withCacheTags(dm.isEnabled, cacheTags)
+
+  try {
+    const res = await PublicStrapiClient.fetchMany(
+      "api::blog-post.blog-post",
+      {
+        locale,
+        status: dm.isEnabled ? "draft" : "published",
+        sort: { originalPublishedAt: "desc" },
+        ...filters,
+        populate: blogListPopulate,
+        pagination: { start: offset, limit },
+      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1],
+      requestInit
+    )
+
+    const posts = (res.data ?? []) as unknown as BlogPost[]
+
+    return {
+      posts,
+      total: res.meta?.pagination?.total ?? offset + posts.length,
+    }
+  } catch (e: unknown) {
+    const scopeParts: string[] = []
+    if (slugs) scopeParts.push(`categories '${slugs.join(",")}'`)
+    if (tagSlug) scopeParts.push(`tag '${tagSlug}'`)
+    const scope =
+      scopeParts.length > 0 ? ` for ${scopeParts.join(" and ")}` : ""
+
+    logNonBlockingError({
+      message: `Error fetching blog posts page${scope} for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { posts: [], total: 0 }
   }
 }
 

@@ -20,7 +20,7 @@ import type { SeoComponent } from "@/lib/metadata/build-from-seo"
 import {
   fetchAllPostTags,
   fetchBlog,
-  fetchBlogPostsList,
+  fetchBlogPostsPage,
   fetchPostTag,
 } from "@/lib/strapi-api/content/server"
 
@@ -31,7 +31,7 @@ type TagWithExtras = {
   seo?: SeoComponent | null
 }
 
-export const dynamic = "force-static"
+export const revalidate = 3600
 
 export async function generateStaticParams({
   params: { locale },
@@ -75,11 +75,13 @@ export default function BlogTagPage(
 
   const tag = tagRes?.data as TagWithExtras | undefined
 
-  const tagPosts = use(fetchBlogPostsList(locale, undefined, 20, slug))
+  const tagPosts = use(
+    fetchBlogPostsPage(locale, { offset: 0, limit: 10, tagSlug: slug })
+  )
 
   const hubspotForm = getBlogNewsletterHubspot(blog)
-  const featuredPost: BlogPost | null = tagPosts?.data[0] ?? null
-  const remainingPosts: BlogPost[] = tagPosts?.data.slice(1) ?? []
+  const featuredPost: BlogPost | null = tagPosts.posts[0] ?? null
+  const remainingPosts: BlogPost[] = tagPosts.posts.slice(1)
   const tagName = tag?.name ?? slug
 
   return (
@@ -105,7 +107,14 @@ export default function BlogTagPage(
 
           {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
+          <BlogPostsList
+            posts={remainingPosts}
+            locale={locale}
+            initialOffset={tagPosts.posts.length}
+            total={tagPosts.total}
+            tagSlug={slug}
+            loadMoreLabel={t("loadMore")}
+          />
         </HeroContainerContent>
 
         <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">

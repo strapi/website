@@ -1,0 +1,200 @@
+{
+  "slices.section-with-image:image+line+text+textPosition+title": {
+    "v5_component": "cards.feature-card",
+    "variant": "bordered",
+    "layout": "full",
+    "image_position": "flip_from_textPosition",
+    "emit_image": true,
+    "emit_ctaLinks": false,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-8/screenshots/source-full.png",
+      "target": "iteration-8/screenshots/target-final-full.png"
+    },
+    "override_reason": "Same card shape as the fuller version but without button/features/description fields. Cards on enterprise-intranet-cms have only title+text+image (no CTA). Still maps to cards.feature-card bordered/full with imagePosition flipped from textPosition. ctaLinks emitted as empty array. Confirmed rendering correctly on target."
+  },
+  "slices.text-slice:content.title+content.text": {
+    "v5_component": "sections.section-header",
+    "variant": null,
+    "layout": "center",
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-8/screenshots/source-full.png",
+      "target": "iteration-8/screenshots/target-final-full.png"
+    },
+    "override_reason": "slices.text-slice with content nested under a `content` sub-object (not top-level title/text) and no button/theme=purple. SKILL.md Step 6.1 says 'otherwise → sections.richtext' but this is a clean title+description heading block (alignCenter: true), not prose markdown — sections.section-header matches visually better. IMPORTANT populate note: `slices.text-slice` content lives under a `content` sub-field; populate[slices][populate]=* does NOT reach it. Must use populate[slices][on][slices.text-slice][populate]=* to reach content.title/content.text. Missed in initial populate spec — added to findings."
+  },
+  "slices.stacking-cards:cards+title": {
+    "v5_component": "sections.feature-card-grid",
+    "variant": "plain",
+    "layout": "third",
+    "image_position": null,
+    "background": "light",
+    "decided_at": "2026-05-24",
+    "evidence": {
+      "source": "iteration-2/visual-pass/source-stacking-cards.png",
+      "candidate": "iteration-2/visual-pass/candidate-featurecardgrid.png"
+    },
+    "override_reason": "Source 'Extend Strapi' renders as a sticky-left header + vertical stacking-card animation. User feedback: prefers v5 to use grid layout, not standalone cards. The dev-page 'FeatureCardGrid 3-column grid on light background' variant matches the user's intent. Old default emitted sections.section-header + N×standalone cards.content-card; this override wraps all cards in a single feature-card-grid with feature-card items (title + description) so the section is one cohesive component, not 7 loose ones."
+  },
+  "slices.section-with-image:button+image+line+text+textPosition+title": {
+    "v5_component": "cards.feature-card",
+    "variant": "bordered",
+    "layout": "full",
+    "image_position": "flip_from_textPosition",
+    "emit_image": true,
+    "emit_ctaLinks": true,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-9/screenshots/source-full.png",
+      "target": "iteration-9/screenshots/target-full.png"
+    },
+    "override_reason": "mobile-cms section-with-image cards: title+text+image+button+line (no label/description/features). Same mapping as fuller shapes — cards.feature-card bordered/full, imagePosition flipped from textPosition, ctaLinks from button.link. Confirmed visually: all 4 feature cards render with image and CTA on target."
+  },
+  "slices.section-with-image:button+image+label+line+text+textPosition+title": {
+    "v5_component": "cards.feature-card",
+    "variant": "bordered",
+    "layout": "full",
+    "image_position": "flip_from_textPosition",
+    "emit_image": true,
+    "emit_ctaLinks": true,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-9/screenshots/source-full.png",
+      "target": "iteration-9/screenshots/target-full.png"
+    },
+    "override_reason": "Same as button+image+line shape but with an empty label field present. Identical mapping: cards.feature-card bordered/full, imagePosition flip, ctaLinks from button.link. Empty label field is ignored (not sent to target)."
+  },
+  "slices.section-with-image:button+description+features+image+text+textPosition+title": {
+    "v5_component": "cards.feature-card",
+    "variant": "bordered",
+    "layout": "full",
+    "image_position": "flip_from_textPosition",
+    "emit_image": true,
+    "emit_ctaLinks": true,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-2/visual-pass/source-section-with-image.png",
+      "candidate": "iteration-2/visual-pass/candidate-featurecard-variants.png",
+      "after": "iteration-2/screenshots/04-target-AFTER-v3-images-ctas.png"
+    },
+    "override_reason": "CORRECTED 2026-05-25. The earlier 'data gap' diagnosis was WRONG — it was a shallow-populate bug. The source DOES carry image (image.media) and CTA (button.link) per card; populate:'*' just returned image:{} and button:{theme:link} as empty shells. Fix: deep-populate image.media + button.link (now the Step 8 default), find-before-upload the media → utilities.basic-image {media,alt,width,height}, and emit ctaLinks from button.link. All 4 ecommerce-cms cards now render bordered with real images + 'Learn More' CTAs, alternating left/right. Lesson: an empty nested object is a populate symptom, never proof of missing data."
+  },
+  "slices.content-cards-list:cards": {
+    "v5_component": "cards.content-card",
+    "variant": null,
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-10/screenshots/source-full.png",
+      "candidate": "iteration-10/screenshots/candidate-content-card.png",
+      "target": "iteration-10/screenshots/target-full.png"
+    },
+    "override_reason": "NEW slice type, first seen on cms-comparison strapi-vs-sanity. slices.content-cards-list has a cards[] array, each card {label, title, content} where content is rich markdown (incl. markdown tables and embedded iframes). Maps 1:1 to N standalone cards.content-card entries in the dynamic zone — exact field match (label→label, title→title, content→content REQUIRED richtext). Same precedent as slices.stacking-cards' content-card branch. Source renders each card as a titled prose/table block (H3 + body); component-library ContentCard variant renders identically incl. markdown tables. SKIP any card with empty content (content is required). POPULATE NOTE: reach cards via populate[slices][on][slices.content-cards-list][populate][cards][populate]=* — the generic populate[slices][populate][__all__]=* returned slices:[] (empty) on the comparators collection, a populate quirk; per-component 'on' populate is required."
+  },
+  "slices.faq:categories": {
+    "v5_component": "sections.faq-section",
+    "variant": null,
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-10/screenshots/source-full.png",
+      "target": "iteration-10/screenshots/target-full.png"
+    },
+    "override_reason": "NEW slice type, first seen on cms-comparison strapi-vs-sanity. slices.faq nests questions under categories[]: each category has {name, questions[]} and each question is {question, answer, openByDefault}. Maps to a single sections.faq-section with items[] = FLATTENED questions across all categories, each → utilities.accordions {question, answer} (both REQUIRED). Category names are dropped (faq-section has no category grouping — flat accordion list). SKIP the slice if no question survives the filter. POPULATE NOTE: reach the questions via populate[slices][on][slices.faq][populate][categories][populate]=* — categories alone returns just {name} without questions."
+  },
+  "slices.image-gallery:image": {
+    "v5_component": "media.image-gallery",
+    "variant": "contained",
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-17/screenshots/source-full.png",
+      "candidate": "iteration-17/screenshots/candidate-image-gallery.png",
+      "target": "iteration-17/screenshots/target-full.png"
+    },
+    "override_reason": "NEW slice UID (cheatsheet previously only had slices.image-slider). slices.image-gallery has image[] (mosaic, ~8 imgs) → media.image-gallery variant=contained; images uploaded+deduped from old CDN via the brand-logo/image-slider find-before-upload routine. Reach via populate[slices][on][slices.image-gallery][populate][image][populate]=*. SKIP if no images survive. Confirmed render matches on /about-us."
+  },
+  "slices.team-slice:intro": {
+    "v5_component": "SKIP",
+    "variant": null,
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": {
+      "source": "iteration-17/screenshots/source-full.png",
+      "candidate": "iteration-17/screenshots/candidate-meet-the-team.png"
+    },
+    "override_reason": "NEW slice UID. On the old site team MEMBERS are frontend-auto-fetched (not stored on the slice — source has intro only, no members[]). The v5 sections.meet-the-team REQUIRES items[] (elements.team-member-item, role required) and does NOT auto-fetch. So with no source members there is nothing to fill → SKIP. Only map (intro→section + members→items) if a future team-slice actually carries members[]."
+  },
+  "slices.features-grid:cards": {
+    "v5_component": "sections.feature-card-grid",
+    "variant": "plain",
+    "layout": "third",
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "iteration-18/screenshots/source-full.png", "target": "iteration-18/screenshots/target-full.png" },
+    "override_reason": "NEW UID (distinct from features-slice/features-card). cards[] {title, description=text, icon, button} -> sections.feature-card-grid, items=cards.feature-card with variant=PLAIN + layout=THIRD (or half for 2-col) — NEVER full/bordered/imagePosition (those are for single image-split cards; full makes full-width boxes = wrong). Source per-card icon -> feature-card icon field. ctaLinks from button.link. section from LABEL/TITLE/DESCRIPTION."
+  },
+  "slices.features-slice:cards": {
+    "v5_component": "sections.feature-card-grid",
+    "variant": "plain",
+    "layout": "third",
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "https://strapi.io/financial-services", "target": "iteration-37 (fixed)" },
+    "override_reason": "Plain multi-column tile grid (icon/title/text). items=cards.feature-card variant=PLAIN, layout = (source layout 'two'->half else 'three'/default->third), NO imagePosition, source card.icon -> feature-card.icon. The financial-services 'Any channel, any device' 3-col section. (Was wrongly emitted full/bordered/imagePosition — corrected per user feedback.)"
+  },
+  "slices.two-columns-benefits:benefits": {
+    "v5_component": "sections.two-columns-benefits",
+    "variant": null,
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "iteration-18/screenshots/source-full.png", "target": "iteration-18/screenshots/target-full.png" },
+    "override_reason": "v5-NATIVE same-named component. benefits[] {title, description=text, icon} -> items=elements.how-it-works-item, 1:1. Confirmed render."
+  },
+  "slices.capabilities-dynamic-cards:cards": {
+    "v5_component": "sections.feature-card-grid",
+    "variant": null,
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "iteration-18/screenshots/source-full.png", "target": "iteration-18/screenshots/target-full.png" },
+    "emit_ctaLinks": true,
+    "override_reason": "cards[] with per-card images -> sections.feature-card-grid (NOT tabbed-feature-overview; differs from slices.capability-cards). Per-card image via populate[slices][on][slices.capabilities-dynamic-cards][populate][cards][populate][image][populate][media]=true (generic cards.image populate=* returns image:{} shallow). EACH CARD carries a FLAT button {href,text,target} -> emit ctaLinks; prior migrations dropped these 'Learn more' CTAs (fixed on /content-management + /create-apis). Confirmed render."
+  },
+  "slices.icon-cards:cards": {
+    "v5_component": "sections.feature-card-grid",
+    "variant": "plain",
+    "layout": "half",
+    "image_position": null,
+    "emit_ctaLinks": true,
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "iteration-51/screenshots/source-icon-cards.png", "candidate": "iteration-51/screenshots/candidate-feature-card-grid.png" },
+    "override_reason": "NEW UID, first seen on /pricing universal. slices.icon-cards has cards[] each {theme, link:{href,text,target}, card:{title,text}} — NO icon/image media. Each card carries a CTA link ('Read More', 'Become a partner'). The target had mis-mapped this to sections.two-column-grid (how-it-works-item) which DROPS the CTAs (how-it-works-item has only icon/title/description). Correct mapping: sections.feature-card-grid, items=cards.feature-card variant=plain, layout=half (2 cards / 2-col), NO imagePosition; title=card.card.title, description=card.card.text, ctaLinks=[resolveLink(card.link)]. Restores the dropped CTAs while keeping title+description. section from LABEL/TITLE/DESCRIPTION (icon-cards has none -> omit/empty section)."
+  },
+  "slices.reviews-slider:intro+reviews": {
+    "v5_component": "sections.reviews",
+    "variant": null,
+    "layout": null,
+    "image_position": null,
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "https://strapi.io/pricing-cloud", "candidate": "iteration-51/screenshots/candidate-reviews.png" },
+    "override_reason": "Confirms cheatsheet preferred mapping. slices.reviews-slider with inline reviews.data[].attributes.{quote, author:{name,description}} -> sections.reviews {title (required, from intro.title), subTitle from LABEL, description from DESCRIPTION, reviews=<resolved api::review.review documentIds matched by authorName>}. Target api/reviews collection IS seeded (13 records) — all 3 pricing authors (Guillermo Rauch, Francois Duprat, Jerome Chauveau) resolve, so use the RELATION branch (not the testimonials.quote fallback). The target had mis-mapped this to a bare sections.section-header that kept only the heading and DROPPED all 3 review quotes — fixed to sections.reviews which renders heading + 3 review cards with quote/author/role/avatar."
+  },
+  "slices.text-with-key-numbers:keyNumber@case-study": {
+    "v5_component": "sections.feature-card-grid",
+    "variant": "plain",
+    "layout": "third",
+    "image_position": null,
+    "background": "none",
+    "decided_at": "2026-05-25",
+    "evidence": { "source": "iteration-70/screenshots/source-full.png", "target": "iteration-70/screenshots/target-full.png" },
+    "override_reason": "On a CASE-STUDY target the cheatsheet default sections.three-column-grid is NOT in the case-study content dynamic-zone allowlist (only two-column-grid/feature-card-grid/richtext etc. are). Closest allowed 3-column stat renderer is sections.feature-card-grid variant=plain layout=third (3 stats -> 3 columns), items=cards.feature-card {title:keyNumber.number, description:keyNumber.text}. section header OMITTED (the key-numbers slice carries no intro; section is optional on feature-card-grid, required on two-column-grid so feature-card-grid is the better fit). Confirmed render on /user-stories/airbus: +57% / 3 frontends / +67% as a clean 3-up stat row. NOTE: scope-qualified key (@case-study) — on pages where three-column-grid IS allowed, keep the cheatsheet default."
+  }
+}

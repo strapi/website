@@ -16,5 +16,10 @@ export function Breadcrumbs({ breadcrumbs, locale }: Props) {
 
   const breadcrumbListSchema = generateBreadcrumbListSchema(breadcrumbs, locale)
 
-  return <StrapiStructuredData structuredData={breadcrumbListSchema} />
+  return (
+    <StrapiStructuredData
+      structuredData={breadcrumbListSchema}
+      id="breadcrumbListStructuredData"
+    />
+  )
 }

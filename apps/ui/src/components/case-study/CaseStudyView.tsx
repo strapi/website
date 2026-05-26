@@ -17,6 +17,7 @@ import {
   SectionLabel,
   SectionTitle,
 } from "@/components/elementary/section-header"
+import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { fetchCaseStudy } from "@/lib/strapi-api/content/server"
@@ -47,6 +48,7 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
 
   return (
     <>
+      <StrapiSeoStructuredDataFromSeo seo={caseStudy.seo} />
       <HeroContainer affectsNavbarTheme>
         <HeroContainerContent>
           <HeroContainerBorder>

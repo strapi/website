@@ -13,7 +13,10 @@ import {
 } from "@/components/elementary/HeroContainer"
 import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
+import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
+import { getPostCategoryMetadata } from "@/lib/metadata"
+import type { SeoComponent } from "@/lib/metadata/build-from-seo"
 import {
   fetchBlog,
   fetchBlogPostsList,
@@ -24,11 +27,7 @@ type CategoryWithExtras = {
   name?: string | null
   slug?: string | null
   description?: string | null
-  seo?: {
-    metaTitle?: string | null
-    metaDescription?: string | null
-    keywords?: string | null
-  } | null
+  seo?: SeoComponent | null
   children?: ({ slug?: string | null } | null)[] | null
 }
 
@@ -58,20 +57,13 @@ export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { slug, locale } = await props.params
-  const res = await fetchPostCategory(slug, locale as Locale)
-  const category = res?.data as CategoryWithExtras | undefined
-  const seo = category?.seo
 
-  const fallbackName = slug
-    .replaceAll("-", " ")
-    .replaceAll(/\b\w/g, (c) => c.toUpperCase())
-  const name = category?.name ?? fallbackName
-
-  return {
-    title: seo?.metaTitle || `${name} — Blog`,
-    description: seo?.metaDescription ?? undefined,
-    keywords: seo?.keywords ?? undefined,
-  }
+  return (
+    (await getPostCategoryMetadata({
+      slug,
+      locale: locale as Locale,
+    })) ?? {}
+  )
 }
 
 export default function BlogCategoryPage(
@@ -105,32 +97,35 @@ export default function BlogCategoryPage(
   const categoryName = category?.name ?? featuredPost?.category?.name ?? slug
 
   return (
-    <HeroContainer affectsNavbarTheme className="gap-0">
-      <BlogNavbar locale={locale} />
+    <>
+      <StrapiSeoStructuredDataFromSeo seo={category?.seo} />
+      <HeroContainer affectsNavbarTheme className="gap-0">
+        <BlogNavbar locale={locale} />
 
-      <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-        <div className="flex flex-col gap-6">
-          <BlogBreadcrumbs category={{ name: categoryName, slug }} />
+        <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
+          <div className="flex flex-col gap-6">
+            <BlogBreadcrumbs category={{ name: categoryName, slug }} />
 
-          <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {categoryName}
-          </h1>
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {categoryName}
+            </h1>
 
-          {category?.description && (
-            <div className="text-background/60 max-w-full lg:max-w-1/2 [&_p:last-child]:mb-0">
-              <InlineMarkdown>{category.description}</InlineMarkdown>
-            </div>
-          )}
-        </div>
+            {category?.description && (
+              <div className="text-background/60 max-w-full lg:max-w-1/2 [&_p:last-child]:mb-0">
+                <InlineMarkdown>{category.description}</InlineMarkdown>
+              </div>
+            )}
+          </div>
 
-        {featuredPost && <FeaturedBlogPost post={featuredPost} />}
+          {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-        <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
-      </HeroContainerContent>
+          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
+        </HeroContainerContent>
 
-      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
-        <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
-      </HeroContainerContent>
-    </HeroContainer>
+        <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
+          <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
+        </HeroContainerContent>
+      </HeroContainer>
+    </>
   )
 }

@@ -3,7 +3,7 @@ import type { Locale } from "next-intl"
 import { CaseStudyView } from "@/components/case-study/CaseStudyView"
 import { createFallbackPath, debugStaticParams } from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
-import { getCaseStudyMetadata } from "@/lib/metadata/case-study"
+import { getCaseStudyMetadata } from "@/lib/metadata"
 import { fetchAllCaseStudies } from "@/lib/strapi-api/content/server"
 
 export const dynamic = "force-static"

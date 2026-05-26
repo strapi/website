@@ -257,14 +257,16 @@ Hit the Claude session usage limit. The two in-flight agents were throttled, not
 - [x] **GROUP F re-validate-only COMPLETE** (iteration-99-revalidate): `/`, `/solutions/app-builder-backend-framework`, `/solutions/corporate-website-cms`, `/solutions/ecommerce-cms`, `/solutions/enterprise-intranet-cms`, `/solutions/mobile-cms` — all 6 re-rendered fresh (reload+wait), DOM sanity-checked, all 6 renders viewed by orchestrator. No regressions: heroes present, feature cards render as image-split/3-up plain grids (not full-width bordered), integration grids intact, no raw markdown, 0 console errors. ⚠️ FOLLOW-UP (out of validate-only scope): homepage `seo.metaTitle` is the literal placeholder "SEO-TITLE" → browser tab shows "SEO-TITLE / Notum Technologies". One-field content fix, not a render regression — flagged for user approval.
 
 ## GROUP G — feature-pages quality/flag cleanup (2026-05-26, user: "do better" w/ reinforced learning)
+
 Scope (user-chosen): **structural/flag cleanup ONLY** — no new media, no new copy. 16 v5-native pages (no v4 source; strapi.io = design ref). Defect inventory (deep-GET):
+
 - **Image-less standalone feature-cards** (variant=bordered/layout=full/imgPos, hasImage=false → empty bordered boxes): custom-fields[3,4], custom-roles-and-permissions[4,5,6], customizable-api[3,4,5], internationalization[3,4,5]. FIX: consolidate consecutive into ONE feature-card-grid, items variant=plain layout=third(3)/half(2), NO imagePosition, carry title+description(+icon+ctaLinks if present).
 - **Grid items layout=full** (should be third): content-types-builder[3] (5 items), media-library[3] (5 items). FIX: items layout full→third.
 - **Empty case-study-card** (no caseStudy rel): custom-roles[7], audit-logs[2], content-history[4], live-preview[3], single-sign-on-sso[2]. FIX: link the existing migrated case-study strapi.io features on that page (lookup api/case-studies by company/slug); else DROP the empty card.
 - **Spurious imgPos on "More Features" bordered link-grids** (bordered legit): custom-fields[5], custom-roles[8], customizable-api[6], internationalization[6] — clear imagePosition; normalize layout if needed.
 - content-history[2] section-header possibly-empty → verify/drop.
 - two-columns-benefits `items:[]` = field-name/populate artifact (sections have titles) → NOT empty, verify-before-data-gap.
-Queue (one agent/page, view render each):
+  Queue (one agent/page, view render each):
 - [x] custom-roles-and-permissions → **cleaned** (iteration-100-features): 9→7; consolidated 3 image-less bordered/full cards → 3-up plain/third grid; wired empty case-study-card → continuum-banco-internacional; cleared spurious imgPos on "More Features" (5 bordered/half); published; render viewed ✓ (0 empty boxes). KEY: feature-card.imagePosition default="right" → must set explicit null to clear (not omit).
 - [x] custom-fields → **cleaned** (iteration-101-features): 6→5; consolidated 2 image-less cards → 2-up plain/half grid; cleared spurious imgPos on "More features" (5 bordered/half); published; render viewed ✓ (0 empty boxes). Confirmed explicit imagePosition:null sticks.
 - [x] customizable-api → **cleaned** (iteration-102-features): 7→5; consolidated 3 image-less cards → 3-up plain/third grid (carried "Learn more" ctaLinks); cleared spurious imgPos on "More features"; published; GET-back verified (0 image-less cards); orchestrator viewed render ✓ (agent missed screenshot — prompt lacked explicit FE URL; fixed for next).
@@ -279,10 +281,18 @@ Queue (one agent/page, view render each):
 - [x] /features INDEX → **cleaned** (iteration-111-features): benefit grid (3) bordered/full→plain/third; "More features" grid (6) full→third (kept bordered); imgPos→null on all 9 items; preserved hero/dynamic-features-grid/data-sink/newsletter; published; render viewed ✓ (3-up benefit tiles + 2×3 bordered "More features", no data-sink junk).
 
 ### ✅ GROUP G COMPLETE — all 16 feature pages done (2026-05-26)
+
 10 cleaned (custom-roles-and-permissions, custom-fields, customizable-api, internationalization, content-types-builder, media-library, audit-logs, content-history, live-preview, single-sign-on-sso) + /features index cleaned + 5 validate-only OK (conditional-fields, relations, releases, dynamic-zone, review-workflow). Fixes: consolidated image-less full/bordered feature-cards → plain/third grids; grid items full→third; empty case-study-cards → wired to existing migrated case-studies (Continuum on custom-roles; Tesco on audit-logs/content-history/live-preview/sso, per strapi.io design) or would-drop; cleared spurious imagePosition everywhere. ZERO new media, ZERO new copy. All published, all renders orchestrator-viewed. KEY gotcha: cards.feature-card.imagePosition default="right" → must PUT explicit `null` to clear (omitting re-applies "right").
 
 ## 🏁 QUEUE EMPTY — LOOP COMPLETE (2026-05-26)
+
 All batch-2 groups done: A–D (universals/solutions/top-level/headless-cms), E (31 user-stories case-studies), F (6 re-validations). Parked (3, no v5 target): /culture, /headless-cms/benefits-of-a-headless-cms-development, /headless-cms/headless-cms-vs-traditional-cms-understanding-the-difference. Skill edits 1–22 applied. Out-of-scope follow-ups for user: ~~homepage SEO-TITLE placeholder~~ **FIXED 2026-05-26** (homepage seo was null → set metaTitle "Strapi - Open-Source TypeScript Headless CMS" + metaDescription from source trimmed to ≤160; published; live tab verified); Meilisearch case-study index unseeded (/user-stories grid empty); /contact-sales + /demo + /careers FE notes (logged above).
+
+- [ ] finary · glean · google-walldecaux · kyivstar · l-equipe-amp-story-20th-anniversary · mind-gym · moustache-bikes-replaced-wordPress-with-strapi · mug-snug-e-commerce · openforge-mobile-agency · palmabit-intred · paradigma-digital-brand · pixeldust-agency · posthog · shelt-in-iot-health-monitoring · smartshore-ability-rd-nl · societe-generale-e-training-platform · sonos-pixel-alliance · successive-technologies · tesco · yatra-scaled-10m-users-4x-faster-campaigns-with-strapi · yuka-moves-fast-with-strapi-cloud · zero-molecule
+
+### F. Revalidate-only (already perfected this session — Playwright re-check, NO re-migrate)
+
+- [ ] `/` · `/solutions/app-builder-backend-framework` · `/solutions/corporate-website-cms` · `/solutions/ecommerce-cms` · `/solutions/enterprise-intranet-cms` · `/solutions/mobile-cms`
 
 ## Batch-2 skill edits
 

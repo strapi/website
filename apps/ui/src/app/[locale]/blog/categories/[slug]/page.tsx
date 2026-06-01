@@ -19,7 +19,7 @@ import { getPostCategoryMetadata } from "@/lib/metadata"
 import type { SeoComponent } from "@/lib/metadata/build-from-seo"
 import {
   fetchBlog,
-  fetchBlogPostsList,
+  fetchBlogPostsPage,
   fetchPostCategory,
 } from "@/lib/strapi-api/content/server"
 
@@ -31,7 +31,7 @@ type CategoryWithExtras = {
   children?: ({ slug?: string | null } | null)[] | null
 }
 
-export const dynamic = "force-static"
+export const revalidate = 3600
 
 export async function generateStaticParams({
   params: { locale },
@@ -89,11 +89,13 @@ export default function BlogCategoryPage(
     .filter((s): s is string => typeof s === "string" && s.length > 0)
   const allSlugs: string[] = [slug, ...childSlugs]
 
-  const categoryPosts = use(fetchBlogPostsList(locale, allSlugs, 20))
+  const categoryPosts = use(
+    fetchBlogPostsPage(locale, { offset: 0, limit: 10, categorySlug: allSlugs })
+  )
 
   const hubspotForm = getBlogNewsletterHubspot(blog)
-  const featuredPost: BlogPost | null = categoryPosts?.data[0] ?? null
-  const remainingPosts: BlogPost[] = categoryPosts?.data.slice(1) ?? []
+  const featuredPost: BlogPost | null = categoryPosts.posts[0] ?? null
+  const remainingPosts: BlogPost[] = categoryPosts.posts.slice(1)
   const categoryName = category?.name ?? featuredPost?.category?.name ?? slug
 
   return (
@@ -119,7 +121,14 @@ export default function BlogCategoryPage(
 
           {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-          <BlogPostsList posts={remainingPosts} loadMoreLabel={t("loadMore")} />
+          <BlogPostsList
+            posts={remainingPosts}
+            locale={locale}
+            initialOffset={categoryPosts.posts.length}
+            total={categoryPosts.total}
+            categorySlug={allSlugs}
+            loadMoreLabel={t("loadMore")}
+          />
         </HeroContainerContent>
 
         <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">

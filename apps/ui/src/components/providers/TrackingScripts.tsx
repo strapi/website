@@ -38,6 +38,16 @@ export function TrackingScripts() {
 
   return (
     <>
+      {env.COOKIEBOT_ID && (
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid={env.COOKIEBOT_ID}
+          data-blockingmode="auto"
+          strategy="beforeInteractive"
+        />
+      )}
+
       {env.GTM_ID && <GoogleTagManager gtmId={env.GTM_ID} />}
 
       {env.HUBSPOT_PORTAL_ID && (

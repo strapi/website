@@ -114,6 +114,240 @@ body:has([data-minimal-layout]) [data-slot="site-footer"] {
   display: none;
 }
 
+/* Cookiebot consent banner — restyled to the design system.
+   Uses semantic tokens (--color-primary = strapi-blue-600, --color-foreground,
+   --color-muted-foreground, --color-background), Poppins, and button styling
+   that mirrors the Button component (rounded-[8px], font-medium, ~42px tall). */
+#CybotCookiebotDialog,
+#CybotCookiebotDialog a,
+#CybotCookiebotDialog div,
+#CybotCookiebotDialogBodyContentControls,
+#CybotCookiebotDialogBodyContentTitle {
+  font-family: var(--font-poppins), sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Edge template forces min-width: 100vw, which overrides max-width and makes
+   the panel span the full viewport. Unset it (with the .CybotEdge compound to
+   match Cookiebot's specificity) so the compact card applies at every width. */
+#CybotCookiebotDialog.CybotEdge {
+  min-width: unset !important;
+}
+
+/* Edge lays Header | Nav | Content | Footer in a row above its viewport
+   breakpoint. Force the single-column ("mobile") stack at every width so the
+   compact card is always used — content on top, buttons below. */
+.CybotCookiebotDialogContentWrapper {
+  flex-direction: column !important;
+}
+
+#CybotCookiebotDialogHeader,
+#CybotCookiebotDialogTabContent,
+#CybotCookiebotDialogFooter {
+  width: 100% !important;
+  /* Edge adds a left margin on the tab content to clear its side nav (unused
+     in the forced-column layout) — zero it so the body doesn't shift/clip. */
+  margin-left: 0 !important;
+}
+
+/* Header: logo image (left) + Cookiebot logo (right) on a single row, with a
+   divider line below it — matching the mobile layout at every width. */
+#CybotCookiebotDialogHeaderLogosWrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+#CybotCookiebotDialogHeader {
+  border-bottom: 1px solid var(--color-border) !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 14px !important;
+}
+
+/* Second divider line — below the body text, above the buttons. */
+#CybotCookiebotDialogBody > .CybotCookiebotScrollContainer {
+  border-bottom: 1px solid var(--color-border) !important;
+  margin-bottom: 14px !important;
+}
+
+/* Dialog shell — floating card anchored to the bottom-LEFT, aligned to the
+   left edge of the site content container (max-w-312 = 78rem). On viewports
+   narrower than the content width it falls back to a 24px gutter, so the banner
+   stays next to the content instead of drifting to the corner on wide screens. */
+#CybotCookiebotDialog {
+  width: calc(100vw - 48px) !important;
+  max-width: 440px !important;
+  border: none !important;
+  background: var(--color-background) !important;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.12) !important;
+  left: max(24px, calc((100vw - 78rem) / 2)) !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 24px !important;
+  /* Cap height so the panel never overflows the top of the viewport (Edge
+     template + bottom anchor otherwise gives a negative top). Overflowing
+     content scrolls inside Cookiebot's own scroll areas. */
+  max-height: calc(100dvh - 48px) !important;
+  overflow: hidden !important;
+  transform: translateZ(1000px) !important;
+  margin: 0 !important;
+  border-radius: 10px !important;
+  padding: 22px 20px 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Very small phones — tighten the viewport gutter and stack the header logos
+   (image on top, Cookiebot logo beneath) so they don't overlap. */
+@media (width <= 380px) {
+  #CybotCookiebotDialog {
+    width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    bottom: 12px !important;
+    max-height: calc(100dvh - 24px) !important;
+    padding: 18px 16px 16px !important;
+  }
+
+  #CybotCookiebotDialogHeaderLogosWrapper {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+}
+
+#CybotCookiebotDialogBody {
+  border: none !important;
+  max-width: 590px !important;
+  width: 100% !important;
+  position: relative !important;
+  padding: 0 !important;
+}
+
+#CybotCookiebotDialogPoweredbyLink {
+  margin: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  opacity: 0.5 !important;
+}
+
+#CybotCookiebotDialogPoweredbyImage {
+  margin: 0 !important;
+  width: 30px !important;
+  display: block !important;
+}
+
+#CybotCookiebotDialogBodyContent,
+#CybotCookiebotDialogBodyButtons {
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+#CybotCookiebotDialogBodyContent {
+  max-width: 465px !important;
+}
+
+/* Cookiebot caps the buttons container at ~286px and pins it left, throwing off
+   centering on the wider desktop card — uncap it so the buttons center. */
+#CybotCookiebotDialogBodyButtons {
+  max-width: none !important;
+}
+
+#CybotCookiebotDialogBodyContentTitle {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--color-foreground) !important;
+  margin-bottom: 8px !important;
+}
+
+#CybotCookiebotDialogBodyContentText {
+  font-size: 13px !important;
+  color: var(--color-muted-foreground) !important;
+  line-height: 19px !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+}
+
+/* "Show details" link — centered consistently (Cookiebot aligns it left on
+   wide viewports and right on narrow ones otherwise). */
+#CybotCookiebotDialogBodyEdgeMoreDetails {
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin: 0 !important;
+  margin-left: 15px !important;
+}
+
+/* Button stack — Edge template nests the actual buttons inside
+   #CybotCookiebotDialogBodyButtonsWrapper, so the flex column must live there.
+   Buttons stretch to the full card width; column-reverse keeps Accept on top. */
+#CybotCookiebotDialogBodyButtonsWrapper {
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Buttons — mirror the Button component */
+#CybotCookiebotDialogBodyButtonAccept,
+#CybotCookiebotDialogBodyButtonDecline {
+  display: inline-flex !important;
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 9px 20px !important;
+  box-sizing: border-box !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease !important;
+}
+
+#CybotCookiebotDialogBodyButtonAccept {
+  background-color: var(--color-primary) !important;
+  color: var(--color-primary-foreground) !important;
+  border: none !important;
+}
+
+#CybotCookiebotDialogBodyButtonAccept:hover {
+  background-color: color-mix(
+    in oklab,
+    var(--color-primary) 90%,
+    transparent
+  ) !important;
+}
+
+#CybotCookiebotDialogBodyButtonDecline {
+  background-color: transparent !important;
+  border: solid 1px var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+#CybotCookiebotDialogBodyButtonDecline:hover {
+  background-color: color-mix(
+    in oklab,
+    var(--color-primary) 8%,
+    transparent
+  ) !important;
+}
+
+#CybotCookiebotDialogBodyButtonAccept:focus-visible,
+#CybotCookiebotDialogBodyButtonDecline:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ring) 50%, transparent) !important;
+}
+
+#CybotCookiebotDialogBodyButtonDetails {
+  display: none !important;
+}
+
 /* When a dark hero is present, swap to light logo on all sizes */
 body:has([data-dark-hero]) nav[data-navbar] {
   --nav-logo-default-opacity: 0;

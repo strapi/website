@@ -32,6 +32,7 @@ export function StrapiEmbed({
             allowTransparency
             scrolling="no"
             loading="lazy"
+            data-cookieconsent="marketing"
           />
         </div>
       </Container>

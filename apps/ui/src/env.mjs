@@ -37,6 +37,7 @@ export const env = createEnv({
     HUBSPOT_PORTAL_ID: z.string().optional(),
     HUBSPOT_API_TOKEN: z.string().optional(),
     HOTJAR_ID: z.string().optional(),
+    COOKIEBOT_ID: z.string().optional(),
 
     DEMO_OPERATOR_SERVER: z.string().url().optional(),
     DEMO_OPERATOR_TOKEN: z.string().optional(),
@@ -102,6 +103,7 @@ export const env = createEnv({
     HUBSPOT_PORTAL_ID: process.env.HUBSPOT_PORTAL_ID,
     HUBSPOT_API_TOKEN: process.env.HUBSPOT_API_TOKEN,
     HOTJAR_ID: process.env.HOTJAR_ID,
+    COOKIEBOT_ID: process.env.COOKIEBOT_ID,
 
     DEMO_OPERATOR_SERVER: process.env.DEMO_OPERATOR_SERVER,
     DEMO_OPERATOR_TOKEN: process.env.DEMO_OPERATOR_TOKEN,

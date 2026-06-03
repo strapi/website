@@ -64,7 +64,9 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
 
                 {caseStudy.description && (
                   <SectionDescription variant="inverse" size="lg">
-                    <InlineMarkdown>{caseStudy.description}</InlineMarkdown>
+                    <InlineMarkdown allowNewLines>
+                      {caseStudy.description}
+                    </InlineMarkdown>
                   </SectionDescription>
                 )}
               </SectionHeader>

@@ -1,4 +1,3 @@
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
 import type { Locale } from "next-intl"
 
 import {
@@ -9,7 +8,6 @@ import { fetchBlog } from "@/lib/strapi-api/content/server"
 
 import { BlogNavbarTabs } from "./BlogNavbarTabs"
 import { BlogNewsletterPopover } from "./BlogNewsletterPopover"
-import { Button } from "../ui/button"
 
 export async function BlogNavbar({ locale }: { readonly locale: Locale }) {
   const response = await fetchBlog(locale)
@@ -29,9 +27,9 @@ export async function BlogNavbar({ locale }: { readonly locale: Locale }) {
         <BlogNavbarTabs categories={categories} />
 
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="outlineInverse" size="icon">
+          {/* <Button variant="outlineInverse" size="icon">
             <MagnifyingGlassIcon weight="bold" />
-          </Button>
+          </Button> */}
           <BlogNewsletterPopover hubspotForm={hubspotForm} />
         </div>
       </div>

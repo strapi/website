@@ -282,7 +282,7 @@ export function StrapiPlanComparisonTable({
 
       {component.footnote && (
         <div className="text-strapi-neutral-700 mt-4 px-4 text-sm">
-          <InlineMarkdown>{component.footnote}</InlineMarkdown>
+          <InlineMarkdown allowNewLines>{component.footnote}</InlineMarkdown>
         </div>
       )}
     </Container>

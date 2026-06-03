@@ -2,6 +2,7 @@ import type { Data } from "@repo/strapi-types"
 
 import { Box } from "@/components/elementary/box/Box"
 import { Container } from "@/components/elementary/Container"
+import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
 
@@ -54,7 +55,9 @@ export function StrapiTwoColumnGrid({
                   <h3 className={classes.title}>{item.title}</h3>
                 </div>
 
-                <p className={classes.description}>{item.description}</p>
+                <InlineMarkdown allowNewLines>
+                  {item.description}
+                </InlineMarkdown>
               </div>
             ))}
           </div>

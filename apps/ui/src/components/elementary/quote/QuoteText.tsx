@@ -31,7 +31,7 @@ export function QuoteText({
 
   const content =
     typeof children === "string" ? (
-      <InlineMarkdown>{children}</InlineMarkdown>
+      <InlineMarkdown allowNewLines>{children}</InlineMarkdown>
     ) : (
       children
     )

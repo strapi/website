@@ -21,7 +21,7 @@ export function StrapiFeatureCardGrid({
   readonly component: Data.Component<"sections.feature-card-grid">
 }) {
   return (
-    <Box variant={component.background ?? "none"}>
+    <Box variant={component.background ?? "none"} className="py-16 lg:py-32">
       <Container>
         {component.section && (
           <StrapiSectionHeader component={component.section} />
@@ -112,7 +112,16 @@ export function StrapiFeatureCardGrid({
                       {item.ctaLinks && item.ctaLinks.length > 0 && (
                         <FeatureCardCTA spacing={size}>
                           {item.ctaLinks.map((link) => (
-                            <StrapiLink key={link.id} component={link} />
+                            <StrapiLink
+                              key={link.id}
+                              component={{
+                                ...link,
+                                decorations: {
+                                  variant: "secondary",
+                                  ...link?.decorations,
+                                } as Data.Component<"utilities.link">["decorations"],
+                              }}
+                            />
                           ))}
                         </FeatureCardCTA>
                       )}

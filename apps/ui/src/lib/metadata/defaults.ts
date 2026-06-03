@@ -13,9 +13,9 @@ export function getDefaultMetadata(siteUrl: string, t: TranslateFn) {
     keywords: t("keywords"),
     robots: t("metaRobots"),
 
-    icons: {
-      icon: "favicon.ico",
-    },
+    // Favicon/manifest are defined once on the root layout so every route
+    // inherits the full icon set; omit `icons` here so Next's shallow merge
+    // doesn't replace it with just the .ico on SEO-driven pages.
 
     metadataBase: new URL(siteUrl),
   } as Metadata

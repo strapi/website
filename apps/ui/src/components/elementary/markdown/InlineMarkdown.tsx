@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm"
 
 interface InlineMarkdownProps {
   children?: string | null
+  allowNewLines?: boolean
   className?: string
 }
 
@@ -20,7 +21,11 @@ interface InlineMarkdownProps {
  *
  * Used in places like TooltipContent, SectionDescription
  */
-export function InlineMarkdown({ children, className }: InlineMarkdownProps) {
+export function InlineMarkdown({
+  children,
+  allowNewLines,
+  className,
+}: InlineMarkdownProps) {
   if (!children) {
     return null
   }
@@ -30,10 +35,15 @@ export function InlineMarkdown({ children, className }: InlineMarkdownProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
-        allowedElements={["p", "strong", "em", "del", "u", "a", "code", "br"]}
+        allowedElements={
+          allowNewLines
+            ? ["p", "strong", "em", "del", "u", "a", "code", "br"]
+            : ["p", "strong", "em", "del", "u", "a", "code  "]
+        }
         unwrapDisallowed
         components={{
-          p: ({ children }) => <>{children}</>,
+          p: ({ children }) =>
+            allowNewLines ? <>{children}</> : <p>{children}</p>,
           strong: ({ children }) => (
             <strong className="font-semibold">{children}</strong>
           ),

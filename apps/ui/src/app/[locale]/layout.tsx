@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
 import Script from "next/script"
 import type { Locale } from "next-intl"
@@ -32,6 +32,22 @@ export const metadata: Metadata = {
     template: "%s / Notum Technologies",
     default: "",
   },
+
+  /**
+   * Site-wide favicon set. Defined on the root layout so every route inherits
+   * it — Next.js shallow-merges metadata, so pages that don't set `icons`
+   * (not-found, dev, error boundaries) still get these.
+   */
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
+
   // TODO: REMOVE BEFORE PRODUCTION DEPLOY — site-wide noindex/nofollow while
   // hosted on a non-production URL. Drop this `robots` field entirely.
   robots: {
@@ -44,6 +60,10 @@ export const metadata: Metadata = {
       noimageindex: true,
     },
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#4945ff",
 }
 
 export default async function RootLayout({

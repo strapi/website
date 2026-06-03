@@ -42,9 +42,20 @@ export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
 
               {component.ctas?.length ? (
                 <div className="mt-6 flex flex-wrap gap-4">
-                  {component.ctas.map((cta) => (
-                    <StrapiLink key={cta.id} component={cta} />
-                  ))}
+                  {component.ctas.map((cta) => {
+                    return (
+                      <StrapiLink
+                        key={cta.id}
+                        component={{
+                          ...cta,
+                          decorations: {
+                            variant: "secondary",
+                            ...cta?.decorations,
+                          } as Data.Component<"utilities.link">["decorations"],
+                        }}
+                      />
+                    )
+                  })}
                 </div>
               ) : null}
             </div>

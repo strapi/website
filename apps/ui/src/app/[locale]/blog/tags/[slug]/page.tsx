@@ -100,7 +100,7 @@ export default function BlogTagPage(
 
             {tag?.description && (
               <div className="text-strapi-gray-300 max-w-3xl [&_p]:text-base [&_p:last-child]:mb-0">
-                <InlineMarkdown>{tag.description}</InlineMarkdown>
+                <InlineMarkdown allowNewLines>{tag.description}</InlineMarkdown>
               </div>
             )}
           </div>

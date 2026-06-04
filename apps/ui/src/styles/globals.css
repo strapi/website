@@ -366,4 +366,16 @@ body:has([data-dark-hero]) nav[data-navbar]::before {
     --nav-text-initial: rgb(255 255 255);
     --nav-link-hover-initial: rgb(255 255 255 / 0.6);
   }
+
+  /* The nav text color flips between the dark- and light-hero themes instantly
+     (steps(1) on scroll; :has() swap on client navigation). Button/link variants
+     in the bar carry a `color` transition that animates that flip, so the text
+     lags behind the background + logo swap. Drop color (and fill/stroke for
+     icons) from the transition on navbar text while leaving background/opacity/
+     transform hovers animated. */
+  nav[data-navbar] :is(a, button, span, p, svg) {
+    transition-property:
+      background-color, border-color, box-shadow, opacity, transform, translate,
+      scale, rotate, filter, backdrop-filter;
+  }
 }

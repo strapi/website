@@ -22,7 +22,7 @@ export function StrapiReviews({
   }
 
   return (
-    <section className="py-20 lg:py-30">
+    <section>
       <Container>
         <SectionHeader size="default" layout="center">
           {subTitle && <SectionLabel variant="purple">{subTitle}</SectionLabel>}

@@ -22,7 +22,7 @@ export function StrapiFaqSection({
   const t = useTranslations("sections.faq")
 
   return (
-    <section className="py-16 lg:py-24">
+    <section>
       <Container>
         <div className="mx-auto max-w-3xl">
           <SectionHeader>

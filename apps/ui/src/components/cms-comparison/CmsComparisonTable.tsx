@@ -1,11 +1,6 @@
 import { CheckIcon, XIcon } from "@phosphor-icons/react/ssr"
+import { Fragment } from "react"
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import type { CMSEntry } from "@/lib/cms-comparison-utils"
 
 import { CMSLogo } from "../page-builder/components/sections/StrapiComparatorGrid"
@@ -81,13 +76,15 @@ function FieldValue({
   readonly value: { mark: boolean; text: string | null }
 }) {
   if (value.text) {
-    return <span className="text-strapi-neutral-700 text-sm">{value.text}</span>
+    return (
+      <span className="text-strapi-neutral-700 text-base">{value.text}</span>
+    )
   }
 
   return value.mark ? (
-    <CheckIcon className="text-green-600" size={20} weight="bold" />
+    <CheckIcon className="text-strapi-green-600" size={20} weight="bold" />
   ) : (
-    <XIcon className="text-strapi-neutral-400" size={20} weight="bold" />
+    <XIcon className="text-red-500" size={20} weight="bold" />
   )
 }
 
@@ -104,50 +101,47 @@ export function CmsComparisonTable({
     return null
   }
 
-  const defaultOpen = categories[0]?.category
-
   return (
-    <div className="rounded-strapi-lg overflow-hidden border">
-      <div className="bg-strapi-neutral-100 grid grid-cols-[1fr_1fr_1fr] items-center border-b px-4 py-4 lg:px-6">
-        <div />
-        <div className="flex justify-center">
+    <div className="rounded-strapi-lg border-strapi-neutral-200 overflow-hidden border">
+      <div className="grid grid-cols-3">
+        {/* Header row: empty label column + the two CMS logos */}
+        <div className="border-strapi-neutral-200 border-b" />
+        <div className="border-strapi-neutral-200 flex items-center justify-center border-b border-l px-2 py-5">
           <CMSLogo cms={firstCMS} className="max-h-8" />
         </div>
-        <div className="flex justify-center">
+        <div className="border-strapi-neutral-200 flex items-center justify-center border-b border-l px-2 py-5">
           <CMSLogo cms={secondCMS} className="max-h-8" />
         </div>
-      </div>
 
-      <Accordion
-        type="multiple"
-        defaultValue={defaultOpen ? [defaultOpen] : []}
-      >
         {categories.map((group) => (
-          <AccordionItem key={group.category} value={group.category}>
-            <AccordionTrigger className="bg-strapi-neutral-100/50 px-4 py-3 text-sm font-semibold lg:px-6">
-              {group.category}
-            </AccordionTrigger>
-            <AccordionContent className="p-0">
-              {group.fields.map((field) => (
-                <div
-                  key={field.name}
-                  className="hover:bg-strapi-neutral-100/30 grid grid-cols-[1fr_1fr_1fr] items-center border-t px-4 py-3 lg:px-6"
-                >
-                  <span className="text-strapi-neutral-800 text-sm font-medium">
+          <Fragment key={group.category}>
+            {/* Category header spans the label column; value columns stay empty */}
+            <div className="border-strapi-neutral-200 flex items-center border-b py-3 pr-2 pl-6">
+              <span className="text-strapi-blue-800 text-lg font-semibold">
+                {group.category}
+              </span>
+            </div>
+            <div className="border-strapi-neutral-200 border-b border-l" />
+            <div className="border-strapi-neutral-200 border-b border-l" />
+
+            {group.fields.map((field) => (
+              <Fragment key={field.name}>
+                <div className="border-strapi-neutral-200 flex items-center border-b py-3 pr-2 pl-6">
+                  <span className="text-strapi-neutral-700 text-lg">
                     {field.name}
                   </span>
-                  <div className="flex justify-center">
-                    <FieldValue value={field.firstCMS} />
-                  </div>
-                  <div className="flex justify-center">
-                    <FieldValue value={field.secondCMS} />
-                  </div>
                 </div>
-              ))}
-            </AccordionContent>
-          </AccordionItem>
+                <div className="border-strapi-neutral-200 flex items-center justify-center border-b border-l px-2 py-3 text-center">
+                  <FieldValue value={field.firstCMS} />
+                </div>
+                <div className="border-strapi-neutral-200 flex items-center justify-center border-b border-l px-2 py-3 text-center">
+                  <FieldValue value={field.secondCMS} />
+                </div>
+              </Fragment>
+            ))}
+          </Fragment>
         ))}
-      </Accordion>
+      </div>
     </div>
   )
 }

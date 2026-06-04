@@ -11,7 +11,7 @@ export function StrapiRichtext({
   if (!component.content) return null
 
   return (
-    <section className="py-8 lg:py-12">
+    <section>
       <Container>
         <Markdown>{component.content}</Markdown>
       </Container>

@@ -20,6 +20,7 @@ import {
 import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
+import { SECTION_SPACING } from "@/lib/section-spacing"
 import { fetchCaseStudy } from "@/lib/strapi-api/content/server"
 
 interface CaseStudyViewProps {
@@ -91,7 +92,7 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
           {caseStudy.content && caseStudy.content.length > 0 && (
             <DynamicZoneRenderer
               content={caseStudy.content}
-              itemClassName="mb-6 md:mb-10 lg:mb-14"
+              itemClassName={SECTION_SPACING}
               surface="page"
             />
           )}

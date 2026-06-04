@@ -121,7 +121,7 @@ export function NewsListView({
   }
 
   return (
-    <section className="py-8 lg:py-16">
+    <section>
       <Container>
         <ul className="flex list-none flex-col gap-4 pl-0">
           {items.map((item) => (

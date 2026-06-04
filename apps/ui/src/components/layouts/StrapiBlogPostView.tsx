@@ -16,6 +16,7 @@ import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRender
 import { extractHeadings, type BlogPost } from "@/lib/blog-utils"
 import { getEnvVar } from "@/lib/env-vars"
 import { routing } from "@/lib/navigation"
+import { SECTION_SPACING } from "@/lib/section-spacing"
 import { fetchBlogPost } from "@/lib/strapi-api/content/server"
 import { buildBlogPostingJsonLd } from "@/lib/structured-data/blog-posting"
 
@@ -136,7 +137,7 @@ export function StrapiBlogPostView({ params }: Props) {
           {sections && sections.length > 0 && (
             <DynamicZoneRenderer
               content={sections}
-              itemClassName="mb-6 md:mb-10 lg:mb-14"
+              itemClassName={SECTION_SPACING}
               surface="page"
               extraProps={{ currentSlug: slug, locale }}
             />

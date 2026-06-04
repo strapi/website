@@ -14,6 +14,7 @@ import {
   mapCmsEntries,
   parseComparatorSlug,
 } from "@/lib/cms-comparison-utils"
+import { SECTION_SPACING } from "@/lib/section-spacing"
 import {
   fetchAllCms,
   fetchCmsComparison,
@@ -90,27 +91,25 @@ export function CmsComparisonView({ params }: CmsComparisonViewProps) {
       </HeroContainer>
 
       <main className="flex w-full flex-col pt-24">
-        <Container variant="condensed">
-          {comparison.content && comparison.content.length > 0 && (
-            <DynamicZoneRenderer
-              content={comparison.content}
-              itemClassName="mb-6 md:mb-10 lg:mb-14"
-              surface="page"
-            />
-          )}
-        </Container>
+        {comparison.content && comparison.content.length > 0 && (
+          <DynamicZoneRenderer
+            content={comparison.content}
+            itemClassName={SECTION_SPACING}
+            surface="page"
+          />
+        )}
+
+        {Array.isArray(slugParts) && (
+          <StrapiComparatorGrid filterBySlugs={[slugParts[0]]} />
+        )}
 
         {comparison.showTable && formatted && (
-          <Container variant="condensed">
+          <Container variant="condensed" className={SECTION_SPACING}>
             <CmsComparisonTable
               firstCMS={formatted.firstCMS}
               secondCMS={formatted.secondCMS}
             />
           </Container>
-        )}
-
-        {Array.isArray(slugParts) && (
-          <StrapiComparatorGrid filterBySlugs={[slugParts[0]]} />
         )}
 
         <Container variant="condensed">

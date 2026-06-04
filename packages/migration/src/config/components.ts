@@ -192,6 +192,24 @@ function wrapBasicImage(media: unknown): Record<string, unknown> | undefined {
   }
 }
 
+/**
+ * Strip inline markdown emphasis/heading/code markers from a value destined for
+ * a plain-string field (e.g. content-card `title`/`label`). v4 authors wrapped
+ * some card titles in `**bold**`; those fields are rendered as raw text in v5, so
+ * the markers would show as literal asterisks. Leaves markdown body fields alone.
+ */
+function stripInlineMarkdown(value: unknown): string {
+  if (typeof value !== "string") return ""
+
+  return value
+    .replace(/^\s*#{1,6}\s+/, "") // leading "# " heading markers
+    .replaceAll(/\*\*([\s\S]+?)\*\*/g, "$1") // **bold**
+    .replaceAll(/__([\s\S]+?)__/g, "$1") // __bold__
+    .replaceAll(/\*([^*\n]+?)\*/g, "$1") // *italic*
+    .replaceAll(/`([^`\n]+?)`/g, "$1") // `code`
+    .trim()
+}
+
 /** Strip keys with `undefined` values so they don't serialize as `null`. */
 function compact<T extends Record<string, unknown>>(obj: T): T {
   return Object.fromEntries(
@@ -787,49 +805,34 @@ export const COMPONENT_MAP: ComponentMapping[] = [
   },
 
   // --- Case Study Card ---
-  // v4: triangleImage, card (relation → case-study with coverImage, whiteHero), buttonText
-  // v5: companyName, title, image, ctaLink, backgroundImage
+  // v4: triangleImage, card (relation → case-study), buttonText
+  // v5: relation-only — { caseStudy: <v5 documentId> } (required oneToOne).
+  // Resolve the v4 case-study id to its v5 documentId via IdMap. Entities that
+  // carry this slice must declare `case-studies` as a dependency so the map is
+  // prewarmed. Drop the component (return []) when the referenced case study
+  // isn't present in v5, so the parent entry still validates.
   {
     source: "slices.case-study-card",
     target: "cards.case-study-card",
-    transform: (entry) => {
-      // card is a v4 relation: { data: { id, attributes: { slug, coverImage, whiteHero, ... } } }
+    transform: (entry, ctx) => {
+      // card is a v4 relation: { data: { id, attributes: { ... } } }
       const cardRaw = asRecord(entry["card"])
       const cardData = asRecord(cardRaw["data"])
-      const card = asRecord(cardData["attributes"] ?? cardData)
 
-      const slug = (card["slug"] as string) ?? (cardRaw["slug"] as string) ?? ""
+      const v4Id =
+        typeof cardData["id"] === "number"
+          ? (cardData["id"] as number)
+          : typeof cardRaw["_v4Id"] === "number"
+            ? (cardRaw["_v4Id"] as number)
+            : undefined
 
-      // Extract company name + title from whiteHero.intro
-      const whiteHero = asRecord(card["whiteHero"])
-      const heroIntro = asRecord(whiteHero["intro"])
+      const documentId = v4Id
+        ? ctx?.idMap.get("api::case-study.case-study", v4Id)
+        : undefined
 
-      const companyName =
-        (heroIntro["label"] as string) ??
-        (card["companyName"] as string) ??
-        slug
-          .split("-")
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(" ")
+      if (!documentId) return []
 
-      const title =
-        (heroIntro["title"] as string) ??
-        (card["title"] as string) ??
-        (entry["buttonText"] as string) ??
-        ""
-
-      return {
-        companyName,
-        title,
-        image: wrapBasicImage(card["coverImage"] ?? card["image"]),
-        backgroundImage: wrapBasicImage(entry["triangleImage"]),
-        ctaLink: {
-          type: "external",
-          label: (entry["buttonText"] as string) ?? "Read more",
-          newTab: false,
-          href: slug ? `/case-studies/${slug}` : "#",
-        },
-      }
+      return { caseStudy: documentId }
     },
   },
 
@@ -844,10 +847,12 @@ export const COMPONENT_MAP: ComponentMapping[] = [
 
       if (cards.length === 0) return { title: "", content: "" }
 
-      // Return array → each becomes a separate content-card in the dynamic zone
+      // Return array → each becomes a separate content-card in the dynamic zone.
+      // title/label render as raw strings — strip any inline markdown the v4
+      // author left in (e.g. `**What is Strapi?**`). content stays markdown.
       return cards.map((card) => ({
-        label: (card["label"] as string) ?? "",
-        title: (card["title"] as string) ?? "",
+        label: stripInlineMarkdown(card["label"]),
+        title: stripInlineMarkdown(card["title"]),
         content:
           (card["content"] as string) ?? (card["description"] as string) ?? "",
       }))

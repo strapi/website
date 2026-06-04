@@ -14,7 +14,7 @@ export function StrapiHowItWorks({
   readonly component: Data.Component<"sections.how-it-works">
 }) {
   return (
-    <section className="py-16 lg:py-24">
+    <section>
       <Container>
         <SectionHeader layout="left">
           <SectionTitle as="h2" size="default">

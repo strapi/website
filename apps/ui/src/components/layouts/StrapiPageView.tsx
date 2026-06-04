@@ -9,6 +9,7 @@ import { Container } from "@/components/elementary/Container"
 import { MinimalHeader } from "@/components/layouts/MinimalHeader"
 import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
+import { SECTION_SPACING } from "@/lib/section-spacing"
 import { fetchPage } from "@/lib/strapi-api/content/server"
 import { cn } from "@/lib/styles"
 
@@ -71,7 +72,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
 
         <DynamicZoneRenderer
           content={content}
-          itemClassName="mb-6 md:mb-10 lg:mb-14"
+          itemClassName={SECTION_SPACING}
           surface="page"
           extraProps={{
             pageParams: params,

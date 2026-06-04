@@ -51,7 +51,7 @@ export function MobileNavbar({
               sizes="120px"
               className={cn(
                 logoClassName,
-                "opacity-[var(--nav-logo-default-opacity)] transition-opacity duration-300"
+                "opacity-[var(--nav-logo-default-opacity)]"
               )}
             />
           )}
@@ -62,7 +62,7 @@ export function MobileNavbar({
               sizes="120px"
               className={cn(
                 logoClassName,
-                "absolute inset-0 opacity-[var(--nav-logo-light-opacity)] transition-opacity duration-300"
+                "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"
               )}
             />
           )}

@@ -164,6 +164,53 @@ const DEEP_DZ_POPULATE = {
   },
 }
 
+/**
+ * Dynamic-zone populate for v4 `comparator.slices`.
+ *
+ * Strapi v4 quirk: a `slices` dynamic zone populated with BOTH a flat
+ * `populate: { field: ... }` object AND an `on:` clause (as DEEP_DZ_POPULATE
+ * does) returns ONLY the components listed in `on` — every other component is
+ * dropped from the response entirely. Comparators use none of DEEP_DZ_POPULATE's
+ * `on` components, so reusing it yielded ZERO slices and empty migrated pages.
+ *
+ * The correct v4 form for a dynamic zone is a pure `on:` clause that lists every
+ * component type with its own nested populate. These six are the only slice
+ * types present across all 132 v4 comparators.
+ */
+const COMPARATOR_SLICES_POPULATE = {
+  on: {
+    "slices.content-cards-list": { populate: { cards: { populate: "*" } } },
+    "slices.faq": {
+      populate: { categories: { populate: { questions: { populate: "*" } } } },
+    },
+    "slices.large-video": {
+      populate: { intro: { populate: { button: { populate: "*" } } } },
+    },
+    "slices.text-with-cards": {
+      populate: {
+        intro: { populate: { button: { populate: "*" } } },
+        cards: {
+          populate: { card: { populate: "*" }, link: { populate: "*" } },
+        },
+      },
+    },
+    "slices.newsletter-banner": {
+      populate: { newsletter: { populate: "*" } },
+    },
+    "slices.case-study-card": {
+      populate: {
+        triangleImage: { populate: "*" },
+        card: {
+          populate: {
+            coverImage: { populate: { media: { populate: "*" } } },
+            whiteHero: { populate: { intro: { populate: "*" } } },
+          },
+        },
+      },
+    },
+  },
+}
+
 // ─── Helpers for entity-level hero → DZ entry ───
 
 const asRecord = (v: unknown): Record<string, unknown> =>
@@ -1516,11 +1563,16 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
   },
 
   "cms-comparisons": {
+    // case-studies must be prewarmed so slices.case-study-card can resolve its
+    // v4 case-study relation to a v5 documentId.
+    dependencies: ["case-studies"],
     sourceEndpoint: "comparators",
     sourcePopulate: {
       SEO: { populate: "*" },
       cms: { populate: { logo: { populate: "*" }, field: { populate: "*" } } },
-      slices: DEEP_DZ_POPULATE["slices"],
+      // NOT DEEP_DZ_POPULATE — its flat-populate+`on` shape drops every slice
+      // a comparator uses. See COMPARATOR_SLICES_POPULATE.
+      slices: COMPARATOR_SLICES_POPULATE,
     },
     targetEndpoint: "cms-comparisons",
     dedupField: "slug",

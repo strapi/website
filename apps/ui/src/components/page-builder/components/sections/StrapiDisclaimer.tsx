@@ -11,7 +11,7 @@ export function StrapiDisclaimer({
   if (!component.title) return null
 
   return (
-    <section className="py-8 lg:py-12">
+    <section>
       <Container>
         <Disclaimer title={component.title}>{component.content}</Disclaimer>
       </Container>

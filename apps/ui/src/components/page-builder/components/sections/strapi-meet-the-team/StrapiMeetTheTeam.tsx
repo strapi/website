@@ -100,7 +100,7 @@ export function StrapiMeetTheTeam({
             />
           ))}
 
-          {component.ctaTitle && (
+          {selectedDepartment === ALL_TEAMS && component.ctaTitle && (
             <Card className="bg-strapi-blue-800 flex items-center justify-center p-8">
               <div className="flex flex-col items-center gap-4 text-center">
                 <h3 className="text-xl font-bold text-white">

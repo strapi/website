@@ -28,7 +28,7 @@ export function QuoteAuthorBlock({
           <StrapiBasicImage
             component={component.companyLogo}
             mode="responsive"
-            className="max-h-5 w-auto"
+            className="max-h-5 w-auto self-start"
             sizes="80px"
           />
         )

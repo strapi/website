@@ -15,16 +15,16 @@
     "playwright-visual-tests": "playwright test visual/visual.spec.ts"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.10.2",
+    "@axe-core/playwright": "^4.11.3",
     "get-sitemap-links": "^1.1.0"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.53.2",
-    "@types/node": "^22",
-    "dotenv": "17.2.3",
-    "eslint-plugin-playwright": "^2.2.0",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^22.19.20",
+    "dotenv": "17.4.2",
+    "eslint-plugin-playwright": "^2.10.4",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.3"
   }
 }

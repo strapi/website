@@ -11,6 +11,7 @@ import {
 } from "@/components/elementary/feature-card"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
+import { cn } from "@/lib/styles"
 
 export function StrapiFeatureCard({
   component,
@@ -48,6 +49,10 @@ export function StrapiFeatureCard({
                   <StrapiBasicImage
                     component={component.icon}
                     mode="intrinsic"
+                    className={cn(
+                      !(component.icon.width && component.icon.height) &&
+                        "size-10 object-contain"
+                    )}
                   />
                 ) : undefined
               }

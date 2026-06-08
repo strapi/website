@@ -50,7 +50,7 @@ export function StrapiFeatureCardGrid({
                     variant={item.variant ?? "bordered"}
                     layout={cardLayout}
                     size={size}
-                    className="h-full"
+                    className="h-full items-start"
                   >
                     {hasImage &&
                       cardLayout === "split" &&
@@ -79,6 +79,10 @@ export function StrapiFeatureCardGrid({
                             <StrapiBasicImage
                               component={item.icon}
                               mode="intrinsic"
+                              className={cn(
+                                !(item.icon.width && item.icon.height) &&
+                                  "size-10 object-contain"
+                              )}
                             />
                           ) : undefined
                         }

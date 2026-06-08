@@ -8,6 +8,7 @@ export interface CaseStudyHit {
   readonly originalPublishedAt?: string | null
   readonly locale?: string
   readonly coverImage?: { readonly image?: unknown } | null
+  readonly logoImage?: { readonly image?: unknown } | null
   readonly categories?:
     | readonly {
         readonly name?: string

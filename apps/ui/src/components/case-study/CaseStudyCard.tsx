@@ -41,6 +41,17 @@ export function CaseStudyCard({ caseStudy }: CaseStudyCardProps) {
         </CardImage>
 
         <CardContent>
+          {caseStudy.logoImage?.image && (
+            <StrapiBasicImage
+              component={caseStudy.logoImage.image}
+              mode="responsive"
+              className="mb-2 h-8 w-auto object-contain"
+              sizes="120px"
+              hideWhenMissing
+              decorative
+            />
+          )}
+
           {caseStudy.companyName && (
             <CardLabel>{caseStudy.companyName}</CardLabel>
           )}

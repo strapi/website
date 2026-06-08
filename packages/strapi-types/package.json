@@ -22,6 +22,6 @@
     "sync-types": "if [ -L ./generated ]; then echo 'generated is symlinked; skipping sync'; else mkdir -p ./generated && cp -R ../../apps/strapi/types/generated/. ./generated; fi"
   },
   "devDependencies": {
-    "@strapi/strapi": "5.47.1"
+    "@strapi/strapi": "5.46.1"
   }
 }

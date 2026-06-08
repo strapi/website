@@ -4,7 +4,7 @@ packages:
   - qa/**
 
 catalog:
-  '@strapi/strapi': 5.47.1
+  '@strapi/strapi': 5.46.1
   '@tailwindcss/postcss': ^4.3.0
   '@types/node': ^24.13.1
   class-variance-authority: ^0.7.1

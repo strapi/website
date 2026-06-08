@@ -1,14 +1,17 @@
-packages: ["packages/*", "apps/*", "qa/**"]
+packages:
+  - packages/*
+  - apps/*
+  - qa/**
 
 catalog:
-  "@strapi/strapi": 5.36.0
-  "@tailwindcss/postcss": ^4.1.18
-  "@types/node": ^24
+  '@strapi/strapi': 5.47.1
+  '@tailwindcss/postcss': ^4.3.0
+  '@types/node': ^24.13.1
   class-variance-authority: ^0.7.1
   eslint-plugin-jsx-a11y: ^6.10.2
-  lodash: ^4.17.23
-  postcss: ^8.5.3
-  qs: ^6.14.1
-  tailwindcss: ^4.1.18
-  typescript: ^5
-  vitest: ~4.0.18
+  lodash: ^4.18.1
+  postcss: ^8.5.15
+  qs: ^6.15.2
+  tailwindcss: ^4.3.0
+  typescript: ^5.9.3
+  vitest: ~4.1.8

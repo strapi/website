@@ -43,13 +43,13 @@
     "@repo/typescript-config": "workspace:*",
     "commitizen": "4.3.1",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.4",
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
-    "prettier": "3.8.1",
+    "prettier": "3.8.3",
     "semantic-release": "25.0.3",
     "shadcn": "^3.8.5",
-    "turbo": "2.8.9"
+    "turbo": "2.9.16"
   },
   "packageManager": "pnpm@10.28.1",
   "engines": {
@@ -57,7 +57,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "19.2.14",
+      "@types/react": "19.2.17",
       "@types/react-dom": "19.2.3"
     },
     "packageExtensions": {

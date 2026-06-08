@@ -20,7 +20,7 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.4",
+    "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "catalog:",
     "class-variance-authority": "catalog:",
     "postcss": "catalog:",

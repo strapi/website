@@ -598,6 +598,7 @@ export interface FormsHubspotFormSsr extends Struct.ComponentSchema {
       "oneToOne",
       "api::hubspot-form.hubspot-form"
     >
+    title: Schema.Attribute.String
   }
 }
 

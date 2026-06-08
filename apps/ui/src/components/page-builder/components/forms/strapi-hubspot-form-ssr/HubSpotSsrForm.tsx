@@ -8,6 +8,7 @@ import { ReCaptchaProvider } from "next-recaptcha-v3"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 
+import { SectionTitle } from "@/components/elementary/section-header"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
@@ -29,6 +30,8 @@ interface HubSpotSsrFormProps {
   /** When true, obtains a reCAPTCHA v3 token before submission. Requires NEXT_PUBLIC_RECAPTCHA_SITE_KEY. */
   readonly enableRecaptcha?: boolean
   readonly onSubmitted?: (values: Record<string, unknown>) => void
+  /** Optional heading rendered above the form. Omitted when absent. */
+  readonly title?: string | null
 }
 
 interface SubmitPayload {
@@ -86,6 +89,7 @@ function HubSpotSsrFormInner({
   formId,
   enableRecaptcha,
   onSubmitted,
+  title,
 }: HubSpotSsrFormProps) {
   const t = useTranslations("forms")
 
@@ -176,48 +180,58 @@ function HubSpotSsrFormInner({
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        noValidate
-        className="flex flex-col gap-4"
-      >
-        {visibleFields.map((field) => (
-          <HubSpotField key={field.name} field={field} control={form.control} />
-        ))}
+    <>
+      <SectionTitle as="h2" size="sm" className="mb-6">
+        {title}
+      </SectionTitle>
 
-        <HubSpotConsentSection
-          legalConsentOptions={schema.legalConsentOptions}
-          control={form.control}
-        />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+          className="flex flex-col gap-4"
+        >
+          {visibleFields.map((field) => (
+            <HubSpotField
+              key={field.name}
+              field={field}
+              control={form.control}
+            />
+          ))}
 
-        {form.formState.submitCount > 0 &&
-          Object.keys(form.formState.errors).length > 0 && (
-            <div
-              className="bg-destructive/10 text-destructive rounded-lg p-3 text-sm"
-              role="alert"
-              aria-live="polite"
-            >
-              {t("reviewErrors")}
-            </div>
+          <HubSpotConsentSection
+            legalConsentOptions={schema.legalConsentOptions}
+            control={form.control}
+          />
+
+          {form.formState.submitCount > 0 &&
+            Object.keys(form.formState.errors).length > 0 && (
+              <div
+                className="bg-destructive/10 text-destructive rounded-lg p-3 text-sm"
+                role="alert"
+                aria-live="polite"
+              >
+                {t("reviewErrors")}
+              </div>
+            )}
+
+          {form.formState.errors.root && (
+            <Alert variant="destructive">
+              <WarningIcon className="size-4" weight="bold" />
+              <AlertTitle>{t("submissionFailed")}</AlertTitle>
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
+            </Alert>
           )}
 
-        {form.formState.errors.root && (
-          <Alert variant="destructive">
-            <WarningIcon className="size-4" weight="bold" />
-            <AlertTitle>{t("submissionFailed")}</AlertTitle>
-            <AlertDescription>
-              {form.formState.errors.root.message}
-            </AlertDescription>
-          </Alert>
-        )}
-
-        <Button type="submit" disabled={submitMutation.isPending}>
-          {submitMutation.isPending
-            ? t("submitting")
-            : (schema.configuration?.submitButtonLabel ?? t("submitDefault"))}
-        </Button>
-      </form>
-    </Form>
+          <Button type="submit" disabled={submitMutation.isPending}>
+            {submitMutation.isPending
+              ? t("submitting")
+              : (schema.configuration?.submitButtonLabel ?? t("submitDefault"))}
+          </Button>
+        </form>
+      </Form>
+    </>
   )
 }

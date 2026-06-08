@@ -7,6 +7,9 @@
   },
   "options": {},
   "attributes": {
+    "title": {
+      "type": "string"
+    },
     "form": {
       "type": "relation",
       "relation": "oneToOne",

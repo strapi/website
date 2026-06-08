@@ -48,6 +48,7 @@ export async function StrapiHubSpotFormSsr({
             portalId={form.portalId}
             formId={form.formId}
             enableRecaptcha={component.enableRecaptcha ?? false}
+            title={component.title}
           />
         </div>
       </Container>

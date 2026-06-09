@@ -59,7 +59,7 @@ export function StrapiTabbedFeatureOverview({
             className={cn(
               "flex w-full max-w-full flex-nowrap items-center justify-start gap-2 overflow-x-auto",
               "px-1 lg:justify-center lg:overflow-visible lg:px-0",
-              "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             )}
           >
             {tabs.map((tab, index) => (

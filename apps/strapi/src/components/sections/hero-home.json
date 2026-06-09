@@ -10,6 +10,9 @@
     "title": {
       "type": "string"
     },
+    "description": {
+      "type": "richtext"
+    },
     "cta": {
       "type": "component",
       "component": "elements.hero-home-cta",

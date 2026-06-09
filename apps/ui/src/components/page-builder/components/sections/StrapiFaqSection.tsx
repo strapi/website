@@ -3,6 +3,7 @@ import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
 
 import { Container } from "@/components/elementary/Container"
+import { Markdown } from "@/components/elementary/markdown/Markdown"
 import {
   SectionHeader,
   SectionTitle,
@@ -59,8 +60,10 @@ export function StrapiFaqSection({
                 >
                   {item.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-8 text-base">
-                  {item.answer}
+                <AccordionContent className="pb-8">
+                  <Markdown className="text-muted-foreground [&_p:last-child]:mb-0">
+                    {item.answer}
+                  </Markdown>
                 </AccordionContent>
               </AccordionItem>
             ))}

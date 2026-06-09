@@ -1144,6 +1144,7 @@ export interface SectionsHeroHome extends Struct.ComponentSchema {
   }
   attributes: {
     cta: Schema.Attribute.Component<"elements.hero-home-cta", false>
+    description: Schema.Attribute.RichText
     features: Schema.Attribute.Component<"elements.hero-home-feature", true>
     rotatingPhrases: Schema.Attribute.Component<"utilities.text", true>
     testimonials: Schema.Attribute.Component<
@@ -1503,7 +1504,7 @@ export interface UtilitiesAccordions extends Struct.ComponentSchema {
     icon: "stack"
   }
   attributes: {
-    answer: Schema.Attribute.Text & Schema.Attribute.Required
+    answer: Schema.Attribute.RichText & Schema.Attribute.Required
     question: Schema.Attribute.String & Schema.Attribute.Required
   }
 }

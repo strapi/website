@@ -22,11 +22,6 @@ import {
 
 import { CmsComparisonTable } from "./CmsComparisonTable"
 import {
-  HeroContainer,
-  HeroContainerBorder,
-  HeroContainerContent,
-} from "../elementary/HeroContainer"
-import {
   SectionDescription,
   SectionHeader,
   SectionHeaderContainer,
@@ -72,23 +67,15 @@ export function CmsComparisonView({ params }: CmsComparisonViewProps) {
   return (
     <>
       <StrapiSeoStructuredDataFromSeo seo={comparison.seo} />
-      <HeroContainer affectsNavbarTheme>
-        <HeroContainerContent>
-          <HeroContainerBorder>
-            <SectionHeaderContainer>
-              <SectionHeader className="animate-reveal-cascade">
-                <SectionLabel size="lg">{comparison.label}</SectionLabel>
-                <SectionTitle variant="inverse" size="lg">
-                  {comparison.title}
-                </SectionTitle>
-                <SectionDescription variant="inverse" size="lg">
-                  {comparison.description}
-                </SectionDescription>
-              </SectionHeader>
-            </SectionHeaderContainer>
-          </HeroContainerBorder>
-        </HeroContainerContent>
-      </HeroContainer>
+      <SectionHeaderContainer background="light">
+        <SectionHeader className="animate-reveal-cascade">
+          <SectionLabel size="lg">{comparison.label}</SectionLabel>
+          <SectionTitle size="lg">{comparison.title}</SectionTitle>
+          <SectionDescription size="lg">
+            {comparison.description}
+          </SectionDescription>
+        </SectionHeader>
+      </SectionHeaderContainer>
 
       <main className="flex w-full flex-col pt-24">
         {comparison.content && comparison.content.length > 0 && (

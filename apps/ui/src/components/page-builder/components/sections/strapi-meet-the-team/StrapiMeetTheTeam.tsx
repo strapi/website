@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select"
 
 import { TeamMemberCard } from "./TeamMemberCard"
+import { TeamMemberSocialLinks } from "./TeamMemberSocialLinks"
 
 const ALL_TEAMS = "__all__"
 
@@ -47,6 +48,10 @@ export function StrapiMeetTheTeam({
       if (item.department) {
         set.add(item.department)
       }
+
+      if (item.secondDepartment) {
+        set.add(item.secondDepartment)
+      }
     }
 
     return Array.from(set).sort()
@@ -57,7 +62,9 @@ export function StrapiMeetTheTeam({
     if (selectedDepartment === ALL_TEAMS) return component.items
 
     return component.items.filter(
-      (item) => item.department === selectedDepartment
+      (item) =>
+        item.department === selectedDepartment ||
+        item.secondDepartment === selectedDepartment
     )
   }, [component.items, selectedDepartment])
 
@@ -160,6 +167,11 @@ export function StrapiMeetTheTeam({
                     {selectedMember.bio}
                   </p>
                 )}
+
+                <TeamMemberSocialLinks
+                  links={selectedMember.socialLinks}
+                  className="mt-3"
+                />
               </div>
             </>
           )}

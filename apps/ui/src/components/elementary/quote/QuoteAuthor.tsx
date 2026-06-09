@@ -23,7 +23,7 @@ export function QuoteAuthor({
   return (
     <div
       data-slot="quote-author"
-      className={cn("flex items-center gap-5", className)}
+      className={cn("flex items-start gap-5", className)}
       {...props}
     >
       {avatar && (

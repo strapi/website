@@ -44,7 +44,10 @@ export function StrapiHeroHome({
   }
 
   return (
-    <HeroContainer affectsNavbarTheme={affectsNavbarTheme}>
+    <HeroContainer
+      affectsNavbarTheme={affectsNavbarTheme}
+      className="-mb-8 md:-mb-12 lg:-mb-16"
+    >
       <HeroContainerContent className="flex flex-col gap-4">
         <div className="animate-ring-reveal ring-strapi-gray-700/50 rounded-strapi-xl overflow-hidden md:ring">
           {hasTopRow ? (

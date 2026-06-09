@@ -2304,25 +2304,51 @@ export default function ComponentLibraryPage() {
                       id: 1,
                       name: "Pierre Burgy",
                       role: "Chief Executive Officer",
-                      department: "Leadership",
+                      department: "Founders",
+                      secondDepartment: "Leadership",
                       location: "Paris",
                       bio: "Pierre created Strapi with Aurélien and Jim back in 2015. He's a strong believer in open-source, remote and people-first organizations. You can also find him regularly windsurfing or mountain-biking!",
                       image: mockBasicImage(
                         "https://picsum.photos/seed/team1/241/286",
                         "Pierre Burgy"
                       ),
+                      socialLinks: [
+                        {
+                          id: 1,
+                          platform: "linkedin",
+                          url: "https://www.linkedin.com/in/pierreburgy/",
+                        },
+                        {
+                          id: 2,
+                          platform: "twitter",
+                          url: "https://x.com/pierre_burgy",
+                        },
+                      ],
                     },
                     {
                       id: 2,
                       name: "Aurélien Georget",
                       role: "Chief Product Officer",
-                      department: "Leadership",
+                      department: "Founders",
+                      secondDepartment: "Product",
                       location: "Paris",
                       bio: "Aurélien co-founded Strapi and leads the product vision. Passionate about developer experience and open-source communities.",
                       image: mockBasicImage(
                         "https://picsum.photos/seed/team2/241/286",
                         "Aurélien Georget"
                       ),
+                      socialLinks: [
+                        {
+                          id: 3,
+                          platform: "linkedin",
+                          url: "https://www.linkedin.com/in/aurelgeorget/",
+                        },
+                        {
+                          id: 4,
+                          platform: "github",
+                          url: "https://github.com/aurelsicoko",
+                        },
+                      ],
                     },
                     {
                       id: 3,

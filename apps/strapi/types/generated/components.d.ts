@@ -332,6 +332,8 @@ export interface ElementsTeamMemberItem extends Struct.ComponentSchema {
     location: Schema.Attribute.String
     name: Schema.Attribute.String
     role: Schema.Attribute.String & Schema.Attribute.Required
+    secondDepartment: Schema.Attribute.String
+    socialLinks: Schema.Attribute.Component<"utilities.social-link", true>
   }
 }
 

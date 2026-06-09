@@ -67,7 +67,7 @@ export function StrapiTabbedFeatureOverview({
                 key={tab.id ?? index}
                 value={String(index)}
                 className={cn(
-                  "inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 whitespace-nowrap",
+                  "group inline-flex shrink-0 items-start gap-2 rounded-full px-4 py-2 whitespace-nowrap",
                   "text-base font-semibold transition-colors",
                   "bg-strapi-neutral-100 text-strapi-neutral-700",
                   "hover:bg-strapi-blue-200 hover:text-strapi-blue-800",
@@ -80,7 +80,7 @@ export function StrapiTabbedFeatureOverview({
                   <StrapiBasicImage
                     component={tab.tabIcon}
                     mode="intrinsic"
-                    className="size-4 shrink-0"
+                    className="size-6 shrink-0 transition group-data-[state=active]:brightness-0 group-data-[state=active]:invert"
                     decorative
                   />
                 )}

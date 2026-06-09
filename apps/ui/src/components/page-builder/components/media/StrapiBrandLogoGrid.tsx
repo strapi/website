@@ -18,9 +18,11 @@ type BrandLogoGridItem = NonNullable<
 function LogoImage({
   item,
   variant,
+  isLinked,
 }: {
   readonly item: BrandLogoGridItem
   readonly variant: string
+  readonly isLinked: boolean
 }) {
   return (
     <StrapiBasicImage
@@ -29,7 +31,10 @@ function LogoImage({
       className={cn(
         "object-contain",
         variant === "plain"
-          ? "h-[45px] w-auto opacity-50 transition-opacity hover:opacity-100"
+          ? cn(
+              "h-[45px] w-auto opacity-50",
+              isLinked && "transition-opacity hover:opacity-100"
+            )
           : "size-full"
       )}
       hideWhenMissing
@@ -46,8 +51,10 @@ function LogoItem({
   readonly item: BrandLogoGridItem
   readonly variant: string
 }) {
-  const image = <LogoImage item={item} variant={variant} />
   const linkHref = item.hasLink ? getStrapiLinkHref(item.link) : undefined
+  const image = (
+    <LogoImage item={item} variant={variant} isLinked={!!linkHref} />
+  )
 
   const linkedContent = linkHref ? (
     <a

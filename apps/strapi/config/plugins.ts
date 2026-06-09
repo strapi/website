@@ -76,6 +76,9 @@ export default ({ env }) => {
               coverImage: {
                 populate: { image: { populate: { media: true } } },
               },
+              logoImage: {
+                populate: { image: { populate: { media: true } } },
+              },
               categories: { fields: ["name", "slug"] },
             },
           },

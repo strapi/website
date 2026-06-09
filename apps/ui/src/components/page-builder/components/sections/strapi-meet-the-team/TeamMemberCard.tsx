@@ -3,6 +3,8 @@ import type { Data } from "@repo/strapi-types"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { Card, CardContent, CardImage } from "@/components/ui/card"
 
+import { TeamMemberSocialLinks } from "./TeamMemberSocialLinks"
+
 interface TeamMemberCardProps {
   readonly item: Data.Component<"elements.team-member-item">
   readonly onClick?: () => void
@@ -30,6 +32,8 @@ export function TeamMemberCard({ item, onClick }: TeamMemberCardProps) {
           {item.name}
         </p>
         <p className="text-strapi-purple-600 text-sm">{item.role}</p>
+
+        <TeamMemberSocialLinks links={item.socialLinks} className="mt-1" />
       </CardContent>
     </Card>
   )

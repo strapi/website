@@ -22,6 +22,14 @@
     "department": {
       "type": "string"
     },
+    "secondDepartment": {
+      "type": "string"
+    },
+    "socialLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "utilities.social-link"
+    },
     "location": {
       "type": "string"
     },

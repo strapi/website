@@ -1,7 +1,7 @@
 import type { Data } from "@repo/strapi-types"
 import type { ImgHTMLAttributes } from "react"
 
-import { logNonBlockingError, logNonBlockingWarning } from "@/lib/logging"
+import { logNonBlockingWarning } from "@/lib/logging"
 import { buildStrapiSrcSet } from "@/lib/strapi-helpers"
 import { cn } from "@/lib/styles"
 import type { StrapiImageMedia } from "@/types/api"
@@ -62,7 +62,7 @@ function emitDimensionWarnings(
   }
 
   if (mode !== "fill" && cmsDims == null && mediaDims == null) {
-    logNonBlockingError(
+    logNonBlockingWarning(
       `StrapiBasicImage mode "${mode}" requires a complete width/height pair from CMS or media metadata.`
     )
   }
@@ -115,7 +115,7 @@ export function StrapiBasicImage({
 
   if (!srcSetData.src) {
     if (!hideWhenMissing) {
-      logNonBlockingError(
+      logNonBlockingWarning(
         "StrapiBasicImage did not receive a media URL and rendered nothing."
       )
     }
@@ -126,7 +126,7 @@ export function StrapiBasicImage({
   const dimensions = mode === "fill" ? undefined : (cmsDims ?? mediaDims)
 
   if (mode !== "fill" && dimensions == null) {
-    logNonBlockingError(
+    logNonBlockingWarning(
       `StrapiBasicImage could not resolve dimensions for mode "${mode}" and rendered nothing.`
     )
 

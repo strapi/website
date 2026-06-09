@@ -1,21 +1,20 @@
 import { getEnvVar } from "@/lib/env-vars"
 
 /**
- * Logs non-blocking errors only if SHOW_NON_BLOCKING_ERRORS environment variable is set to true.
- * This prevents in-memory storage from filling up during builds when errors are logged but execution continues.
+ * Logs non-blocking errors (failed API fetches, missing env vars, etc.) that degrade
+ * a page but don't crash it. Always logged — these are rare, actionable failures and
+ * suppressing them hides real outages (e.g. a form silently caching its error fallback).
+ * For repetitive CMS data-quality issues use logNonBlockingWarning instead.
  * @param args - Arguments to pass to console.error (same signature as console.error)
  */
 export const logNonBlockingError = (...args: unknown[]) => {
-  const showErrors = getEnvVar("SHOW_NON_BLOCKING_ERRORS")
-
-  if (showErrors) {
-    console.error(...args)
-  }
+  console.error(...args)
 }
 
 /**
  * Logs non-blocking warnings (CMS data quality issues, etc.) using console.warn.
- * Same gating as logNonBlockingError but won't trigger the Next.js error overlay.
+ * Gated behind SHOW_NON_BLOCKING_ERRORS — these fire per render across many pages
+ * and would otherwise flood build output.
  */
 export const logNonBlockingWarning = (...args: unknown[]) => {
   const showErrors = getEnvVar("SHOW_NON_BLOCKING_ERRORS")

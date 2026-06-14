@@ -30,6 +30,7 @@ import { StrapiReviews } from "@/components/page-builder/components/sections/str
 import { StrapiTabbedFeatureOverview } from "@/components/page-builder/components/sections/strapi-tabbed-feature-overview"
 import { StrapiTestimonies } from "@/components/page-builder/components/sections/strapi-testimonies/StrapiTestimonies"
 import { StrapiComparatorGrid } from "@/components/page-builder/components/sections/StrapiComparatorGrid"
+import { StrapiCookieDeclaration } from "@/components/page-builder/components/sections/StrapiCookieDeclaration"
 import { StrapiCtaBanner } from "@/components/page-builder/components/sections/StrapiCtaBanner"
 import { StrapiDisclaimer } from "@/components/page-builder/components/sections/StrapiDisclaimer"
 import { StrapiFaqSection } from "@/components/page-builder/components/sections/StrapiFaqSection"
@@ -107,6 +108,7 @@ export const ContentComponents: Partial<
   "sections.cta-banner": StrapiCtaBanner,
   "sections.community-banner": StrapiCommunityBanner,
   "sections.comparator-grid": StrapiComparatorGrid,
+  "sections.cookie-declaration": StrapiCookieDeclaration,
   "sections.disclaimer": StrapiDisclaimer,
   "sections.richtext": StrapiRichtext,
   "sections.news-list": StrapiNewsList,

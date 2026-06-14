@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_sections_cookie_declarations",
+  "info": {
+    "displayName": "Cookie Declaration",
+    "icon": "shield",
+    "description": "Renders the Cookiebot-generated list of all cookies used on the site (e.g. on the privacy page)."
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

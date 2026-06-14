@@ -25,7 +25,9 @@ export async function generateStaticParams({
 
   const params =
     results?.data.map((caseStudy) => ({
-      locale: caseStudy.locale as Locale,
+      // case-study isn't localized in Strapi, so entries carry no `locale`;
+      // use the route locale for the static param.
+      locale,
       slug: caseStudy.slug,
     })) ?? []
 

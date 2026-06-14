@@ -1,10 +1,11 @@
-import type { Data } from "@repo/strapi-types"
-
 export function StrapiStructuredData({
   structuredData,
   id = "strapiStructuredData",
 }: {
-  structuredData: Data.Component<"shared.seo">["structuredData"]
+  // Accepts both Strapi's `shared.seo.structuredData` JSON field and locally
+  // built JSON-LD graphs (Organization/WebSite/WebPage) — both are serialized
+  // verbatim, so an opaque value is the right contract here.
+  structuredData?: unknown
   id?: string
 }) {
   if (structuredData) {

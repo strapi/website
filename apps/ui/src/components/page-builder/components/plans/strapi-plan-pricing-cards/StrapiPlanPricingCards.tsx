@@ -66,7 +66,7 @@ export function StrapiPlanPricingCards({
   return (
     <Container>
       <PricingBillingProvider initialBilling={initialBilling}>
-        <PricingSwitcher className="mb-15" component={component.switcher} />
+        <PricingSwitcher className="my-16" component={component.switcher} />
 
         <div
           className={pricingGridVariants({

@@ -51,10 +51,20 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
     <>
       <StrapiSeoStructuredDataFromSeo seo={caseStudy.seo} />
       <HeroContainer affectsNavbarTheme>
-        <HeroContainerContent>
+        <HeroContainerContent className="flex flex-col gap-6">
           <HeroContainerBorder>
             <SectionHeaderContainer>
               <SectionHeader className="animate-reveal-cascade">
+                {caseStudy.logoImage?.image && (
+                  <StrapiBasicImage
+                    component={caseStudy.logoImage.image}
+                    mode="responsive"
+                    className="h-12 w-auto object-contain"
+                    sizes="200px"
+                    hideWhenMissing
+                  />
+                )}
+
                 {caseStudy.companyName && (
                   <SectionLabel size="lg">{caseStudy.companyName}</SectionLabel>
                 )}
@@ -71,19 +81,20 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
                   </SectionDescription>
                 )}
               </SectionHeader>
-
-              {caseStudy.logoImage && (
-                <div className="relative mt-8 h-16 w-40">
-                  <StrapiBasicImage
-                    component={caseStudy.logoImage}
-                    mode="fill"
-                    className="object-contain"
-                    sizes="160px"
-                  />
-                </div>
-              )}
             </SectionHeaderContainer>
           </HeroContainerBorder>
+
+          {caseStudy.coverImage?.image && (
+            <div className="animate-reveal-cascade animate-ring-reveal ring-strapi-gray-700/50 overflow-hidden rounded-2xl md:ring">
+              <StrapiBasicImage
+                component={caseStudy.coverImage.image}
+                mode="responsive"
+                className="w-full object-cover"
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                priority
+              />
+            </div>
+          )}
         </HeroContainerContent>
       </HeroContainer>
 

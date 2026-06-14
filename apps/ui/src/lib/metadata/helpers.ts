@@ -77,6 +77,24 @@ export const getMetaRobots = (
   return { index: false, follow: false }
 }
 
+const isAbsoluteUrl = (value: string) => /^https?:\/\//i.test(value)
+
+/**
+ * Normalize a Strapi path into a public URL path for the given locale.
+ *
+ * Honors the `as-needed` locale prefix strategy: the default locale gets NO
+ * `/en` prefix (real URLs don't have one, so a prefixed canonical/hreflang would
+ * 301-redirect). Absolute URLs (e.g. a Strapi `canonicalURL`) are passed through
+ * untouched so we never produce `/en/https://…`.
+ */
+const localizePath = (path: string, locale: Locale | string) =>
+  isAbsoluteUrl(path)
+    ? path
+    : normalizePageFullPath(
+        [path],
+        locale === routing.defaultLocale ? null : locale
+      )
+
 export const getMetaAlternates = ({
   seo,
   fullPath,
@@ -100,14 +118,14 @@ export const getMetaAlternates = ({
 
           return {
             ...acc,
-            [curr.locale]: normalizePageFullPath([canonicalUrl], curr.locale),
+            [curr.locale]: localizePath(canonicalUrl, curr.locale),
           }
         }, {}),
         // If you are on defaultLocale, it should point to the en version too
         ...(locale === routing.defaultLocale
           ? {
-              [routing.defaultLocale]: normalizePageFullPath(
-                [canonicalUrl],
+              [routing.defaultLocale]: localizePath(
+                canonicalUrl,
                 routing.defaultLocale
               ),
             }
@@ -116,17 +134,14 @@ export const getMetaAlternates = ({
         ...(locale === routing.defaultLocale ||
         localizations?.find((lang) => lang.locale === routing.defaultLocale)
           ? {
-              "x-default": normalizePageFullPath(
-                [canonicalUrl],
-                routing.defaultLocale
-              ),
+              "x-default": localizePath(canonicalUrl, routing.defaultLocale),
             }
           : {}),
       }
     : undefined
 
   const canonical = canonicalUrl
-    ? normalizePageFullPath([canonicalUrl], locale)
+    ? localizePath(canonicalUrl, locale)
     : undefined
 
   return {

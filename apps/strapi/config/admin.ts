@@ -7,7 +7,14 @@ export default ({ env }) => {
     enabled: env("STRAPI_PREVIEW_ENABLED") === "true",
     previewSecret: env("STRAPI_PREVIEW_SECRET"),
     clientUrl: env("CLIENT_URL"),
-    enabledContentTypeUids: ["api::page.page", "api::blog-post.blog-post"],
+    enabledContentTypeUids: [
+      "api::page.page",
+      "api::blog-post.blog-post",
+      "api::case-study.case-study",
+      "api::cms-comparison.cms-comparison",
+      "api::post-category.post-category",
+      "api::post-tag.post-tag",
+    ],
   }
 
   return {
@@ -75,6 +82,18 @@ function getPreviewPathname(
 
     case "api::blog-post.blog-post":
       return document.slug ? `/blog/${document.slug}` : null
+
+    case "api::case-study.case-study":
+      return document.slug ? `/user-stories/${document.slug}` : null
+
+    case "api::cms-comparison.cms-comparison":
+      return document.slug ? `/headless-cms/comparison/${document.slug}` : null
+
+    case "api::post-category.post-category":
+      return document.slug ? `/blog/categories/${document.slug}` : null
+
+    case "api::post-tag.post-tag":
+      return document.slug ? `/blog/tags/${document.slug}` : null
 
     default:
       return null

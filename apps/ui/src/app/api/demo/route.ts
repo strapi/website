@@ -69,6 +69,27 @@ export async function POST(request: Request) {
 
     const data = await res.json()
 
+    /**
+     * The operator nests URLs under `links` ({ links: { backend, frontend } }),
+     * but tolerate a flat shape in case the operator API changes.
+     */
+    const links = {
+      backend: data.links?.backend ?? data.backend,
+      frontend: data.links?.frontend ?? data.frontend,
+    }
+
+    if (!links.backend || !links.frontend) {
+      console.error(
+        "[Demo API] Demo created but links missing in operator response:",
+        JSON.stringify(data)
+      )
+
+      return Response.json(
+        { error: "Demo instance created but links are missing" },
+        { status: 502 }
+      )
+    }
+
     // Unenroll from HubSpot workflow after the response is sent
     const hubspotToken = env.HUBSPOT_API_TOKEN
 
@@ -92,12 +113,7 @@ export async function POST(request: Request) {
       })
     }
 
-    return Response.json({
-      links: {
-        backend: data.backend,
-        frontend: data.frontend,
-      },
-    })
+    return Response.json({ links })
   } catch (error) {
     console.error("[Demo API] Error:", error)
 

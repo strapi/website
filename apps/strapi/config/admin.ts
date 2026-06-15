@@ -39,7 +39,10 @@ export default ({ env }) => {
           {
             uid: "google",
             displayName: "Google",
-            icon: "https://cdn2.iconfinder.com/data/icons/social-icons-33/128/Google-512.png",
+            // Inline data URI (official Google "G" mark) so the login button
+            // renders without depending on a third-party CDN. `data:` is already
+            // allowed by the CSP `img-src` directive in config/middlewares.ts.
+            icon: "https://automatic-life-0194aa0342.media.strapiapp.com/integrations_logo_google_88cd50d2db.png",
             createStrategy: (strapi: Core.Strapi) =>
               new GoogleStrategy(
                 {

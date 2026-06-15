@@ -75,7 +75,7 @@ export function StrapiCallout({
             )}
 
             <div className="[&_p]:text-base [&_p]:leading-relaxed [&_p:last-child]:mb-0">
-              <InlineMarkdown allowNewLines>{component.content}</InlineMarkdown>
+              <InlineMarkdown>{component.content}</InlineMarkdown>
             </div>
           </div>
         </aside>

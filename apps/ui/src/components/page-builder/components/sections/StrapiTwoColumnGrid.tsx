@@ -55,9 +55,7 @@ export function StrapiTwoColumnGrid({
                   <h3 className={classes.title}>{item.title}</h3>
                 </div>
 
-                <InlineMarkdown allowNewLines>
-                  {item.description}
-                </InlineMarkdown>
+                <InlineMarkdown>{item.description}</InlineMarkdown>
               </div>
             ))}
           </div>

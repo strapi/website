@@ -75,7 +75,7 @@ export function ReviewCard({
       )}
 
       <div className="text-strapi-neutral-700 flex-1 text-base leading-relaxed">
-        <InlineMarkdown allowNewLines>{quote}</InlineMarkdown>
+        <InlineMarkdown>{quote}</InlineMarkdown>
       </div>
 
       <div className="flex items-center gap-4">

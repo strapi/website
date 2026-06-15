@@ -121,7 +121,7 @@ export function StrapiPlanPricingCards({
       </PricingBillingProvider>
 
       <div className="text-strapi-neutral-700 mt-6 text-sm">
-        <InlineMarkdown allowNewLines>{component.footnote}</InlineMarkdown>
+        <InlineMarkdown>{component.footnote}</InlineMarkdown>
       </div>
 
       <PricingExtraBox data={component.extraBox} />

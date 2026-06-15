@@ -21,7 +21,7 @@ export function Tooltip({ children, content, contentProps }: Props) {
       <RadixTooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent {...contentProps}>
-          <InlineMarkdown allowNewLines>{content}</InlineMarkdown>
+          <InlineMarkdown>{content}</InlineMarkdown>
         </TooltipContent>
       </RadixTooltip>
     </TooltipProvider>

@@ -655,6 +655,14 @@ export async function fetchGlobalSeo() {
       withCacheTags(false, STRAPI_TAGS.global)
     )
   } catch (e: unknown) {
+    /**
+     * An empty single type returns 404 — that's "no defaults configured",
+     * not an error worth logging on every render.
+     */
+    if (e instanceof Error && e.message.includes('"status":404')) {
+      return
+    }
+
     logNonBlockingError({
       message: "Error fetching global SEO defaults",
       error: {

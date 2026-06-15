@@ -10,7 +10,7 @@
       "description": "The flexible, open-source headless CMS that gives developers the freedom to use their favorite tools and frameworks.",
       "url": "",
       "siteName": "Strapi",
-      "image": ""
+      "image": "https://delicate-dawn-ac25646e6d.media.strapiapp.com/strapi-cover_1fabc982ce.png"
     },
     "twitter": {
       "card": "summary_large_image",
@@ -19,7 +19,7 @@
       "siteId": "",
       "creator": "@strapijs",
       "creatorId": "",
-      "imageUrl": ""
+      "imageUrl": "https://delicate-dawn-ac25646e6d.media.strapiapp.com/strapi-cover_1fabc982ce.png"
     }
   },
   "general": {

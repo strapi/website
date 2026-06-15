@@ -22,6 +22,10 @@ export async function StrapiDemoForm({
   }
 
   if (!env.DEMO_OPERATOR_TOKEN) {
+    logNonBlockingError(
+      "Demo form unavailable: DEMO_OPERATOR_TOKEN env var is not set"
+    )
+
     return <FormUnavailableAlert />
   }
 

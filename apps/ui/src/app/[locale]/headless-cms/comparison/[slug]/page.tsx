@@ -26,7 +26,9 @@ export async function generateStaticParams({
 
   const params =
     results?.data.map((comparison) => ({
-      locale: comparison.locale as Locale,
+      // cms-comparison isn't localized in Strapi, so entries carry no `locale`;
+      // use the route locale for the static param.
+      locale,
       slug: comparison.slug,
     })) ?? []
 

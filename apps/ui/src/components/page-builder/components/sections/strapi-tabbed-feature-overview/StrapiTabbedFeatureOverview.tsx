@@ -2,16 +2,8 @@ import type { Data } from "@repo/strapi-types"
 import { Tabs as TabsPrimitive } from "radix-ui"
 
 import { Container } from "@/components/elementary/Container"
-import {
-  FeatureCard,
-  FeatureCardContent,
-  FeatureCardCTA,
-  FeatureCardDescription,
-  FeatureCardImage,
-  FeatureCardTitle,
-} from "@/components/elementary/feature-card"
+import { FeatureOverviewContent } from "@/components/page-builder/components/sections/StrapiFeatureOverview"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
-import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import { StrapiSectionHeader } from "@/components/page-builder/components/utilities/StrapiSectionHeader"
 import { cn } from "@/lib/styles"
 
@@ -96,89 +88,12 @@ export function StrapiTabbedFeatureOverview({
                 value={String(index)}
                 className="outline-none"
               >
-                <TabCard content={tab.content} />
+                <FeatureOverviewContent component={tab.content} />
               </TabsPrimitive.Content>
             ))}
           </div>
         </TabsPrimitive.Root>
       </Container>
     </section>
-  )
-}
-
-function TabCard({
-  content,
-}: {
-  readonly content: NonNullable<
-    Data.Component<"elements.tabbed-feature">["content"]
-  >
-}) {
-  return (
-    <FeatureCard
-      variant="bordered"
-      layout="split"
-      size="lg"
-      className="rounded-strapi-lg border"
-    >
-      <FeatureCardContent size="lg" className="gap-6 lg:gap-6">
-        {content.label && (
-          <div className="flex items-start gap-3">
-            {content.labelIcon && (
-              <StrapiBasicImage
-                component={content.labelIcon}
-                mode="intrinsic"
-                className="mt-1 size-4 shrink-0"
-                decorative
-              />
-            )}
-            <span className="text-strapi-blue-600 text-base font-semibold tracking-wider">
-              {content.label}
-            </span>
-          </div>
-        )}
-
-        <FeatureCardTitle as="h2" size="lg" className="text-foreground">
-          {content.title}
-        </FeatureCardTitle>
-
-        {content.description && (
-          <FeatureCardDescription
-            size="lg"
-            className="text-foreground/90 leading-relaxed"
-          >
-            {content.description}
-          </FeatureCardDescription>
-        )}
-
-        {content.ctaLinks && content.ctaLinks.length > 0 && (
-          <FeatureCardCTA spacing="lg" className="mt-4">
-            {content.ctaLinks.map((link) => (
-              <StrapiLink
-                key={link.id}
-                component={{
-                  ...link,
-                  decorations: {
-                    id: link.id ?? "",
-                    variant: "secondary",
-                    ...link?.decorations,
-                  },
-                }}
-              />
-            ))}
-          </FeatureCardCTA>
-        )}
-      </FeatureCardContent>
-
-      {content.image && (
-        <FeatureCardImage>
-          <StrapiBasicImage
-            component={content.image}
-            mode="responsive"
-            className="size-full object-cover"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </FeatureCardImage>
-      )}
-    </FeatureCard>
   )
 }

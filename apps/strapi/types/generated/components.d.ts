@@ -1004,6 +1004,18 @@ export interface SectionsComparatorGrid extends Struct.ComponentSchema {
   attributes: {}
 }
 
+export interface SectionsCookieDeclaration extends Struct.ComponentSchema {
+  collectionName: "components_sections_cookie_declarations"
+  info: {
+    description: "Renders the Cookiebot-generated list of all cookies used on the site (e.g. on the privacy page)."
+    displayName: "Cookie Declaration"
+    icon: "shield"
+  }
+  attributes: {
+    title: Schema.Attribute.String
+  }
+}
+
 export interface SectionsCtaBanner extends Struct.ComponentSchema {
   collectionName: "components_sections_cta_banners"
   info: {
@@ -1017,18 +1029,6 @@ export interface SectionsCtaBanner extends Struct.ComponentSchema {
     section: Schema.Attribute.Component<"utilities.section-header", false> &
       Schema.Attribute.Required
     sectionImage: Schema.Attribute.Component<"utilities.basic-image", false>
-  }
-}
-
-export interface SectionsCookieDeclaration extends Struct.ComponentSchema {
-  collectionName: "components_sections_cookie_declarations"
-  info: {
-    description: "Renders the Cookiebot-generated list of all cookies used on the site (e.g. on the privacy page)."
-    displayName: "Cookie Declaration"
-    icon: "shield"
-  }
-  attributes: {
-    title: Schema.Attribute.String
   }
 }
 

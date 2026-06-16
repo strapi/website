@@ -4,11 +4,12 @@ import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
 import Script from "next/script"
 import type { Locale } from "next-intl"
-import { setRequestLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
 import { StrapiPreviewListener } from "@/components/elementary/strapi-preview-listener"
 import { TailwindIndicator } from "@/components/elementary/TailwindIndicator"
+import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { StrapiFooter } from "@/components/page-builder/single-types/footer/StrapiFooter"
 import { StrapiHeader } from "@/components/page-builder/single-types/header/StrapiHeader"
 import { ClientProviders } from "@/components/providers/ClientProviders"
@@ -16,8 +17,10 @@ import { ServerProviders } from "@/components/providers/ServerProviders"
 import { TrackingScripts } from "@/components/providers/TrackingScripts"
 import { Toaster } from "@/components/ui/sonner"
 import { debugStaticParams } from "@/lib/build"
+import { getEnvVar } from "@/lib/env-vars"
 import { fontPoppins } from "@/lib/fonts"
 import { routing } from "@/lib/navigation"
+import { buildOrgWebsiteGraph } from "@/lib/structured-data/site-graph"
 import { cn } from "@/lib/styles"
 
 export function generateStaticParams() {
@@ -29,7 +32,7 @@ export function generateStaticParams() {
 
 export const metadata: Metadata = {
   title: {
-    template: "%s / Notum Technologies",
+    template: "%s",
     default: "",
   },
 
@@ -81,6 +84,23 @@ export default async function RootLayout({
   }
 
   /**
+   * Global Organization + WebSite JSON-LD, emitted once on every route so the
+   * whole site exposes the same baseline structured data the legacy strapi.io
+   * site had. Per-page `WebPage` nodes (rendered by each page view) link back to
+   * these via `@id`.
+   */
+  const t = await getTranslations({ locale, namespace: "seo" })
+  const siteUrl = getEnvVar("APP_PUBLIC_URL")
+  const siteGraph = siteUrl
+    ? buildOrgWebsiteGraph({
+        siteUrl,
+        name: t("og.siteName"),
+        description: t("metaDescription"),
+        locale,
+      })
+    : null
+
+  /**
    * This allows you to make following env variables RUNTIME.
    *
    * Following variables aren't going to be embedded during the build-time. To avoid embedding,
@@ -125,6 +145,12 @@ export default async function RootLayout({
         )}
       >
         <TrackingScripts />
+        {siteGraph && (
+          <StrapiStructuredData
+            structuredData={siteGraph}
+            id="siteOrganizationWebsite"
+          />
+        )}
         <ServerProviders>
           <StrapiPreviewListener />
           <ClientProviders>

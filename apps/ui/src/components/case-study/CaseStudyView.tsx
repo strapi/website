@@ -5,12 +5,6 @@ import { setRequestLocale } from "next-intl/server"
 
 import { Container } from "@/components/elementary/Container"
 import {
-  HeroContainer,
-  HeroContainerBorder,
-  HeroContainerContent,
-} from "@/components/elementary/HeroContainer"
-import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
-import {
   SectionDescription,
   SectionHeader,
   SectionHeaderContainer,
@@ -50,42 +44,49 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
   return (
     <>
       <StrapiSeoStructuredDataFromSeo seo={caseStudy.seo} />
-      <HeroContainer affectsNavbarTheme>
-        <HeroContainerContent>
-          <HeroContainerBorder>
-            <SectionHeaderContainer>
-              <SectionHeader className="animate-reveal-cascade">
-                {caseStudy.companyName && (
-                  <SectionLabel size="lg">{caseStudy.companyName}</SectionLabel>
-                )}
 
-                <SectionTitle variant="inverse" size="lg">
-                  {caseStudy.title}
-                </SectionTitle>
+      <SectionHeaderContainer
+        background="light"
+        contentClassName="items-center gap-12"
+      >
+        <SectionHeader className="animate-reveal-cascade">
+          {caseStudy.logoImage?.image && (
+            <StrapiBasicImage
+              component={caseStudy.logoImage.image}
+              mode="responsive"
+              className="h-12 w-auto object-contain"
+              sizes="200px"
+              hideWhenMissing
+            />
+          )}
 
-                {caseStudy.description && (
-                  <SectionDescription variant="inverse" size="lg">
-                    <InlineMarkdown allowNewLines>
-                      {caseStudy.description}
-                    </InlineMarkdown>
-                  </SectionDescription>
-                )}
-              </SectionHeader>
+          {caseStudy.companyName && (
+            <SectionLabel size="lg">{caseStudy.companyName}</SectionLabel>
+          )}
 
-              {caseStudy.logoImage && (
-                <div className="relative mt-8 h-16 w-40">
-                  <StrapiBasicImage
-                    component={caseStudy.logoImage}
-                    mode="fill"
-                    className="object-contain"
-                    sizes="160px"
-                  />
-                </div>
-              )}
-            </SectionHeaderContainer>
-          </HeroContainerBorder>
-        </HeroContainerContent>
-      </HeroContainer>
+          <SectionTitle as="h1" size="lg">
+            {caseStudy.title}
+          </SectionTitle>
+
+          {caseStudy.description && (
+            <SectionDescription size="lg">
+              {caseStudy.description}
+            </SectionDescription>
+          )}
+        </SectionHeader>
+
+        {caseStudy.coverImage?.image && (
+          <div className="animate-reveal-cascade ring-strapi-neutral-300/70 w-full max-w-5xl overflow-hidden rounded-2xl shadow-xl ring-1">
+            <StrapiBasicImage
+              component={caseStudy.coverImage.image}
+              mode="responsive"
+              className="w-full object-cover"
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              priority
+            />
+          </div>
+        )}
+      </SectionHeaderContainer>
 
       <main className="flex w-full flex-col pt-24">
         <Container variant="condensed">

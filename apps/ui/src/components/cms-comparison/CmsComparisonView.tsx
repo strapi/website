@@ -70,7 +70,9 @@ export function CmsComparisonView({ params }: CmsComparisonViewProps) {
       <SectionHeaderContainer background="light">
         <SectionHeader className="animate-reveal-cascade">
           <SectionLabel size="lg">{comparison.label}</SectionLabel>
-          <SectionTitle size="lg">{comparison.title}</SectionTitle>
+          <SectionTitle size="lg" as="h1">
+            {comparison.title}
+          </SectionTitle>
           <SectionDescription size="lg">
             {comparison.description}
           </SectionDescription>

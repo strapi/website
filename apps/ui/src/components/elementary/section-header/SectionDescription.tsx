@@ -46,7 +46,7 @@ export function SectionDescription({
 
   const content =
     typeof children === "string" ? (
-      <InlineMarkdown allowNewLines>{children}</InlineMarkdown>
+      <InlineMarkdown>{children}</InlineMarkdown>
     ) : (
       children
     )

@@ -92,8 +92,8 @@ function NewsListRow({ item }: { readonly item: PopulatedNewsItem }) {
             )}
           </div>
 
-          <span className="truncate pr-2 text-base text-white sm:pr-4 lg:pr-8 lg:text-lg">
-            <span className="underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover/news-row:decoration-white">
+          <span className="truncate pr-2 text-base sm:pr-4 lg:pr-8 lg:text-lg">
+            <span className="group-hover/news-row:decoration-strapi-blue-800 decoration-strapi-blue-800/0 underline underline-offset-4 transition-[text-decoration-color] duration-300">
               {title}
             </span>
           </span>

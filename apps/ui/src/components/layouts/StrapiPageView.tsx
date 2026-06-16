@@ -8,9 +8,13 @@ import { Breadcrumbs } from "@/components/elementary/Breadcrumbs"
 import { Container } from "@/components/elementary/Container"
 import { MinimalHeader } from "@/components/layouts/MinimalHeader"
 import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
+import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
+import { getEnvVar } from "@/lib/env-vars"
+import { createPublicFullPath } from "@/lib/navigation"
 import { SECTION_SPACING } from "@/lib/section-spacing"
 import { fetchPage } from "@/lib/strapi-api/content/server"
+import { buildWebPageJsonLd } from "@/lib/structured-data/site-graph"
 import { cn } from "@/lib/styles"
 
 interface Props {
@@ -57,11 +61,28 @@ export function StrapiPageView({ params, searchParams }: Props) {
 
   const { content, minimalLayout, ...restPageData } = data
 
+  const siteUrl = getEnvVar("APP_PUBLIC_URL")
+  const webPageJsonLd = siteUrl
+    ? buildWebPageJsonLd({
+        siteUrl,
+        url: createPublicFullPath(fullPath, locale),
+        name: data.seo?.metaTitle ?? undefined,
+        description: data.seo?.metaDescription ?? undefined,
+        locale,
+      })
+    : null
+
   return (
     <div className="flex w-full flex-col">
       {minimalLayout && <div data-minimal-layout hidden />}
       {minimalLayout && <MinimalHeader />}
       <StrapiSeoStructuredDataFromSeo seo={data?.seo} />
+      {webPageJsonLd && (
+        <StrapiStructuredData
+          structuredData={webPageJsonLd}
+          id="webPageStructuredData"
+        />
+      )}
       <main className={cn("flex w-full flex-col")}>
         <Container>
           <Breadcrumbs

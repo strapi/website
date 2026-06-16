@@ -4,7 +4,7 @@ import {
   HeroContainer,
   HeroContainerContent,
 } from "@/components/elementary/HeroContainer"
-import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
+import { HeroRichText } from "@/components/elementary/markdown/HeroRichText"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
@@ -35,9 +35,7 @@ export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
               </h1>
 
               {component.description ? (
-                <p className="text-background/60 text-sm leading-relaxed sm:text-base">
-                  <InlineMarkdown>{component.description}</InlineMarkdown>
-                </p>
+                <HeroRichText>{component.description}</HeroRichText>
               ) : null}
 
               {component.ctas?.length ? (

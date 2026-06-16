@@ -19,6 +19,11 @@ export const env = createEnv({
     SHOW_NON_BLOCKING_ERRORS: optionalZodBoolean(),
     DEBUG_STRAPI_CLIENT_API_CALLS: optionalZodBoolean(),
     STRAPI_URL: z.string().url().optional(),
+    // Origin of the Strapi media CDN (e.g. https://<project>.media.strapiapp.com).
+    // Used only to emit a `preconnect` resource hint so the LCP hero media loads
+    // sooner. Server-only — the hint is rendered during SSR and never read on the
+    // client. Optional; when unset, no media preconnect is rendered.
+    STRAPI_MEDIA_URL: z.string().url().optional(),
     STRAPI_REST_READONLY_API_KEY: z.string().optional(),
     STRAPI_REST_CUSTOM_API_KEY: z.string().optional(),
     STRAPI_PREVIEW_SECRET: z.string().optional(),
@@ -38,6 +43,7 @@ export const env = createEnv({
     HUBSPOT_API_TOKEN: z.string().optional(),
     HOTJAR_ID: z.string().optional(),
     COOKIEBOT_ID: z.string().optional(),
+    KAPA_WEBSITE_ID: z.string().optional(),
 
     DEMO_OPERATOR_SERVER: z.string().url().optional(),
     DEMO_OPERATOR_TOKEN: z.string().optional(),
@@ -84,6 +90,7 @@ export const env = createEnv({
     DEBUG_STRAPI_CLIENT_API_CALLS: process.env.DEBUG_STRAPI_CLIENT_API_CALLS,
     SHOW_NON_BLOCKING_ERRORS: process.env.SHOW_NON_BLOCKING_ERRORS,
     STRAPI_URL: process.env.STRAPI_URL,
+    STRAPI_MEDIA_URL: process.env.STRAPI_MEDIA_URL,
     STRAPI_REST_READONLY_API_KEY: process.env.STRAPI_REST_READONLY_API_KEY,
     STRAPI_REST_CUSTOM_API_KEY: process.env.STRAPI_REST_CUSTOM_API_KEY,
     STRAPI_PREVIEW_SECRET: process.env.STRAPI_PREVIEW_SECRET,
@@ -104,6 +111,7 @@ export const env = createEnv({
     HUBSPOT_API_TOKEN: process.env.HUBSPOT_API_TOKEN,
     HOTJAR_ID: process.env.HOTJAR_ID,
     COOKIEBOT_ID: process.env.COOKIEBOT_ID,
+    KAPA_WEBSITE_ID: process.env.KAPA_WEBSITE_ID,
 
     DEMO_OPERATOR_SERVER: process.env.DEMO_OPERATOR_SERVER,
     DEMO_OPERATOR_TOKEN: process.env.DEMO_OPERATOR_TOKEN,

@@ -13,7 +13,7 @@ export const sectionLabelVariants = cva(
       variant: {
         default: "text-strapi-blue-600",
         inverse: "text-background/80",
-        purple: "text-strapi-purple-500",
+        purple: "text-strapi-purple-600",
       },
       size: {
         xs: "text-xs",

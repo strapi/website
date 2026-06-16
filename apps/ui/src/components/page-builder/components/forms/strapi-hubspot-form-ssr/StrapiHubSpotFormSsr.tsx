@@ -29,7 +29,7 @@ export async function StrapiHubSpotFormSsr({
     })
 
     return (
-      <section className="py-16 lg:py-24">
+      <section>
         <Container>
           <div className="mx-auto max-w-xl">
             <FormUnavailableAlert error={error} />
@@ -40,7 +40,7 @@ export async function StrapiHubSpotFormSsr({
   }
 
   return (
-    <section className="py-16 lg:py-24">
+    <section>
       <Container>
         <div className="rounded-strapi-lg mx-auto max-w-xl bg-white p-8 shadow-lg lg:p-12">
           <HubSpotSsrForm

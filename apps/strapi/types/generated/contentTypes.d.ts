@@ -1345,6 +1345,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.cta-banner",
         "sections.community-banner",
         "sections.comparator-grid",
+        "sections.cookie-declaration",
         "sections.disclaimer",
         "sections.richtext",
         "sections.dynamic-case-studies-grid",

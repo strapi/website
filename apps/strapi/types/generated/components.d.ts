@@ -1004,6 +1004,18 @@ export interface SectionsComparatorGrid extends Struct.ComponentSchema {
   attributes: {}
 }
 
+export interface SectionsCookieDeclaration extends Struct.ComponentSchema {
+  collectionName: "components_sections_cookie_declarations"
+  info: {
+    description: "Renders the Cookiebot-generated list of all cookies used on the site (e.g. on the privacy page)."
+    displayName: "Cookie Declaration"
+    icon: "shield"
+  }
+  attributes: {
+    title: Schema.Attribute.String
+  }
+}
+
 export interface SectionsCtaBanner extends Struct.ComponentSchema {
   collectionName: "components_sections_cta_banners"
   info: {
@@ -1738,6 +1750,7 @@ declare module "@strapi/strapi" {
       "plans.pricing-switcher": PlansPricingSwitcher
       "sections.community-banner": SectionsCommunityBanner
       "sections.comparator-grid": SectionsComparatorGrid
+      "sections.cookie-declaration": SectionsCookieDeclaration
       "sections.cta-banner": SectionsCtaBanner
       "sections.disclaimer": SectionsDisclaimer
       "sections.dynamic-case-studies-grid": SectionsDynamicCaseStudiesGrid

@@ -39,7 +39,7 @@ export function StrapiFooterCta({
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="text-strapi-purple-500 hover:text-strapi-purple-600 shrink-0 pr-4 text-sm font-semibold transition-colors sm:pr-6 sm:text-base"
+                    className="text-strapi-purple-600 hover:text-strapi-purple-700 shrink-0 pr-4 text-sm font-semibold transition-colors sm:pr-6 sm:text-base"
                     aria-label={copied ? "Code copied" : "Copy code"}
                   >
                     {copied ? "Copied!" : "Copy"}

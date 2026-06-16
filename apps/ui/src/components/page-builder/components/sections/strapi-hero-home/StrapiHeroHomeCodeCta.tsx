@@ -27,7 +27,7 @@ export function StrapiHeroHomeCodeCta({ code }: StrapiHeroHomeCodeCtaProps) {
             copyContent={code}
             copyLabel="Copy code"
             copiedLabel="Code copied"
-            className="text-strapi-purple-500 p-2"
+            className="text-strapi-purple-600 p-2"
             iconClassName="size-5"
           />
         </div>

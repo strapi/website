@@ -35,9 +35,9 @@ export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
               </h1>
 
               {component.description ? (
-                <p className="text-background/60 text-sm leading-relaxed sm:text-base">
-                  <InlineMarkdown>{component.description}</InlineMarkdown>
-                </p>
+                <InlineMarkdown className="text-background/60 text-sm leading-relaxed sm:text-base">
+                  {component.description}
+                </InlineMarkdown>
               ) : null}
 
               {component.ctas?.length ? (

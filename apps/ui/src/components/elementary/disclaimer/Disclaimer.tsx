@@ -32,7 +32,7 @@ export function Disclaimer({
 
         {children && (
           <div className="text-strapi-neutral-700 text-base lg:text-lg">
-            <InlineMarkdown allowNewLines>{children}</InlineMarkdown>
+            <InlineMarkdown>{children}</InlineMarkdown>
           </div>
         )}
       </div>

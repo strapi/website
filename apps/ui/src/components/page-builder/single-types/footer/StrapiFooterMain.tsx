@@ -53,9 +53,9 @@ export function StrapiFooterMain({
 
           {component.sections?.map((section) => (
             <div className="flex flex-col gap-6 sm:gap-8" key={section.id}>
-              <h4 className="text-base font-semibold uppercase">
+              <h2 className="text-base font-semibold uppercase">
                 {section.title}
-              </h4>
+              </h2>
 
               <nav>
                 <ul className="flex list-none flex-col gap-3 leading-none">
@@ -87,7 +87,7 @@ export function StrapiFooterMain({
           {component.socials && (
             <div className="flex items-center gap-4">
               {component.socials.title && (
-                <span className="text-strapi-neutral-500">
+                <span className="text-strapi-neutral-700">
                   {component.socials.title}
                 </span>
               )}

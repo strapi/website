@@ -4,20 +4,25 @@ import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
 import Script from "next/script"
 import type { Locale } from "next-intl"
-import { setRequestLocale } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 
 import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
 import { StrapiPreviewListener } from "@/components/elementary/strapi-preview-listener"
 import { TailwindIndicator } from "@/components/elementary/TailwindIndicator"
+import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { StrapiFooter } from "@/components/page-builder/single-types/footer/StrapiFooter"
 import { StrapiHeader } from "@/components/page-builder/single-types/header/StrapiHeader"
 import { ClientProviders } from "@/components/providers/ClientProviders"
 import { ServerProviders } from "@/components/providers/ServerProviders"
 import { TrackingScripts } from "@/components/providers/TrackingScripts"
 import { Toaster } from "@/components/ui/sonner"
+import { env } from "@/env.mjs"
 import { debugStaticParams } from "@/lib/build"
+import { getEnvVar } from "@/lib/env-vars"
 import { fontPoppins } from "@/lib/fonts"
+import { isDevelopment } from "@/lib/general-helpers"
 import { routing } from "@/lib/navigation"
+import { buildOrgWebsiteGraph } from "@/lib/structured-data/site-graph"
 import { cn } from "@/lib/styles"
 
 export function generateStaticParams() {
@@ -29,7 +34,7 @@ export function generateStaticParams() {
 
 export const metadata: Metadata = {
   title: {
-    template: "%s / Notum Technologies",
+    template: "%s",
     default: "",
   },
 
@@ -81,6 +86,23 @@ export default async function RootLayout({
   }
 
   /**
+   * Global Organization + WebSite JSON-LD, emitted once on every route so the
+   * whole site exposes the same baseline structured data the legacy strapi.io
+   * site had. Per-page `WebPage` nodes (rendered by each page view) link back to
+   * these via `@id`.
+   */
+  const t = await getTranslations({ locale, namespace: "seo" })
+  const siteUrl = getEnvVar("APP_PUBLIC_URL")
+  const siteGraph = siteUrl
+    ? buildOrgWebsiteGraph({
+        siteUrl,
+        name: t("og.siteName"),
+        description: t("metaDescription"),
+        locale,
+      })
+    : null
+
+  /**
    * This allows you to make following env variables RUNTIME.
    *
    * Following variables aren't going to be embedded during the build-time. To avoid embedding,
@@ -99,9 +121,80 @@ export default async function RootLayout({
     "APP_PUBLIC_URL",
   ]
 
+  /**
+   * Origin of the Strapi media CDN, used only for a `preconnect` hint below.
+   * The LCP hero media (video + image) and all SVG logos come from here, so
+   * warming the connection early shaves the cross-origin DNS/TCP/TLS handshake
+   * off the critical path. `env.STRAPI_MEDIA_URL` is validated as a URL, so
+   * `new URL().origin` is safe when set.
+   */
+  const strapiMediaOrigin = env.STRAPI_MEDIA_URL
+    ? new URL(env.STRAPI_MEDIA_URL).origin
+    : null
+
+  /**
+   * Third-party resource hints mirror the integrations loaded by
+   * `<TrackingScripts />` (which only render in production). `preconnect` is
+   * reserved for origins on the early critical path (GTM, Cookiebot consent);
+   * everything loaded later (analytics, ad pixels, lazy Kapa widget) gets the
+   * cheaper `dns-prefetch` so we don't tie up connections speculatively.
+   */
+  const showTrackingHints = !isDevelopment()
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {/*
+          Resource hints — emitted in <head> so they reach the browser before the
+          body scripts/media. The media CDN preconnect is the biggest LCP win
+          (hero video + image load from there).
+        */}
+        {strapiMediaOrigin && (
+          <>
+            <link rel="preconnect" href={strapiMediaOrigin} />
+            <link rel="dns-prefetch" href={strapiMediaOrigin} />
+          </>
+        )}
+
+        {showTrackingHints && (
+          <>
+            {env.GTM_ID && (
+              <link rel="preconnect" href="https://www.googletagmanager.com" />
+            )}
+
+            {env.COOKIEBOT_ID && (
+              <>
+                <link rel="preconnect" href="https://consent.cookiebot.com" />
+                <link
+                  rel="dns-prefetch"
+                  href="https://consentcdn.cookiebot.com"
+                />
+              </>
+            )}
+
+            {env.HOTJAR_ID && (
+              <>
+                <link rel="dns-prefetch" href="https://static.hotjar.com" />
+                <link rel="dns-prefetch" href="https://script.hotjar.com" />
+              </>
+            )}
+
+            {env.KAPA_WEBSITE_ID && (
+              <link rel="dns-prefetch" href="https://widget.kapa.ai" />
+            )}
+
+            {/* Ad/analytics pixels fired through GTM (LinkedIn, Bing, Google Ads). */}
+            {env.GTM_ID && (
+              <>
+                <link rel="dns-prefetch" href="https://snap.licdn.com" />
+                <link rel="dns-prefetch" href="https://px.ads.linkedin.com" />
+                <link rel="dns-prefetch" href="https://bat.bing.com" />
+                <link rel="dns-prefetch" href="https://www.google.com" />
+              </>
+            )}
+          </>
+        )}
+
         <Script id="csr-config" strategy="beforeInteractive">
           {`
          window.CSR_CONFIG = window.CSR_CONFIG || {};
@@ -125,6 +218,12 @@ export default async function RootLayout({
         )}
       >
         <TrackingScripts />
+        {siteGraph && (
+          <StrapiStructuredData
+            structuredData={siteGraph}
+            id="siteOrganizationWebsite"
+          />
+        )}
         <ServerProviders>
           <StrapiPreviewListener />
           <ClientProviders>

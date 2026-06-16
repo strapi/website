@@ -31,6 +31,53 @@ export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::news-item.news-item": "/news-items",
 } as const
 
+/**
+ * Content types with Strapi i18n enabled (`pluginOptions.i18n.localized: true`
+ * in their schema). ONLY these accept a `locale` query param / `locale` field —
+ * sending `locale` to any other content type returns a 400 "Invalid key locale"
+ * and can break build-time static generation. Keep in sync with the Strapi
+ * schemas (`apps/strapi/src/api/<type>/content-types/<type>/schema.json`).
+ */
+const LOCALIZED_UIDS = new Set<UID.ContentType>([
+  "api::page.page",
+  "api::blog.blog",
+  "api::blog-category.blog-category",
+  "api::blog-tag.blog-tag",
+  "api::footer.footer",
+  "api::header.header",
+  "api::not-found.not-found",
+  "api::plan.plan",
+])
+
+/**
+ * For non-localized content types, drop `locale` from both the query params and
+ * any `locale` field selection, and flag the request so the client doesn't
+ * re-add the locale param. Localized types are returned untouched.
+ */
+function normalizeLocaleForUid<TParams>(
+  uid: UID.ContentType,
+  params: TParams | undefined,
+  options?: CustomFetchOptions
+): { params: TParams | undefined; options: CustomFetchOptions | undefined } {
+  if (LOCALIZED_UIDS.has(uid) || params == null) {
+    return { params, options }
+  }
+
+  const next: Record<string, unknown> = {
+    ...(params as Record<string, unknown>),
+  }
+  delete next.locale
+
+  if (Array.isArray(next.fields)) {
+    next.fields = next.fields.filter((field) => field !== "locale")
+  }
+
+  return {
+    params: next as TParams,
+    options: { ...options, doNotAddLocaleQueryParams: true },
+  }
+}
+
 export default abstract class BaseStrapiClient {
   public async fetchAPI(
     path: string,
@@ -128,8 +175,9 @@ export default abstract class BaseStrapiClient {
   > {
     const path = this.getStrapiApiPathByUId(uid)
     const url = `${path}${documentId ? `/${documentId}` : ""}`
+    const localized = normalizeLocaleForUid(uid, params, options)
 
-    return this.fetchAPI(url, params, requestInit, options)
+    return this.fetchAPI(url, localized.params, requestInit, localized.options)
   }
 
   /**
@@ -149,8 +197,9 @@ export default abstract class BaseStrapiClient {
     >
   > {
     const path = this.getStrapiApiPathByUId(uid)
+    const localized = normalizeLocaleForUid(uid, params, options)
 
-    return this.fetchAPI(path, params, requestInit, options)
+    return this.fetchAPI(path, localized.params, requestInit, localized.options)
   }
 
   /**
@@ -166,6 +215,7 @@ export default abstract class BaseStrapiClient {
     options?: CustomFetchOptions
   ): Promise<APIResponseCollection<Result<TContentTypeUID, TParams>>> {
     const path = this.getStrapiApiPathByUId(uid)
+    const localized = normalizeLocaleForUid(uid, params, options)
 
     // Strapi can be configured in https://docs.strapi.io/dev-docs/configurations/api
     const maxPageSize = 100
@@ -173,9 +223,9 @@ export default abstract class BaseStrapiClient {
     const firstPage: APIResponseCollection<Result<TContentTypeUID, TParams>> =
       await this.fetchAPI(
         path,
-        { ...params, pagination: { page: 1, pageSize: maxPageSize } },
+        { ...localized.params, pagination: { page: 1, pageSize: maxPageSize } },
         requestInit,
-        options
+        localized.options
       )
 
     if (firstPage.meta.pagination.pageCount === 1) {
@@ -188,7 +238,7 @@ export default abstract class BaseStrapiClient {
         this.fetchAPI(
           path,
           {
-            ...params,
+            ...localized.params,
             pagination: {
               ...firstPage.meta.pagination,
               page: i + 2,
@@ -196,7 +246,7 @@ export default abstract class BaseStrapiClient {
             },
           },
           requestInit,
-          options
+          localized.options
         )
     )
 
@@ -229,15 +279,16 @@ export default abstract class BaseStrapiClient {
     APIResponse<Result<TContentTypeUID, DynamicZonePopulateParams<TParams>>>
   > {
     const slugFilter = slug && slug.length > 0 ? { $eq: slug } : { $null: true }
+    const localized = normalizeLocaleForUid(uid, params, options)
     const mergedParams = {
-      ...params,
+      ...localized.params,
       sort: { publishedAt: "desc" },
-      filters: { ...params?.filters, slug: slugFilter },
+      filters: { ...localized.params?.filters, slug: slugFilter },
     }
     const path = this.getStrapiApiPathByUId(uid)
     const response: APIResponseCollection<
       Result<TContentTypeUID, DynamicZonePopulateParams<TParams>>
-    > = await this.fetchAPI(path, mergedParams, requestInit, options)
+    > = await this.fetchAPI(path, mergedParams, requestInit, localized.options)
 
     // return last published entry
     return {
@@ -266,10 +317,11 @@ export default abstract class BaseStrapiClient {
   > {
     const slugFilter =
       fullPath && fullPath.length > 0 ? { $eq: fullPath } : { $null: true }
+    const localized = normalizeLocaleForUid(uid, params, options)
     const mergedParams = {
-      ...params,
+      ...localized.params,
       sort: { publishedAt: "desc" },
-      filters: { ...params?.filters, fullPath: slugFilter },
+      filters: { ...localized.params?.filters, fullPath: slugFilter },
       pagination: {
         page: 1,
         pageSize: 1,
@@ -278,7 +330,7 @@ export default abstract class BaseStrapiClient {
     const path = this.getStrapiApiPathByUId(uid)
 
     const response: APIResponseCollection<Result<TContentTypeUID, TParams>> =
-      await this.fetchAPI(path, mergedParams, requestInit, options)
+      await this.fetchAPI(path, mergedParams, requestInit, localized.options)
 
     // return last published entry
     return {

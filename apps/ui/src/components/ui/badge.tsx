@@ -21,7 +21,7 @@ const badgeVariants = cva(
         ghost: "[a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         link: "underline text-primary underline-offset-4 [a&]:hover:underline",
         purple:
-          "bg-strapi-purple-500 text-primary-foreground [a&]:hover:bg-strapi-purple-500/90",
+          "bg-strapi-purple-600 text-primary-foreground [a&]:hover:bg-strapi-purple-600/90",
       },
       size: {
         xs: "px-1 py-0.5 text-[0.55rem] leading-none",

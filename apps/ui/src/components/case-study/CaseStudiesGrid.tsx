@@ -34,7 +34,9 @@ function collectCategories(
   items: readonly CaseStudyHit[]
 ): Map<string, string> {
   for (const item of items) {
-    if (!item.categories) continue
+    // Meilisearch hits can carry `categories` as a non-array (or omit it), so
+    // guard with Array.isArray to avoid a "not iterable" crash at prerender.
+    if (!Array.isArray(item.categories)) continue
 
     for (const cat of item.categories) {
       if (cat?.slug && cat.name && !into.has(cat.slug)) {

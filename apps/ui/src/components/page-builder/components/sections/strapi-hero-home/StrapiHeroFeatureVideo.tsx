@@ -89,7 +89,7 @@ export const HeroFeatureVideo = memo(
         ref={videoRef}
         src={src}
         className="block size-full object-contain object-center"
-        preload="metadata"
+        preload={isActive ? "auto" : "metadata"}
         muted
         playsInline
         onEnded={() => {

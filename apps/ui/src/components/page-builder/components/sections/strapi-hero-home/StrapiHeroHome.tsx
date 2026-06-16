@@ -68,15 +68,15 @@ export function StrapiHeroHome({
                     <div className="animate-hero-border-expand rounded-strapi-sm border-strapi-purple-500 pointer-events-none absolute bottom-0 left-0 h-0 w-0 border" />
                   </div>
 
-                  <div className="animate-hero-use-case-reveal bg-strapi-purple-500 rounded-strapi-sm inline-block px-0.5 py-px text-[12px] font-medium text-white">
+                  <div className="animate-hero-use-case-reveal bg-strapi-purple-600 rounded-strapi-sm inline-block px-0.5 py-px text-[12px] font-medium text-white">
                     Use case
                   </div>
                 </div>
 
                 {component.description ? (
-                  <p className="text-background/60 mt-6 text-sm leading-relaxed sm:text-base">
-                    <InlineMarkdown>{component.description}</InlineMarkdown>
-                  </p>
+                  <InlineMarkdown className="text-background/60 mt-6 text-sm leading-relaxed sm:text-base">
+                    {component.description}
+                  </InlineMarkdown>
                 ) : null}
 
                 {component.cta?.code ? (

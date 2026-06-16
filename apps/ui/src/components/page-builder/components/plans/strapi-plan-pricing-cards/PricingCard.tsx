@@ -34,7 +34,7 @@ export function PricingCard({
       className={cn(
         "flex w-full flex-col gap-6 px-6 py-8",
         {
-          "[*]:border-primary rounded-strapi-lg relative border-2 bg-white xl:-my-4 xl:py-11.5":
+          "[*]:border-primary rounded-strapi-lg relative border-2! bg-white xl:-my-4 xl:py-11.5":
             highlight,
         },
         className

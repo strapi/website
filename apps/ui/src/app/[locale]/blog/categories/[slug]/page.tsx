@@ -114,9 +114,7 @@ export default function BlogCategoryPage(
 
             {category?.description && (
               <div className="text-background/60 max-w-full lg:max-w-1/2 [&_p:last-child]:mb-0">
-                <InlineMarkdown allowNewLines>
-                  {category.description}
-                </InlineMarkdown>
+                <InlineMarkdown>{category.description}</InlineMarkdown>
               </div>
             )}
           </div>

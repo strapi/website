@@ -19,7 +19,7 @@ export function ContentCard({
     <div className={cn(className)} {...props}>
       <div className="flex flex-col gap-4">
         {label && (
-          <p className="text-strapi-purple-500 flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
+          <p className="text-strapi-purple-600 flex items-center gap-2 text-sm font-bold tracking-wider uppercase">
             {label}
           </p>
         )}

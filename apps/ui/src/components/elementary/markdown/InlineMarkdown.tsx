@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
 import remarkGfm from "remark-gfm"
 
+import { Typography } from "@/components/typography"
 import { cn } from "@/lib/styles"
 
 interface InlineMarkdownProps {
@@ -11,7 +12,18 @@ interface InlineMarkdownProps {
 }
 
 const INLINE_ELEMENTS = ["p", "strong", "em", "del", "u", "a", "code", "br"]
-const BLOCK_ELEMENTS = ["ul", "ol", "li", "blockquote"]
+const BLOCK_ELEMENTS = [
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "ul",
+  "ol",
+  "li",
+  "blockquote",
+]
 
 /**
  * Markdown renderer that inherits the parent's typography — font size and text
@@ -58,6 +70,36 @@ export function InlineMarkdown({
         allowedElements={allowedElements}
         unwrapDisallowed
         components={{
+          h1: ({ children }) => (
+            <Typography tag="h1" className="text-strapi-blue-600 mb-3">
+              {children}
+            </Typography>
+          ),
+          h2: ({ children }) => (
+            <Typography tag="h2" className="text-strapi-blue-600 mb-3">
+              {children}
+            </Typography>
+          ),
+          h3: ({ children }) => (
+            <Typography tag="h3" className="text-strapi-blue-600 mb-2">
+              {children}
+            </Typography>
+          ),
+          h4: ({ children }) => (
+            <Typography tag="h4" className="text-strapi-blue-600 mb-2">
+              {children}
+            </Typography>
+          ),
+          h5: ({ children }) => (
+            <Typography tag="h5" className="text-strapi-blue-600 mb-2">
+              {children}
+            </Typography>
+          ),
+          h6: ({ children }) => (
+            <Typography tag="h6" className="text-strapi-blue-600 mb-2">
+              {children}
+            </Typography>
+          ),
           p: ({ children }) => (inline ? <>{children}</> : <p>{children}</p>),
           strong: ({ children }) => (
             <strong className="font-semibold">{children}</strong>

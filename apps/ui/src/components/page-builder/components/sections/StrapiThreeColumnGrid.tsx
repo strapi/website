@@ -59,7 +59,7 @@ export function StrapiThreeColumnGrid({
                     isBordered ? "flex flex-1 flex-col gap-2" : "contents"
                   }
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-center gap-3">
                     {item.icon && (
                       <div
                         className={

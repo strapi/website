@@ -6,11 +6,12 @@ import { cn } from "@/lib/styles"
 const typographyVariants = cva("", {
   variants: {
     variant: {
-      header1: "text-5xl tracking-tight",
-      header2: "text-4xl tracking-tight",
-      header3: "text-3xl tracking-tight",
-      subtitle1: "text-2xl",
-      subtitle2: "text-xl",
+      // header1 mirrors the project's hero heading; the scale steps down from there.
+      header1: "text-3xl leading-tight tracking-tight sm:text-4xl",
+      header2: "text-2xl leading-tight tracking-tight sm:text-3xl",
+      header3: "text-xl leading-tight tracking-tight sm:text-2xl",
+      subtitle1: "text-lg leading-snug tracking-tight sm:text-xl",
+      subtitle2: "text-base leading-snug tracking-tight sm:text-lg",
       body1: "text-lg",
       body2: "text-base",
       smallText1: "text-sm",
@@ -64,9 +65,10 @@ type TypographyTag =
   | "label"
 
 const defaultFontWeights: Record<Variant, FontWeight> = {
-  header1: "bold",
-  header2: "bold",
-  header3: "bold",
+  // semiBold matches the hero heading's weight.
+  header1: "semiBold",
+  header2: "semiBold",
+  header3: "semiBold",
   subtitle1: "normal",
   subtitle2: "normal",
   body1: "normal",

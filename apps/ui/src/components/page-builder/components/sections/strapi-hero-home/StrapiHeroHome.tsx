@@ -74,9 +74,9 @@ export function StrapiHeroHome({
                 </div>
 
                 {component.description ? (
-                  <p className="text-background/60 mt-6 text-sm leading-relaxed sm:text-base">
-                    <InlineMarkdown>{component.description}</InlineMarkdown>
-                  </p>
+                  <InlineMarkdown className="text-background/60 mt-6 text-sm leading-relaxed sm:text-base">
+                    {component.description}
+                  </InlineMarkdown>
                 ) : null}
 
                 {component.cta?.code ? (

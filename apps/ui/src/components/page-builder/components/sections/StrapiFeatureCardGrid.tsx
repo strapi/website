@@ -8,7 +8,6 @@ import {
   FeatureCardCTA,
   FeatureCardDescription,
   FeatureCardImage,
-  FeatureCardTitle,
 } from "@/components/elementary/feature-card"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
@@ -35,6 +34,17 @@ export function StrapiFeatureCardGrid({
               const size = item.size ?? "default"
               const cardLayout =
                 layout === "full" && hasImage ? "split" : "stacked"
+
+              // Inlined from FeatureCardTitle so this grid owns its own title
+              // visual. All original options are preserved below — edit freely.
+              const titleClassName = cn(
+                "text-foreground font-bold",
+                size === "sm"
+                  ? "text-xl"
+                  : size === "lg"
+                    ? "text-3xl tracking-tight"
+                    : "text-2xl"
+              )
 
               return (
                 <div
@@ -66,16 +76,9 @@ export function StrapiFeatureCardGrid({
                       )}
 
                     <FeatureCardContent size={size}>
-                      <FeatureCardTitle
-                        as="h3"
-                        size={size}
-                        iconPosition={
-                          layout === "full" || layout === "half"
-                            ? "inline"
-                            : "top"
-                        }
-                        icon={
-                          item.icon ? (
+                      <div className="flex flex-col gap-3 md:flex-row">
+                        {item.icon ? (
+                          <div className="flex h-7.5 shrink-0 items-center">
                             <StrapiBasicImage
                               component={item.icon}
                               mode="intrinsic"
@@ -84,17 +87,18 @@ export function StrapiFeatureCardGrid({
                                   "size-10 object-contain"
                               )}
                             />
-                          ) : undefined
-                        }
-                      >
-                        {item.title}
-                      </FeatureCardTitle>
+                          </div>
+                        ) : null}
 
-                      {item.description && (
-                        <FeatureCardDescription size={size}>
-                          {item.description}
-                        </FeatureCardDescription>
-                      )}
+                        <div>
+                          <h3 className={titleClassName}>{item.title}</h3>
+                          {item.description && (
+                            <FeatureCardDescription size={size}>
+                              {item.description}
+                            </FeatureCardDescription>
+                          )}
+                        </div>
+                      </div>
 
                       {hasImage && cardLayout === "stacked" && (
                         <div className="mt-4">

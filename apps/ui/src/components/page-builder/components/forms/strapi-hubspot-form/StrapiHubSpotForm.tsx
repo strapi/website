@@ -67,7 +67,7 @@ export function StrapiHubSpotForm({
   const placeholderHeight = form.placeholderHeight ?? DEFAULT_PLACEHOLDER_HEIGHT
 
   return (
-    <section className="py-16 lg:py-24">
+    <section className="py-8 lg:py-12">
       <Container>
         <div className="rounded-strapi-lg mx-auto max-w-xl bg-white p-8 shadow-lg lg:p-12">
           <HubSpotFormEmbed

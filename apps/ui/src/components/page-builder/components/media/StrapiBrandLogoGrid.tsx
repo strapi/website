@@ -100,7 +100,7 @@ export function StrapiBrandLogoGrid({
   const variant = component.variant ?? "plain"
 
   return (
-    <section className="py-16">
+    <section>
       <Container>
         {component.title ? (
           <SectionLabel className="mb-8 justify-center">

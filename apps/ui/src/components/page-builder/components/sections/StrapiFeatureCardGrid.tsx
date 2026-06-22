@@ -21,7 +21,7 @@ export function StrapiFeatureCardGrid({
   readonly component: Data.Component<"sections.feature-card-grid">
 }) {
   return (
-    <Box variant={component.background ?? "none"}>
+    <Box variant={component.background ?? "none"} className="py-16 lg:py-32">
       <Container>
         {component.section && (
           <StrapiSectionHeader component={component.section} />

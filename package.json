@@ -41,15 +41,15 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/semantic-release-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "commitizen": "4.3.1",
+    "commitizen": "4.3.2",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "^9.39.4",
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
-    "prettier": "3.8.3",
-    "semantic-release": "25.0.3",
+    "prettier": "3.8.4",
+    "semantic-release": "25.0.5",
     "shadcn": "^3.8.5",
-    "turbo": "2.9.16"
+    "turbo": "2.9.18"
   },
   "packageManager": "pnpm@10.28.1",
   "engines": {

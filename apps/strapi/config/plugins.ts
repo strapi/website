@@ -51,6 +51,12 @@ export default ({ env }) => {
           medium: 1024,
           large: 1536,
         },
+        providerOptions: {
+          localServer: {
+            maxage: 31536000000,
+            immutable: true,
+          },
+        },
       },
     },
 

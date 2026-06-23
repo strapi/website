@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react"
 
 import { cn } from "@/lib/styles"
@@ -58,12 +59,13 @@ export function TypingAnimation({
   const [chars, setChars] = useState<Char[]>(initialChars)
   const nextKey = useRef(initialChars.length)
   const typingIndex = useRef(startTyped ? initialChars.length : 0)
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   const currentWord = hasWords ? (words[wordIndex] ?? firstWord) : ""
   const graphemes = useMemo(() => Array.from(currentWord), [currentWord])
 
   useEffect(() => {
-    if (!hasWords || phase !== "waiting") {
+    if (!hasWords || prefersReducedMotion || phase !== "waiting") {
       return
     }
 
@@ -72,7 +74,7 @@ export function TypingAnimation({
     }, startDelay)
 
     return () => clearTimeout(timeout)
-  }, [hasWords, phase, startDelay])
+  }, [hasWords, phase, prefersReducedMotion, startDelay])
 
   // Reset typing cursor when word changes
   useEffect(() => {
@@ -81,7 +83,7 @@ export function TypingAnimation({
 
   // Typing: add one character at a time
   useEffect(() => {
-    if (!hasWords || phase !== "typing") {
+    if (!hasWords || prefersReducedMotion || phase !== "typing") {
       return
     }
 
@@ -101,11 +103,19 @@ export function TypingAnimation({
     }, typeSpeed)
 
     return () => clearTimeout(t)
-  }, [chars.length, graphemes, hasWords, pauseDelay, phase, typeSpeed])
+  }, [
+    chars.length,
+    graphemes,
+    hasWords,
+    pauseDelay,
+    phase,
+    prefersReducedMotion,
+    typeSpeed,
+  ])
 
   // Deleting: mark characters for exit on a steady interval
   useEffect(() => {
-    if (!hasWords || phase !== "deleting") {
+    if (!hasWords || prefersReducedMotion || phase !== "deleting") {
       return
     }
 
@@ -121,7 +131,7 @@ export function TypingAnimation({
     }, deleteSpeed)
 
     return () => clearInterval(interval)
-  }, [deleteSpeed, hasWords, phase])
+  }, [deleteSpeed, hasWords, phase, prefersReducedMotion])
 
   // Remove character from DOM when its exit animation finishes
   const handleAnimationEnd = useCallback(
@@ -176,6 +186,19 @@ export function TypingAnimation({
     return null
   }
 
+  // Reduced motion: show the first word statically with no typing/cursor motion.
+  if (prefersReducedMotion) {
+    return (
+      <span
+        {...props}
+        className={cn("inline-block", className)}
+        aria-label={props["aria-label"] ?? firstWord}
+      >
+        {firstWord}
+      </span>
+    )
+  }
+
   return (
     <span
       {...props}
@@ -207,4 +230,26 @@ function findLastNonExiting(chars: Char[]): number {
   }
 
   return -1
+}
+
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)"
+
+function subscribeReducedMotion(onChange: () => void): () => void {
+  const query = window.matchMedia(REDUCED_MOTION_QUERY)
+  query.addEventListener("change", onChange)
+
+  return () => query.removeEventListener("change", onChange)
+}
+
+/**
+ * Tracks the user's `prefers-reduced-motion` setting. The server snapshot is
+ * `false` so SSR and the first client render match (avoiding hydration
+ * mismatch); the real value is read on the client and updates on change.
+ */
+function usePrefersReducedMotion(): boolean {
+  return useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia(REDUCED_MOTION_QUERY).matches,
+    () => false
+  )
 }

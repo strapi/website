@@ -3,6 +3,7 @@ import type { Data } from "@repo/strapi-types"
 import { Container } from "@/components/elementary/Container"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { getStrapiLinkHref } from "@/components/page-builder/components/utilities/StrapiLink"
+import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
 import { formatHref, isAppLink, Link } from "@/lib/navigation"
 import { cn } from "@/lib/styles"
 
@@ -14,17 +15,21 @@ const alignmentClasses = {
 
 export function StrapiImage({
   component,
+  renderContext,
 }: {
   readonly component: Data.Component<"media.image">
+  readonly renderContext?: DynamicZoneRenderContext
 }) {
   const alignment = component.alignment ?? "center"
   const linkHref = getStrapiLinkHref(component.link)
+  const isAboveFold = renderContext?.surface === "page" && renderContext.isFirst
 
   const image = (
     <StrapiBasicImage
       component={component.image}
       mode="responsive"
       sizes="(max-width: 768px) 100vw, 1200px"
+      priority={isAboveFold}
     />
   )
 

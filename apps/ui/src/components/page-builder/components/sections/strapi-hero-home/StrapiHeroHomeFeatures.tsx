@@ -301,6 +301,7 @@ export function StrapiHeroHomeFeatures({
                           fill
                           sizes="(max-width: 767px) 100vw, 1200px"
                           className="object-contain object-center"
+                          priority={index === 0}
                         />
                       )
                     ) : (

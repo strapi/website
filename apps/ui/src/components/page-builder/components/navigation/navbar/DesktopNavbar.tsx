@@ -50,6 +50,7 @@ export function DesktopNavbar({
             component={logoImage}
             imageMode="responsive"
             sizes="140px"
+            priority
             className={cn(
               logoClassName,
               "opacity-[var(--nav-logo-default-opacity)]"

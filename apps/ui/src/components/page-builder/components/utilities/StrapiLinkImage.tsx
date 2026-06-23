@@ -13,6 +13,7 @@ export interface StrapiLinkImageProps {
   readonly decorative?: boolean
   readonly imageClassName?: string
   readonly imageMode?: StrapiBasicImageProps["mode"]
+  readonly priority?: boolean
   readonly sizes?: string
 }
 
@@ -36,6 +37,7 @@ export function StrapiLinkImage({
   decorative,
   imageClassName,
   imageMode,
+  priority,
   sizes,
 }: StrapiLinkImageProps) {
   if (component?.image == null) {
@@ -66,6 +68,7 @@ export function StrapiLinkImage({
           mode={imageMode}
           className={imageClassName}
           decorative={decorative}
+          priority={priority}
           sizes={sizes}
         />
       </Link>
@@ -85,6 +88,7 @@ export function StrapiLinkImage({
         mode={imageMode}
         className={imageClassName}
         decorative={decorative}
+        priority={priority}
         sizes={sizes}
       />
     </a>

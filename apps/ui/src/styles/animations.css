@@ -98,6 +98,40 @@
     both;
 }
 
+/**
+ * Global reduced-motion policy. Users who request reduced motion get a single,
+ * near-instant frame for every CSS animation/transition instead of movement.
+ * This covers all current AND future animations site-wide — reveals, the hero
+ * glow drift, the shimmer, the typing cursor, Radix enter/exit, accordions,
+ * spinners, etc. — without having to enumerate each one.
+ *
+ * Animations that use `forwards`/`both` fill still resolve to their final
+ * visible state, so revealed content (including the hero LCP element) ends up
+ * shown, not hidden.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /**
+   * Carve-out: the navbar theme switch is a *scroll-driven* animation
+   * (`animation-timeline: scroll()`) that maps scroll position to colour — it
+   * encodes state, not motion, so it must keep ticking off the scroll timeline
+   * rather than being frozen to a single frame.
+   */
+  [class*="animation-timeline:scroll"] {
+    animation-duration: auto !important;
+  }
+}
+
 /* ── Progress animations ── */
 
 @keyframes feature-progress {

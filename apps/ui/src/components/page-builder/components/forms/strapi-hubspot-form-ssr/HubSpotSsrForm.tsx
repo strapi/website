@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { WarningIcon } from "@phosphor-icons/react/ssr"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
-import { ReCaptchaProvider } from "next-recaptcha-v3"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 
@@ -15,6 +14,7 @@ import { Form } from "@/components/ui/form"
 import { getEnvVar } from "@/lib/env-vars"
 import type { HubSpotFormSchema, HubSpotSubmitPayload } from "@/lib/hubspot"
 
+import { DeferredReCaptchaProvider } from "./DeferredReCaptchaProvider"
 import {
   buildDefaultValues,
   buildSubmissionPayload,
@@ -74,9 +74,9 @@ const recaptchaSiteKey = getEnvVar("NEXT_PUBLIC_RECAPTCHA_SITE_KEY")
 export function HubSpotSsrForm(props: HubSpotSsrFormProps) {
   if (props.enableRecaptcha && recaptchaSiteKey) {
     return (
-      <ReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
+      <DeferredReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
         <HubSpotSsrFormInner {...props} />
-      </ReCaptchaProvider>
+      </DeferredReCaptchaProvider>
     )
   }
 

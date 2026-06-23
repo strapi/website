@@ -89,7 +89,9 @@ export default ({ env }) => {
             },
           },
           settings: {
-            filterableAttributes: ["categories.slug"],
+            // categories.name is faceted to drive the search sidebar checkboxes;
+            // categories.slug kept filterable for any slug-based filtering.
+            filterableAttributes: ["categories.slug", "categories.name"],
             searchableAttributes: ["title", "companyName", "description"],
             sortableAttributes: ["originalPublishedAt"],
           },

@@ -3,7 +3,10 @@ import { getLocale } from "next-intl/server"
 import { use } from "react"
 
 import { Container } from "@/components/elementary/Container"
-import { searchFeaturePages } from "@/components/feature-page/feature-pages-search"
+import {
+  getFeatureTagFacets,
+  searchFeaturePages,
+} from "@/components/feature-page/feature-pages-search"
 import { FeaturePagesGrid } from "@/components/feature-page/FeaturePagesGrid"
 
 const INITIAL_PAGE_SIZE = 12
@@ -27,6 +30,7 @@ export function StrapiDynamicFeaturesGrid({
       limit: INITIAL_PAGE_SIZE,
     })
   )
+  const tagOptions = use(getFeatureTagFacets())
 
   return (
     <Container className="py-8 lg:py-12">
@@ -34,6 +38,7 @@ export function StrapiDynamicFeaturesGrid({
         locale={locale}
         initialHits={initial.hits}
         initialTotal={initial.total}
+        tagOptions={tagOptions}
         pageSize={INITIAL_PAGE_SIZE}
         searchAction={searchFeaturePages}
       />

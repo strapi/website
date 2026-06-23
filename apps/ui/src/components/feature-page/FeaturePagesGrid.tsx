@@ -2,9 +2,12 @@
 
 import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
-import { useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 
-import { SearchFilterSidebar } from "@/components/elementary/SearchFilterSidebar"
+import {
+  type FilterOption,
+  SearchFilterSidebar,
+} from "@/components/elementary/SearchFilterSidebar"
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -20,6 +23,9 @@ interface FeaturePagesGridProps {
   readonly locale: string
   readonly initialHits: readonly FeaturePageHit[]
   readonly initialTotal: number
+  // Complete feature-tag list from the Meilisearch facet distribution (not just
+  // the tags present in the loaded hits).
+  readonly tagOptions: readonly FilterOption[]
   readonly pageSize?: number
   readonly searchAction: (
     args: SearchFeaturePagesArgs
@@ -29,21 +35,11 @@ interface FeaturePagesGridProps {
 
 const DEFAULT_PAGE_SIZE = 12
 
-function collectTags(
-  into: Set<string>,
-  items: readonly FeaturePageHit[]
-): Set<string> {
-  for (const item of items) {
-    if (item.feature_tag) into.add(item.feature_tag)
-  }
-
-  return into
-}
-
 export function FeaturePagesGrid({
   locale,
   initialHits,
   initialTotal,
+  tagOptions,
   pageSize = DEFAULT_PAGE_SIZE,
   searchAction,
   className,
@@ -56,20 +52,7 @@ export function FeaturePagesGrid({
   const [selectedTags, setSelectedTags] = useState<ReadonlySet<string>>(
     new Set()
   )
-  const [knownTags, setKnownTags] = useState<ReadonlySet<string>>(() =>
-    collectTags(new Set(), initialHits)
-  )
   const [isPending, startTransition] = useTransition()
-
-  const tagOptions = useMemo(() => [...knownTags], [knownTags])
-
-  function mergeTags(items: readonly FeaturePageHit[]) {
-    setKnownTags((prev) => {
-      const next = collectTags(new Set(prev), items)
-
-      return next.size === prev.size ? prev : next
-    })
-  }
 
   const isFirstRender = useRef(true)
   useEffect(() => {
@@ -91,7 +74,6 @@ export function FeaturePagesGrid({
 
         setHits(res.hits)
         setTotal(res.total)
-        mergeTags(res.hits)
       })
     }, 200)
 
@@ -124,7 +106,6 @@ export function FeaturePagesGrid({
 
       setHits((prev) => [...prev, ...res.hits])
       setTotal(res.total)
-      mergeTags(res.hits)
     })
   }
 
@@ -137,7 +118,7 @@ export function FeaturePagesGrid({
         onQueryChange={setQuery}
         searchPlaceholder={t("searchPlaceholder")}
         filterLabel={t("filterTagsLabel")}
-        filterOptions={tagOptions.map((tag) => ({ label: tag, value: tag }))}
+        filterOptions={tagOptions}
         selectedValues={selectedTags}
         onToggleValue={toggleTag}
         idPrefix="feature-tag"

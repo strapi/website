@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs"
 
+import type { FilterOption } from "@/components/elementary/SearchFilterSidebar"
 import {
   getCaseStudiesIndexName,
   getMeilisearchClient,
@@ -13,14 +14,41 @@ import type {
   SearchCaseStudiesArgs,
 } from "./case-studies-search-types"
 
+const CATEGORY_FACET = "categories.name"
+
 function escape(value: string): string {
   // eslint-disable-next-line unicorn/prefer-string-raw -- escaping a single backslash in a template literal is awkward
   return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"')
 }
 
+/**
+ * Full list of category options for the sidebar, sourced from the Meilisearch
+ * facet distribution (every category present in the index, independent of the
+ * currently loaded hits). Returns [] if the index is unavailable so SSG keeps working.
+ */
+export async function getCaseStudyCategoryFacets(): Promise<FilterOption[]> {
+  const index = getMeilisearchClient().index<CaseStudyHit>(
+    getCaseStudiesIndexName()
+  )
+
+  try {
+    const res = await index.search("", { limit: 0, facets: [CATEGORY_FACET] })
+    const dist = res.facetDistribution?.[CATEGORY_FACET] ?? {}
+
+    return Object.keys(dist)
+      .sort((a, b) => a.localeCompare(b))
+      .map((name) => ({ label: name, value: name }))
+  } catch (error) {
+    console.error("[getCaseStudyCategoryFacets] Meilisearch error", error)
+    Sentry.captureException(error)
+
+    return []
+  }
+}
+
 export async function searchCaseStudies({
   query,
-  categorySlugs,
+  categoryNames,
   offset,
   limit,
 }: SearchCaseStudiesArgs): Promise<CaseStudiesSearchResult> {
@@ -30,9 +58,9 @@ export async function searchCaseStudies({
 
   const filter: string[] = []
 
-  if (categorySlugs.length > 0) {
-    const list = categorySlugs.map((s) => `"${escape(s)}"`).join(", ")
-    filter.push(`categories.slug IN [${list}]`)
+  if (categoryNames.length > 0) {
+    const list = categoryNames.map((s) => `"${escape(s)}"`).join(", ")
+    filter.push(`${CATEGORY_FACET} IN [${list}]`)
   }
 
   // Resilient against a missing/unavailable Meilisearch index so SSG doesn't break the build.

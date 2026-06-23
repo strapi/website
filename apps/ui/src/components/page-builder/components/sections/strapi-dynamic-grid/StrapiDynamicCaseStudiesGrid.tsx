@@ -2,7 +2,10 @@ import type { Data } from "@repo/strapi-types"
 import { getLocale } from "next-intl/server"
 import { use } from "react"
 
-import { searchCaseStudies } from "@/components/case-study/case-studies-search"
+import {
+  getCaseStudyCategoryFacets,
+  searchCaseStudies,
+} from "@/components/case-study/case-studies-search"
 import { CaseStudiesGrid } from "@/components/case-study/CaseStudiesGrid"
 import { Container } from "@/components/elementary/Container"
 
@@ -22,11 +25,12 @@ export function StrapiDynamicCaseStudiesGrid({
     searchCaseStudies({
       locale,
       query: "",
-      categorySlugs: [],
+      categoryNames: [],
       offset: 0,
       limit: INITIAL_PAGE_SIZE,
     })
   )
+  const categoryOptions = use(getCaseStudyCategoryFacets())
 
   return (
     <Container className="py-8 lg:py-12">
@@ -34,6 +38,7 @@ export function StrapiDynamicCaseStudiesGrid({
         locale={locale}
         initialHits={initial.hits}
         initialTotal={initial.total}
+        categoryOptions={categoryOptions}
         pageSize={INITIAL_PAGE_SIZE}
         searchAction={searchCaseStudies}
       />

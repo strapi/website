@@ -26,7 +26,7 @@ export interface CaseStudiesSearchResult {
 export interface SearchCaseStudiesArgs {
   readonly locale: string
   readonly query: string
-  readonly categorySlugs: readonly string[]
+  readonly categoryNames: readonly string[]
   readonly offset: number
   readonly limit: number
 }

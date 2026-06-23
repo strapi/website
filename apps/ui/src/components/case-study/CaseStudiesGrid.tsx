@@ -2,9 +2,12 @@
 
 import type { Data } from "@repo/strapi-types"
 import { useTranslations } from "next-intl"
-import { useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 
-import { SearchFilterSidebar } from "@/components/elementary/SearchFilterSidebar"
+import {
+  type FilterOption,
+  SearchFilterSidebar,
+} from "@/components/elementary/SearchFilterSidebar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/styles"
 
@@ -20,6 +23,9 @@ interface CaseStudiesGridProps {
   readonly locale: string
   readonly initialHits: readonly CaseStudyHit[]
   readonly initialTotal: number
+  // Complete category list from the Meilisearch facet distribution (not just
+  // the categories present in the loaded hits).
+  readonly categoryOptions: readonly FilterOption[]
   readonly pageSize?: number
   readonly searchAction: (
     args: SearchCaseStudiesArgs
@@ -29,29 +35,11 @@ interface CaseStudiesGridProps {
 
 const DEFAULT_PAGE_SIZE = 12
 
-function collectCategories(
-  into: Map<string, string>,
-  items: readonly CaseStudyHit[]
-): Map<string, string> {
-  for (const item of items) {
-    // Meilisearch hits can carry `categories` as a non-array (or omit it), so
-    // guard with Array.isArray to avoid a "not iterable" crash at prerender.
-    if (!Array.isArray(item.categories)) continue
-
-    for (const cat of item.categories) {
-      if (cat?.slug && cat.name && !into.has(cat.slug)) {
-        into.set(cat.slug, cat.name)
-      }
-    }
-  }
-
-  return into
-}
-
 export function CaseStudiesGrid({
   locale,
   initialHits,
   initialTotal,
+  categoryOptions,
   pageSize = DEFAULT_PAGE_SIZE,
   searchAction,
   className,
@@ -64,27 +52,7 @@ export function CaseStudiesGrid({
   const [selectedCategories, setSelectedCategories] = useState<
     ReadonlySet<string>
   >(new Set())
-  const [knownCategories, setKnownCategories] = useState<
-    ReadonlyMap<string, string>
-  >(() => collectCategories(new Map(), initialHits))
   const [isPending, startTransition] = useTransition()
-
-  const categoryOptions = useMemo(
-    () =>
-      [...knownCategories.entries()].map(([value, label]) => ({
-        label,
-        value,
-      })),
-    [knownCategories]
-  )
-
-  function mergeCategories(items: readonly CaseStudyHit[]) {
-    setKnownCategories((prev) => {
-      const next = collectCategories(new Map(prev), items)
-
-      return next.size === prev.size ? prev : next
-    })
-  }
 
   const isFirstRender = useRef(true)
   useEffect(() => {
@@ -99,14 +67,13 @@ export function CaseStudiesGrid({
         const res = await searchAction({
           locale,
           query,
-          categorySlugs: [...selectedCategories],
+          categoryNames: [...selectedCategories],
           offset: 0,
           limit: pageSize,
         })
 
         setHits(res.hits)
         setTotal(res.total)
-        mergeCategories(res.hits)
       })
     }, 200)
 
@@ -132,14 +99,13 @@ export function CaseStudiesGrid({
       const res = await searchAction({
         locale,
         query,
-        categorySlugs: [...selectedCategories],
+        categoryNames: [...selectedCategories],
         offset: hits.length,
         limit: pageSize,
       })
 
       setHits((prev) => [...prev, ...res.hits])
       setTotal(res.total)
-      mergeCategories(res.hits)
     })
   }
 

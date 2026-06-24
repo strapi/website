@@ -5,7 +5,6 @@ import { GithubStarButton } from "@/components/elementary/GithubStarButton"
 import { GlobalSearch } from "@/components/elementary/GlobalSearch"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import {
-  NavigationMenu,
   NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuList,
@@ -14,6 +13,7 @@ import { cn } from "@/lib/styles"
 
 import { DirectNavItem } from "./DirectNavItem"
 import { DropdownNavItem } from "./DropdownNavItem"
+import { NavbarNavigationMenu } from "./NavbarNavigationMenu"
 import { StrapiLinkImage } from "../../utilities/StrapiLinkImage"
 
 interface DesktopNavbarProps extends React.ComponentProps<"div"> {
@@ -71,7 +71,7 @@ export function DesktopNavbar({
       </div>
 
       {navItems?.length ? (
-        <NavigationMenu className="static max-w-none flex-initial">
+        <NavbarNavigationMenu className="static max-w-none flex-initial">
           <NavigationMenuList className="gap-0 xl:gap-3">
             {navItems.map((item) => (
               <NavigationMenuItem key={item.id}>
@@ -88,7 +88,7 @@ export function DesktopNavbar({
             ))}
             <NavigationMenuIndicator />
           </NavigationMenuList>
-        </NavigationMenu>
+        </NavbarNavigationMenu>
       ) : null}
 
       <div className="ml-auto flex items-center gap-2">

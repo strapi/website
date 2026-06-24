@@ -29,6 +29,7 @@ const STRAPI_TAGS = {
   header: ["strapi:api::header.header"] as const,
   footer: ["strapi:api::footer.footer"] as const,
   notFound: ["strapi:api::not-found.not-found"] as const,
+  redirect: ["strapi:api::redirect.redirect"] as const,
 } as const
 
 /**
@@ -997,5 +998,39 @@ export async function fetchNotFound(locale: Locale) {
         stack: e instanceof Error ? e.stack : undefined,
       },
     })
+  }
+}
+
+/**
+ * Fetch the published, admin-managed redirects (`redirect` collection type).
+ *
+ * Returns the flat list of records so callers (the redirects proxy) can match a
+ * request path without paging. The content type is not localized, so no locale
+ * is passed. On any failure an empty list is returned and the caller falls back
+ * to its last known cache, keeping a Strapi outage from breaking navigation.
+ */
+export async function fetchRedirects() {
+  try {
+    const res = await PublicStrapiClient.fetchAll(
+      "api::redirect.redirect",
+      {
+        fields: ["source", "destination", "permanent"],
+        populate: {},
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.redirect)
+    )
+
+    return res.data ?? []
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: "Error fetching redirects",
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return []
   }
 }

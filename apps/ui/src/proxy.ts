@@ -5,6 +5,7 @@ import { routing } from "@/lib/navigation"
 import { basicAuth } from "@/lib/proxies/basicAuth"
 import { dynamicRewrite } from "@/lib/proxies/dynamicRewrite"
 import { httpsRedirect } from "@/lib/proxies/httpsRedirect"
+import { redirectsProxy } from "@/lib/proxies/redirects"
 
 // https://next-intl-docs.vercel.app/docs/getting-started/app-router
 const intlProxy = createMiddleware(routing)
@@ -15,6 +16,9 @@ export default async function proxy(req: NextRequest) {
 
   const httpsResponse = httpsRedirect(req)
   if (httpsResponse) return httpsResponse
+
+  const redirectResponse = await redirectsProxy(req)
+  if (redirectResponse) return redirectResponse
 
   const dynamicResponse = dynamicRewrite(req, intlProxy)
   if (dynamicResponse) return dynamicResponse

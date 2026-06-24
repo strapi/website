@@ -29,6 +29,7 @@ export const API_ENDPOINTS: Partial<Record<UID.ContentType, string>> = {
   "api::global.global": "/global",
   "api::not-found.not-found": "/not-found",
   "api::news-item.news-item": "/news-items",
+  "api::redirect.redirect": "/redirects",
 } as const
 
 /**

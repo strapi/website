@@ -22,7 +22,7 @@ export function StrapiFooterCta({
 
   return (
     <section className="w-full">
-      <Container className="py-30">
+      <Container className="pt-16 pb-24">
         <div className="flex flex-col gap-14 lg:flex-row lg:gap-20">
           <div className="flex flex-1 flex-col items-start gap-14">
             <SectionTitle as="h2" size="sm">

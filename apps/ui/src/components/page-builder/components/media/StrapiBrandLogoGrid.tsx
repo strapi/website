@@ -32,8 +32,8 @@ function LogoImage({
         "object-contain",
         variant === "plain"
           ? cn(
-              "h-[45px] w-auto opacity-50",
-              isLinked && "transition-opacity hover:opacity-100"
+              "h-[45px] w-auto",
+              isLinked && "opacity-50 transition-opacity hover:opacity-100"
             )
           : "size-full"
       )}

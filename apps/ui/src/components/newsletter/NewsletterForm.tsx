@@ -100,7 +100,7 @@ export function NewsletterForm({
     <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
       <div
         className={cn(
-          "flex w-full gap-1",
+          "flex w-full gap-2",
           layout === "inline" ? "flex-row md:flex-col lg:flex-row" : "flex-col"
         )}
       >

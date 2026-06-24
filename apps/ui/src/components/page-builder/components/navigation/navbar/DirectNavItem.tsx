@@ -38,6 +38,7 @@ export function DirectNavItem({ item, className }: DirectNavItemProps) {
       href={href}
       variant="ghost"
       className={cn(navigationMenuTriggerStyle(), "text-base", className)}
+      openInNewTab={!!item.link?.newTab}
     >
       {item.link?.label}
     </AppLink>

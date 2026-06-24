@@ -27,7 +27,7 @@ export function StrapiTwoColumnGrid({
       : "gap-y-10 lg:gap-x-16 lg:gap-y-16"
 
   return (
-    <Box variant={component.background ?? "none"} className="py-16 lg:py-32">
+    <Box variant={component.background ?? "none"} className="py-12 lg:py-24">
       <Container className="relative">
         {component.section && (
           <StrapiSectionHeader component={component.section} />

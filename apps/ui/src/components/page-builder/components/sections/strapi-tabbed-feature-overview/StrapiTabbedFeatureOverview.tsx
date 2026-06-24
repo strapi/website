@@ -40,7 +40,7 @@ export function StrapiTabbedFeatureOverview({
 
   return (
     <section>
-      <Container className="flex flex-col items-center gap-12 py-16 lg:gap-20 lg:py-24">
+      <Container className="flex flex-col items-center gap-12 py-16 lg:gap-20 lg:py-20">
         <StrapiSectionHeader component={component.section} />
 
         <TabsPrimitive.Root

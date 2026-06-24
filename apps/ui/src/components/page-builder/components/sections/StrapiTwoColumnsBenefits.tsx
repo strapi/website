@@ -12,7 +12,7 @@ export function StrapiTwoColumnsBenefits({
 }) {
   return (
     <section>
-      <Container className="flex flex-col gap-10 lg:flex-row lg:gap-8">
+      <Container className="flex flex-col gap-10 py-8 lg:flex-row lg:gap-8 lg:py-16">
         {component.section && (
           <div className="lg:flex lg:flex-1 lg:items-center">
             <StrapiSectionHeader component={component.section} />

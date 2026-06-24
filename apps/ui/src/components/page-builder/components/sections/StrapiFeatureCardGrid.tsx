@@ -20,14 +20,19 @@ export function StrapiFeatureCardGrid({
   readonly component: Data.Component<"sections.feature-card-grid">
 }) {
   return (
-    <Box variant={component.background ?? "none"} className="py-16 lg:py-32">
+    <Box variant={component.background ?? "none"} className="pt-8 lg:pt-16">
       <Container>
         {component.section && (
           <StrapiSectionHeader component={component.section} />
         )}
 
         {component.items && component.items.length > 0 && (
-          <div className="mt-12 grid grid-cols-6 gap-6 lg:mt-20">
+          <div
+            className={cn(
+              "grid grid-cols-6 gap-6",
+              component.section ? "mt-12 lg:mt-20" : ""
+            )}
+          >
             {component.items.map((item) => {
               const layout = item.layout ?? "full"
               const hasImage = !!item.image
@@ -76,28 +81,36 @@ export function StrapiFeatureCardGrid({
                       )}
 
                     <FeatureCardContent size={size}>
-                      <div className="flex flex-col gap-3 md:flex-row">
-                        {item.icon ? (
-                          <div className="flex h-7.5 shrink-0 items-center">
-                            <StrapiBasicImage
-                              component={item.icon}
-                              mode="intrinsic"
-                              className={cn(
-                                !(item.icon.width && item.icon.height) &&
-                                  "size-10 object-contain"
-                              )}
-                            />
-                          </div>
-                        ) : null}
+                      <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 md:flex-row md:items-start">
+                          {item.icon ? (
+                            <div className="flex h-7.5 shrink-0 items-start">
+                              <StrapiBasicImage
+                                component={item.icon}
+                                mode="intrinsic"
+                                className={cn(
+                                  !(item.icon.width && item.icon.height) &&
+                                    "size-10 object-contain"
+                                )}
+                              />
+                            </div>
+                          ) : null}
 
-                        <div>
-                          <h3 className={titleClassName}>{item.title}</h3>
-                          {item.description && (
-                            <FeatureCardDescription size={size}>
-                              {item.description}
-                            </FeatureCardDescription>
-                          )}
+                          <div className={cn(item.icon && "md:-mt-1")}>
+                            <h3 className={titleClassName}>{item.title}</h3>
+                            {item.description && !item.icon && (
+                              <FeatureCardDescription size={size}>
+                                {item.description}
+                              </FeatureCardDescription>
+                            )}
+                          </div>
                         </div>
+
+                        {item.description && item.icon && (
+                          <FeatureCardDescription size={size} className="mt-2">
+                            {item.description}
+                          </FeatureCardDescription>
+                        )}
                       </div>
 
                       {hasImage && cardLayout === "stacked" && (

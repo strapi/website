@@ -3,7 +3,8 @@
 import { ListIcon, XIcon } from "@phosphor-icons/react/ssr"
 import type { Nullable } from "@repo/shared-data"
 import type { Data } from "@repo/strapi-types"
-import { useState } from "react"
+import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/styles"
@@ -32,6 +33,13 @@ export function MobileNavbar({
   ...restProps
 }: MobileNavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+
+  const pathname = usePathname()
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsOpen(false)
+  }, [pathname])
 
   if (!Array.isArray(navItems) || !navItems.length) {
     return null

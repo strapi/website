@@ -15,7 +15,50 @@
       "failed": 0,
       "lastProcessedId": 208,
       "errors": []
+    },
+    "blog-posts": {
+      "total": 1266,
+      "migrated": 50,
+      "skipped": 1214,
+      "failed": 2,
+      "lastProcessedId": 1536,
+      "errors": [
+        {
+          "v4Id": 717,
+          "error": "Skipping orphan blog post (no title/slug): v4Id=undefined",
+          "timestamp": "2026-06-23T19:37:10.729Z"
+        },
+        {
+          "v4Id": 964,
+          "error": "Skipping orphan blog post (no title/slug): v4Id=undefined",
+          "timestamp": "2026-06-23T19:37:12.581Z"
+        }
+      ]
+    },
+    "post-categories": {
+      "total": 10,
+      "migrated": 0,
+      "skipped": 10,
+      "failed": 0,
+      "lastProcessedId": 0,
+      "errors": []
+    },
+    "post-sub-categories": {
+      "total": 24,
+      "migrated": 0,
+      "skipped": 24,
+      "failed": 0,
+      "lastProcessedId": 0,
+      "errors": []
+    },
+    "post-tags": {
+      "total": 111,
+      "migrated": 3,
+      "skipped": 216,
+      "failed": 0,
+      "lastProcessedId": 151,
+      "errors": []
     }
   },
-  "lastRun": "2026-05-23T13:45:40.292Z"
+  "lastRun": "2026-06-23T19:48:31.673Z"
 }

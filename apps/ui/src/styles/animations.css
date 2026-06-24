@@ -38,6 +38,15 @@
 
 /* ── Reveal animations (generic) ── */
 
+/**
+ * Reveal animations disabled. The `animate-reveal-cascade`,
+ * `animate-border-reveal` and `animate-ring-reveal` class names are kept in the
+ * JSX but the underlying utilities/keyframes are commented out so elements
+ * render in their final visible state with no entrance animation. Uncomment to
+ * restore the reveal effect.
+ */
+
+/*
 @keyframes reveal-fade-in {
   from {
     opacity: 0;
@@ -97,6 +106,7 @@
   animation: ring-fade-in 1000ms var(--ease-reveal) var(--reveal-delay, 180ms)
     both;
 }
+*/
 
 /**
  * Global reduced-motion policy. Users who request reduced motion get a single,
@@ -148,6 +158,27 @@
     animation: none !important;
     width: 100% !important;
   }
+}
+
+/* ── Top banner (dismissible) ── */
+
+/**
+ * The banner renders open in the static HTML; the pre-paint inline script in
+ * StrapiTopBanner sets `data-top-banner-dismissed` on <html> for visitors who
+ * dismissed this version, and these rules collapse it.
+ *
+ * On an already-dismissed page load the flag is set *before* first paint, so the
+ * banner starts at height 0 and nothing animates (initial state doesn't
+ * transition). The height transition only plays when the user clicks dismiss at
+ * runtime, giving a smooth collapse without any entrance animation.
+ */
+[data-top-banner] {
+  overflow: hidden;
+  transition: height 300ms ease-in-out;
+}
+
+html[data-top-banner-dismissed] [data-top-banner] {
+  height: 0;
 }
 
 /* ── Navigation animations ── */

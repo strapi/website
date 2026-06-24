@@ -5,6 +5,14 @@ import type { NewsletterHubspotRef } from "@/components/newsletter/NewsletterFor
 
 export const BLOG_HEADER_OFFSET = 96
 
+/**
+ * Category slugs hidden from the blog index ("home") feed. Posts in these
+ * categories (e.g. AI-generated "Ecosystem" content) are still reachable via
+ * their own category page and direct links — they are only excluded from the
+ * curated, internally-published front page.
+ */
+export const BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS = ["ecosystem"] as const
+
 export type BlogPost = Data.ContentType<"api::blog-post.blog-post">
 export type BlogCategory = Data.ContentType<"api::post-category.post-category">
 export type BlogTag = Data.ContentType<"api::post-tag.post-tag">

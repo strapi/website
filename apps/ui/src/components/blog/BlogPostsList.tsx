@@ -22,6 +22,7 @@ interface BlogPostsListProps {
   readonly loadMoreLabel?: string
   readonly categorySlug?: string | readonly string[]
   readonly tagSlug?: string
+  readonly excludeCategorySlugs?: readonly string[]
 }
 
 export function BlogPostsList({
@@ -33,6 +34,7 @@ export function BlogPostsList({
   loadMoreLabel = "Load More Articles",
   categorySlug,
   tagSlug,
+  excludeCategorySlugs,
 }: BlogPostsListProps) {
   const [posts, setPosts] = useState<readonly BlogPost[]>(initialPosts)
   const [offset, setOffset] = useState(initialOffset)
@@ -47,6 +49,7 @@ export function BlogPostsList({
         limit: pageSize,
         categorySlug,
         tagSlug,
+        excludeCategorySlugs,
       })
 
       setPosts((prev) => [...prev, ...res.posts])

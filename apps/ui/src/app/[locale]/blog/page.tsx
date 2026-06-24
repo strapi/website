@@ -12,7 +12,11 @@ import {
 } from "@/components/elementary/HeroContainer"
 import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
 import { StrapiSeoStructuredDataByFullPath } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
-import { getBlogNewsletterHubspot, type BlogPost } from "@/lib/blog-utils"
+import {
+  BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS,
+  getBlogNewsletterHubspot,
+  type BlogPost,
+} from "@/lib/blog-utils"
 import { getBlogIndexMetadata } from "@/lib/metadata"
 import { fetchBlog, fetchBlogPostsPage } from "@/lib/strapi-api/content/server"
 
@@ -35,7 +39,11 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   const [t, allPosts, blog] = use(
     Promise.all([
       getTranslations({ locale, namespace: "blog" }),
-      fetchBlogPostsPage(locale, { offset: 0, limit: 10 }),
+      fetchBlogPostsPage(locale, {
+        offset: 0,
+        limit: 10,
+        excludeCategorySlugs: BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS,
+      }),
       fetchBlog(locale),
     ])
   )
@@ -59,6 +67,7 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
             initialOffset={allPosts.posts.length}
             total={allPosts.total}
             loadMoreLabel={t("loadMore")}
+            excludeCategorySlugs={BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS}
           />
         </HeroContainerContent>
 

@@ -284,9 +284,10 @@ export async function fetchBlogPostsPage(
     readonly limit: number
     readonly categorySlug?: string | readonly string[]
     readonly tagSlug?: string
+    readonly excludeCategorySlugs?: readonly string[]
   }
 ): Promise<BlogPostsPage> {
-  const { offset, limit, categorySlug, tagSlug } = options
+  const { offset, limit, categorySlug, tagSlug, excludeCategorySlugs } = options
   const dm = await draftMode()
 
   const slugs = Array.isArray(categorySlug)
@@ -301,6 +302,16 @@ export async function fetchBlogPostsPage(
   }
   if (tagSlug) {
     conditions.push({ tags: { slug: { $eq: tagSlug } } })
+  }
+  if (excludeCategorySlugs && excludeCategorySlugs.length > 0) {
+    // `$notIn` alone drops posts with no category (NULL is never "not in" a
+    // set), so keep uncategorized posts via an explicit null branch.
+    conditions.push({
+      $or: [
+        { category: { slug: { $notIn: excludeCategorySlugs } } },
+        { category: { id: { $null: true } } },
+      ],
+    })
   }
 
   const filters = conditions.length > 0 ? { filters: { $and: conditions } } : {}

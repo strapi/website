@@ -11,6 +11,7 @@ export interface LoadMoreBlogPostsArgs {
   readonly limit: number
   readonly categorySlug?: string | readonly string[]
   readonly tagSlug?: string
+  readonly excludeCategorySlugs?: readonly string[]
 }
 
 export interface LoadMoreBlogPostsResult {
@@ -24,12 +25,14 @@ export async function loadMoreBlogPosts({
   limit,
   categorySlug,
   tagSlug,
+  excludeCategorySlugs,
 }: LoadMoreBlogPostsArgs): Promise<LoadMoreBlogPostsResult> {
   const { posts, total } = await fetchBlogPostsPage(locale, {
     offset,
     limit,
     categorySlug,
     tagSlug,
+    excludeCategorySlugs,
   })
 
   return {

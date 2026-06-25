@@ -4,7 +4,7 @@ import { use } from "react"
 
 import { Container } from "@/components/elementary/Container"
 import {
-  getFeatureTagFacets,
+  getFeatureCategoryFacets,
   searchFeaturePages,
 } from "@/components/feature-page/feature-pages-search"
 import { FeaturePagesGrid } from "@/components/feature-page/FeaturePagesGrid"
@@ -25,12 +25,12 @@ export function StrapiDynamicFeaturesGrid({
     searchFeaturePages({
       locale,
       query: "",
-      featureTagTitles: [],
+      featureCategoryTitles: [],
       offset: 0,
       limit: INITIAL_PAGE_SIZE,
     })
   )
-  const tagOptions = use(getFeatureTagFacets())
+  const categoryOptions = use(getFeatureCategoryFacets())
 
   return (
     <Container className="py-8 lg:py-12">
@@ -38,7 +38,7 @@ export function StrapiDynamicFeaturesGrid({
         locale={locale}
         initialHits={initial.hits}
         initialTotal={initial.total}
-        tagOptions={tagOptions}
+        categoryOptions={categoryOptions}
         pageSize={INITIAL_PAGE_SIZE}
         searchAction={searchFeaturePages}
       />

@@ -11,7 +11,7 @@ import type {
   SearchFeaturePagesArgs,
 } from "./feature-pages-search-types"
 
-const TAG_FACET = "feature_tag"
+const CATEGORY_FACET = "feature_category"
 
 function escape(value: string): string {
   // eslint-disable-next-line unicorn/prefer-string-raw -- escaping a single backslash in a template literal is awkward
@@ -19,24 +19,24 @@ function escape(value: string): string {
 }
 
 /**
- * Full list of feature-tag options for the sidebar, sourced from the Meilisearch
- * facet distribution (every tag present in the index, independent of the
+ * Full list of feature-category options for the sidebar, sourced from the Meilisearch
+ * facet distribution (every category present in the index, independent of the
  * currently loaded hits). Returns [] if the index is unavailable so SSG keeps working.
  */
-export async function getFeatureTagFacets(): Promise<FilterOption[]> {
+export async function getFeatureCategoryFacets(): Promise<FilterOption[]> {
   const index = getMeilisearchClient().index<FeaturePageHit>(
     getFeaturesIndexName()
   )
 
   try {
-    const res = await index.search("", { limit: 0, facets: [TAG_FACET] })
-    const dist = res.facetDistribution?.[TAG_FACET] ?? {}
+    const res = await index.search("", { limit: 0, facets: [CATEGORY_FACET] })
+    const dist = res.facetDistribution?.[CATEGORY_FACET] ?? {}
 
     return Object.keys(dist)
       .sort((a, b) => a.localeCompare(b))
-      .map((tag) => ({ label: tag, value: tag }))
+      .map((category) => ({ label: category, value: category }))
   } catch (error) {
-    console.error("[getFeatureTagFacets] Meilisearch error", error)
+    console.error("[getFeatureCategoryFacets] Meilisearch error", error)
     Sentry.captureException(error)
 
     return []
@@ -45,7 +45,7 @@ export async function getFeatureTagFacets(): Promise<FilterOption[]> {
 
 export async function searchFeaturePages({
   query,
-  featureTagTitles,
+  featureCategoryTitles,
   offset,
   limit,
 }: SearchFeaturePagesArgs): Promise<FeaturePagesSearchResult> {
@@ -55,9 +55,9 @@ export async function searchFeaturePages({
 
   const filter: string[] = []
 
-  if (featureTagTitles.length > 0) {
-    const list = featureTagTitles.map((t) => `"${escape(t)}"`).join(", ")
-    filter.push(`feature_tag IN [${list}]`)
+  if (featureCategoryTitles.length > 0) {
+    const list = featureCategoryTitles.map((t) => `"${escape(t)}"`).join(", ")
+    filter.push(`feature_category IN [${list}]`)
   }
 
   // Resilient against a missing/unavailable Meilisearch index so SSG (e.g. /[locale]/features

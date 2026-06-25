@@ -23,9 +23,9 @@ interface FeaturePagesGridProps {
   readonly locale: string
   readonly initialHits: readonly FeaturePageHit[]
   readonly initialTotal: number
-  // Complete feature-tag list from the Meilisearch facet distribution (not just
-  // the tags present in the loaded hits).
-  readonly tagOptions: readonly FilterOption[]
+  // Complete feature-category list from the Meilisearch facet distribution (not just
+  // the categories present in the loaded hits).
+  readonly categoryOptions: readonly FilterOption[]
   readonly pageSize?: number
   readonly searchAction: (
     args: SearchFeaturePagesArgs
@@ -39,7 +39,7 @@ export function FeaturePagesGrid({
   locale,
   initialHits,
   initialTotal,
-  tagOptions,
+  categoryOptions,
   pageSize = DEFAULT_PAGE_SIZE,
   searchAction,
   className,
@@ -49,9 +49,9 @@ export function FeaturePagesGrid({
   const [hits, setHits] = useState<readonly FeaturePageHit[]>(initialHits)
   const [total, setTotal] = useState(initialTotal)
   const [query, setQuery] = useState("")
-  const [selectedTags, setSelectedTags] = useState<ReadonlySet<string>>(
-    new Set()
-  )
+  const [selectedCategories, setSelectedCategories] = useState<
+    ReadonlySet<string>
+  >(new Set())
   const [isPending, startTransition] = useTransition()
 
   const isFirstRender = useRef(true)
@@ -67,7 +67,7 @@ export function FeaturePagesGrid({
         const res = await searchAction({
           locale,
           query,
-          featureTagTitles: [...selectedTags],
+          featureCategoryTitles: [...selectedCategories],
           offset: 0,
           limit: pageSize,
         })
@@ -78,16 +78,16 @@ export function FeaturePagesGrid({
     }, 200)
 
     return () => clearTimeout(handle)
-  }, [query, selectedTags, locale, pageSize, searchAction])
+  }, [query, selectedCategories, locale, pageSize, searchAction])
 
-  function toggleTag(tag: string) {
-    setSelectedTags((prev) => {
+  function toggleCategory(category: string) {
+    setSelectedCategories((prev) => {
       const next = new Set(prev)
 
-      if (next.has(tag)) {
-        next.delete(tag)
+      if (next.has(category)) {
+        next.delete(category)
       } else {
-        next.add(tag)
+        next.add(category)
       }
 
       return next
@@ -99,7 +99,7 @@ export function FeaturePagesGrid({
       const res = await searchAction({
         locale,
         query,
-        featureTagTitles: [...selectedTags],
+        featureCategoryTitles: [...selectedCategories],
         offset: hits.length,
         limit: pageSize,
       })
@@ -118,10 +118,10 @@ export function FeaturePagesGrid({
         onQueryChange={setQuery}
         searchPlaceholder={t("searchPlaceholder")}
         filterLabel={t("filterTagsLabel")}
-        filterOptions={tagOptions}
-        selectedValues={selectedTags}
-        onToggleValue={toggleTag}
-        idPrefix="feature-tag"
+        filterOptions={categoryOptions}
+        selectedValues={selectedCategories}
+        onToggleValue={toggleCategory}
+        idPrefix="feature-category"
       />
 
       <div className="flex min-w-0 flex-1 flex-col gap-8">
@@ -138,9 +138,9 @@ export function FeaturePagesGrid({
 
             return (
               <Card key={item.documentId ?? item.title} className="relative">
-                {item.feature_tag && (
+                {item.feature_category && (
                   <span className="bg-strapi-blue-100 text-strapi-blue-600 absolute top-3 left-3 rounded-sm px-2 py-0.5 text-xs font-medium">
-                    {item.feature_tag}
+                    {item.feature_category}
                   </span>
                 )}
 

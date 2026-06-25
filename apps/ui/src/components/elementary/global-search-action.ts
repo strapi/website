@@ -75,7 +75,7 @@ export async function globalSearch({
               "title",
               "description",
               "url",
-              "feature_tag",
+              "feature_category",
             ],
           },
         ],

@@ -21,7 +21,7 @@ export interface FeatureGlobalHit {
   readonly title: string
   readonly description?: string | null
   readonly url?: string | null
-  readonly feature_tag?: string | null
+  readonly feature_category?: string | null
 }
 
 export interface DocsGlobalHit {

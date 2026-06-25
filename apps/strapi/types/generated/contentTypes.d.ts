@@ -961,6 +961,36 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiFeatureCategoryFeatureCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: "feature_categories"
+  info: {
+    displayName: "Feature category"
+    pluralName: "feature-categories"
+    singularName: "feature-category"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    features: Schema.Attribute.Relation<"oneToMany", "api::feature.feature">
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::feature-category.feature-category"
+    > &
+      Schema.Attribute.Private
+    publishedAt: Schema.Attribute.DateTime
+    title: Schema.Attribute.String
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiFeatureTagFeatureTag extends Struct.CollectionTypeSchema {
   collectionName: "feature_tags"
   info: {
@@ -1005,6 +1035,10 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
     description: Schema.Attribute.Text
+    feature_category: Schema.Attribute.Relation<
+      "manyToOne",
+      "api::feature-category.feature-category"
+    >
     feature_tag: Schema.Attribute.Relation<
       "manyToOne",
       "api::feature-tag.feature-tag"
@@ -2213,6 +2247,7 @@ declare module "@strapi/strapi" {
       "api::cms-comparison.cms-comparison": ApiCmsComparisonCmsComparison
       "api::cms.cms": ApiCmsCms
       "api::country.country": ApiCountryCountry
+      "api::feature-category.feature-category": ApiFeatureCategoryFeatureCategory
       "api::feature-tag.feature-tag": ApiFeatureTagFeatureTag
       "api::feature.feature": ApiFeatureFeature
       "api::footer.footer": ApiFooterFooter

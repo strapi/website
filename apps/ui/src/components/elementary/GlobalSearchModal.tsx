@@ -302,9 +302,9 @@ export function GlobalSearchModal({
                         <span className="text-foreground font-medium">
                           {item.title}
                         </span>
-                        {item.feature_tag && (
+                        {item.feature_category && (
                           <span className="text-muted-foreground text-xs">
-                            {item.feature_tag}
+                            {item.feature_category}
                           </span>
                         )}
                       </div>

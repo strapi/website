@@ -30,6 +30,12 @@
       "target": "api::feature-tag.feature-tag",
       "inversedBy": "features"
     },
+    "feature_category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::feature-category.feature-category",
+      "inversedBy": "features"
+    },
     "url": {
       "type": "string"
     }

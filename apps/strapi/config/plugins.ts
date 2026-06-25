@@ -126,17 +126,17 @@ export default ({ env }) => {
           entriesQuery: {
             populate: {
               icon: true,
-              feature_tag: { fields: ["title"] },
+              feature_category: { fields: ["title"] },
             },
           },
           transformEntry({ entry }) {
             return {
               ...entry,
-              feature_tag: entry.feature_tag?.title ?? null,
+              feature_category: entry.feature_category?.title ?? null,
             }
           },
           settings: {
-            filterableAttributes: ["feature_tag"],
+            filterableAttributes: ["feature_category"],
             searchableAttributes: ["title", "description"],
           },
         },

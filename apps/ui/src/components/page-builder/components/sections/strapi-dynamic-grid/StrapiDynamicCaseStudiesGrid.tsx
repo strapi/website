@@ -33,7 +33,7 @@ export function StrapiDynamicCaseStudiesGrid({
   const categoryOptions = use(getCaseStudyCategoryFacets())
 
   return (
-    <Container className="py-8 lg:py-12">
+    <Container>
       <CaseStudiesGrid
         locale={locale}
         initialHits={initial.hits}

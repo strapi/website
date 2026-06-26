@@ -39,7 +39,7 @@ export function SectionHeaderContainer({
   const content = (
     <div
       className={cn(
-        "relative z-10 flex flex-col px-8 py-12 lg:px-14 lg:py-18",
+        "relative z-10 flex flex-col px-8 py-4 lg:px-14 lg:py-8",
         contentClassName
       )}
     >

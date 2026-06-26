@@ -12,7 +12,7 @@ export function ImageQuote({
   readonly component: Data.Component<"testimonials.quote">
 }) {
   return (
-    <section className="py-24">
+    <section>
       <Container>
         <div className="relative pt-24">
           <QuoteTriangle className="hidden lg:block">

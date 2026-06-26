@@ -66,7 +66,7 @@ export function StrapiVideo({
   const hasThumbnail = component.thumbnail?.media
 
   return (
-    <section className="py-12 lg:py-16">
+    <section>
       <Container>
         <div className={cn("flex", alignmentClasses[alignment])}>
           <div className="rounded-strapi-lg relative w-full overflow-hidden">

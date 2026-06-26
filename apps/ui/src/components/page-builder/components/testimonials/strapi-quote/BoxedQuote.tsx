@@ -11,7 +11,7 @@ export function BoxedQuote({
   readonly component: Data.Component<"testimonials.quote">
 }) {
   return (
-    <section className="py-24">
+    <section>
       <Container>
         <div className="rounded-strapi-lg max-w-[790px] overflow-hidden bg-white px-14 py-10 shadow-md">
           <Quote>

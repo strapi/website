@@ -87,31 +87,35 @@ export function StrapiPlanPricingCards({
             >
               <PricingCardCta card={card} />
 
-              <PricingFeatures title={card?.starFeaturesTitle}>
-                {card?.starFeatures?.map((feature) => (
-                  <PricingFeature
-                    tooltip={feature.tooltip}
-                    key={feature.id}
-                    badge={feature.badge}
-                    badgeStyle={feature.badgeStyle}
-                  >
-                    {feature.title}
-                  </PricingFeature>
-                ))}
-              </PricingFeatures>
+              {card?.starFeaturesTitle && !!card?.starFeatures?.length && (
+                <PricingFeatures title={card?.starFeaturesTitle}>
+                  {card?.starFeatures?.map((feature) => (
+                    <PricingFeature
+                      tooltip={feature.tooltip}
+                      key={feature.id}
+                      badge={feature.badge}
+                      badgeStyle={feature.badgeStyle}
+                    >
+                      {feature.title}
+                    </PricingFeature>
+                  ))}
+                </PricingFeatures>
+              )}
 
-              <PricingFeatures title={card?.mainFeaturesTitle}>
-                {card?.mainFeatures?.map((feature) => (
-                  <PricingFeature
-                    tooltip={feature.tooltip}
-                    key={feature.id}
-                    badge={feature.badge}
-                    badgeStyle={feature.badgeStyle}
-                  >
-                    {feature.title}
-                  </PricingFeature>
-                ))}
-              </PricingFeatures>
+              {card?.mainFeaturesTitle && !!card?.mainFeatures?.length && (
+                <PricingFeatures title={card?.mainFeaturesTitle}>
+                  {card?.mainFeatures?.map((feature) => (
+                    <PricingFeature
+                      tooltip={feature.tooltip}
+                      key={feature.id}
+                      badge={feature.badge}
+                      badgeStyle={feature.badgeStyle}
+                    >
+                      {feature.title}
+                    </PricingFeature>
+                  ))}
+                </PricingFeatures>
+              )}
 
               <PricingCardPromo component={card.promo} />
               <PricingCardSso component={card.sso} />

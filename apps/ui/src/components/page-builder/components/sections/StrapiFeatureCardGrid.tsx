@@ -20,7 +20,7 @@ export function StrapiFeatureCardGrid({
   readonly component: Data.Component<"sections.feature-card-grid">
 }) {
   return (
-    <Box variant={component.background ?? "none"} className="pt-8 lg:pt-16">
+    <Box variant={component.background ?? "none"} className="pt-6 lg:pt-12">
       <Container>
         {component.section && (
           <StrapiSectionHeader component={component.section} />

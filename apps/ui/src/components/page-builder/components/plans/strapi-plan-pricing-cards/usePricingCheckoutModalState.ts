@@ -20,6 +20,7 @@ export interface PricingCheckoutDerivedState {
   additionalSeatPriceAmount: number | null
   ssoBasePriceAmount: number | null
   ssoSeatPriceAmount: number | null
+  ssoDynamicTotal: number | null
   estimatedTotal: number | null
   planPreviewTotal: number
 }
@@ -140,6 +141,12 @@ export function deriveCheckoutState({
   const planPreviewTotal =
     (planPriceAmount ?? 0) + additionalSeats * (additionalSeatPriceAmount ?? 0)
 
+  const ssoDynamicTotal =
+    ssoBasePriceAmount != null &&
+    (additionalSeats === 0 || ssoSeatPriceAmount != null)
+      ? ssoBasePriceAmount + additionalSeats * (ssoSeatPriceAmount ?? 0)
+      : null
+
   return {
     includedSeats,
     hasSeatCheckout,
@@ -152,6 +159,7 @@ export function deriveCheckoutState({
     additionalSeatPriceAmount,
     ssoBasePriceAmount,
     ssoSeatPriceAmount,
+    ssoDynamicTotal,
     estimatedTotal,
     planPreviewTotal,
   }

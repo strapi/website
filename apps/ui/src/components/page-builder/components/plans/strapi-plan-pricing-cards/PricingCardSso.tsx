@@ -3,12 +3,16 @@ import type { Data } from "@repo/strapi-types"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/styles"
 
+import { formatUsd } from "./usePricingCheckoutModalState"
+
 export interface PricingCardSsoProps extends React.ComponentProps<"div"> {
   component: Data.Component<"plans.pricing-card-sso"> | undefined | null
+  dynamicPrice?: number | null
 }
 
 export function PricingCardSso({
   component,
+  dynamicPrice,
   className,
   ...restProps
 }: PricingCardSsoProps) {
@@ -17,6 +21,7 @@ export function PricingCardSso({
   }
 
   const { description, price, subtext, title } = component
+  const displayPrice = dynamicPrice != null ? formatUsd(dynamicPrice) : price
 
   return (
     <div
@@ -35,7 +40,7 @@ export function PricingCardSso({
         </Badge>
       </div>
       <div className="flex items-baseline">
-        <p className="text-foreground text-2xl font-semibold">{price}</p>
+        <p className="text-foreground text-2xl font-semibold">{displayPrice}</p>
         <p className="text-strapi-neutral-600 text-sm">{subtext}</p>
       </div>
       <p className="text-strapi-neutral-700 text-sm">{description}</p>

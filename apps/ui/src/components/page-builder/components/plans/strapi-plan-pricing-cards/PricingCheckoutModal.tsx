@@ -183,6 +183,7 @@ export function PricingCheckoutModal({ card }: PricingCheckoutModalProps) {
             <div className="border-border flex flex-row items-center gap-6 border-t pt-6">
               <PricingCardSso
                 component={card.sso}
+                dynamicPrice={checkoutState.ssoDynamicTotal}
                 className="mt-0 border-none pt-0"
               />
               <Switch

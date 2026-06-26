@@ -88,7 +88,7 @@ export async function CaseStudyView({ params }: CaseStudyViewProps) {
         )}
       </SectionHeaderContainer>
 
-      <main className="flex w-full flex-col pt-24">
+      <main className="flex w-full flex-col pt-4 lg:pt-8">
         <Container variant="condensed">
           {caseStudy.content && caseStudy.content.length > 0 && (
             <DynamicZoneRenderer

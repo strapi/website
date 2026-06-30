@@ -87,7 +87,7 @@ export function StrapiPlanPricingCards({
             >
               <PricingCardCta card={card} />
 
-              {card?.starFeaturesTitle && !!card?.starFeatures?.length && (
+              {!!card?.starFeatures?.length && (
                 <PricingFeatures title={card?.starFeaturesTitle}>
                   {card?.starFeatures?.map((feature) => (
                     <PricingFeature
@@ -102,7 +102,7 @@ export function StrapiPlanPricingCards({
                 </PricingFeatures>
               )}
 
-              {card?.mainFeaturesTitle && !!card?.mainFeatures?.length && (
+              {!!card?.mainFeatures?.length && (
                 <PricingFeatures title={card?.mainFeaturesTitle}>
                   {card?.mainFeatures?.map((feature) => (
                     <PricingFeature

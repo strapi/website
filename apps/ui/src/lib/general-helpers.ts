@@ -4,8 +4,6 @@ import { setupDayJs } from "./dates"
 
 export const isProduction = () => getEnvVar("APP_ENV") === "production"
 
-export const isTesting = () => getEnvVar("APP_ENV") === "testing"
-
 export const isDevelopment = () => getEnvVar("NODE_ENV") === "development"
 
 export const setupLibraries = () => {

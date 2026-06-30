@@ -20,7 +20,7 @@ import { env } from "@/env.mjs"
 import { debugStaticParams } from "@/lib/build"
 import { getEnvVar } from "@/lib/env-vars"
 import { fontPoppins } from "@/lib/fonts"
-import { isDevelopment } from "@/lib/general-helpers"
+import { isProduction } from "@/lib/general-helpers"
 import { routing } from "@/lib/navigation"
 import { buildOrgWebsiteGraph } from "@/lib/structured-data/site-graph"
 import { cn } from "@/lib/styles"
@@ -53,18 +53,25 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
 
-  // TODO: REMOVE BEFORE PRODUCTION DEPLOY — site-wide noindex/nofollow while
-  // hosted on a non-production URL. Drop this `robots` field entirely.
-  robots: {
-    index: false,
-    follow: false,
-    nocache: true,
-    googleBot: {
-      index: false,
-      follow: false,
-      noimageindex: true,
-    },
-  },
+  /**
+   * Site-wide noindex safety net for every non-production deployment. In
+   * production this field is omitted, so per-page metadata (Strapi SEO via
+   * `getMetaRobots`) decides indexing.
+   */
+  ...(isProduction()
+    ? {}
+    : {
+        robots: {
+          index: false,
+          follow: false,
+          nocache: true,
+          googleBot: {
+            index: false,
+            follow: false,
+            noimageindex: true,
+          },
+        },
+      }),
 }
 
 export const viewport: Viewport = {
@@ -139,7 +146,7 @@ export default async function RootLayout({
    * everything loaded later (analytics, ad pixels, lazy Kapa widget) gets the
    * cheaper `dns-prefetch` so we don't tie up connections speculatively.
    */
-  const showTrackingHints = !isDevelopment()
+  const showTrackingHints = isProduction()
 
   return (
     <html lang={locale} suppressHydrationWarning>

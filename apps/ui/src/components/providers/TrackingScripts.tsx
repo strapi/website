@@ -2,7 +2,7 @@ import { GoogleTagManager } from "@next/third-parties/google"
 import Script from "next/script"
 
 import { env } from "@/env.mjs"
-import { isDevelopment } from "@/lib/general-helpers"
+import { isProduction } from "@/lib/general-helpers"
 
 import { KapaWidget } from "./KapaWidget"
 
@@ -20,7 +20,7 @@ export function TrackingScriptWrapper({
   >
   ignoreInDevelopment?: boolean
 }) {
-  if (ignoreInDevelopment && isDevelopment()) {
+  if (ignoreInDevelopment && !isProduction()) {
     return null
   }
 
@@ -34,7 +34,7 @@ export function TrackingScriptWrapper({
 }
 
 export function TrackingScripts() {
-  if (isDevelopment()) {
+  if (!isProduction()) {
     return null
   }
 

@@ -1,8 +1,19 @@
 import type { MetadataRoute } from "next"
 
+import { getEnvVar } from "@/lib/env-vars"
+import { isProduction } from "@/lib/general-helpers"
+
 export default function robots(): MetadataRoute.Robots {
-  // TODO: REMOVE BEFORE PRODUCTION DEPLOY — temporary site-wide noindex while
-  // hosted on a non-production URL. Revert this file to its prior version
-  // (env-aware allow + sitemap) — see git history.
-  return { rules: { userAgent: "*", disallow: "/" } }
+  const baseUrl = getEnvVar("APP_PUBLIC_URL")
+
+  if (!isProduction()) {
+    return { rules: { userAgent: "*", disallow: "/" } }
+  }
+
+  return {
+    rules: { userAgent: "*", allow: "/" },
+    ...(baseUrl
+      ? { sitemap: new URL("./sitemap.xml", baseUrl).toString() }
+      : {}),
+  }
 }

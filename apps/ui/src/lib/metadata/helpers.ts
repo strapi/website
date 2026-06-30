@@ -3,10 +3,7 @@ import type { Data } from "@repo/strapi-types"
 import type { Metadata } from "next"
 import type { Locale } from "next-intl"
 
-// TODO: REMOVE BEFORE PRODUCTION DEPLOY — restore the `metaRobots` import once
-// `getMetaRobots` is reverted to its original Strapi-driven logic (see git
-// history of this file). Import removed to satisfy the no-unused-imports rule.
-// import { metaRobots } from "@/lib/metadata/constants"
+import { metaRobots } from "@/lib/metadata/constants"
 import { routing } from "@/lib/navigation"
 import type { StrapiLocalization } from "@/types/api"
 import type { NextMetadataTwitterCard, SocialMetadata } from "@/types/general"
@@ -68,13 +65,16 @@ export const seoMergeCustomizer = (
 ) => strapiValue ?? defaultValue
 
 export const getMetaRobots = (
-  _robotsString?: string | Metadata["robots"] | null,
-  _forbidIndexing?: boolean
+  robotsString?: string | Metadata["robots"] | null,
+  forbidIndexing?: boolean
 ) => {
-  // TODO: REMOVE BEFORE PRODUCTION DEPLOY — force noindex/nofollow on every
-  // page regardless of Strapi SEO config / env. Revert this function to its
-  // prior implementation (see git history) once we're on the production URL.
-  return { index: false, follow: false }
+  if (forbidIndexing) {
+    return { index: false, follow: false }
+  }
+
+  return typeof robotsString === "string"
+    ? metaRobots[robotsString.replaceAll(" ", "")]
+    : robotsString
 }
 
 const isAbsoluteUrl = (value: string) => /^https?:\/\//i.test(value)

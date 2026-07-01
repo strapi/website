@@ -53,9 +53,9 @@ export function StrapiFooterMain({
 
           {component.sections?.map((section) => (
             <div className="flex flex-col gap-6 sm:gap-8" key={section.id}>
-              <h2 className="text-base font-semibold uppercase">
+              <p className="text-base font-semibold uppercase">
                 {section.title}
-              </h2>
+              </p>
 
               <nav>
                 <ul className="flex list-none flex-col gap-3 leading-none">

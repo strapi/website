@@ -7,8 +7,9 @@ import {
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/styles"
 
+import { NavLinkTrigger } from "./NavLinkTrigger"
 import { NavMenuSection } from "./NavMenuSection"
-import { StrapiLink } from "../../utilities/StrapiLink"
+import { getStrapiLinkHref, StrapiLink } from "../../utilities/StrapiLink"
 
 export interface DropdownNavItemProps {
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
@@ -25,11 +26,22 @@ export function DropdownNavItem({
     return null
   }
 
+  const href = getStrapiLinkHref(item.link)
+
   return (
     <>
-      <NavigationMenuTrigger className={cn("text-base", className)}>
-        {item.link?.label}
-      </NavigationMenuTrigger>
+      {href ? (
+        <NavLinkTrigger
+          href={href}
+          label={item.link.label ?? ""}
+          openInNewTab={!!item.link?.newTab}
+          className={className}
+        />
+      ) : (
+        <NavigationMenuTrigger className={cn("text-base", className)}>
+          {item.link?.label}
+        </NavigationMenuTrigger>
+      )}
 
       <NavigationMenuContent>
         <div className="divide-strapi-neutral-200 flex max-w-[calc(100vw-2rem)] divide-x">

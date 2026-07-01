@@ -15,6 +15,7 @@ export interface AppLinkProps
   readonly startAdornment?: React.ReactNode
   readonly endAdornment?: React.ReactNode
   readonly adornmentClassName?: string
+  readonly ref?: React.Ref<HTMLAnchorElement>
 }
 
 export function AppLink({
@@ -27,6 +28,7 @@ export function AppLink({
   openInNewTab = false,
   variant = "default",
   size = "default",
+  ref,
   ...props
 }: AppLinkProps) {
   const combinedClassName = cn(
@@ -56,6 +58,7 @@ export function AppLink({
   if (isAppLink(formattedHref)) {
     return (
       <Link
+        ref={ref}
         href={formattedHref}
         {...props}
         target={openInNewTab ? "_blank" : ""}
@@ -69,7 +72,9 @@ export function AppLink({
 
   return (
     <a
+      ref={ref}
       href={formattedHref}
+      {...props}
       target={openInNewTab ? "_blank" : ""}
       rel={openInNewTab ? "noopener noreferrer" : ""}
       className={combinedClassName}

@@ -130,7 +130,7 @@ export function StrapiFeatureOverview({
 }) {
   return (
     <section>
-      <Container className="py-8 lg:py-16">
+      <Container className="py-2 lg:py-4">
         <FeatureOverviewContent component={component} />
       </Container>
     </section>

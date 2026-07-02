@@ -147,8 +147,22 @@ type MarkdownProps = {
 
 const sanitizeSchema: typeof defaultSchema = {
   ...defaultSchema,
+  tagNames: [...(defaultSchema.tagNames ?? []), "video", "source"],
   attributes: {
     ...defaultSchema.attributes,
+    video: [
+      "autoPlay",
+      "muted",
+      "loop",
+      "playsInline",
+      "controls",
+      "preload",
+      "poster",
+      "width",
+      "height",
+      "src",
+    ],
+    source: ["src", "type"],
     code: [
       ...(defaultSchema.attributes?.code ?? []),
       ["className", /^language-./],
@@ -292,6 +306,12 @@ const defaultComponents: Components = {
     >
       {children}
     </MarkdownPre>
+  ),
+
+  video: ({ node: _node, children, ...props }) => (
+    <video {...props} className="my-9 w-full overflow-hidden rounded-lg">
+      {children}
+    </video>
   ),
 
   table: ({ children }) => (

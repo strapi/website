@@ -75,7 +75,7 @@ export const env = createEnv({
     // NODE_ENV makes app behave as if in production mode (optimized builds, no dev-only behavior, etc.)
     NODE_ENV: z.enum(["development", "production"]).optional(),
     // APP_ENV is used to determine the environment the app is running in. Used to divide deployments.
-    APP_ENV: z.enum(["development", "testing", "production"]).optional(),
+    APP_ENV: z.string().optional(),
   },
 
   /*

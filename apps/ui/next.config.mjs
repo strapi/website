@@ -16,6 +16,18 @@ const nextConfig = {
   // cacheComponents: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
+    serverActions: {
+      /**
+       * strapi.io is fronted by AWS CloudFront proxying to this Vercel deployment,
+       * so server-action POSTs arrive with Origin: strapi.io but a Vercel host —
+       * without this allowlist Next.js CSRF protection rejects them with 403.
+       */
+      allowedOrigins: [
+        "strapi.io",
+        "www.strapi.io",
+        "website-vercel.strapi.io",
+      ],
+    },
   },
   reactCompiler: true,
   transpilePackages: ["@repo/design-system"],

@@ -108,7 +108,10 @@ export function assembleMetadataFromSeo({
     robots: seo?.metaRobots,
   }
 
-  const robots = getMetaRobots(seo?.metaRobots, forbidIndexing)
+  const robots = getMetaRobots(
+    seo?.metaRobots ?? defaults.defaultMeta.robots,
+    forbidIndexing
+  )
   const alternates = getMetaAlternates({
     seo,
     fullPath,

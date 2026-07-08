@@ -36,22 +36,34 @@ describe("dates utilities", () => {
 
   describe("formatDateRange", () => {
     it("returns single date when start and end are same day", () => {
-      const result = formatDateRange("2024-03-15T12:00:00Z", "2024-03-15T12:00:00Z")
+      const result = formatDateRange(
+        "2024-03-15T12:00:00Z",
+        "2024-03-15T12:00:00Z"
+      )
       expect(result).toBe("15/03/24")
     })
 
     it("returns day range when same month", () => {
-      const result = formatDateRange("2024-03-10T12:00:00Z", "2024-03-15T12:00:00Z")
+      const result = formatDateRange(
+        "2024-03-10T12:00:00Z",
+        "2024-03-15T12:00:00Z"
+      )
       expect(result).toBe("10–15/03/24")
     })
 
     it("returns month range when same year but different months", () => {
-      const result = formatDateRange("2024-02-10T12:00:00Z", "2024-03-15T12:00:00Z")
+      const result = formatDateRange(
+        "2024-02-10T12:00:00Z",
+        "2024-03-15T12:00:00Z"
+      )
       expect(result).toBe("10/02–15/03/24")
     })
 
     it("returns full range when different years", () => {
-      const result = formatDateRange("2023-12-25T12:00:00Z", "2024-01-05T12:00:00Z")
+      const result = formatDateRange(
+        "2023-12-25T12:00:00Z",
+        "2024-01-05T12:00:00Z"
+      )
       expect(result).toBe("25/12/23–05/01/24")
     })
   })

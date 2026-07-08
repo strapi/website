@@ -87,7 +87,10 @@ async function generateLocalizedSitemap(
   const caseStudyEntries: MetadataRoute.Sitemap = caseStudiesRes.data.map(
     (cs) => ({
       // case-study is not localized in Strapi, so cs.locale is undefined — fall back to the requested locale
-      url: createPublicFullPath(`/user-stories/${cs.slug}`, cs.locale ?? locale),
+      url: createPublicFullPath(
+        `/user-stories/${cs.slug}`,
+        cs.locale ?? locale
+      ),
       lastModified: cs.updatedAt ?? cs.createdAt ?? undefined,
       changeFrequency: "weekly",
     })

@@ -58,8 +58,13 @@ export const dynamicRewrite = (
     return null
   }
 
+  /*
+   * The path must be absolute — a relative URL resolves against the request
+   * path's parent directory, mangling nested paths
+   * (/solutions/foo → /solutions/en/dynamic/solutions/foo).
+   */
   const rewriteUrl = new URL(
-    [locale, dynamicPrefix, rest].filter(Boolean).join("/"),
+    "/" + [locale, dynamicPrefix, rest].filter(Boolean).join("/"),
     req.url
   )
 

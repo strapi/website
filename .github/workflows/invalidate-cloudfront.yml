@@ -1,0 +1,46 @@
+name: Invalidate CloudFront cache
+
+on:
+  deployment_status:
+
+permissions:
+  id-token: write # for the AWS OIDC credential exchange
+  contents: read
+
+concurrency:
+  group: invalidate-cloudfront
+  cancel-in-progress: true
+
+jobs:
+  invalidate:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    env:
+      DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+      ROLE_ARN: ${{ secrets.AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN }}
+    steps:
+      - name: Check configuration
+        id: config
+        run: |
+          if [[ -n "$DISTRIBUTION_ID" && -n "$ROLE_ARN" ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::CloudFront invalidation skipped — AWS_CLOUDFRONT_DISTRIBUTION_ID and/or AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN secrets are not set."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure AWS credentials
+        if: steps.config.outputs.enabled == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Create CloudFront invalidation
+        if: steps.config.outputs.enabled == 'true'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$DISTRIBUTION_ID" \
+            --paths "/*"

@@ -78,11 +78,11 @@ export async function POST(request: Request) {
     `[revalidate] Completed for uid="${uid}" paths=${JSON.stringify([...pathsToRevalidate])} tags=${JSON.stringify([...tagsToRevalidate])}`
   )
 
-  // NOTE(infra): wire AWS CloudFront invalidation here once the CDN is live.
-  // Paths can be purged individually; tag-only invalidations (header/footer/global)
-  // need a wildcard purge or a tag-to-path map maintained alongside fetches.
-  // See `apps/ui/src/lib/cdn.ts` for the stub.
-  const purged = await purgeCDNCache([...pathsToRevalidate])
+  const purged = await purgeCDNCache({
+    uid,
+    paths: [...pathsToRevalidate],
+    tags: [...tagsToRevalidate],
+  })
 
   return Response.json({
     uid,

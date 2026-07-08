@@ -54,6 +54,12 @@ export const env = createEnv({
     BASIC_AUTH_PASSWORD: z.string().optional(),
 
     DEFAULT_REVALIDATE_TIME: z.coerce.number().int().positive().optional(),
+
+    // AWS CloudFront invalidation (see `src/lib/cdn.ts`). Disabled when
+    // the distribution ID is unset. Credentials come from the SDK provider
+    // chain (IAM role or AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY).
+    AWS_CLOUDFRONT_DISTRIBUTION_ID: z.string().optional(),
+    AWS_REGION: z.string().optional(),
   },
 
   /*
@@ -122,6 +128,9 @@ export const env = createEnv({
     BASIC_AUTH_PASSWORD: process.env.BASIC_AUTH_PASSWORD,
 
     DEFAULT_REVALIDATE_TIME: process.env.DEFAULT_REVALIDATE_TIME,
+
+    AWS_CLOUDFRONT_DISTRIBUTION_ID: process.env.AWS_CLOUDFRONT_DISTRIBUTION_ID,
+    AWS_REGION: process.env.AWS_REGION,
 
     // client
     // @dominik-juriga - find out if these are specific per environment

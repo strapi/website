@@ -20,6 +20,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@aws-sdk/client-cloudfront": "^3.1081.0",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.4.0",
     "@next/third-parties": "^16.2.9",

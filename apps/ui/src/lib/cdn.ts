@@ -1,22 +1,84 @@
+import { randomUUID } from "node:crypto"
+
+import {
+  CloudFrontClient,
+  CreateInvalidationCommand,
+} from "@aws-sdk/client-cloudfront"
+
+import { env } from "@/env.mjs"
+import {
+  resolveCDNInvalidationPaths,
+  type PurgeCDNCacheInput,
+} from "@/lib/cdn-paths"
+import { routing } from "@/lib/navigation"
+
 /**
- * AWS CloudFront cache invalidation. Currently a no-op stub.
+ * AWS CloudFront cache invalidation, called from the Strapi revalidation
+ * webhook right after Next.js `revalidatePath`/`revalidateTag` so the CDN
+ * never outlives the origin cache.
  *
- * TODO(infra): when CloudFront is provisioned, wire this to call
- * `CreateInvalidationCommand` from `@aws-sdk/client-cloudfront`.
+ * Enabled only when `AWS_CLOUDFRONT_DISTRIBUTION_ID` is set — deployments
+ * without CloudFront (local, previews) silently no-op. Credentials resolve
+ * through the standard SDK provider chain (IAM role, or
+ * AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY).
  *
- * Required env when implemented:
- *  - AWS_CLOUDFRONT_DISTRIBUTION_ID
- *  - AWS_REGION
- *  - IAM credentials (via the standard SDK provider chain)
- *
- * Notes for the future implementation:
- *  - Path invalidations cost money and have a per-distribution rate limit;
- *    deduplicate inputs and prefer batched invalidations.
- *  - Tag-driven invalidations have no direct CloudFront equivalent — single-types
- *    like header/footer would need a wildcard purge ("/*") which is heavy.
+ * Path/tag translation rules live in `lib/cdn-paths.ts`.
  */
 
-export async function purgeCDNCache(contentPaths: string[]): Promise<boolean> {
-  // Intentionally a no-op until CloudFront is provisioned.
-  return false
+let cloudFrontClient: CloudFrontClient | undefined
+
+function getCloudFrontClient(): CloudFrontClient {
+  cloudFrontClient ??= new CloudFrontClient({
+    region: env.AWS_REGION ?? "us-east-1",
+  })
+
+  return cloudFrontClient
+}
+
+/**
+ * Creates a CloudFront invalidation for the given revalidation payload.
+ * Returns `true` on success, `false` when disabled or on failure — errors
+ * are logged but never fail the revalidation webhook, since the origin
+ * cache is already refreshed and the CDN will self-heal via TTL.
+ */
+export async function purgeCDNCache(
+  input: PurgeCDNCacheInput
+): Promise<boolean> {
+  const distributionId = env.AWS_CLOUDFRONT_DISTRIBUTION_ID
+  if (!distributionId) {
+    return false
+  }
+
+  const invalidationPaths = resolveCDNInvalidationPaths(input, routing.locales)
+  if (invalidationPaths.length === 0) {
+    return false
+  }
+
+  try {
+    const response = await getCloudFrontClient().send(
+      new CreateInvalidationCommand({
+        DistributionId: distributionId,
+        InvalidationBatch: {
+          CallerReference: randomUUID(),
+          Paths: {
+            Quantity: invalidationPaths.length,
+            Items: invalidationPaths,
+          },
+        },
+      })
+    )
+
+    console.debug(
+      `[revalidate] CloudFront invalidation "${response.Invalidation?.Id}" created for paths=${JSON.stringify(invalidationPaths)}`
+    )
+
+    return true
+  } catch (error) {
+    console.error(
+      `[revalidate] CloudFront invalidation failed for paths=${JSON.stringify(invalidationPaths)}`,
+      error
+    )
+
+    return false
+  }
 }

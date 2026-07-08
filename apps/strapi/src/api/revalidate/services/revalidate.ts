@@ -78,6 +78,14 @@ export default () => ({
       throw new Error("Failed to revalidate frontend cache.")
     }
 
-    return response.json()
+    const result = (await response.json()) as { cdnPurged?: boolean }
+
+    if (result?.cdnPurged === false) {
+      strapi.log.warn(
+        `[revalidate.run] Frontend cache revalidated for "${uid}" but the CDN purge did not run — check CLOUDFRONT_WEBSITE_DISTRIBUTION_ID and AWS credentials on the frontend deployment.`
+      )
+    }
+
+    return result
   },
 })

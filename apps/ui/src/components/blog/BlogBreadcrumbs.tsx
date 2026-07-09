@@ -13,6 +13,7 @@ interface BlogBreadcrumbsProps {
     | (CategoryRef & { readonly parent?: CategoryRef | null })
     | null
   readonly tag?: CategoryRef | null
+  readonly author?: CategoryRef | null
   readonly current?: string | null
   readonly className?: string
 }
@@ -24,6 +25,7 @@ function BlogBreadcrumbSeparator() {
 export function BlogBreadcrumbs({
   category,
   tag,
+  author,
   current,
   className,
 }: BlogBreadcrumbsProps) {
@@ -81,6 +83,18 @@ export function BlogBreadcrumbs({
             className="text-strapi-blue-500 hover:text-strapi-blue-400 font-medium transition-colors"
           >
             {tag.name}
+          </Link>
+        </>
+      )}
+
+      {author && (
+        <>
+          <BlogBreadcrumbSeparator />
+          <Link
+            href={`/user/${author.slug}`}
+            className="text-strapi-blue-500 hover:text-strapi-blue-400 font-medium transition-colors"
+          >
+            {author.name}
           </Link>
         </>
       )}

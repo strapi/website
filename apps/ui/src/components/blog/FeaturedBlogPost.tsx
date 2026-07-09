@@ -28,10 +28,7 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
 
   return (
     <HeroContainerBorder asChild>
-      <Link
-        href={`/blog/${post.slug}`}
-        className="group/featured-blog-post-row before:gradient-border-purple relative flex items-center gap-4 transition-[border-color] duration-300 before:pointer-events-none before:absolute before:inset-0 before:z-10 before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-300 hover:border-transparent hover:before:opacity-100"
-      >
+      <div className="group/featured-blog-post-row before:gradient-border-purple relative flex items-center gap-4 transition-[border-color] duration-300 before:pointer-events-none before:absolute before:inset-0 before:z-10 before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-300 hover:border-transparent hover:before:opacity-100">
         <div className="grid grid-cols-1 items-center overflow-hidden rounded-2xl lg:grid-cols-[3fr_2fr]">
           <div className="flex flex-col p-6 sm:p-8 lg:p-14">
             <div className="text-strapi-gray-400 flex flex-wrap items-center gap-3 text-sm font-bold uppercase">
@@ -50,7 +47,12 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
             </div>
 
             <h2 className="mt-6 text-3xl font-bold text-white underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover/featured-blog-post-row:decoration-white">
-              {post.title}
+              <Link
+                href={`/blog/${post.slug}`}
+                className="after:absolute after:inset-0"
+              >
+                {post.title}
+              </Link>
             </h2>
 
             {excerpt && (
@@ -59,8 +61,8 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
               </p>
             )}
 
-            <div className="text-strapi-gray-400 mt-6 flex items-center gap-3 text-sm">
-              <AuthorAvatars authors={allAuthors} />
+            <div className="text-strapi-gray-400 relative z-20 mt-6 flex items-center gap-3 text-sm">
+              <AuthorAvatars authors={allAuthors} linkAuthors />
 
               {publishDate && (
                 <>
@@ -82,7 +84,7 @@ export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
             </div>
           )}
         </div>
-      </Link>
+      </div>
     </HeroContainerBorder>
   )
 }

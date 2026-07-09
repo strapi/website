@@ -22,6 +22,7 @@ interface BlogPostsListProps {
   readonly loadMoreLabel?: string
   readonly categorySlug?: string | readonly string[]
   readonly tagSlug?: string
+  readonly authorSlug?: string
   readonly excludeCategorySlugs?: readonly string[]
 }
 
@@ -34,6 +35,7 @@ export function BlogPostsList({
   loadMoreLabel = "Load More Articles",
   categorySlug,
   tagSlug,
+  authorSlug,
   excludeCategorySlugs,
 }: BlogPostsListProps) {
   const [posts, setPosts] = useState<readonly BlogPost[]>(initialPosts)
@@ -49,6 +51,7 @@ export function BlogPostsList({
         limit: pageSize,
         categorySlug,
         tagSlug,
+        authorSlug,
         excludeCategorySlugs,
       })
 

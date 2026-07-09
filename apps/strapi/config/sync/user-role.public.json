@@ -71,16 +71,6 @@
       "locale": null
     },
     {
-      "action": "plugin::users-permissions.user.find",
-      "documentId": "u8gy6p8r1gsmd4lc6rpubb7w",
-      "locale": null
-    },
-    {
-      "action": "plugin::users-permissions.user.findOne",
-      "documentId": "ykcy1xtq1u833xbgd16elnhs",
-      "locale": null
-    },
-    {
       "action": "plugin::users-permissions.user.me",
       "documentId": "ktkq3a3ehea5nmllql00e1nr",
       "locale": null

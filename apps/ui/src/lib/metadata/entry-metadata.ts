@@ -8,6 +8,7 @@ import {
 } from "@/lib/metadata/build-from-seo"
 import { getMetadataFromStrapi } from "@/lib/metadata/page-metadata"
 import {
+  fetchAuthor,
   fetchBlogPostSeo,
   fetchCaseStudySeo,
   fetchCmsComparisonSeo,
@@ -143,6 +144,33 @@ export async function getPostTagMetadata({
     fallbackMeta: {
       title: tag?.seo?.metaTitle ?? `${name} — Blog`,
       description: tag?.seo?.metaDescription ?? undefined,
+    },
+  })
+}
+
+export async function getAuthorMetadata({
+  slug,
+  locale,
+}: {
+  slug: string
+  locale: Locale
+}): Promise<Metadata | null> {
+  const fullPath = `/user/${slug}`
+  const author = await fetchAuthor(slug)
+
+  const fallbackName = slug
+    .replaceAll("-", " ")
+    .replaceAll(/\b\w/g, (c) => c.toUpperCase())
+  const name = author?.username ?? fallbackName
+
+  return getMetadataFromSeoEntry({
+    locale,
+    fullPath,
+    // users-permissions users carry no seo component
+    seo: undefined,
+    fallbackMeta: {
+      title: `${name} — Blog`,
+      description: author?.description ?? undefined,
     },
   })
 }

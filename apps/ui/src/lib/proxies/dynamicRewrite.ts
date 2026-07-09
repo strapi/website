@@ -9,11 +9,13 @@ const dynamicPrefix = "dynamic"
  * Top-level segments owned by dedicated app routes. These are not served by
  * the /[locale]/dynamic/[[...rest]] Strapi-page route — rewriting them there
  * 404s (e.g. blog posts opened from HubSpot emails with _hsenc/_hsmi params).
+ * `user` hosts the blog author pages (/user/[slug]).
  */
 const dedicatedRouteSegments = new Set([
   "blog",
   "dev",
   "headless-cms",
+  "user",
   "user-stories",
 ])
 

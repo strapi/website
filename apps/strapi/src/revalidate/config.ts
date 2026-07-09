@@ -101,6 +101,20 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
       return slug ? `/headless-cms/comparison/${slug}` : null
     },
   },
+  // Authors are users-permissions users; mirrors
+  // `apps/ui/src/app/[locale]/user/[slug]/page.tsx`. No draftAndPublish →
+  // all-writes policy; slug-less writes (auth flows) resolve to no paths and
+  // are skipped. Cross-tags blog-post since bylines render author data.
+  {
+    uid: "plugin::users-permissions.user",
+    mode: RevalidateModes.Path,
+    pathBuilder: (doc) => {
+      const slug = typeof doc.slug === "string" ? doc.slug : null
+
+      return slug ? `/user/${slug}` : null
+    },
+    tags: ["strapi:api::blog-post.blog-post"],
+  },
 
   // Single types — purely tag-revalidated (no public landing page of their own).
   { uid: "api::header.header", mode: RevalidateModes.Tag },

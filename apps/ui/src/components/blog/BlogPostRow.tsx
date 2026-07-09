@@ -50,7 +50,7 @@ export function BlogPostRow({
         </Link>
 
         <div className="flex justify-start lg:col-auto">
-          <AuthorAvatars authors={allAuthors} hideUsername />
+          <AuthorAvatars authors={allAuthors} hideUsername linkAuthors />
         </div>
 
         <div className="flex justify-start">

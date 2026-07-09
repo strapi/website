@@ -23,4 +23,11 @@ export default ({ env }) => ({
     enabled: env.bool("CRON_ENABLED", false),
     tasks: cronTasks,
   },
+  /**
+   * MCP endpoint at `/mcp` (Strapi >= 5.47). Authenticated via admin tokens —
+   * each token only exposes tools matching its admin permissions.
+   */
+  mcp: {
+    enabled: env.bool("STRAPI_MCP_ENABLED", true),
+  },
 })

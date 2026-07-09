@@ -27,7 +27,7 @@ export function StrapiFaqSection({
       <Container>
         <div className="mx-auto max-w-3xl">
           <SectionHeader>
-            <SectionTitle as="h2">{t("title")}</SectionTitle>
+            <SectionTitle as="h2">{component.title || t("title")}</SectionTitle>
           </SectionHeader>
         </div>
 

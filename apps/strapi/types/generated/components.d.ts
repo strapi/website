@@ -1079,6 +1079,12 @@ export interface SectionsFaqSection extends Struct.ComponentSchema {
           localized: true
         }
       }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
   }
 }
 

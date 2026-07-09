@@ -7,6 +7,14 @@
   },
   "options": {},
   "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "items": {
       "type": "component",
       "repeatable": true,

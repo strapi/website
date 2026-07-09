@@ -4,6 +4,7 @@ import {
   CloudFrontClient,
   CreateInvalidationCommand,
 } from "@aws-sdk/client-cloudfront"
+import { awsCredentialsProvider } from "@vercel/oidc-aws-credentials-provider"
 
 import { env } from "@/env.mjs"
 import {
@@ -20,13 +21,16 @@ import { routing } from "@/lib/navigation"
  * Enabled only when `AWS_CLOUDFRONT_DISTRIBUTION_ID` is set — deployments
  * without CloudFront (local, previews) silently no-op.
  *
- * Credentials MUST come from `CLOUDFRONT_ACCESS_KEY_ID` /
- * `CLOUDFRONT_SECRET_ACCESS_KEY` on Vercel: its functions run on AWS Lambda,
- * which injects non-functional AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY/
- * AWS_SESSION_TOKEN into the runtime env, so the SDK's default provider
- * chain "finds" credentials that fail every call
+ * Credentials come from Vercel OIDC federation: the function's
+ * `VERCEL_OIDC_TOKEN` is exchanged for temporary credentials of
+ * `AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN` via STS AssumeRoleWithWebIdentity.
+ * The explicit provider is required on Vercel — its functions run on AWS
+ * Lambda, which injects non-functional AWS_ACCESS_KEY_ID/
+ * AWS_SECRET_ACCESS_KEY/AWS_SESSION_TOKEN into the runtime env, so the
+ * SDK's default provider chain "finds" credentials that fail every call
  * (https://vercel.com/docs/environment-variables/reserved-environment-variables).
- * Off Vercel the default chain (IAM role, etc.) still works as a fallback.
+ * Without the role ARN the default chain (IAM role, etc.) still works as a
+ * fallback off Vercel.
  *
  * Path/tag translation rules live in `lib/cdn-paths.ts`.
  */
@@ -36,12 +40,11 @@ let cloudFrontClient: CloudFrontClient | undefined
 function getCloudFrontClient(): CloudFrontClient {
   cloudFrontClient ??= new CloudFrontClient({
     region: env.AWS_REGION ?? "us-east-1",
-    ...(env.CLOUDFRONT_ACCESS_KEY_ID && env.CLOUDFRONT_SECRET_ACCESS_KEY
+    ...(env.AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN
       ? {
-          credentials: {
-            accessKeyId: env.CLOUDFRONT_ACCESS_KEY_ID,
-            secretAccessKey: env.CLOUDFRONT_SECRET_ACCESS_KEY,
-          },
+          credentials: awsCredentialsProvider({
+            roleArn: env.AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN,
+          }),
         }
       : {}),
   })
@@ -88,10 +91,11 @@ export async function purgeCDNCache(
 
     return true
   } catch (error) {
-    const credentialsHint =
-      env.CLOUDFRONT_ACCESS_KEY_ID && env.CLOUDFRONT_SECRET_ACCESS_KEY
-        ? ""
-        : " (CLOUDFRONT_ACCESS_KEY_ID/CLOUDFRONT_SECRET_ACCESS_KEY are not set — on Vercel the default AWS credential chain picks up Lambda-injected credentials that cannot authorize anything)"
+    const credentialsHint = !env.AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN
+      ? " (AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN is not set — on Vercel the default AWS credential chain picks up Lambda-injected credentials that cannot authorize anything)"
+      : !process.env.VERCEL_OIDC_TOKEN
+        ? " (VERCEL_OIDC_TOKEN is not available — OIDC federation must be enabled for the Vercel project so the function can assume the CloudFront invalidation role)"
+        : ""
 
     console.error(
       `[revalidate] CloudFront invalidation failed for paths=${JSON.stringify(invalidationPaths)}${credentialsHint}`,

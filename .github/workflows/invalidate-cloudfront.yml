@@ -2,6 +2,7 @@ name: Invalidate CloudFront cache
 
 on:
   deployment_status:
+  workflow_dispatch:
 
 permissions:
   id-token: write # for the AWS OIDC credential exchange
@@ -14,9 +15,11 @@ concurrency:
 jobs:
   invalidate:
     if: >-
-      github.event.deployment_status.state == 'success' &&
-      github.event.deployment.environment == 'Production'
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
     runs-on: ubuntu-latest
+    environment: production
     env:
       DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
       ROLE_ARN: ${{ secrets.AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN }}

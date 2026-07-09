@@ -56,13 +56,13 @@ export const env = createEnv({
     DEFAULT_REVALIDATE_TIME: z.coerce.number().int().positive().optional(),
 
     // AWS CloudFront invalidation (see `src/lib/cdn.ts`). Disabled when
-    // the distribution ID is unset. Credentials use custom-named vars
+    // the distribution ID is unset. Credentials come from Vercel OIDC
+    // federation — the role below is assumed via AssumeRoleWithWebIdentity,
     // because Vercel's Lambda runtime injects unusable AWS_ACCESS_KEY_ID/
     // AWS_SECRET_ACCESS_KEY values that poison the SDK's default chain.
     AWS_CLOUDFRONT_DISTRIBUTION_ID: z.string().optional(),
     AWS_REGION: z.string().optional(),
-    CLOUDFRONT_ACCESS_KEY_ID: z.string().optional(),
-    CLOUDFRONT_SECRET_ACCESS_KEY: z.string().optional(),
+    AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN: z.string().optional(),
   },
 
   /*
@@ -134,8 +134,8 @@ export const env = createEnv({
 
     AWS_CLOUDFRONT_DISTRIBUTION_ID: process.env.AWS_CLOUDFRONT_DISTRIBUTION_ID,
     AWS_REGION: process.env.AWS_REGION,
-    CLOUDFRONT_ACCESS_KEY_ID: process.env.CLOUDFRONT_ACCESS_KEY_ID,
-    CLOUDFRONT_SECRET_ACCESS_KEY: process.env.CLOUDFRONT_SECRET_ACCESS_KEY,
+    AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN:
+      process.env.AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN,
 
     // client
     // @dominik-juriga - find out if these are specific per environment

@@ -1,6 +1,6 @@
 import "server-only"
 
-import type { FindFirst, UID } from "@repo/strapi-types"
+import type { Data, FindFirst, UID } from "@repo/strapi-types"
 import { draftMode } from "next/headers"
 import type { Locale } from "next-intl"
 
@@ -30,6 +30,7 @@ const STRAPI_TAGS = {
   footer: ["strapi:api::footer.footer"] as const,
   notFound: ["strapi:api::not-found.not-found"] as const,
   redirect: ["strapi:api::redirect.redirect"] as const,
+  user: ["strapi:plugin::users-permissions.user"] as const,
 } as const
 
 /**
@@ -57,7 +58,13 @@ function withCacheTags(
 
 // ------ Shared populate objects
 
+/**
+ * Authors are users-permissions users — without an explicit `fields` list the
+ * API returns every scalar including `email`, which would end up serialized in
+ * RSC payloads. Keep the selection tight.
+ */
 const authorPopulate = {
+  fields: ["username", "slug", "job", "description"],
   populate: {
     avatar: {
       populate: { image: { populate: { media: true } } },
@@ -284,10 +291,18 @@ export async function fetchBlogPostsPage(
     readonly limit: number
     readonly categorySlug?: string | readonly string[]
     readonly tagSlug?: string
+    readonly authorSlug?: string
     readonly excludeCategorySlugs?: readonly string[]
   }
 ): Promise<BlogPostsPage> {
-  const { offset, limit, categorySlug, tagSlug, excludeCategorySlugs } = options
+  const {
+    offset,
+    limit,
+    categorySlug,
+    tagSlug,
+    authorSlug,
+    excludeCategorySlugs,
+  } = options
   const dm = await draftMode()
 
   const slugs = Array.isArray(categorySlug)
@@ -303,6 +318,14 @@ export async function fetchBlogPostsPage(
   if (tagSlug) {
     conditions.push({ tags: { slug: { $eq: tagSlug } } })
   }
+  if (authorSlug) {
+    conditions.push({
+      $or: [
+        { author: { slug: { $eq: authorSlug } } },
+        { coauthors: { slug: { $eq: authorSlug } } },
+      ],
+    })
+  }
   if (excludeCategorySlugs && excludeCategorySlugs.length > 0) {
     // `$notIn` alone drops posts with no category (NULL is never "not in" a
     // set), so keep uncategorized posts via an explicit null branch.
@@ -316,9 +339,11 @@ export async function fetchBlogPostsPage(
 
   const filters = conditions.length > 0 ? { filters: { $and: conditions } } : {}
 
-  const cacheTags = tagSlug
-    ? [...STRAPI_TAGS.blogPost, ...STRAPI_TAGS.postTag]
-    : STRAPI_TAGS.blogPost
+  const cacheTags = [
+    ...STRAPI_TAGS.blogPost,
+    ...(tagSlug ? STRAPI_TAGS.postTag : []),
+    ...(authorSlug ? STRAPI_TAGS.user : []),
+  ]
   const requestInit = withCacheTags(dm.isEnabled, cacheTags)
 
   try {
@@ -345,6 +370,7 @@ export async function fetchBlogPostsPage(
     const scopeParts: string[] = []
     if (slugs) scopeParts.push(`categories '${slugs.join(",")}'`)
     if (tagSlug) scopeParts.push(`tag '${tagSlug}'`)
+    if (authorSlug) scopeParts.push(`author '${authorSlug}'`)
     const scope =
       scopeParts.length > 0 ? ` for ${scopeParts.join(" and ")}` : ""
 
@@ -472,7 +498,7 @@ export async function fetchAllPostTags(locale: Locale) {
       "api::post-tag.post-tag",
       {
         locale,
-        fields: ["slug", "name"],
+        fields: ["slug", "name", "updatedAt", "createdAt"],
         populate: {},
         status: "published",
       },
@@ -488,6 +514,127 @@ export async function fetchAllPostTags(locale: Locale) {
     })
 
     return { data: [] }
+  }
+}
+
+export async function fetchAllPostCategories(locale: Locale) {
+  try {
+    return await PublicStrapiClient.fetchAll(
+      "api::post-category.post-category",
+      {
+        locale,
+        fields: ["slug", "name", "updatedAt", "createdAt"],
+        populate: {},
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.postCategory)
+    )
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all post categories for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
+  }
+}
+
+export type AuthorUser = Data.ContentType<"plugin::users-permissions.user">
+
+/**
+ * Fetches an author (users-permissions user) by slug.
+ *
+ * Bespoke on purpose: `/api/users` returns a BARE ARRAY (no `{data, meta}`
+ * envelope), so the typed `fetchMany`/`fetchOneBySlug` helpers don't fit —
+ * and `fetchOneBySlug` force-sorts by `publishedAt`, which users (no
+ * draft & publish) don't have. Never request `email` here.
+ */
+export async function fetchAuthor(slug: string): Promise<AuthorUser | null> {
+  if (!slug) {
+    return null
+  }
+
+  try {
+    const res: unknown = await PublicStrapiClient.fetchAPI(
+      "/users",
+      {
+        filters: { slug: { $eq: slug } },
+        fields: ["username", "slug", "job", "description", "pronouns"],
+        populate: {
+          avatar: { populate: { image: { populate: { media: true } } } },
+          socials: true,
+        },
+      },
+      withCacheTags(false, STRAPI_TAGS.user),
+      { doNotAddLocaleQueryParams: true }
+    )
+
+    const users = Array.isArray(res) ? (res as AuthorUser[]) : []
+
+    return users[0] ?? null
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching author '${slug}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return null
+  }
+}
+
+/**
+ * Collects the slugs of all authors (and coauthors) with at least one
+ * published blog post. There is no inverse user → posts relation, so the
+ * published posts are scanned instead of filtering `/api/users`.
+ */
+export async function fetchAllBlogAuthorSlugs(
+  locale: Locale
+): Promise<string[]> {
+  try {
+    const res = await PublicStrapiClient.fetchAll(
+      "api::blog-post.blog-post",
+      {
+        locale,
+        fields: ["slug"],
+        populate: {
+          author: { fields: ["slug"] },
+          coauthors: { fields: ["slug"] },
+        } as Record<string, unknown>,
+        status: "published",
+      },
+      withCacheTags(false, [...STRAPI_TAGS.blogPost, ...STRAPI_TAGS.user])
+    )
+
+    const slugs = new Set<string>()
+    for (const post of res.data ?? []) {
+      const p = post as unknown as {
+        author?: { slug?: string | null } | null
+        coauthors?: readonly ({ slug?: string | null } | null)[] | null
+      }
+
+      if (p.author?.slug) slugs.add(p.author.slug)
+      for (const coauthor of p.coauthors ?? []) {
+        if (coauthor?.slug) slugs.add(coauthor.slug)
+      }
+    }
+
+    return [...slugs]
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching all blog author slugs for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return []
   }
 }
 

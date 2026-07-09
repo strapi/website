@@ -60,6 +60,7 @@ describe("dynamicRewrite", () => {
     expect(run("/blog/some-post?_hsenc=abc&_hsmi=123")).toBeNull()
     expect(run("/en/blog/some-post?_hsenc=abc")).toBeNull()
     expect(run("/user-stories/acme?utm_source=email")).toBeNull()
+    expect(run("/user/john-doe?utm_source=email")).toBeNull()
     expect(run("/headless-cms/comparison/contentful?x=1")).toBeNull()
     expect(run("/dev/component-library?x=1")).toBeNull()
   })

@@ -67,7 +67,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           )}
 
           <div className="border-strapi-gray-700/50 mt-6 flex flex-wrap items-center gap-3 border-t pt-4 sm:mt-8 sm:gap-4 sm:pt-6">
-            <AuthorAvatars authors={allAuthors} />
+            <AuthorAvatars authors={allAuthors} linkAuthors />
 
             {publishDate && (
               <>

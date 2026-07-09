@@ -31,8 +31,7 @@ export function BlogPostCard({ post, className }: BlogPostCardProps) {
 
   return (
     <HeroContainerBorder asChild>
-      <Link
-        href={`/blog/${post.slug}`}
+      <div
         className={cn(
           "group/blog-card hover:animate-spring-sm relative flex flex-col overflow-hidden bg-white/5 transition-[border-color] duration-300",
           "before:gradient-border-purple before:pointer-events-none before:absolute before:inset-0 before:z-10 before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-300",
@@ -68,7 +67,12 @@ export function BlogPostCard({ post, className }: BlogPostCardProps) {
           </div>
 
           <h3 className="mt-3 text-lg font-bold text-white underline decoration-white/0 underline-offset-4 transition-[text-decoration-color] duration-300 group-hover/blog-card:decoration-white">
-            {post.title}
+            <Link
+              href={`/blog/${post.slug}`}
+              className="after:absolute after:inset-0"
+            >
+              {post.title}
+            </Link>
           </h3>
 
           {excerpt && (
@@ -77,8 +81,8 @@ export function BlogPostCard({ post, className }: BlogPostCardProps) {
             </p>
           )}
 
-          <div className="text-strapi-gray-400 mt-auto flex items-center gap-2 pt-4 text-sm">
-            <AuthorAvatars authors={allAuthors} hideUsername />
+          <div className="text-strapi-gray-400 relative z-20 mt-auto flex items-center gap-2 pt-4 text-sm">
+            <AuthorAvatars authors={allAuthors} hideUsername linkAuthors />
 
             {publishDate && (
               <>
@@ -88,7 +92,7 @@ export function BlogPostCard({ post, className }: BlogPostCardProps) {
             )}
           </div>
         </div>
-      </Link>
+      </div>
     </HeroContainerBorder>
   )
 }

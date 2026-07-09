@@ -1,6 +1,8 @@
 import type { Data } from "@repo/strapi-types"
+import { Fragment } from "react"
 
 import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
+import { Link } from "@/lib/navigation"
 import { cn } from "@/lib/styles"
 
 export interface AuthorAvatarData {
@@ -15,6 +17,7 @@ export interface AuthorAvatarData {
 interface AuthorAvatarsProps {
   readonly authors: readonly AuthorAvatarData[]
   readonly hideUsername?: boolean
+  readonly linkAuthors?: boolean
   readonly className?: string
 }
 
@@ -29,6 +32,7 @@ function getInitials(name: string | null | undefined): string {
 export function AuthorAvatars({
   authors,
   hideUsername,
+  linkAuthors,
   className,
 }: AuthorAvatarsProps) {
   if (authors.length === 0) {
@@ -43,33 +47,52 @@ export function AuthorAvatars({
       <div
         className={cn("flex flex-row", authors.length > 1 && "-space-x-1.5")}
       >
-        {authors.map((author) => (
-          <div
-            key={author.id}
-            className="border-strapi-purple-600/60 relative h-[30px] w-[30px] overflow-hidden rounded-full border"
-          >
-            {author.avatar?.image ? (
-              <StrapiBasicImage
-                component={author.avatar.image}
-                mode="fill"
-                className="object-cover"
-                decorative
-                sizes="30px"
-              />
-            ) : (
-              <div className="bg-strapi-purple-900 flex h-full w-full items-center justify-center text-[11px] font-semibold text-white">
-                {getInitials(author.username)}
-              </div>
-            )}
-          </div>
-        ))}
+        {authors.map((author) => {
+          const avatar = (
+            <div className="border-strapi-purple-600/60 relative h-[30px] w-[30px] overflow-hidden rounded-full border">
+              {author.avatar?.image ? (
+                <StrapiBasicImage
+                  component={author.avatar.image}
+                  mode="fill"
+                  className="object-cover"
+                  decorative
+                  sizes="30px"
+                />
+              ) : (
+                <div className="bg-strapi-purple-900 flex h-full w-full items-center justify-center text-[11px] font-semibold text-white">
+                  {getInitials(author.username)}
+                </div>
+              )}
+            </div>
+          )
+
+          return linkAuthors && author.slug ? (
+            <Link
+              key={author.id}
+              href={`/user/${author.slug}`}
+              aria-label={author.username ?? "Author"}
+            >
+              {avatar}
+            </Link>
+          ) : (
+            <Fragment key={author.id}>{avatar}</Fragment>
+          )
+        })}
       </div>
 
-      {showName && (
-        <span className="text-strapi-purple-400 text-sm font-semibold">
-          {mainAuthor?.username}
-        </span>
-      )}
+      {showName &&
+        (linkAuthors && mainAuthor?.slug ? (
+          <Link
+            href={`/user/${mainAuthor.slug}`}
+            className="text-strapi-purple-400 hover:text-strapi-purple-300 text-sm font-semibold transition-colors"
+          >
+            {mainAuthor.username}
+          </Link>
+        ) : (
+          <span className="text-strapi-purple-400 text-sm font-semibold">
+            {mainAuthor?.username}
+          </span>
+        ))}
     </div>
   )
 }

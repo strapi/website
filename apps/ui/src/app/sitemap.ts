@@ -5,8 +5,12 @@ import { getEnvVar } from "@/lib/env-vars"
 import { isDevelopment, isProduction } from "@/lib/general-helpers"
 import { createPublicFullPath, routing } from "@/lib/navigation"
 import {
+  fetchAllBlogAuthorSlugs,
+  fetchAllBlogPosts,
   fetchAllCaseStudies,
   fetchAllPages,
+  fetchAllPostCategories,
+  fetchAllPostTags,
 } from "@/lib/strapi-api/content/server"
 
 // This should be static or dynamic based on build/runtime needs
@@ -83,7 +87,15 @@ async function generateLocalizedSitemap(
     [] as MetadataRoute.Sitemap
   )
 
-  const caseStudiesRes = await fetchAllCaseStudies(locale)
+  const [caseStudiesRes, blogPostsRes, categoriesRes, tagsRes, authorSlugs] =
+    await Promise.all([
+      fetchAllCaseStudies(locale),
+      fetchAllBlogPosts(locale),
+      fetchAllPostCategories(locale),
+      fetchAllPostTags(locale),
+      fetchAllBlogAuthorSlugs(locale),
+    ])
+
   const caseStudyEntries: MetadataRoute.Sitemap = caseStudiesRes.data.map(
     (cs) => ({
       // case-study is not localized in Strapi, so cs.locale is undefined — fall back to the requested locale
@@ -96,7 +108,45 @@ async function generateLocalizedSitemap(
     })
   )
 
-  return [...pageEntries, ...caseStudyEntries]
+  const blogPostEntries: MetadataRoute.Sitemap = blogPostsRes.data
+    .filter((post) => post.slug)
+    .map((post) => ({
+      url: createPublicFullPath(`/blog/${post.slug}`, post.locale ?? locale),
+      lastModified: post.updatedAt ?? post.createdAt ?? undefined,
+      changeFrequency: "weekly",
+    }))
+
+  const categoryEntries: MetadataRoute.Sitemap = categoriesRes.data
+    .filter((category) => category.slug)
+    .map((category) => ({
+      url: createPublicFullPath(`/blog/categories/${category.slug}`, locale),
+      lastModified: category.updatedAt ?? category.createdAt ?? undefined,
+      changeFrequency: "weekly",
+    }))
+
+  const tagEntries: MetadataRoute.Sitemap = tagsRes.data
+    .filter((tag) => tag.slug)
+    .map((tag) => ({
+      url: createPublicFullPath(`/blog/tags/${tag.slug}`, locale),
+      lastModified: tag.updatedAt ?? tag.createdAt ?? undefined,
+      changeFrequency: "weekly",
+    }))
+
+  // Author slugs are derived from posts, so there is no per-author
+  // `updatedAt` available without an extra /users round-trip.
+  const authorEntries: MetadataRoute.Sitemap = authorSlugs.map((slug) => ({
+    url: createPublicFullPath(`/user/${slug}`, locale),
+    changeFrequency: "weekly",
+  }))
+
+  return [
+    ...pageEntries,
+    ...caseStudyEntries,
+    ...blogPostEntries,
+    ...categoryEntries,
+    ...tagEntries,
+    ...authorEntries,
+  ]
 }
 
 // Should you have multiple "pageable" collections, add them to this array

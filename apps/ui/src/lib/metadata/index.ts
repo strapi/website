@@ -3,6 +3,7 @@ export {
   resolveMetadataDefaults,
 } from "@/lib/metadata/build-from-seo"
 export {
+  getAuthorMetadata,
   getBlogIndexMetadata,
   getBlogPostMetadata,
   getCaseStudyMetadata,

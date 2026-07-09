@@ -48,5 +48,4 @@ CLAUDE.md
 .claude
 .playwright
 .playwright-mcp
-*.png
 tmp

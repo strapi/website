@@ -20,7 +20,6 @@ export interface StaticRedirect {
  * editor changes take effect without a rebuild.
  */
 export const STATIC_REDIRECTS: StaticRedirect[] = [
-  { source: "/cloud-legal", destination: "/legal", permanent: true },
   {
     source: "/community-stars",
     destination:

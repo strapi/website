@@ -149,6 +149,11 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
     tags: ["strapi:api::page.page"],
   },
   {
+    uid: "api::plan-feature.plan-feature",
+    mode: RevalidateModes.Tag,
+    tags: ["strapi:api::page.page"],
+  },
+  {
     uid: "api::review.review",
     mode: RevalidateModes.Tag,
     tags: ["strapi:api::page.page"],

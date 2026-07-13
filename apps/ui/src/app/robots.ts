@@ -11,7 +11,8 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   return {
-    rules: { userAgent: "*", allow: "/" },
+    // `/dev/` (not `/dev`) so prefix matching can't catch unrelated routes
+    rules: { userAgent: "*", allow: "/", disallow: "/dev/" },
     ...(baseUrl
       ? { sitemap: new URL("./sitemap.xml", baseUrl).toString() }
       : {}),

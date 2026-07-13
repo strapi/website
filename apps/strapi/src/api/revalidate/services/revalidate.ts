@@ -20,13 +20,19 @@ export default () => ({
       )
     }
 
-    // Drop the Strapi-side REST cache so the next frontend fetch can't read
-    // a stale entry that races the revalidate POST below.
+    /**
+     * Drop the Strapi-side REST cache BEFORE notifying the frontend — the
+     * re-render triggered by the webhook fetches through this cache, and a
+     * stale entry (1h TTL) would be baked into the "fresh" HTML and then
+     * re-cached by CloudFront. The plugin registers the service as
+     * "cacheStore" (there is no "cache" service); no optional chaining so
+     * a missing plugin/service lands in the catch instead of no-oping.
+     */
     try {
-      await strapi.plugin("rest-cache")?.service("cache")?.reset()
+      await strapi.plugin("rest-cache").service("cacheStore").reset()
     } catch (error) {
-      strapi.log.warn(
-        `[revalidate.run] rest-cache reset failed: ${error instanceof Error ? error.message : String(error)}`
+      strapi.log.error(
+        `[revalidate.run] rest-cache reset failed — frontend re-renders may bake stale REST cache entries into cached HTML: ${error instanceof Error ? error.message : String(error)}`
       )
     }
 

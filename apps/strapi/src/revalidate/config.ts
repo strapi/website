@@ -60,6 +60,8 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
     },
   },
   // Mirrors `apps/ui/src/app/[locale]/blog/categories/[slug]/page.tsx`.
+  // Cross-tags blog-post (category chips on post cards/headers) and blog
+  // (category names in the blog navigation single type).
   {
     uid: "api::post-category.post-category",
     mode: RevalidateModes.Path,
@@ -68,6 +70,7 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
 
       return slug ? `/blog/categories/${slug}` : null
     },
+    tags: ["strapi:api::blog-post.blog-post", "strapi:api::blog.blog"],
   },
   // Mirrors `apps/ui/src/app/[locale]/blog/tags/[slug]/page.tsx`. Also
   // cross-tags blog-post since tag chips render in BlogPostHeader.
@@ -82,6 +85,8 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
     tags: ["strapi:api::blog-post.blog-post"],
   },
   // Mirrors `apps/ui/src/app/[locale]/user-stories/[slug]/page.tsx`.
+  // Cross-tags page + blog-post since `cards.case-study-card` embeds
+  // case-study data (title, companyName, images) in both dynamic zones.
   {
     uid: "api::case-study.case-study",
     mode: RevalidateModes.Path,
@@ -90,6 +95,7 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
 
       return slug ? `/user-stories/${slug}` : null
     },
+    tags: ["strapi:api::page.page", "strapi:api::blog-post.blog-post"],
   },
   // Mirrors `apps/ui/src/app/[locale]/headless-cms/comparison/[slug]/page.tsx`.
   {
@@ -120,6 +126,7 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
   { uid: "api::header.header", mode: RevalidateModes.Tag },
   { uid: "api::footer.footer", mode: RevalidateModes.Tag },
   { uid: "api::global.global", mode: RevalidateModes.Tag },
+  { uid: "api::not-found.not-found", mode: RevalidateModes.Tag },
   // Blog single type powers /blog index, post pages, and category pages —
   // emit cross-tags to invalidate all of them.
   {
@@ -167,6 +174,23 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
     uid: "api::blog-tag.blog-tag",
     mode: RevalidateModes.Tag,
     tags: ["strapi:api::blog-post.blog-post"],
+  },
+  // Referenced by the `forms.*` components (pages, blog posts) and the
+  // blog single type's newsletter component.
+  {
+    uid: "api::hubspot-form.hubspot-form",
+    mode: RevalidateModes.Tag,
+    tags: [
+      "strapi:api::page.page",
+      "strapi:api::blog-post.blog-post",
+      "strapi:api::blog.blog",
+    ],
+  },
+  // Renders on case-study detail pages and the /user-stories listing.
+  {
+    uid: "api::case-study-category.case-study-category",
+    mode: RevalidateModes.Tag,
+    tags: ["strapi:api::case-study.case-study"],
   },
 ]
 

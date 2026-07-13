@@ -14,23 +14,37 @@ import {
 import { logNonBlockingError } from "@/lib/logging"
 import { Link } from "@/lib/navigation"
 import { PublicStrapiClient } from "@/lib/strapi-api"
+import { STRAPI_TAGS } from "@/lib/strapi-api/content/server"
 import { formatStrapiMediaUrl } from "@/lib/strapi-helpers"
 import { cn } from "@/lib/styles"
 
 async function fetchComparatorData() {
   try {
+    /**
+     * Both fetches are tagged so cms/cms-comparison publishes expire them
+     * (and the routes that rendered the grid) — untagged entries would
+     * survive in the data cache and re-renders would bake the old grid in.
+     */
     const [comparisonsRes, cmsRes] = await Promise.all([
-      PublicStrapiClient.fetchAll("api::cms-comparison.cms-comparison", {
-        fields: ["slug"],
-        status: "published",
-      }),
-      PublicStrapiClient.fetchAll("api::cms.cms", {
-        fields: ["name", "slug"],
-        populate: {
-          logo: { fields: ["url", "width", "height", "alternativeText"] },
+      PublicStrapiClient.fetchAll(
+        "api::cms-comparison.cms-comparison",
+        {
+          fields: ["slug"],
+          status: "published",
         },
-        status: "published",
-      }),
+        { next: { tags: [...STRAPI_TAGS.cmsComparison] } }
+      ),
+      PublicStrapiClient.fetchAll(
+        "api::cms.cms",
+        {
+          fields: ["name", "slug"],
+          populate: {
+            logo: { fields: ["url", "width", "height", "alternativeText"] },
+          },
+          status: "published",
+        },
+        { next: { tags: [...STRAPI_TAGS.cms] } }
+      ),
     ])
 
     const allCMS = mapCmsEntries(cmsRes.data ?? [])

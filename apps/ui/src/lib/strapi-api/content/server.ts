@@ -12,12 +12,13 @@ import type { CustomFetchOptions } from "@/types/general"
 // ------ Cache tag map
 //
 // One tag per Strapi content type (`strapi:<uid>`). The Strapi-side document
-// middleware (`apps/strapi/src/documentMiddlewares/revalidate.ts`) calls
-// `revalidateTag(tag, "max")` after writes, so any fetch tagged below is
-// invalidated as soon as the editor publishes.
+// middleware (`apps/strapi/src/documentMiddlewares/revalidate.ts`) POSTs to
+// `/api/strapi-revalidate`, which calls `revalidateTag(tag, { expire: 0 })`,
+// so any fetch tagged below is expired as soon as the editor publishes.
 
-const STRAPI_TAGS = {
+export const STRAPI_TAGS = {
   page: ["strapi:api::page.page"] as const,
+  newsItem: ["strapi:api::news-item.news-item"] as const,
   blogPost: ["strapi:api::blog-post.blog-post"] as const,
   postCategory: ["strapi:api::post-category.post-category"] as const,
   postTag: ["strapi:api::post-tag.post-tag"] as const,

@@ -10,6 +10,7 @@ import { formatDate } from "@/lib/dates"
 import { logNonBlockingError } from "@/lib/logging"
 import { Link } from "@/lib/navigation"
 import { PublicStrapiClient } from "@/lib/strapi-api"
+import { STRAPI_TAGS } from "@/lib/strapi-api/content/server"
 import { cn } from "@/lib/styles"
 
 // `Result<>` strips component-typed attributes from the API response, so we
@@ -44,7 +45,11 @@ async function fetchNewsItems(locale: Locale): Promise<PopulatedNewsItem[]> {
         sort: ["date:desc", "publishedAt:desc"],
         status: "published",
         pagination: { page: 1, pageSize: 100 },
-      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1]
+      } as unknown as Parameters<typeof PublicStrapiClient.fetchMany>[1],
+      // Tagged so news-item publishes expire this entry (and the routes that
+      // rendered it) — an untagged fetch would survive in the data cache and
+      // get baked back into re-rendered pages until its TTL.
+      { next: { tags: [...STRAPI_TAGS.newsItem] } }
     )
 
     return (response.data ?? []) as unknown as PopulatedNewsItem[]

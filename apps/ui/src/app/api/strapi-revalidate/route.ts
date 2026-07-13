@@ -70,8 +70,15 @@ export async function POST(request: Request) {
     revalidatePath(path)
   }
 
+  /**
+   * Tags must expire immediately ({ expire: 0 }), not stale-while-revalidate
+   * ("max"): the CloudFront purge below makes the CDN refetch right away, and
+   * an SWR origin would answer that refetch with the stale page — pinning it
+   * at the CDN for its full TTL. Immediate expiry makes the refetch block on
+   * a fresh render instead.
+   */
   for (const tag of tagsToRevalidate) {
-    revalidateTag(tag, "max")
+    revalidateTag(tag, { expire: 0 })
   }
 
   console.debug(

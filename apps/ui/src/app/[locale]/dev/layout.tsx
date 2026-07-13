@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 import type { Locale } from "next-intl"
 
 import { DevNavbar } from "@/app/[locale]/dev/components/DevNavbar"
@@ -26,16 +25,18 @@ export async function generateMetadata(
   )
 }
 
+/**
+ * The component library is intentionally reachable in production as a visual
+ * reference for the product team (noindex + robots.txt keep it out of search).
+ * The overview pages stay dev-only — each enforces its own production gate —
+ * so the navbar linking to them is hidden in production.
+ */
 export default async function Layout({
   children,
 }: LayoutProps<"/[locale]/dev">) {
-  if (isProduction()) {
-    notFound()
-  }
-
   return (
     <>
-      <DevNavbar />
+      {!isProduction() && <DevNavbar />}
       <Container className="py-20">{children}</Container>
     </>
   )

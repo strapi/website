@@ -1,7 +1,9 @@
+import { notFound } from "next/navigation"
 import type { Locale } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 
 import { PageList } from "@/app/[locale]/dev/pages-overview/components/PageList"
+import { isProduction } from "@/lib/general-helpers"
 import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 
@@ -30,6 +32,10 @@ async function fetchAllPages(locale: Locale) {
 export default async function PagesOverviewPage({
   params,
 }: PageProps<"/[locale]/dev/pages-overview">) {
+  if (isProduction()) {
+    notFound()
+  }
+
   const { locale } = (await params) as { locale: Locale }
   setRequestLocale(locale)
 

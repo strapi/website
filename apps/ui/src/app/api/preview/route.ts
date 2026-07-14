@@ -56,7 +56,13 @@ export async function GET(request: Request) {
   cookieStore.set({
     name: draftModePrerenderCookieKey,
     value: draftCookie?.value || "",
-    expires: draftCookie?.value ? undefined : 0, // undefined => does not expire, 0 => expires at timestamp 0
+    /**
+     * Bounded lifetime instead of a session cookie: browsers restore session
+     * cookies across relaunches, so editors previously stayed stuck in draft
+     * mode indefinitely and reported the site "showing drafts". Each Preview
+     * open refreshes the window; `/api/exit-preview` ends it early.
+     */
+    expires: draftCookie?.value ? Date.now() + DRAFT_MODE_COOKIE_TTL_MS : 0, // 0 => expires at timestamp 0 (deletes the cookie)
     httpOnly: true,
     path: "/",
     secure: true,
@@ -84,6 +90,7 @@ export async function GET(request: Request) {
 }
 const validPageStatusKeys = new Set(["draft", "published"])
 const draftModePrerenderCookieKey = "__prerender_bypass"
+const DRAFT_MODE_COOKIE_TTL_MS = 2 * 60 * 60 * 1000 // 2 hours
 
 const validPageUrlRegex = new RegExp(
   String.raw`^(${ROOT_PAGE_PATH}[a-zA-Z0-9-%]*)+$`

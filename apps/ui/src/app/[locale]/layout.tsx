@@ -6,6 +6,7 @@ import Script from "next/script"
 import type { Locale } from "next-intl"
 import { getTranslations, setRequestLocale } from "next-intl/server"
 
+import { DraftModeBanner } from "@/components/elementary/DraftModeBanner"
 import { ErrorBoundary } from "@/components/elementary/ErrorBoundary"
 import { StrapiPreviewListener } from "@/components/elementary/strapi-preview-listener"
 import { TailwindIndicator } from "@/components/elementary/TailwindIndicator"
@@ -251,6 +252,8 @@ export default async function RootLayout({
               <div className="flex-1">{children}</div>
 
               <TailwindIndicator />
+
+              <DraftModeBanner />
 
               <Toaster />
 

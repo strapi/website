@@ -81,6 +81,13 @@ export default ({ env }) => {
   return {
     auth: {
       secret: env("ADMIN_JWT_SECRET"),
+      sessions: {
+        accessTokenLifespan: 60 * 60 * 12, // 12 hours (default 30 min)
+        maxSessionLifespan: 60 * 60 * 24 * 7, // 7 days (default 1 day)
+        idleSessionLifespan: 60 * 60 * 24, // 24 hours (default 2 hours)
+        maxRefreshTokenLifespan: 60 * 60 * 24 * 30, // 30 days (default)
+        idleRefreshTokenLifespan: 60 * 60 * 24 * 14, // 14 days (default)
+      },
       ...(ssoProviders.length > 0 ? { providers: ssoProviders } : {}),
     },
     apiToken: {

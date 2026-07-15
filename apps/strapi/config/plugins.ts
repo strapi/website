@@ -23,6 +23,17 @@ function getApiContentTypes(): string[] {
     .map((name) => `api::${name}.${name}`)
 }
 
+/**
+ * Koa may parse a repeated query param into an array, so handle both shapes.
+ */
+function isDraftStatusQuery(status: unknown): boolean {
+  if (Array.isArray(status)) {
+    return status.includes("draft")
+  }
+
+  return status === "draft"
+}
+
 export default ({ env }) => {
   return {
     "config-sync": {
@@ -164,8 +175,13 @@ export default ({ env }) => {
           enableEtag: true,
           enableXCacheHeaders: true,
           // Allow caching of API-token requests (same data for all callers).
-          // Only skip cache for session cookies (admin panel).
-          hitpass: (ctx) => Boolean(ctx.request.header.cookie),
+          // Skip cache for session cookies (admin panel) and for draft reads:
+          // draft saves never reset this cache (only publish does, via the
+          // revalidate service), so a cached `?status=draft` response would
+          // pin the Next.js preview to a stale draft for up to 1 hour.
+          hitpass: (ctx) =>
+            Boolean(ctx.request.header.cookie) ||
+            isDraftStatusQuery(ctx.query?.status),
           contentTypes: getApiContentTypes(),
         },
       },

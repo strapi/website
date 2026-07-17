@@ -57,7 +57,6 @@ export const STATIC_REDIRECTS: StaticRedirect[] = [
     permanent: true,
   },
   { source: "/five", destination: "/", permanent: true },
-  { source: "/get-license", destination: "/pricing", permanent: true },
   {
     source: "/integrations",
     destination: "https://community.strapi.io/integrations",
@@ -90,7 +89,6 @@ export const STATIC_REDIRECTS: StaticRedirect[] = [
     destination: "/",
     permanent: true,
   },
-  { source: "/order-confirmation", destination: "/", permanent: true },
   {
     source: "/partners",
     destination: "https://community.strapi.io/partners",

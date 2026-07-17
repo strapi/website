@@ -10,11 +10,16 @@ const dynamicPrefix = "dynamic"
  * the /[locale]/dynamic/[[...rest]] Strapi-page route — rewriting them there
  * 404s (e.g. blog posts opened from HubSpot emails with _hsenc/_hsmi params).
  * `user` hosts the blog author pages (/user/[slug]).
+ * `order-confirmation` and `get-license` are entirely query-param driven
+ * (checkout/email links), so they must keep their own routes — rewriting
+ * them to /dynamic 404s every visit.
  */
 const dedicatedRouteSegments = new Set([
   "blog",
   "dev",
+  "get-license",
   "headless-cms",
+  "order-confirmation",
   "user",
   "user-stories",
 ])

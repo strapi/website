@@ -11,8 +11,14 @@ export async function StrapiPreviewListener() {
   }
 
   const previewSecret = Boolean(getEnvVar("STRAPI_PREVIEW_SECRET"))
+
+  /**
+   * Hash the normalized origin, not the raw env var — `message.origin` in the
+   * client listener never has a trailing slash or path, so hashing a value
+   * like "https://cms.example.com/" would silently never match.
+   */
   const strapiPreviewHashedOrigin = previewSecret
-    ? await hashStringSHA256(strapiUrl)
+    ? await hashStringSHA256(new URL(strapiUrl).origin)
     : undefined
 
   if (!previewSecret || !strapiPreviewHashedOrigin) {

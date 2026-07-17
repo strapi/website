@@ -55,6 +55,13 @@ export const env = createEnv({
 
     DEFAULT_REVALIDATE_TIME: z.coerce.number().int().positive().optional(),
 
+    // Growth-plan pricing used by /order-confirmation (Chargebee price id and
+    // per-seat prices in cents). Optional here to keep builds env-free; the
+    // page throws a descriptive error at request time when they are missing.
+    GROWTH_PLAN_SSO_PRICE_ID: z.string().optional(),
+    GROWTH_PLAN_SSO_SEAT_PRICE: z.coerce.number().int().positive().optional(),
+    GROWTH_PLAN_SEAT_PRICE: z.coerce.number().int().positive().optional(),
+
     // AWS CloudFront invalidation (see `src/lib/cdn.ts`). Disabled when
     // the distribution ID is unset. Credentials come from Vercel OIDC
     // federation — the role below is assumed via AssumeRoleWithWebIdentity,
@@ -78,6 +85,10 @@ export const env = createEnv({
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional(),
     NEXT_PUBLIC_PREVENT_UNUSED_FUNCTIONS_ERROR_LOGS: optionalZodBoolean(),
     NEXT_PUBLIC_CHARGEBEE_URL: z.string().url().optional(),
+    // Chargebee self-serve portal, linked from the /get-license page.
+    NEXT_PUBLIC_CHARGEBEE_PORTAL: z.string().url().optional(),
+    // License registry backing /get-license (one-time license reveal).
+    NEXT_PUBLIC_LICENSE_REGISTRY_API_URL: z.string().url().optional(),
   },
 
   shared: {
@@ -132,6 +143,10 @@ export const env = createEnv({
 
     DEFAULT_REVALIDATE_TIME: process.env.DEFAULT_REVALIDATE_TIME,
 
+    GROWTH_PLAN_SSO_PRICE_ID: process.env.GROWTH_PLAN_SSO_PRICE_ID,
+    GROWTH_PLAN_SSO_SEAT_PRICE: process.env.GROWTH_PLAN_SSO_SEAT_PRICE,
+    GROWTH_PLAN_SEAT_PRICE: process.env.GROWTH_PLAN_SEAT_PRICE,
+
     AWS_CLOUDFRONT_DISTRIBUTION_ID: process.env.AWS_CLOUDFRONT_DISTRIBUTION_ID,
     AWS_REGION: process.env.AWS_REGION,
     AWS_CLOUDFRONT_INVALIDATION_ROLE_ARN:
@@ -144,6 +159,9 @@ export const env = createEnv({
     NEXT_PUBLIC_PREVENT_UNUSED_FUNCTIONS_ERROR_LOGS:
       process.env.NEXT_PUBLIC_PREVENT_UNUSED_FUNCTIONS_ERROR_LOGS,
     NEXT_PUBLIC_CHARGEBEE_URL: process.env.NEXT_PUBLIC_CHARGEBEE_URL,
+    NEXT_PUBLIC_CHARGEBEE_PORTAL: process.env.NEXT_PUBLIC_CHARGEBEE_PORTAL,
+    NEXT_PUBLIC_LICENSE_REGISTRY_API_URL:
+      process.env.NEXT_PUBLIC_LICENSE_REGISTRY_API_URL,
 
     // shared
     NODE_ENV: process.env.NODE_ENV,

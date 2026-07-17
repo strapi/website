@@ -197,6 +197,7 @@ const blogListPopulate = {
   author: authorPopulate,
   coauthors: authorPopulate,
   category: true,
+  seo: true,
 } as Record<string, unknown>
 
 export async function fetchBlogPostsList(

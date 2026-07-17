@@ -21,7 +21,7 @@ interface FeaturedBlogPostProps {
 
 export function FeaturedBlogPost({ post }: FeaturedBlogPostProps) {
   const readTime = calculateReadTime(post.content)
-  const excerpt = post.description?.trim() || getExcerpt(post.content)
+  const excerpt = post.seo?.metaDescription?.trim() || getExcerpt(post.content)
   const allAuthors = combineAuthors(post.author, post.coauthors ?? undefined)
   const publishDate = getBlogPostPublishDate(post)
   const coverImage = getBlogPostCoverImage(post)

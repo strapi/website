@@ -25,7 +25,8 @@ interface BlogPostCardProps {
 
 export function BlogPostCard({ post, className }: BlogPostCardProps) {
   const readTime = calculateReadTime(post.content)
-  const excerpt = post.description?.trim() || getExcerpt(post.content, 120)
+  const excerpt =
+    post.seo?.metaDescription?.trim() || getExcerpt(post.content, 120)
   const allAuthors = combineAuthors(post.author, post.coauthors ?? undefined)
   const publishDate = getBlogPostPublishDate(post)
 

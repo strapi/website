@@ -15,5 +15,6 @@ export const blogPostPopulate = {
     },
     category: true,
     tags: { fields: ["name", "slug"] },
+    seo: true,
   },
 }

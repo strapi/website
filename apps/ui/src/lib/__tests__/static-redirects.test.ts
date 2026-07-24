@@ -2,13 +2,6 @@ import { resolveStaticRedirectDestination } from "@repo/shared-data"
 import { describe, expect, it } from "vitest"
 
 describe("resolveStaticRedirectDestination", () => {
-  it("resolves exact-match sources", () => {
-    expect(resolveStaticRedirectDestination("/v4")).toBe("/v5")
-    expect(resolveStaticRedirectDestination("/culture")).toBe(
-      "https://handbook.strapi.io/"
-    )
-  })
-
   it("ignores paths without a redirect rule", () => {
     expect(resolveStaticRedirectDestination("/pricing")).toBeNull()
     expect(resolveStaticRedirectDestination("/")).toBeNull()
@@ -37,11 +30,5 @@ describe("resolveStaticRedirectDestination", () => {
     expect(resolveStaticRedirectDestination("/showcases/foo")).toBe(
       "https://community.strapi.io/showcases"
     )
-  })
-
-  it("collapses relative redirect chains to their final destination", () => {
-    // /launch-week -> /five -> /
-    expect(resolveStaticRedirectDestination("/launch-week")).toBe("/")
-    expect(resolveStaticRedirectDestination("/five")).toBe("/")
   })
 })

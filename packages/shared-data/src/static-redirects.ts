@@ -27,42 +27,10 @@ export const STATIC_REDIRECTS: StaticRedirect[] = [
     permanent: true,
   },
   {
-    source: "/contact-sales-cloud",
-    destination: "https://strapi.io/contact-sales",
-    permanent: true,
-  },
-  {
-    source: "/content-architecture",
-    destination: "https://strapi.io/content-management",
-    permanent: true,
-  },
-  {
-    source: "/content-videos",
-    destination: "https://www.youtube.com/@Strapi/videos",
-    permanent: true,
-  },
-  {
-    source: "/culture",
-    destination: "https://handbook.strapi.io/",
-    permanent: true,
-  },
-  {
-    source: "/culture-code",
-    destination: "https://handbook.strapi.io/",
-    permanent: true,
-  },
-  {
-    source: "/discovery",
-    destination: "/headless-cms/comparaison",
-    permanent: true,
-  },
-  { source: "/five", destination: "/", permanent: true },
-  {
     source: "/integrations",
     destination: "https://community.strapi.io/integrations",
     permanent: true,
   },
-  { source: "/launch-week", destination: "/five", permanent: true },
   {
     source: "/legacy-community-stars",
     destination:
@@ -72,21 +40,6 @@ export const STATIC_REDIRECTS: StaticRedirect[] = [
   {
     source: "/market-guidelines",
     destination: "https://community.strapi.io/market-guidelines",
-    permanent: true,
-  },
-  {
-    source: "/nuxtnation",
-    destination: "https://strapi.io/integrations/nuxtjs-cms",
-    permanent: true,
-  },
-  {
-    source: "/oldv4",
-    destination: "https://docs-v4.strapi.io/dev-docs/migration-guides",
-    permanent: true,
-  },
-  {
-    source: "/open-collective-gift-card-redeemed",
-    destination: "/",
     permanent: true,
   },
   {
@@ -100,108 +53,8 @@ export const STATIC_REDIRECTS: StaticRedirect[] = [
     permanent: true,
   },
   {
-    source: "/premium-support",
-    destination: "https://strapi.io/security",
-    permanent: true,
-  },
-  {
-    source: "/resource-center",
-    destination: "https://docs.strapi.io",
-    permanent: true,
-  },
-  {
-    source: "/security-guide",
-    destination: "https://strapi.io/security",
-    permanent: true,
-  },
-  {
     source: "/showcases",
     destination: "https://community.strapi.io/showcases",
-    permanent: true,
-  },
-  {
-    source: "/solutions",
-    destination: "https://strapi.io/solutions/corporate-website-cms",
-    permanent: true,
-  },
-  {
-    source: "/strapi-conf-2021-videos",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/strapi-consumer-services-retail-ecommerce-cms",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/strapi-financial-services-headless-cms",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/strapi-gaming-cms-leaderboards-community-platform",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/strapi-it-tech-services-developer-headless-cms",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/strapi-marketing-advertising-cms-campaign-management",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/strapi-media-companies-content-distribution-cms",
-    destination: "/",
-    permanent: true,
-  },
-  { source: "/strapi-recipes", destination: "/", permanent: true },
-  {
-    source: "/strapi-reseller-agreement",
-    destination: "/legal",
-    permanent: true,
-  },
-  {
-    source: "/strapi-retail-ecommerce-omnichannel-product-cms",
-    destination: "https://strapi.io/solutions/ecommerce-cms",
-    permanent: true,
-  },
-  {
-    source: "/strapi-telecommunications-customer-portal-cms",
-    destination: "/",
-    permanent: true,
-  },
-  {
-    source: "/support",
-    destination: "https://support.strapi.io/",
-    permanent: true,
-  },
-  { source: "/thank-you", destination: "/", permanent: true },
-  {
-    source: "/the-best-headless-cms-for-seo",
-    destination: "/for-content-teams",
-    permanent: true,
-  },
-  { source: "/v4", destination: "/v5", permanent: true },
-  {
-    source: "/video-library",
-    destination: "https://www.youtube.com/@Strapi/videos",
-    permanent: true,
-  },
-  { source: "/what-is-headless-cms", destination: "/", permanent: true },
-  { source: "/why-strapi", destination: "/", permanent: true },
-  {
-    source: "/write-for-the-community",
-    destination: "/community",
-    permanent: true,
-  },
-  {
-    source: "/youtube-creator-highlight",
-    destination: "/community",
     permanent: true,
   },
 

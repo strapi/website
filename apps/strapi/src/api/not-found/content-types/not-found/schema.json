@@ -32,16 +32,6 @@
         }
       }
     },
-    "image": {
-      "type": "component",
-      "component": "utilities.basic-image",
-      "repeatable": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "content": {
       "type": "dynamiczone",
       "pluginOptions": {

@@ -1143,9 +1143,6 @@ export async function fetchNotFound(locale: Locale) {
       undefined,
       {
         locale,
-        populate: {
-          image: { populate: { media: true } },
-        },
         populateDynamicZone: { content: true },
       },
       withCacheTags(false, STRAPI_TAGS.notFound)

@@ -3,11 +3,11 @@ import type { Locale } from "next-intl"
 import { getLocale } from "next-intl/server"
 
 import { Container } from "@/components/elementary/Container"
+import { NotFoundAnimation } from "@/components/elementary/not-found-animation/NotFoundAnimation"
 import {
   SectionHeader,
   SectionTitle,
 } from "@/components/elementary/section-header"
-import { StrapiBasicImage } from "@/components/page-builder/components/utilities/StrapiBasicImage"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { buttonVariants } from "@/components/ui/button"
 import { getMetadataFromStrapi } from "@/lib/metadata"
@@ -27,7 +27,6 @@ export default async function NotFound() {
 
   const title = notFound?.title ?? "Page not found"
   const backButtonText = notFound?.backButtonText ?? "Back to home"
-  const image = notFound?.image
   const content = notFound?.content ?? []
 
   return (
@@ -42,9 +41,7 @@ export default async function NotFound() {
           >
             <SectionTitle as="h1">{title}</SectionTitle>
 
-            {image && (
-              <StrapiBasicImage component={image} mode="intrinsic" priority />
-            )}
+            <NotFoundAnimation />
 
             <Link
               href="/"

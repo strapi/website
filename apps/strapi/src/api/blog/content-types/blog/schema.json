@@ -24,6 +24,11 @@
       "type": "component",
       "component": "forms.newsletter",
       "repeatable": false
+    },
+    "featuredBlogPost": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::blog-post.blog-post"
     }
   }
 }

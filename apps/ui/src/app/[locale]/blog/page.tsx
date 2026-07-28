@@ -14,8 +14,8 @@ import { NewsletterSignup } from "@/components/newsletter/NewsletterSignup"
 import { StrapiSeoStructuredDataByFullPath } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import {
   BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS,
+  getBlogIndexPosts,
   getBlogNewsletterHubspot,
-  type BlogPost,
 } from "@/lib/blog-utils"
 import { getBlogIndexMetadata } from "@/lib/metadata"
 import { fetchBlog, fetchBlogPostsPage } from "@/lib/strapi-api/content/server"
@@ -49,8 +49,10 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   )
 
   const hubspotForm = getBlogNewsletterHubspot(blog)
-  const featuredPost: BlogPost | null = allPosts.posts[0] ?? null
-  const remainingPosts: BlogPost[] = allPosts.posts.slice(1)
+  const { featuredPost, remainingPosts, excludeSlugs } = getBlogIndexPosts(
+    blog?.data,
+    allPosts.posts
+  )
 
   return (
     <>
@@ -68,6 +70,7 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
             total={allPosts.total}
             loadMoreLabel={t("loadMore")}
             excludeCategorySlugs={BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS}
+            excludeSlugs={excludeSlugs}
           />
         </HeroContainerContent>
 

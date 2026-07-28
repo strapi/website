@@ -750,6 +750,9 @@ export async function fetchBlog(locale: Locale) {
       newsletter: {
         populate: { hubspotForm: true },
       },
+      featuredBlogPost: {
+        populate: blogListPopulate,
+      },
     },
   } satisfies FindFirst<"api::blog.blog">
 

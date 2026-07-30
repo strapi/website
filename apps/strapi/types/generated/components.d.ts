@@ -112,6 +112,32 @@ export interface CardsContentCard extends Struct.ComponentSchema {
   }
 }
 
+export interface CardsCtaCard extends Struct.ComponentSchema {
+  collectionName: "components_cards_cta_cards"
+  info: {
+    description: "Reusable call-to-action card: title, optional image, description and one link. Usable in any dynamic zone."
+    displayName: "CTA Card"
+    icon: "cursor"
+  }
+  attributes: {
+    buttonStyle: Schema.Attribute.Enumeration<["primary", "secondary"]> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<"secondary">
+    ctaLink: Schema.Attribute.Component<"utilities.link", false> &
+      Schema.Attribute.Required
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160
+      }>
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60
+      }>
+  }
+}
+
 export interface CardsFeatureCard extends Struct.ComponentSchema {
   collectionName: "components_cards_feature_card"
   info: {
@@ -1707,6 +1733,7 @@ declare module "@strapi/strapi" {
       "blog.resource-cta": BlogResourceCta
       "cards.case-study-card": CardsCaseStudyCard
       "cards.content-card": CardsContentCard
+      "cards.cta-card": CardsCtaCard
       "cards.feature-card": CardsFeatureCard
       "cms.field-entry": CmsFieldEntry
       "elements.brand-logo-grid-item": ElementsBrandLogoGridItem

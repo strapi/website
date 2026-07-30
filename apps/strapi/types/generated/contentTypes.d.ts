@@ -574,6 +574,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       ]
     >
     seo: Schema.Attribute.Component<"shared.seo", false>
+    sidebar: Schema.Attribute.Component<"cards.cta-card", true>
     slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required
     tags: Schema.Attribute.Relation<"manyToMany", "api::post-tag.post-tag">
     title: Schema.Attribute.String & Schema.Attribute.Required
@@ -659,6 +660,7 @@ export interface ApiBlogBlog extends Struct.SingleTypeSchema {
     navigation: Schema.Attribute.Component<"blog.navigation", false>
     newsletter: Schema.Attribute.Component<"forms.newsletter", false>
     publishedAt: Schema.Attribute.DateTime
+    sidebar: Schema.Attribute.Component<"cards.cta-card", true>
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private

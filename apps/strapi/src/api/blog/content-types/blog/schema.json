@@ -29,6 +29,11 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::blog-post.blog-post"
+    },
+    "sidebar": {
+      "type": "component",
+      "component": "cards.cta-card",
+      "repeatable": true
     }
   }
 }

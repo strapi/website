@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_cards_cta_cards",
+  "info": {
+    "displayName": "CTA Card",
+    "icon": "cursor",
+    "description": "Reusable call-to-action card: title, optional image, description and one link. Usable in any dynamic zone."
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 160
+    },
+    "image": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    },
+    "ctaLink": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": false,
+      "required": true
+    },
+    "buttonStyle": {
+      "type": "enumeration",
+      "enum": ["primary", "secondary"],
+      "default": "secondary",
+      "required": true
+    }
+  }
+}

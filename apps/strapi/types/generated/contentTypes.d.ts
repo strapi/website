@@ -650,6 +650,10 @@ export interface ApiBlogBlog extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private
+    featuredBlogPost: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::blog-post.blog-post"
+    >
     locale: Schema.Attribute.String
     localizations: Schema.Attribute.Relation<"oneToMany", "api::blog.blog">
     navigation: Schema.Attribute.Component<"blog.navigation", false>

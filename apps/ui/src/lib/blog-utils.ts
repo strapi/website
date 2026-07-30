@@ -38,6 +38,33 @@ export function getBlogNewsletterHubspot(
   return null
 }
 
+export function getBlogIndexPosts(
+  blog: BlogData | null | undefined,
+  posts: readonly BlogPost[]
+): {
+  featuredPost: BlogPost | null
+  remainingPosts: BlogPost[]
+  excludeSlugs: string[] | undefined
+} {
+  const hasFeaturedPost = !!blog?.featuredBlogPost
+
+  const featuredPost = hasFeaturedPost
+    ? (blog?.featuredBlogPost as BlogPost)
+    : (posts[0] ?? null)
+
+  const remainingPosts = featuredPost
+    ? posts.filter((post) => post.documentId !== featuredPost.documentId)
+    : [...posts]
+
+  return {
+    featuredPost,
+    remainingPosts,
+    excludeSlugs: hasFeaturedPost
+      ? [blog?.featuredBlogPost?.slug as string]
+      : undefined,
+  }
+}
+
 export function combineAuthors(
   author: AuthorAvatarData | null | undefined,
   coauthors?: readonly AuthorAvatarData[]

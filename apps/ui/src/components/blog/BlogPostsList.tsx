@@ -24,6 +24,7 @@ interface BlogPostsListProps {
   readonly tagSlug?: string
   readonly authorSlug?: string
   readonly excludeCategorySlugs?: readonly string[]
+  readonly excludeSlugs?: readonly string[]
 }
 
 export function BlogPostsList({
@@ -37,6 +38,7 @@ export function BlogPostsList({
   tagSlug,
   authorSlug,
   excludeCategorySlugs,
+  excludeSlugs,
 }: BlogPostsListProps) {
   const [posts, setPosts] = useState<readonly BlogPost[]>(initialPosts)
   const [offset, setOffset] = useState(initialOffset)
@@ -53,10 +55,11 @@ export function BlogPostsList({
         tagSlug,
         authorSlug,
         excludeCategorySlugs,
+        excludeSlugs,
       })
 
       setPosts((prev) => [...prev, ...res.posts])
-      setOffset((prev) => prev + res.posts.length)
+      setOffset((prev) => prev + res.fetchedCount)
       setHasMore(res.hasMore)
     })
   }

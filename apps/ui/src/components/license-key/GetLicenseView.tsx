@@ -25,6 +25,7 @@ interface GetLicenseViewProps {
 export function GetLicenseView({ token }: GetLicenseViewProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [licenseKey, setLicenseKey] = useState("")
+  const [planDisplayName, setPlanDisplayName] = useState("")
   const [error, setError] = useState<string | null>(
     token ? null : "ERR_TOKEN_NOT_FOUND"
   )
@@ -47,6 +48,7 @@ export function GetLicenseView({ token }: GetLicenseViewProps) {
       }
 
       setLicenseKey(result.license)
+      setPlanDisplayName(result.planDisplayName ?? "")
     } catch (fetchError) {
       console.error("Error while fetching license key:", fetchError)
       setError("DEFAULT")
@@ -86,10 +88,12 @@ export function GetLicenseView({ token }: GetLicenseViewProps) {
     <div className="flex flex-col gap-8 py-8">
       <div>
         <Typography tag="h1" variant="header2" className="mb-4">
-          Thank you for choosing the Strapi Growth Plan!
+          License access
         </Typography>
         <Typography tag="p" variant="subtitle1" textColor="muted">
-          Please find your license below.
+          {planDisplayName
+            ? `Your ${planDisplayName} license is ready.`
+            : "Your Strapi license is ready."}
         </Typography>
       </div>
 

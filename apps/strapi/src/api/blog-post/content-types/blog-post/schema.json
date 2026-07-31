@@ -76,6 +76,11 @@
     "content": {
       "type": "richtext"
     },
+    "sidebar": {
+      "type": "component",
+      "component": "cards.cta-card",
+      "repeatable": true
+    },
     "sections": {
       "type": "dynamiczone",
       "components": [

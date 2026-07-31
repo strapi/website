@@ -80,6 +80,14 @@ const seoPopulate = {
   },
 }
 
+// `cards.cta-card` is a plain repeatable component rather than a dynamic zone,
+// so it is not covered by the backend populateDynamicZone config and has to be
+// populated explicitly. `ctaLink.page` supplies fullPath for internal links.
+const ctaCardPopulate = {
+  image: { populate: { media: true } },
+  ctaLink: { populate: { page: { fields: ["fullPath"] } } },
+} as Record<string, unknown>
+
 // ------ Page fetching functions
 
 export async function fetchPage(
@@ -172,6 +180,7 @@ export async function fetchBlogPost(
           },
           tags: true,
           seo: seoPopulate,
+          sidebar: { populate: ctaCardPopulate },
         } as Record<string, unknown>,
         populateDynamicZone: { sections: true },
       },
@@ -753,6 +762,7 @@ export async function fetchBlog(locale: Locale) {
       featuredBlogPost: {
         populate: blogListPopulate,
       },
+      sidebar: { populate: ctaCardPopulate },
     },
   } satisfies FindFirst<"api::blog.blog">
 

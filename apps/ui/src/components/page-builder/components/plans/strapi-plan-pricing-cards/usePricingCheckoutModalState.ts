@@ -186,17 +186,14 @@ export function buildCheckoutUrl({
     }
   }
 
+  const planItemPriceId =
+    selectedSsoItemPriceId?.trim() || selectedPlanItemPriceId
+
   const subscriptionItems: { itemPriceId: string; quantity?: number }[] = [
     {
-      itemPriceId: selectedPlanItemPriceId,
+      itemPriceId: planItemPriceId,
     },
   ]
-
-  if (selectedSsoItemPriceId?.trim()) {
-    subscriptionItems.push({
-      itemPriceId: selectedSsoItemPriceId,
-    })
-  }
 
   if (additionalSeatItemPriceId && additionalSeats > 0) {
     subscriptionItems.push({

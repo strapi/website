@@ -20,7 +20,7 @@ export function GithubStarButton({
 
   return (
     <a
-      href="https://github.com/strapi/website"
+      href="https://github.com/strapi/strapi"
       target="_blank"
       rel="noreferrer"
       className={cn(

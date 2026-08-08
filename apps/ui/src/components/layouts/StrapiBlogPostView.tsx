@@ -63,6 +63,7 @@ export function StrapiBlogPostView({ params }: Props) {
 
   const sections = post.sections
   const author = post.author as BlogAuthor | null
+  const intro = post.intro
   const content = post.content
   const headings = content ? extractHeadings(content) : []
   const hasManualRelated = (sections ?? []).some(
@@ -109,6 +110,17 @@ export function StrapiBlogPostView({ params }: Props) {
 
       <div className="flex w-full flex-col">
         <main className="flex w-full flex-col">
+          {intro && intro.length > 0 && (
+            <div className="pt-8 lg:pt-16">
+              <DynamicZoneRenderer
+                content={intro}
+                itemClassName="mb-8 md:mb-12 lg:mb-16 last:mb-0"
+                surface="page"
+                extraProps={{ currentSlug: slug, locale }}
+              />
+            </div>
+          )}
+
           {content && (
             <section className="py-8 lg:py-16">
               <div className="relative">

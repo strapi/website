@@ -525,6 +525,9 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private
     description: Schema.Attribute.Text
     image: Schema.Attribute.Component<"media.image", false>
+    intro: Schema.Attribute.DynamicZone<
+      ["sections.disclaimer", "sections.richtext"]
+    >
     level: Schema.Attribute.Enumeration<
       ["beginner", "intermediate", "advanced"]
     >
@@ -2186,6 +2189,7 @@ export interface PluginUsersPermissionsUser
     description: Schema.Attribute.Text
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
+      Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6
       }>

@@ -73,6 +73,13 @@
     "originalPublishedAt": {
       "type": "datetime"
     },
+    "intro": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.disclaimer",
+        "sections.richtext"
+      ]
+    },
     "content": {
       "type": "richtext"
     },

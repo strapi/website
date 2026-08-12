@@ -10,19 +10,25 @@ const MAX_VISIBLE = 6
 const SWAP_INTERVAL_MS = 3500
 const ANIMATION_DURATION_MS = 400
 
-/** Random slot 0..MAX_VISIBLE-1, never the same as `exclude` when there is more than one slot. */
-function pickRandomSlotIndex(exclude: number): number {
-  if (MAX_VISIBLE <= 1) {
+function pickRandomIndex(exclude: number | number[], max: number): number {
+  if (max <= 1) {
     return 0
   }
 
-  let slot = exclude
+  const excluded = Array.isArray(exclude) ? exclude : [exclude]
+  const candidates: number[] = []
 
-  while (slot === exclude) {
-    slot = Math.floor(Math.random() * MAX_VISIBLE)
+  for (let i = 0; i < max; i++) {
+    if (!excluded.includes(i)) {
+      candidates.push(i)
+    }
   }
 
-  return slot
+  if (candidates.length === 0) {
+    return Math.floor(Math.random() * max)
+  }
+
+  return candidates[Math.floor(Math.random() * candidates.length)]!
 }
 
 type Logo = Data.Component<"utilities.basic-image">
@@ -30,6 +36,7 @@ type Logo = Data.Component<"utilities.basic-image">
 interface LogoSlot {
   logo: Logo
   state: "idle" | "exiting" | "entering"
+  index: number
 }
 
 interface TestimonialLogosGridProps {
@@ -39,14 +46,15 @@ interface TestimonialLogosGridProps {
 export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
   const shouldAnimate = logos.length > MAX_VISIBLE
   const [slots, setSlots] = useState<LogoSlot[]>(() =>
-    logos.slice(0, MAX_VISIBLE).map((logo) => ({ logo, state: "idle" }))
+    logos
+      .slice(0, MAX_VISIBLE)
+      .map((logo, index) => ({ logo, state: "idle", index }))
   )
 
-  // Next slot to swap (0–5, random each time) and next logo index (sequential through the list)
-  const rotationRef = useRef({
-    slotIndex: pickRandomSlotIndex(-1),
-    logoIndex: MAX_VISIBLE,
-  })
+  // Next slot to swap (0–5, random each time)
+  const nextSlotToSwapIndexRef = useRef(pickRandomIndex(-1, MAX_VISIBLE))
+
+  const visibleLogoIndexesRef = useRef(slots.map((s) => s.index))
 
   useEffect(() => {
     if (!shouldAnimate) {
@@ -61,9 +69,14 @@ export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
       return
     }
 
+    let swapTimeout: ReturnType<typeof setTimeout> | undefined
+    let idleTimeout: ReturnType<typeof setTimeout> | undefined
     const interval = setInterval(() => {
-      const { slotIndex, logoIndex } = rotationRef.current
-      const nextLogo = logos[logoIndex % logos.length]!
+      const slotIndex = nextSlotToSwapIndexRef.current
+      const nextLogoIndex = pickRandomIndex(
+        visibleLogoIndexesRef.current,
+        logos.length
+      )
 
       // Exit current logo
       setSlots((prev) =>
@@ -73,15 +86,26 @@ export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
       )
 
       // After fade-out, swap in new logo
-      setTimeout(() => {
+      swapTimeout = setTimeout(() => {
+        visibleLogoIndexesRef.current = visibleLogoIndexesRef.current.map(
+          (visibleLogoIndex, i) =>
+            i === slotIndex ? nextLogoIndex : visibleLogoIndex
+        )
+
         setSlots((prev) =>
           prev.map((slot, i) =>
-            i === slotIndex ? { logo: nextLogo, state: "entering" } : slot
+            i === slotIndex
+              ? {
+                  logo: logos[nextLogoIndex]!,
+                  state: "entering",
+                  index: nextLogoIndex,
+                }
+              : slot
           )
         )
 
         // After fade-in, settle to idle
-        setTimeout(() => {
+        idleTimeout = setTimeout(() => {
           setSlots((prev) =>
             prev.map((slot, i) =>
               i === slotIndex ? { ...slot, state: "idle" } : slot
@@ -90,13 +114,14 @@ export function TestimonialLogosGrid({ logos }: TestimonialLogosGridProps) {
         }, ANIMATION_DURATION_MS)
       }, ANIMATION_DURATION_MS)
 
-      rotationRef.current = {
-        slotIndex: pickRandomSlotIndex(slotIndex),
-        logoIndex: logoIndex + 1,
-      }
+      nextSlotToSwapIndexRef.current = pickRandomIndex(slotIndex, MAX_VISIBLE)
     }, SWAP_INTERVAL_MS)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      clearTimeout(swapTimeout)
+      clearTimeout(idleTimeout)
+    }
   }, [shouldAnimate, logos])
 
   return (

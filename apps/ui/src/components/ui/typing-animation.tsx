@@ -20,6 +20,9 @@ interface Char {
 
 type Phase = "waiting" | "typing" | "deleting"
 
+/** Must exceed `--animate-char-fade-out` (110ms). */
+const EXIT_DURATION_MS = 250
+
 interface TypingAnimationProps extends ComponentProps<"span"> {
   words: string[]
   typeSpeed?: number
@@ -120,66 +123,39 @@ export function TypingAnimation({
     }
 
     const interval = setInterval(() => {
-      setChars((prev) => {
-        const idx = findLastNonExiting(prev)
-        if (idx < 0) {
-          return prev
-        }
-
-        return prev.map((c, i) => (i === idx ? { ...c, exiting: true } : c))
-      })
+      setChars(markLastCharExiting)
     }, deleteSpeed)
 
     return () => clearInterval(interval)
   }, [deleteSpeed, hasWords, phase, prefersReducedMotion])
 
-  // Remove character from DOM when its exit animation finishes
-  const handleAnimationEnd = useCallback(
-    (key: number) => {
-      setChars((prev) => {
-        const nextChars = prev.filter((c) => c.key !== key)
-
-        if (hasWords && phase === "deleting" && nextChars.length === 0) {
-          queueMicrotask(() => {
-            setWordIndex((index) => (index + 1) % words.length)
-            setPhase("typing")
-          })
-        }
-
-        return nextChars
-      })
-    },
-    [hasWords, phase, words.length]
-  )
-
-  // Force-clear stuck exiting chars when tab regains visibility
-  // (browsers pause CSS animations in hidden tabs, so animationend may never fire)
+  // Advance once delete is done. Driven by a timer so a missed animationend
+  // (e.g. background tab) cannot leave an empty word + blinking cursor.
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout> | undefined
-
-    const onVisibilityChange = () => {
-      if (document.visibilityState !== "visible") {
-        return
-      }
-
-      // Give browser a moment to fire pending animationend events
-      timeoutId = setTimeout(() => {
-        setChars((prev) => {
-          if (prev.length > 0 && prev.every((c) => c.exiting)) {
-            return []
-          }
-
-          return prev
-        })
-      }, 200)
+    if (!hasWords || prefersReducedMotion || phase !== "deleting") {
+      return
     }
 
-    document.addEventListener("visibilitychange", onVisibilityChange)
-
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange)
-      clearTimeout(timeoutId)
+    // Wait until every character has started exiting (or none left)
+    if (chars.length > 0 && !chars.every((c) => c.exiting)) {
+      return
     }
+
+    const timeout = setTimeout(
+      () => {
+        setChars([])
+        setWordIndex((index) => (index + 1) % words.length)
+        setPhase("typing")
+      },
+      chars.length === 0 ? 0 : EXIT_DURATION_MS
+    )
+
+    return () => clearTimeout(timeout)
+  }, [chars, hasWords, phase, prefersReducedMotion, words.length])
+
+  // Visual only — state machine advances from the delete-finished effect above
+  const handleAnimationEnd = useCallback((key: number) => {
+    setChars((prev) => prev.filter((c) => c.key !== key))
   }, [])
 
   if (words.length === 0) {
@@ -230,6 +206,15 @@ function findLastNonExiting(chars: Char[]): number {
   }
 
   return -1
+}
+
+function markLastCharExiting(chars: Char[]): Char[] {
+  const idx = findLastNonExiting(chars)
+  if (idx < 0) {
+    return chars
+  }
+
+  return chars.map((c, i) => (i === idx ? { ...c, exiting: true } : c))
 }
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)"

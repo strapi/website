@@ -182,7 +182,7 @@ export async function fetchBlogPost(
           seo: seoPopulate,
           sidebar: { populate: ctaCardPopulate },
         } as Record<string, unknown>,
-        populateDynamicZone: { sections: true },
+        populateDynamicZone: { intro: true, sections: true },
       },
       withCacheTags(dm.isEnabled, STRAPI_TAGS.blogPost, requestInit),
       options

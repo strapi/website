@@ -142,7 +142,6 @@ export const getComponentsToPopulate = async (
     action: string
     documentId: string | number
     locale?: string
-    params?: Record<string, unknown>
   }
 ): Promise<Record<string, string[]>> => {
   const prefetchPopulate = buildDynamicZonePrefetchPopulate(
@@ -151,18 +150,13 @@ export const getComponentsToPopulate = async (
     dynamicZonePopulate
   )
 
-  // Pass filters/status/pagination from the real request so we don't
-  // prefetch the whole collection on every blog-post page.
   const prefetchedData = await strapi
     .documents(context.uid)
     [context.action].call(this, {
       documentId: context.documentId,
       populate: prefetchPopulate,
       fields: ["documentId"],
-      locale: context.params?.locale ?? context.locale,
-      filters: context.params?.filters,
-      status: context.params?.status,
-      pagination: context.params?.pagination,
+      locale: context.locale,
     })
 
   const entries = Array.isArray(prefetchedData)

@@ -10,6 +10,7 @@ import { MinimalHeader } from "@/components/layouts/MinimalHeader"
 import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
+import { FirstTouchScript } from "@/components/providers/TrackingScripts"
 import { getEnvVar } from "@/lib/env-vars"
 import { createPublicFullPath } from "@/lib/navigation"
 import { SECTION_SPACING } from "@/lib/section-spacing"
@@ -74,6 +75,7 @@ export function StrapiPageView({ params, searchParams }: Props) {
 
   return (
     <div className="flex w-full flex-col">
+      {data.fullPath === "/contact-sales" && <FirstTouchScript />}
       {minimalLayout && <div data-minimal-layout hidden />}
       {minimalLayout && <MinimalHeader />}
       <StrapiSeoStructuredDataFromSeo seo={data?.seo} />

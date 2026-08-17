@@ -33,6 +33,27 @@ export function TrackingScriptWrapper({
   )
 }
 
+/**
+ * First Touch visitor tracking — contact-sales page only.
+ */
+export function FirstTouchScript() {
+  if (!isProduction()) {
+    return null
+  }
+
+  return (
+    <Script id="first-touch-loader" strategy="afterInteractive">
+      {`(function() {
+          var el = document.createElement('script');
+          el.id = 'first-touch-script';
+          el.src = 'https://app.firsttouch.ai/first-touch-web-visitors.js?id=FnSDSSTRoP0kUnJxtFolacgwZsMGdvYI&customer_id=2469c089-4669-4998-adce-a83c337d7ae5';
+          el.async = true;
+          document.head.appendChild(el);
+        })();`}
+    </Script>
+  )
+}
+
 export function TrackingScripts() {
   if (!isProduction()) {
     return null

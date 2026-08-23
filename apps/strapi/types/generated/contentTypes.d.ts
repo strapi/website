@@ -1000,35 +1000,6 @@ export interface ApiFeatureCategoryFeatureCategory
   }
 }
 
-export interface ApiFeatureTagFeatureTag extends Struct.CollectionTypeSchema {
-  collectionName: "feature_tags"
-  info: {
-    displayName: "Feature tag"
-    pluralName: "feature-tags"
-    singularName: "feature-tag"
-  }
-  options: {
-    draftAndPublish: true
-  }
-  attributes: {
-    createdAt: Schema.Attribute.DateTime
-    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-    features: Schema.Attribute.Relation<"oneToMany", "api::feature.feature">
-    locale: Schema.Attribute.String & Schema.Attribute.Private
-    localizations: Schema.Attribute.Relation<
-      "oneToMany",
-      "api::feature-tag.feature-tag"
-    > &
-      Schema.Attribute.Private
-    publishedAt: Schema.Attribute.DateTime
-    title: Schema.Attribute.String
-    updatedAt: Schema.Attribute.DateTime
-    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
-      Schema.Attribute.Private
-  }
-}
-
 export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
   collectionName: "features"
   info: {
@@ -1047,10 +1018,6 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
     feature_category: Schema.Attribute.Relation<
       "manyToOne",
       "api::feature-category.feature-category"
-    >
-    feature_tag: Schema.Attribute.Relation<
-      "manyToOne",
-      "api::feature-tag.feature-tag"
     >
     icon: Schema.Attribute.Media<"images">
     locale: Schema.Attribute.String & Schema.Attribute.Private
@@ -2252,7 +2219,6 @@ declare module "@strapi/strapi" {
       "api::cms.cms": ApiCmsCms
       "api::country.country": ApiCountryCountry
       "api::feature-category.feature-category": ApiFeatureCategoryFeatureCategory
-      "api::feature-tag.feature-tag": ApiFeatureTagFeatureTag
       "api::feature.feature": ApiFeatureFeature
       "api::footer.footer": ApiFooterFooter
       "api::global.global": ApiGlobalGlobal

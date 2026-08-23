@@ -12,7 +12,11 @@ export async function StrapiNavbar({
 }: {
   readonly component: Data.Component<"navigation.navbar">
 }) {
-  const githubStars = component.githubStars ? await fetchGithubStars() : null
+  const githubUrl = component.githubUrl
+  const githubStars =
+    component.githubStars && githubUrl
+      ? await fetchGithubStars(githubUrl)
+      : null
 
   return (
     <nav
@@ -40,6 +44,7 @@ export async function StrapiNavbar({
           logoImage={component.logoImage}
           logoImageLight={component.logoImageLight}
           githubStars={githubStars}
+          githubUrl={githubUrl}
         />
 
         <MobileNavbar

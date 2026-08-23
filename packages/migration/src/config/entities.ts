@@ -2401,6 +2401,7 @@ export const ENTITY_CONFIGS: Record<string, EntityMigrationConfig> = {
               bottomLinks,
               ctaLinks,
               githubStars: true,
+              githubUrl: "https://github.com/strapi/strapi",
             },
           ],
         }

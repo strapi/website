@@ -6,10 +6,12 @@ function formatStars(count: number): string {
 }
 
 interface GithubStarButtonProps extends React.ComponentProps<"a"> {
+  readonly href: string
   readonly stars: number | null
 }
 
 export function GithubStarButton({
+  href,
   stars,
   className,
   ...restProps
@@ -20,7 +22,7 @@ export function GithubStarButton({
 
   return (
     <a
-      href="https://github.com/strapi/strapi"
+      href={href}
       target="_blank"
       rel="noreferrer"
       className={cn(

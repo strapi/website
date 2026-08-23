@@ -34,6 +34,20 @@
     "githubStars": {
       "type": "boolean",
       "default": true
+    },
+    "githubUrl": {
+      "type": "string",
+      "default": "https://github.com/strapi/strapi",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "githubStars"
+            },
+            true
+          ]
+        }
+      }
     }
   }
 }

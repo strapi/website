@@ -791,6 +791,8 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
     bottomLinks: Schema.Attribute.Component<"utilities.link", true>
     ctaLinks: Schema.Attribute.Component<"utilities.link", true>
     githubStars: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>
+    githubUrl: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"https://github.com/strapi/strapi">
     logoImage: Schema.Attribute.Component<"utilities.link-image", false>
     logoImageLight: Schema.Attribute.Component<"utilities.link-image", false>
     navItems: Schema.Attribute.Component<"navbar.nav-item", true>

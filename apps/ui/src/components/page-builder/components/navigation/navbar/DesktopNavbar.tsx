@@ -23,6 +23,7 @@ interface DesktopNavbarProps extends React.ComponentProps<"div"> {
   readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
   readonly logoImageLight: Nullable<Data.Component<"utilities.link-image">>
   readonly githubStars: number | null
+  readonly githubUrl: Nullable<string>
   readonly className?: string
 }
 
@@ -36,6 +37,7 @@ export function DesktopNavbar({
   logoImage,
   logoImageLight,
   githubStars,
+  githubUrl,
   className,
   ...restProps
 }: DesktopNavbarProps) {
@@ -93,7 +95,13 @@ export function DesktopNavbar({
 
       <div className="ml-auto flex items-center gap-2">
         <GlobalSearch />
-        <GithubStarButton stars={githubStars} className="hidden xl:flex" />
+        {githubUrl ? (
+          <GithubStarButton
+            href={githubUrl}
+            stars={githubStars}
+            className="hidden xl:flex"
+          />
+        ) : null}
         {ctaLinks?.map((link, index) => (
           <StrapiLink
             key={link.id ?? index}

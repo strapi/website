@@ -61,11 +61,18 @@ export function StrapiHero({ component, renderContext }: StrapiHeroProps) {
             </div>
 
             {component.image ? (
-              <div className="animate-border-reveal animate-reveal-cascade border-strapi-gray-700/50 flex shrink-0 grow basis-1/2 items-center justify-center overflow-hidden max-md:border-t">
+              <div className="animate-border-reveal animate-reveal-cascade border-strapi-gray-700/50 relative flex shrink-0 grow basis-1/2 items-center justify-center overflow-hidden max-md:border-t">
+                <StrapiBasicImage
+                  component={component.image}
+                  decorative
+                  mode="fill"
+                  className="pointer-events-none inset-0 scale-150 object-cover opacity-70 blur-xl"
+                  sizes="(max-width: 768px) 100vw, 3200px"
+                />
                 <StrapiBasicImage
                   component={component.image}
                   mode="responsive"
-                  className="max-w-[640px]"
+                  className="relative z-10"
                   sizes="(max-width: 768px) 100vw, 640px"
                   priority={affectsNavbarTheme}
                 />

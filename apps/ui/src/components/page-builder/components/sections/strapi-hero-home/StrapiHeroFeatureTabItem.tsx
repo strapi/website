@@ -33,7 +33,7 @@ export const StrapiHeroFeatureTabItem = memo(
       role="tab"
       tabIndex={active ? 0 : -1}
       className={cn(
-        "group relative hidden grow items-center justify-center overflow-hidden px-2 py-5 text-center lg:block",
+        "group relative hidden grow cursor-pointer items-center justify-center overflow-hidden px-2 py-5 text-center lg:block",
         active && "bg-strapi-gray-900 block"
       )}
       {...restProps}

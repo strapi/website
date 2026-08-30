@@ -13,6 +13,7 @@ import { cn } from "@/lib/styles"
 
 import { DirectNavItem } from "./DirectNavItem"
 import { DropdownNavItem } from "./DropdownNavItem"
+import { NavbarMediaKit } from "./NavbarMediaKit"
 import { NavbarNavigationMenu } from "./NavbarNavigationMenu"
 import { StrapiLinkImage } from "../../utilities/StrapiLinkImage"
 
@@ -22,6 +23,7 @@ interface DesktopNavbarProps extends React.ComponentProps<"div"> {
   readonly bottomLinks: Nullable<Data.Component<"utilities.link">[]>
   readonly logoImage: Nullable<Data.Component<"utilities.link-image">>
   readonly logoImageLight: Nullable<Data.Component<"utilities.link-image">>
+  readonly mediaKit: Nullable<Data.Component<"navigation.media-kit">>
   readonly githubStars: number | null
   readonly githubUrl: Nullable<string>
   readonly className?: string
@@ -36,6 +38,7 @@ export function DesktopNavbar({
   bottomLinks,
   logoImage,
   logoImageLight,
+  mediaKit,
   githubStars,
   githubUrl,
   className,
@@ -46,31 +49,33 @@ export function DesktopNavbar({
       className={cn("hidden items-center gap-3 lg:flex", className)}
       {...restProps}
     >
-      <div className="relative shrink-0">
-        {logoImage && (
-          <StrapiLinkImage
-            component={logoImage}
-            imageMode="responsive"
-            sizes="140px"
-            priority
-            className={cn(
-              logoClassName,
-              "opacity-[var(--nav-logo-default-opacity)]"
-            )}
-          />
-        )}
-        {logoImageLight && (
-          <StrapiLinkImage
-            component={logoImageLight}
-            imageMode="responsive"
-            sizes="140px"
-            className={cn(
-              logoClassName,
-              "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"
-            )}
-          />
-        )}
-      </div>
+      <NavbarMediaKit mediaKit={mediaKit}>
+        <div className="relative shrink-0">
+          {logoImage && (
+            <StrapiLinkImage
+              component={logoImage}
+              imageMode="responsive"
+              sizes="140px"
+              priority
+              className={cn(
+                logoClassName,
+                "opacity-[var(--nav-logo-default-opacity)]"
+              )}
+            />
+          )}
+          {logoImageLight && (
+            <StrapiLinkImage
+              component={logoImageLight}
+              imageMode="responsive"
+              sizes="140px"
+              className={cn(
+                logoClassName,
+                "absolute inset-0 opacity-[var(--nav-logo-light-opacity)]"
+              )}
+            />
+          )}
+        </div>
+      </NavbarMediaKit>
 
       {navItems?.length ? (
         <NavbarNavigationMenu className="static max-w-none flex-initial">

@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_navigation_media_kits",
+  "info": {
+    "displayName": "Media Kit",
+    "icon": "paintBrush",
+    "description": "Popup shown when right-clicking the desktop navbar logo"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "image": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    },
+    "links": {
+      "type": "component",
+      "component": "utilities.link",
+      "repeatable": true
+    }
+  }
+}

@@ -1,10 +1,5 @@
 /* Shiki syntax highlighting styles — matching website-2020 */
 
-[data-slot="code-highlighter"] {
-  position: relative;
-  margin: 0;
-}
-
 [data-slot="code-highlighter"] .shiki {
   padding: 1em;
   margin: 0;

@@ -7,6 +7,7 @@ import type { Locale } from "next-intl"
 import type { BlogPost } from "@/lib/blog-utils"
 import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
+import { logAndRethrow } from "@/lib/strapi-api/log-and-rethrow"
 import type { CustomFetchOptions } from "@/types/general"
 
 // ------ Cache tag map
@@ -112,13 +113,7 @@ export async function fetchPage(
       options
     )
   } catch (e: unknown) {
-    logNonBlockingError({
-      message: `Error fetching page '${fullPath}' for locale '${locale}'`,
-      error: {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-      },
-    })
+    logAndRethrow(`Error fetching page '${fullPath}' for locale '${locale}'`, e)
   }
 }
 
@@ -188,13 +183,10 @@ export async function fetchBlogPost(
       options
     )
   } catch (e: unknown) {
-    logNonBlockingError({
-      message: `Error fetching blog post '${slug}' for locale '${locale}'`,
-      error: {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-      },
-    })
+    logAndRethrow(
+      `Error fetching blog post '${slug}' for locale '${locale}'`,
+      e
+    )
   }
 }
 
@@ -385,8 +377,16 @@ export async function fetchBlogPostsPage(
     const scope =
       scopeParts.length > 0 ? ` for ${scopeParts.join(" and ")}` : ""
 
+    const message = `Error fetching blog posts page${scope} for locale '${locale}'`
+
+    // Author pages call `notFound()` when total === 0. Swallowing an outage
+    // here would cache a 404 for a real author, so rethrow when scoped to one.
+    if (authorSlug) {
+      logAndRethrow(message, e)
+    }
+
     logNonBlockingError({
-      message: `Error fetching blog posts page${scope} for locale '${locale}'`,
+      message,
       error: {
         error: e instanceof Error ? e.message : String(e),
         stack: e instanceof Error ? e.stack : undefined,
@@ -587,15 +587,7 @@ export async function fetchAuthor(slug: string): Promise<AuthorUser | null> {
 
     return users[0] ?? null
   } catch (e: unknown) {
-    logNonBlockingError({
-      message: `Error fetching author '${slug}'`,
-      error: {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-      },
-    })
-
-    return null
+    logAndRethrow(`Error fetching author '${slug}'`, e)
   }
 }
 
@@ -873,13 +865,10 @@ export async function fetchCmsComparison(
       options
     )
   } catch (e: unknown) {
-    logNonBlockingError({
-      message: `Error fetching CMS comparison '${slug}' for locale '${locale}'`,
-      error: {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-      },
-    })
+    logAndRethrow(
+      `Error fetching CMS comparison '${slug}' for locale '${locale}'`,
+      e
+    )
   }
 }
 
@@ -998,13 +987,10 @@ export async function fetchCaseStudy(
       options
     )
   } catch (e: unknown) {
-    logNonBlockingError({
-      message: `Error fetching case study '${slug}' for locale '${locale}'`,
-      error: {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-      },
-    })
+    logAndRethrow(
+      `Error fetching case study '${slug}' for locale '${locale}'`,
+      e
+    )
   }
 }
 

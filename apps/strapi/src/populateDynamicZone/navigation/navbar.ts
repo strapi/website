@@ -26,5 +26,11 @@ export default {
     },
     bottomLinks: linkPopulate,
     ctaLinks: linkPopulate,
+    mediaKit: {
+      populate: {
+        image: basicImagePopulate,
+        links: linkPopulate,
+      },
+    },
   },
 } as Modules.Documents.Params.Populate.NestedParams<"navigation.navbar">

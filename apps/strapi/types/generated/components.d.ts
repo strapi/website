@@ -780,6 +780,20 @@ export interface NavbarNavSection extends Struct.ComponentSchema {
   }
 }
 
+export interface NavigationMediaKit extends Struct.ComponentSchema {
+  collectionName: "components_navigation_media_kits"
+  info: {
+    description: "Popup shown when right-clicking the desktop navbar logo"
+    displayName: "Media Kit"
+    icon: "paintBrush"
+  }
+  attributes: {
+    image: Schema.Attribute.Component<"utilities.basic-image", false>
+    links: Schema.Attribute.Component<"utilities.link", true>
+    title: Schema.Attribute.String
+  }
+}
+
 export interface NavigationNavbar extends Struct.ComponentSchema {
   collectionName: "components_navigation_navbars"
   info: {
@@ -795,6 +809,7 @@ export interface NavigationNavbar extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<"https://github.com/strapi/strapi">
     logoImage: Schema.Attribute.Component<"utilities.link-image", false>
     logoImageLight: Schema.Attribute.Component<"utilities.link-image", false>
+    mediaKit: Schema.Attribute.Component<"navigation.media-kit", false>
     navItems: Schema.Attribute.Component<"navbar.nav-item", true>
   }
 }
@@ -1770,6 +1785,7 @@ declare module "@strapi/strapi" {
       "navbar.nav-item": NavbarNavItem
       "navbar.nav-link": NavbarNavLink
       "navbar.nav-section": NavbarNavSection
+      "navigation.media-kit": NavigationMediaKit
       "navigation.navbar": NavigationNavbar
       "navigation.top-banner": NavigationTopBanner
       "plans.plan-comparison-table": PlansPlanComparisonTable

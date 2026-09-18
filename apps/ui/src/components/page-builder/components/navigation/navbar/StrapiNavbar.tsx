@@ -43,6 +43,7 @@ export async function StrapiNavbar({
           bottomLinks={component.bottomLinks}
           logoImage={component.logoImage}
           logoImageLight={component.logoImageLight}
+          mediaKit={component.mediaKit}
           githubStars={githubStars}
           githubUrl={githubUrl}
         />

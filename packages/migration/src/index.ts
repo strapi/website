@@ -18,6 +18,7 @@ import { runEntityMigration, type RunStats } from "./pipeline/runner.ts"
 import { runBackfillOriginalPublishedAt } from "./scripts/backfill-original-published-at.ts"
 import { runFixMarkdownImages } from "./scripts/fix-markdown-images.ts"
 import { runFixPublishedAt } from "./scripts/fix-published-at.ts"
+import { runFixYoutubeIframes } from "./scripts/fix-youtube-iframes.ts"
 import { runUnpublishWrongDrafts } from "./scripts/unpublish-wrong-drafts.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
@@ -453,6 +454,22 @@ program
     await runFixMarkdownImages({
       entity,
       targetEndpoint: config.targetEndpoint,
+      apply: opts.apply ?? false,
+      limit: opts.limit,
+      verbose: opts.verbose ?? false,
+    })
+  })
+
+program
+  .command("fix-youtube-iframes")
+  .description(
+    "Replace YouTube <iframe> tags in blog-post content with markdown watch links the frontend auto-embeds. Dry-run by default."
+  )
+  .option("--apply", "Actually PUT rewritten content (default: dry-run)")
+  .option("--limit <n>", "Max rows per status to process", Number.parseInt)
+  .option("--verbose", "Debug-level logging")
+  .action(async (opts) => {
+    await runFixYoutubeIframes({
       apply: opts.apply ?? false,
       limit: opts.limit,
       verbose: opts.verbose ?? false,

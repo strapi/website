@@ -101,40 +101,42 @@ export default function BlogCategoryPage(
   return (
     <>
       <StrapiSeoStructuredDataFromSeo seo={category?.seo} />
-      <HeroContainer affectsNavbarTheme className="gap-0">
-        <BlogNavbar locale={locale} />
+      <main className="flex w-full flex-col">
+        <HeroContainer affectsNavbarTheme className="gap-0">
+          <BlogNavbar locale={locale} />
 
-        <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-          <div className="flex flex-col gap-6">
-            <BlogBreadcrumbs category={{ name: categoryName, slug }} />
+          <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
+            <div className="flex flex-col gap-6">
+              <BlogBreadcrumbs category={{ name: categoryName, slug }} />
 
-            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              {categoryName}
-            </h1>
+              <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                {categoryName}
+              </h1>
 
-            {category?.description && (
-              <div className="text-background/60 max-w-full lg:max-w-1/2 [&_p:last-child]:mb-0">
-                <InlineMarkdown>{category.description}</InlineMarkdown>
-              </div>
-            )}
-          </div>
+              {category?.description && (
+                <div className="text-background/60 max-w-full lg:max-w-1/2 [&_p:last-child]:mb-0">
+                  <InlineMarkdown>{category.description}</InlineMarkdown>
+                </div>
+              )}
+            </div>
 
-          {featuredPost && <FeaturedBlogPost post={featuredPost} />}
+            {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-          <BlogPostsList
-            posts={remainingPosts}
-            locale={locale}
-            initialOffset={categoryPosts.posts.length}
-            total={categoryPosts.total}
-            categorySlug={allSlugs}
-            loadMoreLabel={t("loadMore")}
-          />
-        </HeroContainerContent>
+            <BlogPostsList
+              posts={remainingPosts}
+              locale={locale}
+              initialOffset={categoryPosts.posts.length}
+              total={categoryPosts.total}
+              categorySlug={allSlugs}
+              loadMoreLabel={t("loadMore")}
+            />
+          </HeroContainerContent>
 
-        <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
-          <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
-        </HeroContainerContent>
-      </HeroContainer>
+          <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
+            <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
+          </HeroContainerContent>
+        </HeroContainer>
+      </main>
     </>
   )
 }

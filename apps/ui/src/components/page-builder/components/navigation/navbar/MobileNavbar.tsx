@@ -57,7 +57,6 @@ export function MobileNavbar({
               component={logoImage}
               imageMode="responsive"
               sizes="120px"
-              priority
               className={cn(
                 logoClassName,
                 "opacity-[var(--nav-logo-default-opacity)]"

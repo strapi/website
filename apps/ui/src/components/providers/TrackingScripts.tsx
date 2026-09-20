@@ -104,9 +104,9 @@ export function TrackingScripts() {
               var target=e.target;
               if(!(target instanceof Element)){return;}
               var btn=target.closest('[data-slot="button"]');
-              if(btn&&btn.innerText){
+              if(btn&&btn.textContent){
                 window.dataLayer=window.dataLayer||[];
-                window.dataLayer.push({event:'button_click',button_text:btn.innerText});
+                window.dataLayer.push({event:'button_click',button_text:btn.textContent});
               }
             });`}
         </Script>

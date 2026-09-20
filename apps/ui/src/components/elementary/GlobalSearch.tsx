@@ -1,9 +1,12 @@
 "use client"
 
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/ssr"
+import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 
-import { GlobalSearchModal } from "@/components/elementary/GlobalSearchModal"
+const GlobalSearchModal = dynamic(() =>
+  import("./GlobalSearchModal").then((mod) => mod.GlobalSearchModal)
+)
 
 export function GlobalSearch() {
   const [open, setOpen] = useState(false)

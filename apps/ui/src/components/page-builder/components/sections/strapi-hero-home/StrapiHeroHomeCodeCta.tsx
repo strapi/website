@@ -1,5 +1,3 @@
-"use client"
-
 import { CopyButton } from "@/components/elementary/CopyButton"
 import { ShineBorder } from "@/components/ui/shine-border"
 

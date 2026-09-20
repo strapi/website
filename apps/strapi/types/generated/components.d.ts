@@ -671,6 +671,7 @@ export interface MediaEmbed extends Struct.ComponentSchema {
     height: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<670>
+    title: Schema.Attribute.String & Schema.Attribute.Required
     url: Schema.Attribute.String & Schema.Attribute.Required
     width: Schema.Attribute.Integer &
       Schema.Attribute.Required &

@@ -26,6 +26,7 @@ export function StrapiEmbed({
         >
           <iframe
             src={component.url}
+            title={component.title || undefined}
             className="absolute inset-0 size-full overflow-hidden border-0"
             allow="clipboard-read; clipboard-write"
             allowFullScreen

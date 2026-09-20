@@ -1,6 +1,6 @@
 "use client"
 
-import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react"
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react/ssr"
 import type { Nullable } from "@repo/shared-data"
 import type { Data } from "@repo/strapi-types"
 import useEmblaCarousel from "embla-carousel-react"

@@ -40,6 +40,7 @@ export function TypingAnimation({
   pauseDelay = 1500,
   startDelay = 0,
   startTyped = false,
+  "aria-label": _ariaLabel, // pop aria label out of props
   ...props
 }: TypingAnimationProps) {
   const hasWords = words.length > 0
@@ -165,35 +166,29 @@ export function TypingAnimation({
   // Reduced motion: show the first word statically with no typing/cursor motion.
   if (prefersReducedMotion) {
     return (
-      <span
-        {...props}
-        className={cn("inline-block", className)}
-        aria-label={props["aria-label"] ?? firstWord}
-      >
+      <span {...props} className={cn("inline-block", className)}>
         {firstWord}
       </span>
     )
   }
 
   return (
-    <span
-      {...props}
-      className={cn("inline-block", className)}
-      aria-label={props["aria-label"] ?? currentWord}
-    >
-      {chars.map(({ key, char, exiting }) => (
-        <span
-          key={key}
-          className={cn("inline-block", exiting && "animate-char-fade-out")}
-          onAnimationEnd={exiting ? () => handleAnimationEnd(key) : undefined}
-          aria-hidden
-        >
-          {char === " " ? "\u00A0" : char}
-        </span>
-      ))}
-      {phase === "waiting" ? null : (
-        <span className="animate-blink-cursor inline-block">|</span>
-      )}
+    <span {...props} className={cn("inline-block", className)}>
+      <span className="sr-only">{currentWord}</span>
+      <span aria-hidden="true">
+        {chars.map(({ key, char, exiting }) => (
+          <span
+            key={key}
+            className={cn("inline-block", exiting && "animate-char-fade-out")}
+            onAnimationEnd={exiting ? () => handleAnimationEnd(key) : undefined}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
+        {phase === "waiting" ? null : (
+          <span className="animate-blink-cursor inline-block">|</span>
+        )}
+      </span>
     </span>
   )
 }

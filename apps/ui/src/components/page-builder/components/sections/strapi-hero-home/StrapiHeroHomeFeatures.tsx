@@ -216,35 +216,39 @@ export function StrapiHeroHomeFeatures({
       {...restProps}
     >
       {hasMultipleFeatures ? (
-        <div
-          role="tablist"
-          aria-label="Hero feature previews"
-          className="relative flex w-full"
-          onKeyDown={handleTabKeyDown}
-        >
-          {normalizedFeatures?.map(({ feature, isVideo }, index) => {
-            const isActive = index === activeIndex
-            const tabId = `${baseId}-tab-${index}`
-            const panelId = `${baseId}-panel-${index}`
+        <div className="relative flex w-full">
+          <div
+            role="tablist"
+            aria-label="Hero feature previews"
+            className="flex w-full"
+            onKeyDown={handleTabKeyDown}
+          >
+            {normalizedFeatures?.map(({ feature, isVideo }, index) => {
+              const isActive = index === activeIndex
+              const tabId = `${baseId}-tab-${index}`
+              const panelId = `${baseId}-panel-${index}`
 
-            return (
-              <StrapiHeroFeatureTabItem
-                key={feature.id}
-                id={tabId}
-                aria-controls={panelId}
-                aria-selected={isActive}
-                active={isActive}
-                animationKey={activeIndex}
-                paused={isActive ? paused : false}
-                autoplayDuration={isActive ? activeAutoplayDuration : undefined}
-                feature={feature}
-                onProgressComplete={
-                  isActive && !isVideo ? handleAdvance : undefined
-                }
-                onClick={() => handleTabClick(index)}
-              />
-            )
-          })}
+              return (
+                <StrapiHeroFeatureTabItem
+                  key={feature.id}
+                  id={tabId}
+                  aria-controls={panelId}
+                  aria-selected={isActive}
+                  active={isActive}
+                  animationKey={activeIndex}
+                  paused={isActive ? paused : false}
+                  autoplayDuration={
+                    isActive ? activeAutoplayDuration : undefined
+                  }
+                  feature={feature}
+                  onProgressComplete={
+                    isActive && !isVideo ? handleAdvance : undefined
+                  }
+                  onClick={() => handleTabClick(index)}
+                />
+              )
+            })}
+          </div>
 
           <div className="absolute top-0 right-0 flex h-full w-full items-center justify-between text-white lg:hidden">
             <button

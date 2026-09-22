@@ -68,7 +68,7 @@ const blogComponents: Partial<Components> = {
     return (
       <a
         href={safeHref}
-        className="*:text-strapi-purple-600 text-strapi-purple-600 bg-strapi-purple-100 hover:*:text-strapi-purple-700 hover:text-strapi-purple-700 transition-colors *:transition-colors"
+        className="*:text-strapi-purple-600 text-strapi-purple-600 bg-strapi-purple-100 hover:*:text-strapi-purple-700 hover:text-strapi-purple-700 underline underline-offset-4 transition-colors *:transition-colors"
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
       >

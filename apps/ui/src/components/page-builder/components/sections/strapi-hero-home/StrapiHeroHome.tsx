@@ -1,4 +1,5 @@
 import type { Data } from "@repo/strapi-types"
+import dynamic from "next/dynamic"
 
 import {
   HeroContainer,
@@ -7,11 +8,8 @@ import {
 import { InlineMarkdown } from "@/components/elementary/markdown/InlineMarkdown"
 import { StrapiLink } from "@/components/page-builder/components/utilities/StrapiLink"
 import type { DynamicZoneRenderContext } from "@/components/page-builder/DynamicZoneRenderer"
-import { TypingAnimation } from "@/components/ui/typing-animation"
 
 import { StrapiHeroHomeCodeCta } from "./StrapiHeroHomeCodeCta"
-import { StrapiHeroHomeFeatures } from "./StrapiHeroHomeFeatures"
-import { TestimonialLogosGrid } from "./TestimonialLogosGrid"
 
 const DEFAULT_ROTATING_PHRASES = [
   "Websites",
@@ -25,6 +23,16 @@ interface StrapiHeroHomeProps {
   readonly component: Data.Component<"sections.hero-home">
   readonly renderContext?: DynamicZoneRenderContext
 }
+
+const TypingAnimation = dynamic(() =>
+  import("@/components/ui/typing-animation").then((mod) => mod.TypingAnimation)
+)
+const StrapiHeroHomeFeatures = dynamic(() =>
+  import("./StrapiHeroHomeFeatures").then((mod) => mod.StrapiHeroHomeFeatures)
+)
+const TestimonialLogosGrid = dynamic(() =>
+  import("./TestimonialLogosGrid").then((mod) => mod.TestimonialLogosGrid)
+)
 
 export function StrapiHeroHome({
   component,

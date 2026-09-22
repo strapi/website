@@ -5,6 +5,7 @@ import { env } from "@/env.mjs"
 import { isProduction } from "@/lib/general-helpers"
 
 import { KapaWidget } from "./KapaWidget"
+import { LoadAfterIdle } from "./LoadAfterIdle"
 
 export function TrackingScriptWrapper({
   id,
@@ -74,17 +75,20 @@ export function TrackingScripts() {
       {env.GTM_ID && <GoogleTagManager gtmId={env.GTM_ID} />}
 
       {env.HUBSPOT_PORTAL_ID && (
-        <Script
-          data-cookieconsent="marketing"
-          id="hs-script-loader"
-          src={`//js.hs-scripts.com/${env.HUBSPOT_PORTAL_ID}.js`}
-          strategy="afterInteractive"
-        />
+        <LoadAfterIdle>
+          <Script
+            data-cookieconsent="marketing"
+            id="hs-script-loader"
+            src={`//js.hs-scripts.com/${env.HUBSPOT_PORTAL_ID}.js`}
+            strategy="afterInteractive"
+          />
+        </LoadAfterIdle>
       )}
 
       {env.HOTJAR_ID && (
-        <Script id="hotjar" strategy="afterInteractive">
-          {`(function(h,o,t,j,a,r){
+        <LoadAfterIdle>
+          <Script id="hotjar" strategy="afterInteractive">
+            {`(function(h,o,t,j,a,r){
               h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
               h._hjSettings={hjid:${env.HOTJAR_ID},hjsv:6};
               a=o.getElementsByTagName('head')[0];
@@ -92,7 +96,8 @@ export function TrackingScripts() {
               r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
               a.appendChild(r);
           })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
-        </Script>
+          </Script>
+        </LoadAfterIdle>
       )}
 
       {env.KAPA_WEBSITE_ID && <KapaWidget websiteId={env.KAPA_WEBSITE_ID} />}
@@ -104,9 +109,9 @@ export function TrackingScripts() {
               var target=e.target;
               if(!(target instanceof Element)){return;}
               var btn=target.closest('[data-slot="button"]');
-              if(btn&&btn.innerText){
+              if(btn&&btn.textContent){
                 window.dataLayer=window.dataLayer||[];
-                window.dataLayer.push({event:'button_click',button_text:btn.innerText});
+                window.dataLayer.push({event:'button_click',button_text:btn.textContent});
               }
             });`}
         </Script>

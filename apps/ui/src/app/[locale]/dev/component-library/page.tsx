@@ -2768,6 +2768,7 @@ export default function ComponentLibraryPage() {
                 {
                   id: 1,
                   __component: "media.embed",
+                  title: "Interactive product demo",
                   url: "https://app.guideflow.com/embed/np15xl7uzk",
                   width: 1000,
                   height: 670,
@@ -2782,6 +2783,7 @@ export default function ComponentLibraryPage() {
                 {
                   id: 2,
                   __component: "media.embed",
+                  title: "YouTube video",
                   url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
                   width: 1280,
                   height: 720,

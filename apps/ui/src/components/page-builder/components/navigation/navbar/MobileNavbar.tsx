@@ -78,7 +78,12 @@ export function MobileNavbar({
         </div>
       </div>
 
-      <Button variant="secondary" size="icon" onClick={() => setIsOpen(true)}>
+      <Button
+        variant="secondary"
+        size="icon"
+        onClick={() => setIsOpen(true)}
+        aria-label="Open menu"
+      >
         <ListIcon weight="bold" />
       </Button>
 

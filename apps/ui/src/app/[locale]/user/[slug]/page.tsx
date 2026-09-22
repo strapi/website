@@ -89,31 +89,33 @@ export default function AuthorPage(props: PageProps<"/[locale]/user/[slug]">) {
   const remainingPosts: BlogPost[] = authorPosts.posts.slice(1)
 
   return (
-    <HeroContainer affectsNavbarTheme className="gap-0">
-      <BlogNavbar locale={locale} />
+    <main className="flex w-full flex-col">
+      <HeroContainer affectsNavbarTheme className="gap-0">
+        <BlogNavbar locale={locale} />
 
-      <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-        <div className="flex flex-col gap-6">
-          <BlogBreadcrumbs author={{ name: author.username ?? slug, slug }} />
+        <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
+          <div className="flex flex-col gap-6">
+            <BlogBreadcrumbs author={{ name: author.username ?? slug, slug }} />
 
-          <AuthorHero author={author} />
-        </div>
+            <AuthorHero author={author} />
+          </div>
 
-        {featuredPost && <FeaturedBlogPost post={featuredPost} />}
+          {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-        <BlogPostsList
-          posts={remainingPosts}
-          locale={locale}
-          initialOffset={authorPosts.posts.length}
-          total={authorPosts.total}
-          authorSlug={slug}
-          loadMoreLabel={t("loadMore")}
-        />
-      </HeroContainerContent>
+          <BlogPostsList
+            posts={remainingPosts}
+            locale={locale}
+            initialOffset={authorPosts.posts.length}
+            total={authorPosts.total}
+            authorSlug={slug}
+            loadMoreLabel={t("loadMore")}
+          />
+        </HeroContainerContent>
 
-      <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
-        <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
-      </HeroContainerContent>
-    </HeroContainer>
+        <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
+          <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
+        </HeroContainerContent>
+      </HeroContainer>
+    </main>
   )
 }

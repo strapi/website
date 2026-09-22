@@ -57,27 +57,29 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   return (
     <>
       <StrapiSeoStructuredDataByFullPath fullPath="/blog" locale={locale} />
-      <HeroContainer affectsNavbarTheme className="gap-0">
-        <BlogNavbar locale={locale} />
+      <main className="flex w-full flex-col">
+        <HeroContainer affectsNavbarTheme className="gap-0">
+          <BlogNavbar locale={locale} />
 
-        <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
-          {featuredPost && <FeaturedBlogPost post={featuredPost} />}
+          <HeroContainerContent className="animate-reveal-cascade border-strapi-gray-700/50 flex flex-col gap-10 border-b">
+            {featuredPost && <FeaturedBlogPost post={featuredPost} />}
 
-          <BlogPostsList
-            posts={remainingPosts}
-            locale={locale}
-            initialOffset={allPosts.posts.length}
-            total={allPosts.total}
-            loadMoreLabel={t("loadMore")}
-            excludeCategorySlugs={BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS}
-            excludeSlugs={excludeSlugs}
-          />
-        </HeroContainerContent>
+            <BlogPostsList
+              posts={remainingPosts}
+              locale={locale}
+              initialOffset={allPosts.posts.length}
+              total={allPosts.total}
+              loadMoreLabel={t("loadMore")}
+              excludeCategorySlugs={BLOG_INDEX_EXCLUDED_CATEGORY_SLUGS}
+              excludeSlugs={excludeSlugs}
+            />
+          </HeroContainerContent>
 
-        <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
-          <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
-        </HeroContainerContent>
-      </HeroContainer>
+          <HeroContainerContent className="animate-reveal-cascade flex flex-col gap-10 [--reveal-delay:680ms]">
+            <NewsletterSignup presentation="banner" hubspotForm={hubspotForm} />
+          </HeroContainerContent>
+        </HeroContainer>
+      </main>
     </>
   )
 }

@@ -41,7 +41,7 @@ export async function getMetadataFromStrapi({
 
   try {
     const res = await fetchSeo(uid, fullPath, locale)
-    const { seo, localizations } = res?.data || {}
+    const { seo, localizations, title } = res?.data || {}
 
     return assembleMetadataFromSeo({
       defaults,
@@ -49,6 +49,9 @@ export async function getMetadataFromStrapi({
       fullPath,
       locale,
       localizations: localizations as StrapiLocalization[] | undefined,
+      fallbackMeta: {
+        title: title || undefined,
+      },
       customMetadata,
     })
   } catch (e: unknown) {

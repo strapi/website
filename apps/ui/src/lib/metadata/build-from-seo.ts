@@ -102,7 +102,7 @@ export function assembleMetadataFromSeo({
   const forbidIndexing = !isProduction()
 
   const strapiMeta: Metadata = {
-    title: seo?.metaTitle,
+    title: seo?.metaTitle || undefined,
     description: seo?.metaDescription,
     keywords: seo?.keywords,
     robots: seo?.metaRobots,

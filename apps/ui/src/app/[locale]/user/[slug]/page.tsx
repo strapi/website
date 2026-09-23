@@ -89,7 +89,7 @@ export default function AuthorPage(props: PageProps<"/[locale]/user/[slug]">) {
   const remainingPosts: BlogPost[] = authorPosts.posts.slice(1)
 
   return (
-    <main className="flex w-full flex-col">
+    <main>
       <HeroContainer affectsNavbarTheme className="gap-0">
         <BlogNavbar locale={locale} />
 

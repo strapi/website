@@ -101,7 +101,7 @@ export default function BlogCategoryPage(
   return (
     <>
       <StrapiSeoStructuredDataFromSeo seo={category?.seo} />
-      <main className="flex w-full">
+      <main>
         <HeroContainer affectsNavbarTheme className="gap-0">
           <BlogNavbar locale={locale} />
 

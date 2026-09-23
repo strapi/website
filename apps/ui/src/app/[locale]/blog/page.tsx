@@ -57,7 +57,7 @@ export default function BlogIndexPage(props: PageProps<"/[locale]/blog">) {
   return (
     <>
       <StrapiSeoStructuredDataByFullPath fullPath="/blog" locale={locale} />
-      <main className="flex w-full flex-col">
+      <main>
         <HeroContainer affectsNavbarTheme className="gap-0">
           <BlogNavbar locale={locale} />
 

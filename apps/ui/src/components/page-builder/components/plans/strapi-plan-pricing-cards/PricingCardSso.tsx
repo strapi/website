@@ -41,7 +41,7 @@ export function PricingCardSso({
       </div>
       <div className="flex items-baseline">
         <p className="text-foreground text-2xl font-semibold">{displayPrice}</p>
-        <p className="text-strapi-neutral-600 text-sm">{subtext}</p>
+        <p className="text-strapi-neutral-700 text-sm">{subtext}</p>
       </div>
       <p className="text-strapi-neutral-700 text-sm">{description}</p>
     </div>

@@ -59,14 +59,14 @@ export function PricingCardPrice({
           {(billing === "yearly" && yearly?.yearlyPerMonth) || price}
         </p>
         {priceSubtext && (
-          <p className="text-strapi-neutral-600 text-sm">{priceSubtext}</p>
+          <p className="text-strapi-neutral-700 text-sm">{priceSubtext}</p>
         )}
       </div>
       {billing === "yearly" && (
         <p className="text-foreground text-sm">
           {yearly?.preSavingsYearly && (
             <>
-              <span className="text-strapi-neutral-600 line-through">
+              <span className="text-strapi-neutral-700 line-through">
                 {yearly.preSavingsYearly}
               </span>{" "}
             </>

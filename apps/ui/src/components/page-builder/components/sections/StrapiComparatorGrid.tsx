@@ -100,7 +100,7 @@ function ComparatorCard({
           <CMSLogo cms={comparator.firstCMS} />
         </div>
 
-        <span className="bg-strapi-neutral-100 text-strapi-neutral-600 inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold">
+        <span className="bg-strapi-neutral-100 text-strapi-neutral-700 inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold">
           {vsLabel}
         </span>
 

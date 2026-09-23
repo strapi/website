@@ -90,7 +90,7 @@ const blogComponents: Partial<Components> = {
   li: ({ children }) => <li className="text-strapi-body-1">{children}</li>,
 
   blockquote: ({ children }) => (
-    <blockquote className="border-strapi-purple-300 text-muted-foreground mb-8 border-l-4 pl-4 italic">
+    <blockquote className="border-strapi-purple-300 text-strapi-neutral-700 mb-8 border-l-4 pl-4 italic">
       {children}
     </blockquote>
   ),

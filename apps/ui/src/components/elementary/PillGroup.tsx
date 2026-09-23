@@ -17,7 +17,7 @@ export function PillGroup({
   return (
     <div
       className={cn(
-        "bg-strapi-blue-200 rounded-strapi-lg inline-flex gap-1 p-1",
+        "bg-strapi-blue-100 rounded-strapi-lg inline-flex gap-1 p-1",
         className
       )}
       {...restProps}

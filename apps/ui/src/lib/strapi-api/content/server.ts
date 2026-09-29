@@ -36,9 +36,33 @@ export const STRAPI_TAGS = {
 } as const
 
 /**
+ * Copy request headers into a plain object.
+ *
+ * `fetchAPI` merges headers with `{ ...headers }`. That keeps entries on a
+ * plain object, and drops them when `headers` is a `Headers` instance or a
+ * list of `[name, value]` pairs.
+ */
+function headersToRecord(
+  headers: HeadersInit | undefined
+): Record<string, string> {
+  if (!headers) return {}
+
+  if (headers instanceof Headers) {
+    return Object.fromEntries(headers.entries())
+  }
+
+  if (Array.isArray(headers)) {
+    return Object.fromEntries(headers)
+  }
+
+  return { ...headers }
+}
+
+/**
  * Build a `RequestInit` that is safe to pass to the Strapi client:
  *  - In draft mode, opt out of Next.js caching entirely (`cache: "no-store"`)
- *    so editors see live changes and draft content never seeds the public tag.
+ *    so editors see live changes and draft content never seeds the public tag,
+ *    and ask Strapi to encode live-preview source maps.
  *  - Otherwise tag the fetch so it can be invalidated on demand.
  */
 function withCacheTags(
@@ -47,7 +71,14 @@ function withCacheTags(
   base?: RequestInit
 ): RequestInit {
   if (isDraftMode) {
-    return { ...base, cache: "no-store" }
+    return {
+      ...base,
+      cache: "no-store",
+      headers: {
+        ...headersToRecord(base?.headers),
+        "strapi-encode-source-maps": "true",
+      },
+    }
   }
 
   const callerTags = base?.next?.tags ?? []

@@ -39,7 +39,7 @@ export function PricingSwitcher({
     >
       <div className="flex w-full flex-col items-start justify-between gap-8 md:flex-row md:items-end">
         {component.title && (
-          <h2 className="text-foreground text-left text-4xl font-bold tracking-tight">
+          <h2 className="text-foreground text-left text-4xl font-bold tracking-tight md:min-h-[2lh]">
             {component.title}
           </h2>
         )}

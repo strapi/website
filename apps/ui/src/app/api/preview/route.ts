@@ -67,6 +67,9 @@ export async function GET(request: Request) {
     path: "/",
     secure: true,
     sameSite: "none", // Allow cookie in cross-origin iframes
+    // Without this, browsers reject the cookie inside the Strapi
+    // admin iframe because that iframe is a different site from the frontend.
+    partitioned: true,
   })
   // --------------------------------------------------------------------
   // Check if the locale in the request is a correct frontend locale

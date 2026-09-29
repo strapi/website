@@ -61,13 +61,10 @@ export async function redirectsProxy(
     return null
   }
 
-  // Always use 307 for CMS-managed redirects. A 308/301 is attractive for SEO
-  // once a move is truly final, but it is also sticky: browsers, crawlers, and
-  // intermediate caches can keep using it after editors fix or remove the
-  // redirect. A CDN can be purged, but user-agent caches cannot. These
-  // redirects are operational CMS content, so the safer default is a temporary
-  // method-preserving redirect that can be changed without leaving clients
-  // pinned to the old destination.
+  if (redirect.permanent) {
+    return NextResponse.redirect(destinationUrl, 301)
+  }
+
   return NextResponse.redirect(destinationUrl, 307)
 }
 

@@ -75,7 +75,7 @@ export function TrackingScripts() {
       {env.GTM_ID && <GoogleTagManager gtmId={env.GTM_ID} />}
 
       {env.HUBSPOT_PORTAL_ID && (
-        <LoadAfterIdle>
+        <LoadAfterIdle delayMs={1000}>
           <Script
             data-cookieconsent="marketing"
             id="hs-script-loader"
@@ -86,7 +86,7 @@ export function TrackingScripts() {
       )}
 
       {env.HOTJAR_ID && (
-        <LoadAfterIdle>
+        <LoadAfterIdle delayMs={1000}>
           <Script id="hotjar" strategy="afterInteractive">
             {`(function(h,o,t,j,a,r){
               h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};

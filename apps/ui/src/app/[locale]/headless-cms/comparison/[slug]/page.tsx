@@ -2,7 +2,11 @@ import type { Locale } from "next-intl"
 import { use } from "react"
 
 import { CmsComparisonView } from "@/components/cms-comparison/CmsComparisonView"
-import { createFallbackPath, debugStaticParams } from "@/lib/build"
+import {
+  createFallbackPath,
+  debugStaticParams,
+  withExportFallback,
+} from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
 import { getCmsComparisonMetadata } from "@/lib/metadata"
 import { fetchAllCmsComparisons } from "@/lib/strapi-api/content/server"
@@ -38,7 +42,7 @@ export async function generateStaticParams({
     slug: "fallback",
   })
 
-  return params.length > 0 ? params : [fallbackPath]
+  return withExportFallback(params, fallbackPath)
 }
 
 export async function generateMetadata(

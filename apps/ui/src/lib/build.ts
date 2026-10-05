@@ -34,11 +34,25 @@ export const debugStaticParams = (
  * @example createFallbackPath("en", { slug: 'fallback', page: 'fallback' }) => {locale: "en", slug: "fallback", page: "fallback"}
  * @example createFallbackPath("en", { rest: ['fallback'] }) => {locale: "en", rest: ["fallback"]}
  */
-export const createFallbackPath = (
+export function createFallbackPath<T extends Record<string, string | string[]>>(
   locale: Locale,
-  params: Record<string, string | string[]>
-) => ({
-  locale,
-  rest: [], // to satisfy type checking for [[...rest]], but can be overridden via `params`
-  ...params,
-})
+  params: T
+): { locale: Locale } & T {
+  return {
+    locale,
+    ...params,
+  }
+}
+
+/**
+ * Static export builds need at least one param for a dynamic segment.
+ * Standalone builds should stay empty when Strapi returned no entries, so CI
+ * does not prerender a dummy path against a stopped Strapi.
+ */
+export function withExportFallback<T>(entries: T[], fallback: T): T[] {
+  if (entries.length > 0) return entries
+
+  if (getEnvVar("NEXT_OUTPUT") === "export") return [fallback]
+
+  return []
+}

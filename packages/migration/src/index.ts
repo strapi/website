@@ -19,6 +19,7 @@ import { runBackfillOriginalPublishedAt } from "./scripts/backfill-original-publ
 import { runFixMarkdownImages } from "./scripts/fix-markdown-images.ts"
 import { runFixPublishedAt } from "./scripts/fix-published-at.ts"
 import { runFixYoutubeIframes } from "./scripts/fix-youtube-iframes.ts"
+import { runResetRedirectPermanent } from "./scripts/reset-redirect-permanent.ts"
 import { runUnpublishWrongDrafts } from "./scripts/unpublish-wrong-drafts.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
@@ -472,6 +473,20 @@ program
     await runFixYoutubeIframes({
       apply: opts.apply ?? false,
       limit: opts.limit,
+      verbose: opts.verbose ?? false,
+    })
+  })
+
+program
+  .command("reset-redirect-permanent")
+  .description(
+    "Set permanent=false on every Strapi redirect (draft and published). Dry-run by default."
+  )
+  .option("--apply", "Actually PUT permanent=false (default: dry-run)")
+  .option("--verbose", "Debug-level logging")
+  .action(async (opts) => {
+    await runResetRedirectPermanent({
+      apply: opts.apply ?? false,
       verbose: opts.verbose ?? false,
     })
   })

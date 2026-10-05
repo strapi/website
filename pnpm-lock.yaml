@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@strapi/strapi':
+      specifier: 5.52.2
+      version: 5.52.2
     '@tailwindcss/postcss':
       specifier: ^4.3.1
       version: 4.3.1
@@ -126,7 +129,7 @@ importers:
         specifier: 5.52.2
         version: 5.52.2(aa34c8c923a2b329891e9468222240d1)
       '@strapi/strapi':
-        specifier: 5.52.2
+        specifier: 'catalog:'
         version: 5.52.2(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/language@6.12.3)(@codemirror/lint@6.9.6)(@codemirror/search@6.7.0)(@codemirror/theme-one-dark@6.1.3)(@emotion/is-prop-valid@1.4.0)(@swc/helpers@0.5.23)(@types/hoist-non-react-statics@3.3.7(@types/react@19.2.17))(@types/node@24.13.2)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(codemirror@5.65.21)(esbuild@0.28.1)(koa@2.16.4)(lightningcss@1.32.0)(pg@8.22.0)(postcss@8.5.15)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1)(styled-components@6.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.51.2)(ts-toolbelt@9.6.0)(type-fest@4.41.0)
       '@strapi/utils':
         specifier: 5.52.2
@@ -516,7 +519,7 @@ importers:
   packages/strapi-types:
     devDependencies:
       '@strapi/strapi':
-        specifier: 5.52.2
+        specifier: 'catalog:'
         version: 5.52.2(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/language@6.12.3)(@codemirror/lint@6.9.6)(@codemirror/search@6.7.0)(@codemirror/theme-one-dark@6.1.3)(@emotion/is-prop-valid@1.4.0)(@swc/helpers@0.5.23)(@types/hoist-non-react-statics@3.3.7(@types/react@19.2.17))(@types/node@26.0.0)(@types/react@19.2.17)(codemirror@5.65.21)(esbuild@0.28.1)(koa@2.16.4)(lightningcss@1.32.0)(postcss@8.5.15)(react-dom@19.2.7(react@19.2.7))(react-router-dom@6.30.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(redux@4.2.1)(styled-components@6.4.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(terser@5.51.2)(ts-toolbelt@9.6.0)(type-fest@4.41.0)
 
   packages/typescript-config: {}
@@ -947,9 +950,6 @@ packages:
 
   '@codemirror/search@6.7.0':
     resolution: {integrity: sha512-ZvGm99wc/s2cITtMT15LFdn8aH/aS+V+DqyGq/N5ZlV5vWtH+nILvC2nw0zX7ByNoHHDZ2IxxdW38O0tc5nVHg==}
-
-  '@codemirror/state@6.7.0':
-    resolution: {integrity: sha512-Zbl9NyscLMZkfXPQnNAIIAFftidrA1UbcJEIMp24C0Bukc2I5T8wJS0wsXYsnDOqCFJUeJ1BITGNs5CqPDSmSg==}
 
   '@codemirror/state@6.7.1':
     resolution: {integrity: sha512-9QzNDgE4EYDnAHfrTlR2lwiPciiOymLtwKK+8yHQzCc7GXhAP9xdEbEJFy2IWB1j9UGUl9BsgMmTo/ImA02T7A==}
@@ -9284,9 +9284,6 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  linkify-it@5.0.1:
-    resolution: {integrity: sha512-wVoTjP4Q6R0NW5hiZkVJaFZPWgtXfoGF+6LucL3/FtiNjmcHhYjEr5f1Kqjirc1nBW07J/ZuRFumqr2oqccEWg==}
-
   linkify-it@5.0.2:
     resolution: {integrity: sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==}
 
@@ -9498,10 +9495,6 @@ packages:
 
   markdown-it-sup@1.0.0:
     resolution: {integrity: sha512-E32m0nV9iyhRR7CrhnzL5msqic7rL1juWre6TQNxsnApg7Uf+F97JOKxUijg5YwXz86lZ0mqfOnutoryyNdntQ==}
-
-  markdown-it@14.2.0:
-    resolution: {integrity: sha512-1TGiQiJVRQ3NPmZH6sx5Cfnmg6GQm9jvC1ch4TK511NjSJvjzKLzn5pPfZRNZkRPZP0HqCioSndqH8v2nRaWVQ==}
-    hasBin: true
 
   markdown-it@14.3.0:
     resolution: {integrity: sha512-RCEsPjR+sr0x+AuYp601tKTkgFG4YEPLCzHST3cQ/fhlJkqAkz1L2/Qbp1j9qw5SBwQHFBoW8+hoN5xssOF0Tw==}
@@ -12261,11 +12254,6 @@ packages:
     resolution: {integrity: sha512-d79HhZya5Djd7am0q+W4RTsSU+D/aJzM+4Y4AGJGuGlgM2L6sx5ZvOYTmZjqPhrDrV6xJTtRSm1JCLj6V6LHLQ==}
     engines: {node: '>=14.16'}
 
-  terser@5.48.0:
-    resolution: {integrity: sha512-J/9An6vs9Us6wKRriSFXBWdRZapREHqFzdNUKk0pmu804EMR6dr6winwo7e5JDxN4xahxQsuysyYFwlwj4XN/Q==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   terser@5.51.2:
     resolution: {integrity: sha512-bWnjSNscmuI+GJze6ZupnHP8G/cTcsJF+bXCeQknk2SHQsgbNJnLrqiH9jZ2W4STPVXH2mDKKRX3iwPhc9Cn/Q==}
     engines: {node: '>=10'}
@@ -12290,8 +12278,8 @@ packages:
   third-party-web@0.26.7:
     resolution: {integrity: sha512-buUzX4sXC4efFX6xg2bw6/eZsCUh8qQwSavC4D9HpONMFlRbcHhD8Je5qwYdCpViR6q0qla2wPP+t91a2vgolg==}
 
-  third-party-web@0.29.2:
-    resolution: {integrity: sha512-fegtha91tq2DHphyoiBXVHjVi2YG9zFaRnboT9C28tO1en9Y3wJsfspuy40F+u5wl3hHVbw7cnd1b67kEGHb8g==}
+  third-party-web@0.30.0:
+    resolution: {integrity: sha512-p+PfyL5U0ediGzvwPzMSdD9MnC8rHW6nWJJVLIQvqN7RsSqfaZ+7n4c9GILqH36EYR0eXB9CzAeCRnKFr/9uJg==}
 
   throttle-debounce@3.0.1:
     resolution: {integrity: sha512-dTEWWNu6JmeVXY0ZYoPuH5cRIwc0MeGbJwah9KUNYSJwommQpCzTySTpEe8Gs1J23aeWEuAobe4Ag7EHVt/LOg==}
@@ -12960,10 +12948,6 @@ packages:
 
   webpack-hot-middleware@2.26.1:
     resolution: {integrity: sha512-khZGfAeJx6I8K9zKohEWWYN6KDlVw2DHownoe+6Vtwj1LP9WFgegXnVMSkZ/dBEBtXFwrkkydsaPFlB7f8wU2A==}
-
-  webpack-sources@3.5.0:
-    resolution: {integrity: sha512-HPuy+uuoTCaaoEoI1LQ3JN9+vrPBvEesnnX1jADHy728cHSMlq4wUc4afYqahq2B1mhQVZxCXOkNTnXltr+2vQ==}
-    engines: {node: '>=10.13.0'}
 
   webpack-sources@3.5.1:
     resolution: {integrity: sha512-jyuiGJdtvY434z5bUZrjz67v76/ePNvFZTp9Mdz29IlH4+GPsgyGjiv0fKI+M7BdkU6ADjulUcKAd3tUK3WlEw==}
@@ -13888,7 +13872,7 @@ snapshots:
   '@codemirror/autocomplete@6.20.3':
     dependencies:
       '@codemirror/language': 6.12.3
-      '@codemirror/state': 6.7.0
+      '@codemirror/state': 6.7.1
       '@codemirror/view': 6.43.2
       '@lezer/common': 1.5.2
 
@@ -13915,19 +13899,15 @@ snapshots:
 
   '@codemirror/lint@6.9.6':
     dependencies:
-      '@codemirror/state': 6.7.0
+      '@codemirror/state': 6.7.1
       '@codemirror/view': 6.43.2
       crelt: 1.0.6
 
   '@codemirror/search@6.7.0':
     dependencies:
-      '@codemirror/state': 6.7.0
+      '@codemirror/state': 6.7.1
       '@codemirror/view': 6.43.2
       crelt: 1.0.6
-
-  '@codemirror/state@6.7.0':
-    dependencies:
-      '@marijn/find-cluster-break': 1.0.2
 
   '@codemirror/state@6.7.1':
     dependencies:
@@ -13936,7 +13916,7 @@ snapshots:
   '@codemirror/theme-one-dark@6.1.3':
     dependencies:
       '@codemirror/language': 6.12.3
-      '@codemirror/state': 6.7.0
+      '@codemirror/state': 6.7.1
       '@codemirror/view': 6.43.2
       '@lezer/highlight': 1.2.3
 
@@ -15785,7 +15765,7 @@ snapshots:
   '@paulirish/trace_engine@0.0.53':
     dependencies:
       legacy-javascript: 0.0.1
-      third-party-web: 0.29.2
+      third-party-web: 0.30.0
 
   '@phosphor-icons/react@2.1.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
@@ -22989,7 +22969,7 @@ snapshots:
       get-tsconfig: 4.14.0
       loader-utils: 2.0.4
       webpack: 5.109.2(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.15)
-      webpack-sources: 3.5.0
+      webpack-sources: 3.5.1
 
   esbuild-register@3.5.0(esbuild@0.20.2):
     dependencies:
@@ -24308,7 +24288,7 @@ snapshots:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.48.0
+      terser: 5.51.2
 
   html-url-attributes@3.0.1: {}
 
@@ -25332,10 +25312,6 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  linkify-it@5.0.1:
-    dependencies:
-      uc.micro: 2.1.0
-
   linkify-it@5.0.2:
     dependencies:
       uc.micro: 2.1.0
@@ -25542,15 +25518,6 @@ snapshots:
   markdown-it-sub@1.0.0: {}
 
   markdown-it-sup@1.0.0: {}
-
-  markdown-it@14.2.0:
-    dependencies:
-      argparse: 2.0.1
-      entities: 4.5.0
-      linkify-it: 5.0.1
-      mdurl: 2.0.0
-      punycode.js: 2.3.1
-      uc.micro: 2.1.0
 
   markdown-it@14.3.0:
     dependencies:
@@ -29108,13 +29075,6 @@ snapshots:
       type-fest: 2.19.0
       unique-string: 3.0.0
 
-  terser@5.48.0:
-    dependencies:
-      '@jridgewell/source-map': 0.3.11
-      acorn: 8.17.0
-      commander: 2.20.3
-      source-map-support: 0.5.21
-
   terser@5.51.2:
     dependencies:
       '@jridgewell/source-map': 0.3.11
@@ -29142,7 +29102,7 @@ snapshots:
 
   third-party-web@0.26.7: {}
 
-  third-party-web@0.29.2: {}
+  third-party-web@0.30.0: {}
 
   throttle-debounce@3.0.1: {}
 
@@ -29385,7 +29345,7 @@ snapshots:
     dependencies:
       '@gerrit0/mini-shiki': 3.23.0
       lunr: 2.3.9
-      markdown-it: 14.2.0
+      markdown-it: 14.3.0
       minimatch: 10.2.5
       typescript: 5.9.3
       yaml: 2.9.0
@@ -29831,7 +29791,7 @@ snapshots:
       opener: 1.5.2
       picocolors: 1.1.1
       sirv: 3.0.2
-      ws: 8.21.0
+      ws: 8.21.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -29851,8 +29811,6 @@ snapshots:
       ansi-html-community: 0.0.8
       html-entities: 2.6.0
       strip-ansi: 6.0.1
-
-  webpack-sources@3.5.0: {}
 
   webpack-sources@3.5.1: {}
 

@@ -15,11 +15,9 @@ export async function GET(request: Request) {
   dm.disable()
 
   /**
-   * `dm.disable()` emits the deletion cookie with `sameSite=Lax`, which
-   * browsers reject in the cross-origin Strapi admin iframe — the same
-   * shortcoming `/api/preview` works around. Re-set the deletion with
-   * `sameSite=None` so exiting works from the iframe too (later `.set()`
-   * calls for the same cookie name override earlier pending ones).
+   * Re-set the deletion with the same attributes `/api/preview` uses.
+   * A partitioned cookie is only cleared by a deletion that is also
+   * `SameSite=None`, `Secure`, and `Partitioned`.
    */
   const cookieStore = await cookies()
   cookieStore.set({
@@ -30,6 +28,7 @@ export async function GET(request: Request) {
     path: "/",
     secure: true,
     sameSite: "none",
+    partitioned: true,
   })
 
   return NextResponse.redirect(resolveRedirectTarget(request))

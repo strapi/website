@@ -39,7 +39,7 @@
     "@strapi/plugin-color-picker": "5.52.2",
     "@strapi/plugin-sentry": "5.52.2",
     "@strapi/plugin-users-permissions": "5.52.2",
-    "@strapi/strapi": "5.52.2",
+    "@strapi/strapi": "catalog:",
     "@strapi/utils": "5.52.2",
     "jsonwebtoken": "9.0.3",
     "lodash": "catalog:",

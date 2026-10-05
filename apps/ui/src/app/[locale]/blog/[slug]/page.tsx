@@ -2,7 +2,11 @@ import type { Locale } from "next-intl"
 import { use } from "react"
 
 import { StrapiBlogPostView } from "@/components/layouts/StrapiBlogPostView"
-import { createFallbackPath, debugStaticParams } from "@/lib/build"
+import {
+  createFallbackPath,
+  debugStaticParams,
+  withExportFallback,
+} from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
 import { getBlogPostMetadata } from "@/lib/metadata"
 import { fetchAllBlogPosts } from "@/lib/strapi-api/content/server"
@@ -36,7 +40,7 @@ export async function generateStaticParams({
     slug: "fallback",
   })
 
-  return params.length > 0 ? params : [fallbackPath]
+  return withExportFallback(params, fallbackPath)
 }
 
 export async function generateMetadata(

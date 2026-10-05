@@ -1,7 +1,11 @@
 import type { Locale } from "next-intl"
 
 import { CaseStudyView } from "@/components/case-study/CaseStudyView"
-import { createFallbackPath, debugStaticParams } from "@/lib/build"
+import {
+  createFallbackPath,
+  debugStaticParams,
+  withExportFallback,
+} from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
 import { getCaseStudyMetadata } from "@/lib/metadata"
 import { fetchAllCaseStudies } from "@/lib/strapi-api/content/server"
@@ -37,7 +41,7 @@ export async function generateStaticParams({
     slug: "fallback",
   })
 
-  return params.length > 0 ? params : [fallbackPath]
+  return withExportFallback(params, fallbackPath)
 }
 
 interface RouteProps {

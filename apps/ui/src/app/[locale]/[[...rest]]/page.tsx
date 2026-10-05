@@ -3,7 +3,11 @@ import type { Locale } from "next-intl"
 import { use } from "react"
 
 import { StrapiPageView } from "@/components/layouts/StrapiPageView"
-import { createFallbackPath, debugStaticParams } from "@/lib/build"
+import {
+  createFallbackPath,
+  debugStaticParams,
+  withExportFallback,
+} from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
 import { getMetadataFromStrapi } from "@/lib/metadata"
 import { fetchAllPages } from "@/lib/strapi-api/content/server"
@@ -49,7 +53,7 @@ export async function generateStaticParams({
     rest: ["fallback"],
   })
 
-  return params.length > 0 ? params : [fallbackPath]
+  return withExportFallback(params, fallbackPath)
 }
 
 export async function generateMetadata(

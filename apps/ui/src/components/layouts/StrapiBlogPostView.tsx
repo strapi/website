@@ -126,7 +126,10 @@ export function StrapiBlogPostView({ params }: Props) {
               <div className="relative">
                 {/* With a side column the ToC becomes a real column in the
                     row, so all four tracks line up on the site grid. Without
-                    one it keeps its original full-bleed absolute position. */}
+                    one it stays absolutely positioned in the left gutter.
+                    13rem matches that column. 50vw-28rem is the space beside
+                    the centered max-w-216 article, minus 1rem, so the list
+                    cannot paint into the article on a tight xl viewport. */}
                 <div
                   className={cn(
                     "mx-auto flex justify-center",
@@ -139,7 +142,7 @@ export function StrapiBlogPostView({ params }: Props) {
                         "hidden h-full",
                         hasSidebar
                           ? "w-52 shrink-0 xl:block"
-                          : "absolute top-0 left-0 xl:block"
+                          : "absolute top-0 left-0 w-[min(13rem,calc(50vw-28rem))] xl:block"
                       )}
                     >
                       <BlogTableOfContents headings={headings} />

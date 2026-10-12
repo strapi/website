@@ -1,11 +1,14 @@
-// The Strapi admin embeds the site in an iframe for live preview and posts a
-// `strapiUpdate` message when content changes. StrapiPreviewListener (apps/ui)
-// then calls router.refresh(), but only for messages from the Strapi origin.
+// The Strapi admin embeds the site in an iframe for live preview. Once
+// embedded, the site announces itself with a `previewReady` message, and the
+// admin posts `strapiUpdate` when content changes. StrapiPreviewListener
+// (apps/ui) then calls router.refresh(), but only for messages from the
+// Strapi origin.
 // The admin window is stubbed with a route-fulfilled page, so no real Strapi
 // admin is needed.
 import type { Page, Request } from "@playwright/test"
 
 import { expect, mockTest as test } from "../../helpers/fixtures"
+import { waitForHydration } from "../../helpers/hydration"
 
 // Must match STRAPI_URL of the app under test
 const STRAPI_URL = process.env.STRAPI_URL
@@ -37,15 +40,22 @@ async function openInAdminWindow(
   await page.route(adminUrl, (route) =>
     route.fulfill({
       contentType: "text/html",
-      body: `<!doctype html><iframe id="preview" src="${previewUrl}" style="width:1280px;height:800px;border:0"></iframe>`,
+      // Records the messages the embedded site sends to the admin window
+      body: `<!doctype html>
+        <script>
+          window.receivedMessages = []
+          window.addEventListener("message", (event) => {
+            window.receivedMessages.push(event.data?.type)
+          })
+        </script>
+        <iframe id="preview" src="${previewUrl}" style="width:1280px;height:800px;border:0"></iframe>`,
     })
   )
 
   await page.goto(adminUrl)
   await expect(page.frameLocator("#preview").getByRole("main")).toBeVisible()
 
-  // The message listener is attached once React hydrates, which is when it
-  // adds its internal fiber key to <body> (rendered by the app's layout)
+  // The message listener is attached once the app hydrates
   const iframe = await page.locator("#preview").elementHandle()
   const frame = await iframe?.contentFrame()
 
@@ -53,9 +63,7 @@ async function openInAdminWindow(
     throw new Error("Preview iframe has no frame")
   }
 
-  await frame.waitForFunction(() =>
-    Object.keys(document.body).some((key) => key.startsWith("__reactFiber"))
-  )
+  await waitForHydration(frame)
 }
 
 async function postStrapiUpdate(page: Page) {
@@ -78,6 +86,22 @@ test.describe("Strapi preview — mocked admin window", () => {
     if (browserName === "chromium") {
       await context.grantPermissions(["local-network-access"])
     }
+  })
+
+  test("announces itself to the Strapi admin window", async ({
+    page,
+    baseURL,
+  }) => {
+    const previewUrl = new URL(PREVIEW_PATH, baseURL).href
+    await openInAdminWindow(page, new URL(STRAPI_URL!).origin, previewUrl)
+
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => (window as { receivedMessages?: string[] }).receivedMessages
+        )
+      )
+      .toContain("previewReady")
   })
 
   test("refreshes the page on an update message from Strapi", async ({

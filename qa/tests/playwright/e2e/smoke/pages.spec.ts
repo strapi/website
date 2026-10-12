@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
 
 import { flattenUrls } from "../../helpers/flatten-urls"
+import { collectPageErrors } from "../../helpers/page-errors"
 import { ContentPage } from "../../helpers/pages/ContentPage"
 
 import urls from "../../helpers/urls.json"
@@ -11,28 +12,8 @@ const TEMPLATES = Object.entries(urls.templates).map(([name, paths]) => ({
   paths: flattenUrls(paths),
 }))
 
-// Browser errors that don't break the page, so they don't fail the test.
-// They're still listed as a warning on the test in the report.
-const IGNORED_PAGE_ERRORS = [
-  // Hydration mismatch - React recovers by re-rendering on the client
-  /Minified React error #418/,
-]
-
 async function expectPageRenders(page: Page, path: string) {
-  // Uncaught exceptions in the browser (e.g. a crashing client component)
-  const pageErrors: string[] = []
-  page.on("pageerror", (error) => {
-    if (IGNORED_PAGE_ERRORS.some((pattern) => pattern.test(error.message))) {
-      test.info().annotations.push({
-        type: "warning",
-        description: `Ignored browser error on ${path}: ${error.message}`,
-      })
-
-      return
-    }
-
-    pageErrors.push(error.message)
-  })
+  const pageErrors = collectPageErrors(page)
 
   const contentPage = new ContentPage(page)
   const response = await contentPage.goTo(path)

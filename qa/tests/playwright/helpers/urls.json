@@ -57,6 +57,32 @@
       "prod": ["/solutions/corporate-website-cms"]
     }
   },
+  "legal": {
+    "dev": [
+      "/terms-of-use",
+      "/privacy",
+      "/enterprise-terms",
+      "/ai-terms",
+      "/cloud-legal",
+      "/strapi-reseller-agreement"
+    ],
+    "staging": [
+      "/terms-of-use",
+      "/privacy",
+      "/enterprise-terms",
+      "/ai-terms",
+      "/cloud-legal",
+      "/strapi-reseller-agreement"
+    ],
+    "prod": [
+      "/terms-of-use",
+      "/privacy",
+      "/enterprise-terms",
+      "/ai-terms",
+      "/cloud-legal",
+      "/strapi-reseller-agreement"
+    ]
+  },
   "seo": {
     "staging": ["/"],
     "prod": ["/"]

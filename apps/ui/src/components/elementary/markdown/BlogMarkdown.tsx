@@ -21,7 +21,7 @@ const blogComponents: Partial<Components> = {
   h2: ({ children }) => (
     <h2
       id={headingId(children)}
-      className="text-foreground mt-12 mb-5 scroll-mt-24 text-2xl leading-tight font-bold tracking-tight sm:mt-17 sm:mb-7 sm:text-3xl"
+      className="text-foreground mt-12 mb-5 scroll-mt-(--blog-header-offset,6rem) text-2xl leading-tight font-bold tracking-tight sm:mt-17 sm:mb-7 sm:text-3xl"
     >
       {children}
     </h2>
@@ -30,7 +30,7 @@ const blogComponents: Partial<Components> = {
   h3: ({ children }) => (
     <h3
       id={headingId(children)}
-      className="text-foreground mb-6 scroll-mt-24 text-xl leading-tight font-bold tracking-tight sm:mb-8 sm:text-2xl"
+      className="text-foreground mb-6 scroll-mt-(--blog-header-offset,6rem) text-xl leading-tight font-bold tracking-tight sm:mb-8 sm:text-2xl"
     >
       {children}
     </h3>

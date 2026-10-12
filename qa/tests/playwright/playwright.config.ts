@@ -1,8 +1,10 @@
 import fs from "node:fs"
 import path from "node:path"
 
-import { defineConfig, devices } from "@playwright/test"
+import { defineConfig, devices, type Project } from "@playwright/test"
 import dotenv from "dotenv"
+
+import { cookieConsentStorageState } from "./helpers/cookie-consent"
 
 const envPath = path.resolve(__dirname, ".env")
 if (fs.existsSync(envPath)) {
@@ -12,7 +14,7 @@ if (fs.existsSync(envPath)) {
 const mobileViewportsEnabled =
   process.env.MOBILE_VIEWPORTS_TESTING_ENABLED === "true"
 
-const projects: any[] = [
+const baseProjects: Project[] = [
   {
     name: "chromium",
     use: { ...devices["Desktop Chrome"] },
@@ -23,47 +25,111 @@ const projects: any[] = [
   },
   {
     name: "webkit",
-    use: { ...devices["Desktop Safari"] },
+    use: {
+      ...devices["Desktop Safari"],
+      // Desktop Safari defaults to deviceScaleFactor: 2, overriding to match Chromium/Firefox
+      deviceScaleFactor: 1,
+    },
   },
 ]
 
-if (mobileViewportsEnabled) {
-  projects.push(
-    // Android
-    {
-      name: "Mobile Chrome (Pixel 7)",
-      use: { ...devices["Pixel 7"] },
-    },
-    // iOS
-    {
-      name: "Mobile Safari (iPhone 15)",
-      use: { ...devices["iPhone 15"] },
-    }
-  )
-}
+const mobileProjects: Project[] = mobileViewportsEnabled
+  ? [
+      // Android
+      {
+        name: "Mobile Chrome (Pixel 7)",
+        use: { ...devices["Pixel 7"] },
+      },
+      // iOS
+      {
+        name: "Mobile Safari (iPhone 15)",
+        use: { ...devices["iPhone 15"] },
+      },
+    ]
+  : []
 
-projects.push({
-  name: "seo",
-  testMatch: ["seo/**/*.spec.ts"],
-  retries: 0,
-  use: {
-    ...devices["Desktop Chrome"],
-    trace: "off",
-    screenshot: "off",
-    video: "off",
+const specializedProjects: Project[] = [
+  {
+    name: "visual-chromium",
+    testMatch: ["visual/**/*.spec.ts"],
+    retries: 0,
+    use: {
+      ...devices["Desktop Chrome"],
+      trace: "off",
+      video: "off",
+      screenshot: "off",
+    },
   },
-})
+  {
+    name: "visual-firefox",
+    testMatch: ["visual/**/*.spec.ts"],
+    retries: 0,
+    use: {
+      ...devices["Desktop Firefox"],
+      trace: "off",
+      video: "off",
+      screenshot: "off",
+    },
+  },
+  {
+    name: "visual-webkit",
+    testMatch: ["visual/**/*.spec.ts"],
+    retries: 0,
+    use: {
+      ...devices["Desktop Safari"],
+      deviceScaleFactor: 1,
+      trace: "off",
+      video: "off",
+      screenshot: "off",
+    },
+  },
+  {
+    name: "seo",
+    testMatch: ["seo/**/*.spec.ts"],
+    retries: 1,
+    use: {
+      ...devices["Desktop Chrome"],
+      trace: "off",
+      screenshot: "off",
+      video: "off",
+    },
+  },
+  {
+    name: "axe",
+    testMatch: ["axe/**/*.spec.ts"],
+    workers: 1,
+    retries: 1,
+    use: {
+      ...devices["Desktop Chrome"],
+      trace: "off",
+      screenshot: "off",
+      video: "off",
+    },
+  },
+]
+
+// Browser projects run only e2e specs - axe, seo and visual have their own
+// projects above, so a plain `playwright test` doesn't run them per browser.
+const e2eProjects: Project[] = [...baseProjects, ...mobileProjects].map(
+  (project) => ({ ...project, testMatch: ["e2e/**/*.spec.ts"] })
+)
+
+const projects: Project[] = [...e2eProjects, ...specializedProjects]
 
 export default defineConfig({
   testDir: ".",
+  snapshotPathTemplate:
+    "{snapshotDir}/{testFileDir}/{testFileName}-snapshots/{platform}/{arg}{-projectName}{ext}",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 3 : undefined,
-  reporter: "html",
+  reporter: [["html", { open: process.env.CI ? "never" : "on-failure" }]],
 
   use: {
     baseURL: process.env.BASE_URL,
+    // Closes the cookie consent banner up front (necessary cookies only)
+    storageState: cookieConsentStorageState(process.env.BASE_URL),
 
     // Uncomment if credentials are needed
     // httpCredentials: {
@@ -75,6 +141,5 @@ export default defineConfig({
     screenshot: "only-on-failure",
     video: "retain-on-failure",
   },
-
   projects,
 })

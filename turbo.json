@@ -92,7 +92,7 @@
       "dependsOn": ["^build"],
       "cache": true
     },
-    "axe-test": {
+    "playwright-axe-test": {
       "cache": false,
       "persistent": false
     },
@@ -101,6 +101,14 @@
       "persistent": false
     },
     "playwright-e2e-tests": {
+      "cache": false,
+      "persistent": false
+    },
+    "playwright-e2e-smoke-tests": {
+      "cache": false,
+      "persistent": false
+    },
+    "playwright-e2e-mock-tests": {
       "cache": false,
       "persistent": false
     },
@@ -113,6 +121,18 @@
       "persistent": false
     },
     "playwright-visual-tests": {
+      "cache": false,
+      "persistent": false
+    },
+    "playwright-visual-update-tests": {
+      "cache": false,
+      "persistent": false
+    },
+    "playwright-visual-tests-docker": {
+      "cache": false,
+      "persistent": false
+    },
+    "playwright-visual-update-snapshots-docker": {
       "cache": false,
       "persistent": false
     }

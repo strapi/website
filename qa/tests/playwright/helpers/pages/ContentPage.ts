@@ -1,5 +1,7 @@
 import type { Locator, Page } from "@playwright/test"
 
+import { waitForHydration } from "../hydration"
+
 /**
  * Any page rendered by the catch-all page route (`[[...rest]]`) from a Strapi
  * `page` entry. Main pages and template pages (blog posts, user stories, ...)
@@ -20,7 +22,7 @@ export class ContentPage {
     const response = await this.page.goto(path, {
       waitUntil: "domcontentloaded",
     })
-    await this.page.waitForLoadState("networkidle")
+    await waitForHydration(this.page)
 
     return response
   }

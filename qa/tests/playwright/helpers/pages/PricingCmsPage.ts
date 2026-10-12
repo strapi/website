@@ -5,7 +5,7 @@ import { waitForElementHydration, waitForHydration } from "../hydration"
 export class PricingCmsPage {
   private readonly page: Page
 
-  readonly growthBuyNowButton: Locator
+  readonly growthCheckoutButton: Locator
   readonly checkoutDialog: Locator
   readonly seatCountInput: Locator
   readonly increaseSeatsButton: Locator
@@ -18,10 +18,11 @@ export class PricingCmsPage {
   constructor(page: Page) {
     this.page = page
 
-    // Growth is the only plan whose CTA opens the checkout dialog
-    this.growthBuyNowButton = page
+    // Growth is the only plan whose CTA opens the checkout dialog. Matched by
+    // that, as the "Buy now" label is editable in the CMS.
+    this.growthCheckoutButton = page
       .getByRole("main")
-      .getByRole("button", { name: "Buy now", exact: true })
+      .locator('button[aria-haspopup="dialog"]')
     this.checkoutDialog = page.getByRole("dialog", {
       name: "Add seats to your plan",
     })
@@ -54,8 +55,6 @@ export class PricingCmsPage {
     const response = await this.page.goto("/pricing-cms", {
       waitUntil: "domcontentloaded",
     })
-    // The page keeps loading in the background and never reaches
-    // "networkidle" - the checkout dialog only needs the page to be hydrated
     await waitForHydration(this.page)
 
     return response
@@ -63,8 +62,8 @@ export class PricingCmsPage {
 
   async openGrowthCheckout() {
     // The pricing cards hydrate later than the rest of the page
-    await waitForElementHydration(this.growthBuyNowButton)
-    await this.growthBuyNowButton.click()
+    await waitForElementHydration(this.growthCheckoutButton)
+    await this.growthCheckoutButton.click()
   }
 
   async addSeat() {

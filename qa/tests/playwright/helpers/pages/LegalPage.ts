@@ -1,5 +1,7 @@
 import type { Locator, Page } from "@playwright/test"
 
+import { waitForHydration } from "../hydration"
+
 /**
  * Legal pages (terms, privacy, agreements, ...): long-form text split into
  * sections. The page title is the first heading - some pages use an <h2> for
@@ -25,7 +27,7 @@ export class LegalPage {
     const response = await this.page.goto(path, {
       waitUntil: "domcontentloaded",
     })
-    await this.page.waitForLoadState("networkidle")
+    await waitForHydration(this.page)
 
     return response
   }

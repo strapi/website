@@ -41,11 +41,12 @@ qa/
 
 ```json
 {
-  "smoke": { "dev": ["/", "/pricing"], "staging": [...], "prod": [...] },
+  "smoke": { "dev": ["/", "/pricing-cloud"], "staging": [...], "prod": [...] },
   "templates": {
     "blog-post": { "dev": ["/blog/..."], "staging": [...], "prod": [...] },
     "user-story": { "dev": ["/user-stories/airbus"], "staging": [...], "prod": [...] }
   },
+  "legal": { "dev": ["/terms-of-use", "/privacy"], "staging": [...], "prod": [...] },
   "seo": { "dev": ["/"], "staging": ["/"], "prod": ["/"] },
   "axe": { "dev": ["/"], "staging": ["/"], "prod": ["/"] },
   "visual": { "dev": ["/"], "staging": ["/"], "prod": ["/"] },
@@ -55,18 +56,35 @@ qa/
 
 Each suite gets its full page list (every environment, deduped) via `helpers/flatten-urls.ts`. To cover a new page, add it to the right suite's list. It's picked up automatically, no spec changes needed.
 
-`smoke` lists the main pages and `templates` holds one example page per page template (blog post, blog category, user story, feature, solution). Both are used by `e2e/smoke/pages.spec.ts`. When a template example is removed from the CMS, replace it with another page of the same template.
-
-Leave out pages that redirect to `community.strapi.io` (e.g. `/integrations`). They aren't served by this repo.
+- `smoke`: main pages, `templates`: one example page per page template (blog post, blog category, user story, feature, solution). Both are used by `e2e/smoke/pages.spec.ts`. When a template example is removed from the CMS, replace it with another page of the same template.
+- `legal`: legal pages, checked in detail by `e2e/smoke/legal.spec.ts`.
+- Use the final URL of a page, not one that redirects (e.g. `/pricing-cloud`, not `/pricing`). Leave out pages that redirect to `community.strapi.io` (e.g. `/integrations`) - they aren't served by this repo.
 
 ### E2E: smoke vs mock
 
 Both kinds share the same page objects from `helpers/pages/` (one Page Object Model class per page).
 
-- **`e2e/smoke/`**: drives a real browser against the real running app and its real backend. Kept small and critical-path: does the page load, does the core flow complete. `pages.spec.ts` checks that every main and template page returns a non-error status, renders its main content, and throws no uncaught browser errors (e.g. a crashing client component). Errors that don't break the page, like React hydration mismatches (#418), are listed in `IGNORED_PAGE_ERRORS` in the spec. They don't fail the test, but show up as a warning on it in the HTML report. The navbar and footer aren't checked there, because some pages intentionally have a different one or none. `homepage.spec.ts` checks the main navbar (visible, with links) and the main footer on the homepage instead.
-- **`e2e/mock/`**: drives the browser the same way, but stubs network responses with [Playwright's route mocking](https://playwright.dev/docs/mock) via the `mockTest` fixture in `helpers/fixtures.ts`. Use it for backend states that are hard to reproduce for real (a specific error response, a dropped connection).
-  - `media-fallback.spec.ts`: Strapi images respond with 404, and the page must show the fallback image (`ImageWithFallback`) instead of broken images.
-  - `preview-refresh.spec.ts`: a stubbed Strapi admin window embeds the page in an iframe and posts a `strapiUpdate` message. The page must refresh when the message comes from the Strapi origin, and ignore it from any other origin. Needs `STRAPI_URL` (see below), otherwise it's skipped.
+**`e2e/smoke/`** drives a real browser against the real running app and its real backend:
+
+- `pages.spec.ts`: every main and template page returns a non-error status, renders its main content, and throws no uncaught browser errors (e.g. a crashing client component). The navbar and footer aren't checked here, because some pages intentionally have a different one or none.
+- `homepage.spec.ts`: the main navbar (with links) and the main footer.
+- `blog.spec.ts`: category navigation, the featured post, the post list (each post with a title and a publish date), "Load More Articles" and opening a post.
+- `pricing-cloud.spec.ts`: plan cards with sign-up links, the comparison table, the monthly/yearly billing switch.
+- `pricing-cms.spec.ts`: the Growth checkout dialog - seats, totals, the SSO add-on, cancelling.
+- `legal.spec.ts`: each legal page has a title, the full text (word count, sections, paragraphs), no placeholders, and a valid effective date if it states one.
+
+**`e2e/mock/`** drives the browser the same way, but stubs network responses with [Playwright's route mocking](https://playwright.dev/docs/mock). Use it for backend states that are hard to reproduce for real. Mock specs import `mockTest as test` from `helpers/fixtures.ts`.
+
+- `media-failure.spec.ts`: every image request returns 404 - the page must still render and not crash.
+- `pricing-checkout.spec.ts`: Chargebee's hosted checkout is stubbed, so no real checkout session is opened. Checks the plan, extra seats and SSO the app sends to Chargebee.
+- `preview-refresh.spec.ts`: a stubbed Strapi admin window embeds the page in an iframe. The page must announce itself (`previewReady`), refresh on a `strapiUpdate` message from the Strapi origin, and ignore it from any other origin. Needs `STRAPI_URL` (see below), otherwise it's skipped.
+
+### Writing tests
+
+- **Don't assert CMS-managed content.** Page copy, blog posts, prices, legal texts and button labels set in Strapi change often. Check the shape instead (counts, formats, "not empty"), and locate CMS-labelled elements by role or target, not by their text. UI copy from `apps/ui/locales/en.json` is fine to use.
+- **Wait for hydration, not "networkidle".** Deployed pages keep loading in the background (analytics, polling), so they may never reach "networkidle". Page objects wait with `waitForHydration` (`helpers/hydration.ts`) instead. Parts of a page can hydrate later than the rest - before clicking those, wait with `waitForElementHydration`, otherwise the click does nothing.
+- **Known non-breaking browser errors** (e.g. React hydration mismatches, #418) are listed in `helpers/page-errors.ts`. They don't fail tests, but show up as a warning on the test in the HTML report.
+- **The cookie consent banner** is closed up front: `playwright.config.ts` sets Cookiebot's consent cookie (necessary cookies only) for the `BASE_URL` host via `helpers/cookie-consent.ts`.
 
 ---
 

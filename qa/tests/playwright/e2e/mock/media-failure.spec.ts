@@ -3,11 +3,14 @@
 // crash. A failing media host isn't something a real environment produces on
 // demand, so every image request is stubbed with a 404 here.
 import { expect, mockTest as test } from "../../helpers/fixtures"
+import { flattenUrls } from "../../helpers/flatten-urls"
 import { collectPageErrors } from "../../helpers/page-errors"
 import { ContentPage } from "../../helpers/pages/ContentPage"
 
+import urls from "../../helpers/urls.json"
+
 // Pages that render Strapi images in their main content
-const PATHS = ["/", "/user-stories/airbus"]
+const PATHS = ["/", ...flattenUrls(urls.templates["user-story"])]
 
 test.describe("Media — mocked failing asset responses", () => {
   for (const path of PATHS) {

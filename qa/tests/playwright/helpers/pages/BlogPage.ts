@@ -1,5 +1,7 @@
 import type { Locator, Page } from "@playwright/test"
 
+import { waitForElementHydration, waitForHydration } from "../hydration"
+
 export class BlogPage {
   private readonly page: Page
 
@@ -40,7 +42,7 @@ export class BlogPage {
     const response = await this.page.goto("/blog", {
       waitUntil: "domcontentloaded",
     })
-    await this.page.waitForLoadState("networkidle")
+    await waitForHydration(this.page)
 
     return response
   }
@@ -54,6 +56,8 @@ export class BlogPage {
   }
 
   async loadMorePosts() {
+    // The post list is a client component and can hydrate after the page
+    await waitForElementHydration(this.loadMoreButton)
     await this.loadMoreButton.click()
   }
 

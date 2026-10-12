@@ -33,8 +33,8 @@ Before writing, read **one existing test in the same layer** to mirror style:
 
 - UI unit ref: `apps/ui/src/lib/__tests__/dates.test.ts`
 - Strapi ref: `apps/strapi/tests/app.test.ts` (boots Strapi via `tests/helpers/strapi.ts`)
-- Playwright e2e/smoke ref: `qa/tests/playwright/e2e/smoke/pages.spec.ts` (page object: `helpers/pages/ContentPage.ts`)
-- Playwright e2e/mock ref: `qa/tests/playwright/e2e/mock/media-fallback.spec.ts` (route stubbing), `preview-refresh.spec.ts` (stubbed cross-origin window)
+- Playwright e2e/smoke ref: `qa/tests/playwright/e2e/smoke/pricing-cms.spec.ts` (page object with interactions: `helpers/pages/PricingCmsPage.ts`), `pages.spec.ts` (one check across a page list from `urls.json`)
+- Playwright e2e/mock ref: `qa/tests/playwright/e2e/mock/pricing-checkout.spec.ts` (stubbed third-party page), `media-failure.spec.ts` (stubbed failing requests), `preview-refresh.spec.ts` (stubbed cross-origin window)
 - Playwright visual ref: `qa/tests/playwright/visual/visual.spec.ts`
 - Playwright axe ref: `qa/tests/playwright/axe/axe.spec.ts`
 - Playwright seo ref: `qa/tests/playwright/seo/seo.spec.ts`
@@ -89,12 +89,20 @@ export class ExamplePage {
     const response = await this.page.goto("/example", {
       waitUntil: "domcontentloaded",
     })
-    await this.page.waitForLoadState("networkidle")
+    await waitForHydration(this.page)
 
     return response
   }
+
+  async editFoo() {
+    // Parts of the page can hydrate later than the rest
+    await waitForElementHydration(this.editFooButton)
+    await this.editFooButton.click()
+  }
 }
 ```
+
+The template imports `waitForElementHydration` and `waitForHydration` from `../hydration`.
 
 Rules:
 
@@ -103,6 +111,9 @@ Rules:
 - Dialog locators are scoped: `page.getByRole("dialog").getByRole(...)`, never a bare `page.getByRole(...)` that could match content behind the dialog.
 - POM classes do NOT import `expect` and do NOT define assertion methods — they only expose locators and navigation/interaction methods. Assertions live in the spec.
 - `goTo()` returns the navigation `Response` when the spec needs to assert on it (e.g. a smoke test checking `response?.ok()`); otherwise it can return `void`.
+- `goTo()` waits with `waitForHydration` (`helpers/hydration.ts`), never `waitForLoadState("networkidle")` — deployed pages keep loading in the background (analytics, polling) and may never reach it. Before clicking a client-side control that can hydrate later than the page (dialogs, toggles, "Load more"), wait with `waitForElementHydration` — a click before hydration does nothing.
+- **Don't locate or assert CMS-managed content.** Page copy, blog posts, prices, legal texts and button labels set in Strapi change often. Locate CMS-labelled elements by role, attribute or target (e.g. `button[aria-haspopup="dialog"]`, `a[href*="plan="]`), and assert the shape (counts, formats, not empty), not the wording. UI copy from `apps/ui/locales/en.json` is fine to use. Comment why when a locator isn't role-based.
+- In specs, check "at least one" with `not.toHaveCount(0)` (or loop over `.all()` to check every item) instead of a raw `.first()`.
 
 #### Spec file template — smoke
 
@@ -162,6 +173,8 @@ test.describe("Example page — mocked backend", () => {
 
 Set up the route mock **before** navigating/triggering the request it intercepts — a mock registered after the request has already fired does nothing.
 
+To check uncaught browser errors on a page, use `collectPageErrors(page)` from `helpers/page-errors.ts` (call it before navigating, assert the returned array is empty at the end). Known non-breaking errors (e.g. React hydration mismatches) are ignored there and reported as a warning.
+
 #### Checklist when adding a new e2e page
 
 1. Create `qa/tests/playwright/helpers/pages/<Page>Page.ts` with locators + a `goTo()` method. One POM, reused by both its smoke and mock specs.
@@ -172,7 +185,7 @@ Set up the route mock **before** navigating/triggering the request it intercepts
 
 ### Playwright — visual, axe, seo
 
-- **Page lists**: all three (and Lighthouse) read their paths from `qa/tests/playwright/helpers/urls.json`, keyed by suite and environment (`seo`/`axe`/`visual`/`perfo` → `dev`/`staging`/`prod`). The page smoke spec reads `smoke` (main pages) and `templates` (one example per page template). To cover a new page, add it there — no spec change needed.
+- **Page lists**: all three (and Lighthouse) read their paths from `qa/tests/playwright/helpers/urls.json`, keyed by suite and environment (`seo`/`axe`/`visual`/`perfo` → `dev`/`staging`/`prod`). The page smoke spec reads `smoke` (main pages) and `templates` (one example per page template), the legal spec reads `legal`. To cover a new page, add it there — no spec change needed. Never hardcode content paths (a blog post, a user story) in a spec — take them from `urls.json`.
 - **Visual**: if no baseline snapshot exists yet for a page/browser combination, the spec creates one and skips comparison for that run instead of failing — inspect a newly created baseline before committing it. Update existing baselines only when the change is intentional: `pnpm tests:playwright:visual:update` (local OS) or `pnpm tests:playwright:visual:docker:update` (Linux, commit-ready — matches what CI compares against).
 - **Axe**: add per-page exceptions via `GLOBAL_WARNING_RULE_IDS` / `PATH_CONFIGS` in `axe.spec.ts` rather than skipping a page outright — a known, unfixable violation becomes a warning, not a silent gap.
 - **SEO**: mirror `seo.spec.ts`'s per-page `test.describe` blocks (Title, Meta description, Robots, Canonical, H1, Heading hierarchy, Structured data, Open Graph, hreflang). Production-only checks gate on `isProductionBaseUrl()` (strapi.io).

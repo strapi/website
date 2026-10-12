@@ -1,5 +1,7 @@
 import type { Locator, Page } from "@playwright/test"
 
+import { waitForHydration } from "../hydration"
+
 export class HomePage {
   private readonly page: Page
 
@@ -9,8 +11,9 @@ export class HomePage {
 
   constructor(page: Page) {
     this.page = page
-    // The footer has its own nested <nav>, which isn't the main navbar
-    this.navbar = page.locator("nav:not(footer nav)").first()
+    // The page has several unnamed <nav> landmarks (e.g. one in the footer) -
+    // the main navbar is marked with the app's own data-navbar attribute
+    this.navbar = page.locator("nav[data-navbar]")
     // Desktop and mobile navbars are both rendered, one is hidden by CSS
     this.navbarLinks = this.navbar.getByRole("link").filter({ visible: true })
     this.footer = page.getByRole("contentinfo")
@@ -20,7 +23,7 @@ export class HomePage {
     const response = await this.page.goto("/", {
       waitUntil: "domcontentloaded",
     })
-    await this.page.waitForLoadState("networkidle")
+    await waitForHydration(this.page)
 
     return response
   }

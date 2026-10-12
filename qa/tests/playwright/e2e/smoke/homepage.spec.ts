@@ -14,7 +14,7 @@ test.describe("Homepage layout", () => {
 
   test("shows the main navbar with links", async () => {
     await expect(homePage.navbar).toBeVisible()
-    await expect(homePage.navbarLinks.first()).toBeVisible()
+    await expect(homePage.navbarLinks).not.toHaveCount(0)
   })
 
   test("shows the main footer", async () => {

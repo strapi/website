@@ -18,7 +18,7 @@ test.describe("Blog page", () => {
 
   test("shows the category navigation", async () => {
     await expect(blogPage.categoryNavigation).toBeVisible()
-    await expect(blogPage.categoryLinks.first()).toBeVisible()
+    await expect(blogPage.categoryLinks).not.toHaveCount(0)
   })
 
   test("shows the featured post", async () => {

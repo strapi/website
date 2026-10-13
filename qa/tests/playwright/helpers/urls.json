@@ -58,14 +58,6 @@
     }
   },
   "legal": {
-    "dev": [
-      "/terms-of-use",
-      "/privacy",
-      "/enterprise-terms",
-      "/ai-terms",
-      "/cloud-legal",
-      "/strapi-reseller-agreement"
-    ],
     "staging": [
       "/terms-of-use",
       "/privacy",
@@ -84,12 +76,56 @@
     ]
   },
   "seo": {
-    "staging": ["/"],
-    "prod": ["/"]
+    "staging": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ]
   },
   "axe": {
-    "staging": ["/"],
-    "prod": ["/"]
+    "staging": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ]
   },
   "visual": {
     "staging": ["/"],

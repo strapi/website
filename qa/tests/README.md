@@ -37,20 +37,20 @@ qa/
 
 ### Page lists per environment
 
-`helpers/urls.json` holds the pages each suite checks, split by environment:
+`helpers/urls.json` holds the pages each suite checks, split by environment (`staging`, `prod`):
 
 ```json
 {
-  "smoke": { "dev": ["/", "/pricing-cloud"], "staging": [...], "prod": [...] },
+  "smoke": { "staging": ["/", "/pricing-cloud", "..."], "prod": ["..."] },
   "templates": {
-    "blog-post": { "dev": ["/blog/..."], "staging": [...], "prod": [...] },
-    "user-story": { "dev": ["/user-stories/airbus"], "staging": [...], "prod": [...] }
+    "blog-post": { "staging": ["/blog/..."], "prod": ["..."] },
+    "user-story": { "staging": ["/user-stories/airbus"], "prod": ["..."] }
   },
-  "legal": { "dev": ["/terms-of-use", "/privacy"], "staging": [...], "prod": [...] },
-  "seo": { "dev": ["/"], "staging": ["/"], "prod": ["/"] },
-  "axe": { "dev": ["/"], "staging": ["/"], "prod": ["/"] },
-  "visual": { "dev": ["/"], "staging": ["/"], "prod": ["/"] },
-  "perfo": { "dev": ["/"], "staging": ["/"], "prod": ["/"] }
+  "legal": { "staging": ["/terms-of-use", "/privacy", "..."], "prod": ["..."] },
+  "seo": { "staging": ["/", "/pricing-cloud", "..."], "prod": ["..."] },
+  "axe": { "staging": ["/", "/pricing-cloud", "..."], "prod": ["..."] },
+  "visual": { "staging": ["/"], "prod": ["/"] },
+  "perfo": { "staging": ["/"], "prod": ["/"] }
 }
 ```
 

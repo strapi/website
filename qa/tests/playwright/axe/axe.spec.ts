@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test"
 import type { AxeResults, Result } from "axe-core"
 
 import { flattenUrls } from "../helpers/flatten-urls"
+import { waitForHydration } from "../helpers/hydration"
 
 import urls from "../helpers/urls.json"
 
@@ -48,11 +49,18 @@ test.describe("AXE accessibility", () => {
         ...(config?.excludeSelectors ?? []),
       ]
 
-      await page.goto(site, {
+      const response = await page.goto(site, {
         waitUntil: "domcontentloaded",
         timeout: 20000,
       })
-      await page.waitForLoadState("networkidle")
+
+      // A blocked or broken response would be scanned instead of the page
+      expect(
+        response?.status(),
+        `Unexpected HTTP status for ${site} (final URL: ${page.url()})`
+      ).toBeLessThan(400)
+
+      await waitForHydration(page)
 
       const results: AxeResults = await excludeSelectors
         .reduce(

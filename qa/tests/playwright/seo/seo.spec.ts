@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
 
 import { flattenUrls } from "../helpers/flatten-urls"
+import { loadPageOnce } from "../helpers/shared-page"
 
 import urls from "../helpers/urls.json"
 
@@ -28,28 +29,36 @@ function normalizePath(url: string): string {
   }
 }
 
-async function expectAttrNonEmpty(page: Page, selector: string, attr: string) {
-  const el = page.locator(selector)
-  const count = await el.count()
-
-  if (count !== 1) {
-    const values = await el.evaluateAll((els) =>
-      els.map((e) => (e.getAttribute(attr) ?? "").trim())
+/** Expects exactly one element and returns its trimmed attribute value */
+async function getSingleAttribute(page: Page, selector: string, attr: string) {
+  const values = await page
+    .locator(selector)
+    .evaluateAll(
+      (els, name) => els.map((e) => (e.getAttribute(name) ?? "").trim()),
+      attr
     )
 
-    throw new Error(
-      [
-        `${selector} count mismatch`,
-        `Expected: exactly 1`,
-        `Found: ${count}`,
-        `URL: ${page.url()}`,
-        `${attr} values found:`,
-        ...values.map((v, i) => `  ${i + 1}. "${v}"`),
-      ].join("\n")
-    )
-  }
+  expect(
+    values.length,
+    [
+      `${selector} count mismatch`,
+      "Expected: exactly 1",
+      `Found: ${values.length}`,
+      `URL: ${page.url()}`,
+      `${attr} values found:`,
+      ...values.map((v, i) => `  ${i + 1}. "${v}"`),
+    ].join("\n")
+  ).toBe(1)
 
-  const value = ((await el.first().getAttribute(attr)) ?? "").trim()
+  return values[0]
+}
+
+async function expectAttributeNonEmpty(
+  page: Page,
+  selector: string,
+  attr: string
+) {
+  const value = await getSingleAttribute(page, selector, attr)
 
   expect(
     value,
@@ -57,96 +66,104 @@ async function expectAttrNonEmpty(page: Page, selector: string, attr: string) {
       `${selector} attribute is empty`,
       `Attr: ${attr}`,
       `URL: ${page.url()}`,
-      `Current value: "${value}"`,
     ].join("\n")
   ).not.toBe("")
 }
 
-test.describe.configure({ mode: "parallel" })
+function expectLengthBetween(
+  value: string,
+  label: string,
+  min: number,
+  max: number,
+  url: string
+) {
+  const details = [`URL: ${url}`, `Current ${label}: "${value}"`]
+
+  expect(
+    value.length,
+    [`${label} is too short (min ${min} chars)`, ...details].join("\n")
+  ).toBeGreaterThanOrEqual(min)
+  expect(
+    value.length,
+    [`${label} is too long (max ${max} chars)`, ...details].join("\n")
+  ).toBeLessThanOrEqual(max)
+}
+
+/**
+ * Parses one JSON-LD script and returns its schemas. A @graph container has
+ * no @type itself - its items have one each, so they're returned instead.
+ */
+function getJsonLdSchemas(content: string) {
+  const data: unknown = JSON.parse(content)
+  const blocks = (Array.isArray(data) ? data : [data]) as Record<
+    string,
+    unknown
+  >[]
+
+  return blocks.map((block) => ({
+    context: block["@context"],
+    schemas: Array.isArray(block["@graph"])
+      ? (block["@graph"] as Record<string, unknown>[])
+      : [block],
+  }))
+}
+
+function getJsonLdContents(page: Page) {
+  return page.locator("script[type='application/ld+json']").allTextContents()
+}
+
+// Each page loads once for all of its checks (see loadPageOnce), in one worker
+test.describe.configure({ mode: "default" })
 
 for (const path of PATHS) {
   test.describe(`SEO checks on ${path}`, () => {
-    test.beforeEach(async ({ page }) => {
-      await page.goto(path, { waitUntil: "domcontentloaded" })
-      await page.waitForLoadState("networkidle")
-    })
+    const shared = loadPageOnce(path)
 
     test.describe("Title", () => {
-      test("should exist and be non-empty", async ({ page }) => {
-        const title = (await page.title()).trim()
+      test("should exist and be non-empty", async () => {
+        const title = (await shared.page.title()).trim()
 
         expect(
           title,
-          [
-            "Page title should not be empty",
-            `URL: ${page.url()}`,
-            `Current title: "${title}"`,
-          ].join("\n")
+          `Page title should not be empty\nURL: ${shared.page.url()}`
         ).not.toBe("")
       })
 
-      test("should have reasonable length (10–70 chars)", async ({ page }) => {
-        const title = (await page.title()).trim()
+      test("should have reasonable length (10–70 chars)", async () => {
+        const title = (await shared.page.title()).trim()
 
-        expect(
-          title.length,
-          [
-            "Page title is too short (min 10 chars)",
-            `URL: ${page.url()}`,
-            `Current title: "${title}"`,
-            `Length: ${title.length}`,
-          ].join("\n")
-        ).toBeGreaterThanOrEqual(10)
-
-        expect(
-          title.length,
-          [
-            "Page title is too long (max 70 chars)",
-            `URL: ${page.url()}`,
-            `Current title: "${title}"`,
-            `Length: ${title.length}`,
-          ].join("\n")
-        ).toBeLessThanOrEqual(70)
+        expectLengthBetween(title, "Page title", 10, 70, shared.page.url())
       })
     })
 
     test.describe("Meta description", () => {
-      test("should exist and be non-empty", async ({ page }) => {
-        await expectAttrNonEmpty(page, "meta[name='description']", "content")
+      test("should exist and be non-empty", async () => {
+        await expectAttributeNonEmpty(
+          shared.page,
+          "meta[name='description']",
+          "content"
+        )
       })
 
-      test("should have reasonable length (50–160 chars)", async ({ page }) => {
-        const content = (
-          (await page
-            .locator("meta[name='description']")
-            .first()
-            .getAttribute("content")) ?? ""
-        ).trim()
+      test("should have reasonable length (50–160 chars)", async () => {
+        const description = await getSingleAttribute(
+          shared.page,
+          "meta[name='description']",
+          "content"
+        )
 
-        expect(
-          content.length,
-          [
-            "Meta description is too short (min 50 chars)",
-            `URL: ${page.url()}`,
-            `Current description: "${content}"`,
-            `Length: ${content.length}`,
-          ].join("\n")
-        ).toBeGreaterThanOrEqual(50)
-
-        expect(
-          content.length,
-          [
-            "Meta description is too long (max 160 chars)",
-            `URL: ${page.url()}`,
-            `Current description: "${content}"`,
-            `Length: ${content.length}`,
-          ].join("\n")
-        ).toBeLessThanOrEqual(160)
+        expectLengthBetween(
+          description,
+          "Meta description",
+          50,
+          160,
+          shared.page.url()
+        )
       })
     })
 
     test.describe("Robots", () => {
-      test("should not have noindex directive", async ({ page }) => {
+      test("should not have noindex directive", async () => {
         const baseUrl = process.env.BASE_URL
 
         test.skip(
@@ -154,354 +171,259 @@ for (const path of PATHS) {
           "Robots noindex check runs only against production (strapi.io)"
         )
 
-        const robots = page.locator("meta[name='robots']")
+        const robots = await shared.page
+          .locator("meta[name='robots']")
+          .evaluateAll((els) =>
+            els.map((e) => (e.getAttribute("content") ?? "").toLowerCase())
+          )
 
-        if ((await robots.count()) === 0) {
-          return
+        for (const content of robots) {
+          expect(
+            content,
+            [
+              "robots meta must not contain noindex",
+              `URL: ${shared.page.url()}`,
+              `Content: "${content}"`,
+            ].join("\n")
+          ).not.toContain("noindex")
         }
-
-        const content = (
-          (await robots.first().getAttribute("content")) ?? ""
-        ).toLowerCase()
-
-        expect(
-          content,
-          [
-            "robots meta must not contain noindex",
-            `URL: ${page.url()}`,
-            `Content: "${content}"`,
-          ].join("\n")
-        ).not.toContain("noindex")
       })
     })
 
     test.describe("Canonical tag", () => {
-      test("should be present, absolute and reachable", async ({ page }) => {
-        const canonical = page.locator("link[rel='canonical']")
-        const count = await canonical.count()
-
-        if (count !== 1) {
-          const hrefs = await canonical.evaluateAll((els) =>
-            els.map((e) => (e.getAttribute("href") ?? "").trim())
-          )
-
-          throw new Error(
-            [
-              "link[rel='canonical'] count mismatch",
-              "Expected: exactly 1",
-              `Found: ${count}`,
-              `URL: ${page.url()}`,
-              "hrefs found:",
-              ...hrefs.map((h, i) => `  ${i + 1}. "${h}"`),
-            ].join("\n")
-          )
-        }
-
-        const href = (await canonical.first().getAttribute("href")) ?? ""
+      test("should be present, absolute and reachable", async () => {
+        const url = shared.page.url()
+        const href = await getSingleAttribute(
+          shared.page,
+          "link[rel='canonical']",
+          "href"
+        )
 
         expect(
           href,
           [
             "Canonical href must be absolute",
-            `URL: ${page.url()}`,
+            `URL: ${url}`,
             `Canonical href: "${href}"`,
           ].join("\n")
         ).toMatch(/^https?:\/\//)
 
-        const res = await page.request.get(href)
-        expect(
-          res.ok(),
-          [
-            "Canonical URL not reachable",
-            `URL: ${page.url()}`,
-            `Canonical href: "${href}"`,
-            `HTTP status: ${res.status()}`,
-          ].join("\n")
-        ).toBeTruthy()
+        // The current page already loaded fine - only fetch other targets
+        if (normalizePath(href) !== normalizePath(url)) {
+          const response = await shared.page.request.get(href)
+
+          expect(
+            response.ok(),
+            [
+              "Canonical URL not reachable",
+              `URL: ${url}`,
+              `Canonical href: "${href}"`,
+              `HTTP status: ${response.status()}`,
+            ].join("\n")
+          ).toBe(true)
+        }
       })
 
-      test("should self-reference the current page", async ({ page }) => {
+      test("should self-reference the current page", async () => {
         const hasHreflang =
-          (await page.locator("link[rel='alternate'][hreflang]").count()) > 0
+          (await shared.page
+            .locator("link[rel='alternate'][hreflang]")
+            .count()) > 0
 
         test.skip(
           hasHreflang,
           "Canonical self-reference skipped on multilingual pages — canonical may point to a language variant"
         )
 
-        const href =
-          (await page
-            .locator("link[rel='canonical']")
-            .first()
-            .getAttribute("href")) ?? ""
-        const currentUrl = page.url()
-
-        const canonicalPath = normalizePath(href)
-        const currentPath = normalizePath(currentUrl)
+        const url = shared.page.url()
+        const href = await getSingleAttribute(
+          shared.page,
+          "link[rel='canonical']",
+          "href"
+        )
 
         expect(
-          canonicalPath,
+          normalizePath(href),
           [
             "Canonical path does not match current page path",
-            `URL: ${currentUrl}`,
+            `URL: ${url}`,
             `Canonical: "${href}"`,
-            `Canonical path: "${canonicalPath}"`,
-            `Current path: "${currentPath}"`,
           ].join("\n")
-        ).toBe(currentPath)
+        ).toBe(normalizePath(url))
       })
     })
 
     test.describe("H1 heading", () => {
-      test("should exist exactly once and have non-empty text", async ({
-        page,
-      }) => {
-        const h1 = page.locator("h1")
-        const count = await h1.count()
+      test("should exist exactly once and have non-empty text", async () => {
+        const texts = (await shared.page.locator("h1").allTextContents()).map(
+          (t) => t.trim()
+        )
 
-        if (count !== 1) {
-          const texts = (await h1.allInnerTexts()).map((t) => t.trim())
-
-          throw new Error(
-            [
-              "H1 count mismatch",
-              "Expected: exactly 1 <h1>",
-              `Found: ${count}`,
-              `URL: ${page.url()}`,
-              "H1 texts found:",
-              ...texts.map((t, i) => `  ${i + 1}. "${t}"`),
-            ].join("\n")
-          )
-        }
-
-        const text = ((await h1.first().textContent()) ?? "").trim()
-
-        if (!text) {
-          throw new Error(
-            [
-              "H1 text is empty",
-              `URL: ${page.url()}`,
-              `Current H1 text: "${text}"`,
-            ].join("\n")
-          )
-        }
+        expect(
+          texts.length,
+          [
+            "H1 count mismatch",
+            "Expected: exactly 1 <h1>",
+            `Found: ${texts.length}`,
+            `URL: ${shared.page.url()}`,
+            "H1 texts found:",
+            ...texts.map((t, i) => `  ${i + 1}. "${t}"`),
+          ].join("\n")
+        ).toBe(1)
+        expect(
+          texts[0],
+          `H1 text is empty\nURL: ${shared.page.url()}`
+        ).not.toBe("")
       })
     })
 
     test.describe("Heading hierarchy", () => {
-      test("should be valid heading hierarchy", async ({ page }) => {
-        const headings = page.locator("h1, h2, h3, h4, h5, h6")
-        const count = await headings.count()
+      test("should be valid heading hierarchy", async () => {
+        const headings = await shared.page
+          .locator("h1, h2, h3, h4, h5, h6")
+          .evaluateAll((els) =>
+            els.map((el) => ({
+              tag: el.tagName,
+              level: Number(el.tagName[1]),
+              text: (el.textContent ?? "").trim(),
+            }))
+          )
 
-        let lastLevel = 0
-        let lastText = ""
-        let lastTag = ""
+        for (const [i, heading] of headings.entries()) {
+          const previous = headings[i - 1]
 
-        for (let i = 0; i < count; i++) {
-          const heading = headings.nth(i)
-
-          const tagName = await heading.evaluate((el) => el.tagName)
-          const level = Number(tagName[1])
-          const text = ((await heading.textContent()) ?? "").trim()
-
-          expect(
-            level,
-            [
-              `Invalid heading level <${tagName}>`,
-              `URL: ${page.url()}`,
-              `Index: ${i}`,
-              `Text: "${text}"`,
-            ].join("\n")
-          ).toBeLessThanOrEqual(6)
-
-          if (i === 0) {
-            lastLevel = level
-            lastText = text
-            lastTag = tagName
+          if (!previous) {
             continue
           }
 
           expect(
-            level,
+            heading.level,
             [
               "Invalid heading hierarchy",
-              `URL: ${page.url()}`,
+              `URL: ${shared.page.url()}`,
               `Index: ${i}`,
-              `Current: <${tagName}> "${text}"`,
-              `Previous: <${lastTag}> "${lastText}"`,
-              `Expected max level: H${lastLevel + 1}`,
-              `Actual level: H${level}`,
+              `Current: <${heading.tag}> "${heading.text}"`,
+              `Previous: <${previous.tag}> "${previous.text}"`,
+              `Expected max level: H${previous.level + 1}`,
             ].join("\n")
-          ).toBeLessThanOrEqual(lastLevel + 1)
-
-          lastLevel = level
-          lastText = text
-          lastTag = tagName
+          ).toBeLessThanOrEqual(previous.level + 1)
         }
       })
     })
 
     test.describe("Structured data", () => {
-      test("JSON-LD should be present and valid", async ({ page }) => {
-        const ld = page.locator("script[type='application/ld+json']")
-        const contents = await ld.allTextContents()
+      test("JSON-LD should be present and valid", async () => {
+        const contents = await getJsonLdContents(shared.page)
 
         expect(
           contents.length,
-          ["At least one JSON-LD script expected", `URL: ${page.url()}`].join(
-            "\n"
-          )
+          `At least one JSON-LD script expected\nURL: ${shared.page.url()}`
         ).toBeGreaterThan(0)
 
         for (const [i, content] of contents.entries()) {
-          try {
-            JSON.parse(content)
-          } catch (e) {
-            const snippet = content.trim().slice(0, 200).replaceAll(/\s+/g, " ")
-            const message = e instanceof Error ? e.message : String(e)
+          expect(
+            () => JSON.parse(content),
+            [
+              "Invalid JSON-LD",
+              `URL: ${shared.page.url()}`,
+              `Index: ${i}`,
+              `Snippet: ${content.trim().slice(0, 200)}`,
+            ].join("\n")
+          ).not.toThrow()
+        }
+      })
 
-            throw new Error(
-              [
-                "Invalid JSON-LD",
-                `URL: ${page.url()}`,
-                `Index: ${i}`,
-                `Error: ${message}`,
-                `Snippet: ${snippet}`,
-              ].join("\n"),
-              { cause: e }
-            )
+      test("JSON-LD schemas should have @context and @type", async () => {
+        for (const [i, content] of (
+          await getJsonLdContents(shared.page)
+        ).entries()) {
+          for (const [j, block] of getJsonLdSchemas(content).entries()) {
+            const location = `URL: ${shared.page.url()}\nScript index: ${i}, block index: ${j}`
+
+            expect(
+              block.context,
+              `JSON-LD missing @context\n${location}`
+            ).toBeTruthy()
+
+            for (const [k, schema] of block.schemas.entries()) {
+              expect(
+                schema["@type"],
+                `JSON-LD missing @type\n${location}, schema index: ${k}`
+              ).toBeTruthy()
+            }
           }
         }
       })
 
-      test("JSON-LD schemas should have @context and @type", async ({
-        page,
-      }) => {
-        const ld = page.locator("script[type='application/ld+json']")
-        const contents = await ld.allTextContents()
-
-        for (const [i, content] of contents.entries()) {
-          let data: unknown
-          try {
-            data = JSON.parse(content)
-          } catch {
-            return
-          }
-
-          const schemas = Array.isArray(data) ? data : [data]
-
-          for (const [j, schema] of schemas.entries()) {
-            const s = schema as Record<string, unknown>
-
-            expect(
-              s["@context"],
-              [
-                "JSON-LD missing @context",
-                `URL: ${page.url()}`,
-                `Script index: ${i}, schema index: ${j}`,
-              ].join("\n")
-            ).toBeTruthy()
-
-            expect(
-              s["@type"],
-              [
-                "JSON-LD missing @type",
-                `URL: ${page.url()}`,
-                `Script index: ${i}, schema index: ${j}`,
-              ].join("\n")
-            ).toBeTruthy()
-          }
-        }
-      })
-
-      test("JSON-LD should be present in raw HTML (not only JS-injected)", async ({
-        page,
-      }) => {
-        const response = await page.request.get(page.url())
-        const html = await response.text()
+      test("JSON-LD should be present in raw HTML (not only JS-injected)", async () => {
+        // The server response of the page load, before any JavaScript ran
+        const html = (await shared.response?.text()) ?? ""
 
         expect(
           html,
-          [
-            "JSON-LD not found in raw HTML — it may be injected only by JavaScript",
-            `URL: ${page.url()}`,
-          ].join("\n")
+          `JSON-LD not found in raw HTML — it may be injected only by JavaScript\nURL: ${shared.page.url()}`
         ).toContain('type="application/ld+json"')
       })
     })
 
     test.describe("Open Graph", () => {
-      test("essential tags should be present and non-empty", async ({
-        page,
-      }) => {
-        await expectAttrNonEmpty(page, "meta[property='og:title']", "content")
-        await expectAttrNonEmpty(
-          page,
-          "meta[property='og:description']",
-          "content"
-        )
-        await expectAttrNonEmpty(page, "meta[property='og:image']", "content")
-        await expectAttrNonEmpty(page, "meta[property='og:url']", "content")
-        await expectAttrNonEmpty(page, "meta[property='og:type']", "content")
+      test("essential tags should be present and non-empty", async () => {
+        for (const property of [
+          "og:title",
+          "og:description",
+          "og:image",
+          "og:url",
+          "og:type",
+        ]) {
+          await expectAttributeNonEmpty(
+            shared.page,
+            `meta[property='${property}']`,
+            "content"
+          )
+        }
       })
     })
 
     test.describe("hreflang", () => {
-      test("hreflang tags should be valid if present", async ({ page }) => {
-        const alternates = page.locator("link[rel='alternate'][hreflang]")
+      test("hreflang tags should be valid if present", async () => {
+        const url = shared.page.url()
+        const entries = await shared.page
+          .locator("link[rel='alternate'][hreflang]")
+          .evaluateAll((links) =>
+            links.map((l) => ({
+              hreflang: l.getAttribute("hreflang") ?? "",
+              href: l.getAttribute("href") ?? "",
+            }))
+          )
 
-        if ((await alternates.count()) === 0) {
+        if (entries.length === 0) {
           return
         }
 
-        const xDefaultCount = await page
-          .locator("link[rel='alternate'][hreflang='x-default']")
-          .count()
-
         expect(
-          xDefaultCount,
-          ["x-default hreflang tag is missing", `URL: ${page.url()}`].join("\n")
-        ).toBeGreaterThan(0)
-
-        const entries = await alternates.evaluateAll((links) =>
-          links.map((l) => ({
-            hreflang: l.getAttribute("hreflang") ?? "",
-            href: l.getAttribute("href") ?? "",
-          }))
-        )
+          entries.some(({ hreflang }) => hreflang === "x-default"),
+          `x-default hreflang tag is missing\nURL: ${url}`
+        ).toBe(true)
 
         for (const { hreflang, href } of entries) {
           expect(
             href,
-            [
-              "hreflang href must be absolute",
-              `URL: ${page.url()}`,
-              `hreflang: "${hreflang}"`,
-              `href: "${href}"`,
-            ].join("\n")
+            `hreflang href must be absolute\nURL: ${url}\nhreflang: "${hreflang}"`
           ).toMatch(/^https?:\/\//)
         }
 
-        const currentPath = normalizePath(page.url())
-
-        const selfRef = entries.find(({ href }) => {
-          try {
-            return normalizePath(href) === currentPath
-          } catch {
-            return false
-          }
-        })
+        const currentPath = normalizePath(url)
 
         expect(
-          selfRef,
+          entries.some(({ href }) => normalizePath(href) === currentPath),
           [
             "Current page path is not represented in hreflang tags",
-            `URL: ${page.url()}`,
+            `URL: ${url}`,
             `Current path: "${currentPath}"`,
             "hreflang entries:",
             ...entries.map(({ hreflang, href }) => `  ${hreflang}: ${href}`),
           ].join("\n")
-        ).toBeTruthy()
+        ).toBe(true)
       })
     })
   })

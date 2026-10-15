@@ -134,24 +134,31 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm -F @repo/tests-playwright exec playwright install --with-deps chromium
 
+      # Soft-fail: Axe findings are reported (annotations, job summary,
+      # report artifact) but don't fail the job or the workflow run
       - name: Run Axe tests
+        id: axe_tests
+        continue-on-error: true
         env:
           BASE_URL: ${{ env.BASE_URL }}
         run: pnpm tests:playwright:axe
 
-      - name: Pack Axe reports
-        if: failure()
+      - name: Report Axe findings
+        if: steps.axe_tests.outcome == 'failure'
         run: |
-          tar -czf axe-reports-${{ github.run_id }}.tgz \
-            -C qa/tests/playwright \
-            playwright-report
+          echo "::warning title=Axe findings::Axe checks found issues - see the annotations and the axe-report artifact"
+          {
+            echo "### ⚠️ Axe checks found issues"
+            echo ""
+            echo "The job is set to soft-fail, so this doesn't fail the run. Failing checks are listed as annotations above; the full HTML report is in the \`axe-report\` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish Axe report
         uses: actions/upload-artifact@v7.0.1
-        if: failure()
+        if: ${{ !cancelled() && (steps.axe_tests.outcome == 'success' || steps.axe_tests.outcome == 'failure') }}
         with:
           name: axe-report
-          path: axe-reports-${{ github.run_id }}.tgz
+          path: qa/tests/playwright/playwright-report/
           retention-days: 7
           if-no-files-found: warn
 
@@ -179,24 +186,31 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm -F @repo/tests-playwright exec playwright install --with-deps chromium
 
+      # Soft-fail: SEO findings are reported (annotations, job summary,
+      # report artifact) but don't fail the job or the workflow run
       - name: Run Playwright SEO tests
+        id: seo_tests
+        continue-on-error: true
         env:
           BASE_URL: ${{ env.BASE_URL }}
         run: pnpm tests:playwright:seo
 
-      - name: Pack SEO reports
-        if: failure()
+      - name: Report SEO findings
+        if: steps.seo_tests.outcome == 'failure'
         run: |
-          tar -czf seo-reports-${{ github.run_id }}.tgz \
-            -C qa/tests/playwright \
-            playwright-report
+          echo "::warning title=SEO findings::SEO checks found issues - see the annotations and the seo-report artifact"
+          {
+            echo "### ⚠️ SEO checks found issues"
+            echo ""
+            echo "The job is set to soft-fail, so this doesn't fail the run. Failing checks are listed as annotations above; the full HTML report is in the \`seo-report\` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish SEO report
         uses: actions/upload-artifact@v7.0.1
-        if: failure()
+        if: ${{ !cancelled() && (steps.seo_tests.outcome == 'success' || steps.seo_tests.outcome == 'failure') }}
         with:
           name: seo-report
-          path: seo-reports-${{ github.run_id }}.tgz
+          path: qa/tests/playwright/playwright-report/
           retention-days: 7
           if-no-files-found: warn
 

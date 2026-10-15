@@ -124,7 +124,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 2,
-  reporter: [["html", { open: process.env.CI ? "never" : "on-failure" }]],
+  // In CI, the github reporter also shows every failing test as an annotation
+  // on the workflow run - visible without downloading the HTML report
+  reporter: process.env.CI
+    ? [["html", { open: "never" }], ["github"]]
+    : [["html", { open: "on-failure" }]],
 
   use: {
     baseURL: process.env.BASE_URL,

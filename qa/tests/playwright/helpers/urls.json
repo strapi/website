@@ -128,8 +128,22 @@
     ]
   },
   "visual": {
-    "staging": ["/"],
-    "prod": ["/"]
+    "staging": [
+      "/",
+      "/pricing-cms",
+      "/enterprise",
+      "/cloud",
+      "/ai",
+      "/terms-of-use"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cms",
+      "/enterprise",
+      "/cloud",
+      "/ai",
+      "/terms-of-use"
+    ]
   },
   "perfo": {
     "staging": ["/"],

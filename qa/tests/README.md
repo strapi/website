@@ -49,7 +49,7 @@ qa/
   "legal": { "staging": ["/terms-of-use", "/privacy", "..."], "prod": ["..."] },
   "seo": { "staging": ["/", "/pricing-cloud", "..."], "prod": ["..."] },
   "axe": { "staging": ["/", "/pricing-cloud", "..."], "prod": ["..."] },
-  "visual": { "staging": ["/"], "prod": ["/"] },
+  "visual": { "staging": ["/", "/pricing-cms", "..."], "prod": ["..."] },
   "perfo": { "staging": ["/"], "prod": ["/"] }
 }
 ```
@@ -182,6 +182,10 @@ WebKit on Linux produces blank or incorrectly rendered screenshots, so it runs l
 
 **Baselines must be generated on Linux.** macOS and Linux render fonts differently, so snapshots made locally would fail on CI. Only `linux` snapshots are committed; `darwin` ones are gitignored.
 
+The `visual` list in `helpers/urls.json` holds stable key pages only (homepage, CMS pricing, enterprise, cloud, AI, terms of use). Pages whose content changes often - like the blog listing or Cloud prices - would produce a visual diff on every content update, so they're left out. Screenshots are taken with scripts blocked (server-rendered HTML only) and with images hidden, so third-party widgets and media changes don't cause diffs.
+
+Baselines are committed for **prod** (`strapi-io-*`). Staging gets its own set once it's generated for it.
+
 Snapshot names encode the environment and page: `{env-slug}-{page}-{browser}.png`, where `env-slug` comes from the `BASE_URL` hostname. Each environment keeps its own baselines. The first run on an environment creates the baselines and passes; failures only happen on later runs when something changed visually.
 
 **Workflow:**
@@ -208,7 +212,8 @@ Each run also appends its category scores (performance, accessibility, best prac
 
 `.github/workflows/qa.yml` is triggered manually: **Actions → QA → Run workflow**. Pick the branch, check the suites to run (E2E, AXE, SEO, LHCI Performance, Visual) and optionally set `base_url`. An empty `base_url` falls back to the `BASE_URL` repository variable.
 
-- Jobs run in parallel. Reports and traces are uploaded as artifacts on failure (Lighthouse reports always).
+- Jobs run in parallel. E2E and visual reports and traces are uploaded as artifacts on failure. Axe, SEO and Lighthouse reports are uploaded on both passing and failing runs.
+- **Axe and SEO soft-fail:** their findings don't fail the job or the run. Failing checks show up as annotations on the run, the job summary gets a warning, and the HTML report is uploaded as the `axe-report` / `seo-report` artifact. Locally, the suites still fail normally.
 - The visual job runs in the Playwright Docker image and skips itself when no baseline snapshots are committed.
 - On success, the Lighthouse job opens (or updates) a PR with the updated `lighthouse-history.md`. This needs **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** enabled.
 - A weekday cron schedule is included but commented out. To enable it, each job's `if:` also needs `|| github.event_name == 'schedule'`.

@@ -51,6 +51,8 @@ echo "BASE_URL:   $BASE_URL"
 echo "Browsers:   ${PROJECTS[*]}"
 echo ""
 
+# package.json allows newer Playwright versions (^) - pin the one matching the
+# image, otherwise the installed runner expects browsers the image doesn't have
 docker run --rm \
   --ipc=host \
   -v "$PLAYWRIGHT_DIR:/playwright" \
@@ -59,7 +61,7 @@ docker run --rm \
   -e BASE_URL="$BASE_URL" \
   -e CI=true \
   "mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble" \
-  bash -c "npm install --silent --no-package-lock && npx playwright test visual/visual.spec.ts ${PROJECT_FLAGS[*]}"
+  bash -c "npm install --silent --no-package-lock && npm install --silent --no-save --no-package-lock @playwright/test@${PLAYWRIGHT_VERSION} && npx playwright test visual/visual.spec.ts ${PROJECT_FLAGS[*]}"
 EXIT_CODE=$?
 
 if [[ $EXIT_CODE -ne 0 ]] && [[ -z "${CI:-}" ]]; then

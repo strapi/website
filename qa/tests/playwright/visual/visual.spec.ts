@@ -76,6 +76,8 @@ test.describe("Visual Regression", () => {
         content: `
           * { animation: none !important; transition: none !important; }
           #logo-carousel { visibility: hidden !important; }
+          /* The announcement bar's text changes with every campaign */
+          [data-top-banner] { display: none !important; }
           ::-webkit-scrollbar { display: none !important; }
           * { scrollbar-width: none !important; }
         `,

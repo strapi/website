@@ -2,6 +2,10 @@ import type { Data } from "@repo/strapi-types"
 
 import { FormUnavailableAlert } from "@/components/elementary/FormUnavailableAlert"
 import { HubSpotSsrForm } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/HubSpotSsrForm"
+import {
+  HubSpotThankYou,
+  hasThankYouContent,
+} from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/HubSpotThankYou"
 import { fetchHubSpotFormSchema } from "@/lib/hubspot"
 import { logNonBlockingError } from "@/lib/logging"
 
@@ -33,7 +37,16 @@ export async function StrapiConversion({
 
   const formSlot =
     formSchema && portalId && formId ? (
-      <HubSpotSsrForm schema={formSchema} portalId={portalId} formId={formId} />
+      <HubSpotSsrForm
+        schema={formSchema}
+        portalId={portalId}
+        formId={formId}
+        thankYouContent={
+          hasThankYouContent(form?.form) ? (
+            <HubSpotThankYou form={form?.form} />
+          ) : undefined
+        }
+      />
     ) : (
       <FormUnavailableAlert error={formError} />
     )

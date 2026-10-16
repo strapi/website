@@ -6,6 +6,7 @@ import { fetchHubSpotFormSchema } from "@/lib/hubspot"
 import { logNonBlockingError } from "@/lib/logging"
 
 import { HubSpotSsrForm } from "./HubSpotSsrForm"
+import { HubSpotThankYou, hasThankYouContent } from "./HubSpotThankYou"
 
 export async function StrapiHubSpotFormSsr({
   component,
@@ -49,6 +50,11 @@ export async function StrapiHubSpotFormSsr({
             formId={form.formId}
             enableRecaptcha={component.enableRecaptcha ?? false}
             title={component.title}
+            thankYouContent={
+              hasThankYouContent(form) ? (
+                <HubSpotThankYou form={form} />
+              ) : undefined
+            }
           />
         </div>
       </Container>

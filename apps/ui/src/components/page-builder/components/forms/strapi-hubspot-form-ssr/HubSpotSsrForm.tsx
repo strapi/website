@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { WarningIcon } from "@phosphor-icons/react/ssr"
 import { useMutation } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
-import { useMemo } from "react"
+import { useMemo, type ReactNode } from "react"
 import { useForm } from "react-hook-form"
 
 import { SectionTitle } from "@/components/elementary/section-header"
@@ -32,6 +32,12 @@ interface HubSpotSsrFormProps {
   readonly onSubmitted?: (values: Record<string, unknown>) => void
   /** Optional heading rendered above the form. Omitted when absent. */
   readonly title?: string | null
+  /**
+   * Server-rendered content shown in place of the form after a successful
+   * submission. Takes precedence over HubSpot's `inlineMessage`, which is
+   * empty for forms built in the HubSpot new editor.
+   */
+  readonly thankYouContent?: ReactNode
 }
 
 interface SubmitPayload {
@@ -41,6 +47,18 @@ interface SubmitPayload {
 
 interface SubmitResult {
   inlineMessage?: string
+  redirectUri?: string
+}
+
+/** Returns the trimmed string, or undefined when empty or not a string. */
+function nonEmpty(value: unknown): string | undefined {
+  if (typeof value !== "string") {
+    return undefined
+  }
+
+  const trimmed = value.trim()
+
+  return trimmed.length > 0 ? trimmed : undefined
 }
 
 async function submitHubSpotForm(
@@ -90,6 +108,7 @@ function HubSpotSsrFormInner({
   enableRecaptcha,
   onSubmitted,
   title,
+  thankYouContent,
 }: HubSpotSsrFormProps) {
   const t = useTranslations("forms")
 
@@ -119,10 +138,22 @@ function HubSpotSsrFormInner({
         return
       }
 
+      // HubSpot may answer with a redirect target; honour it first.
+      const redirectUri = nonEmpty(data.redirectUri)
+
+      if (redirectUri) {
+        window.location.href = redirectUri
+
+        return
+      }
+
       const postSubmitAction = schema.configuration?.postSubmitAction
 
-      if (postSubmitAction?.type === "redirect_url" && postSubmitAction.value) {
-        window.location.href = postSubmitAction.value
+      if (
+        postSubmitAction?.type === "redirect_url" &&
+        nonEmpty(postSubmitAction.value)
+      ) {
+        window.location.href = postSubmitAction.value as string
       }
     },
     onError: (err) => {
@@ -156,17 +187,35 @@ function HubSpotSsrFormInner({
   }
 
   if (submitMutation.isSuccess && !onSubmitted) {
+    // 1. CMS-managed thank-you block (preferred: works for every HubSpot form,
+    //    including new-editor forms whose inlineMessage comes back empty).
+    if (thankYouContent) {
+      return <>{thankYouContent}</>
+    }
+
+    // 2. HubSpot-provided HTML, skipping empty strings so the fallback below
+    //    always applies (`??` alone would render a blank box for "").
     const postSubmitAction = schema.configuration?.postSubmitAction
     const message =
-      submitMutation.data.inlineMessage ??
-      postSubmitAction?.value ??
-      t("submissionSuccess")
+      nonEmpty(submitMutation.data.inlineMessage) ??
+      (postSubmitAction?.type !== "redirect_url"
+        ? nonEmpty(postSubmitAction?.value)
+        : undefined)
 
+    if (message) {
+      return (
+        <div
+          className="text-foreground text-sm leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: message }}
+        />
+      )
+    }
+
+    // 3. Generic, translated fallback.
     return (
-      <div
-        className="text-foreground text-sm leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: message }}
-      />
+      <p className="text-foreground text-sm leading-relaxed" role="status">
+        {t("submissionSuccess")}
+      </p>
     )
   }
 

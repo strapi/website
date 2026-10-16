@@ -34,7 +34,7 @@
     "@strapi-community/plugin-rest-cache": "^5.0.1",
     "@strapi-community/plugin-seo": "^2.1.1",
     "@strapi-community/provider-rest-cache-memory": "^5.0.0",
-    "@strapi/database": "5.52.2",
+    "@strapi/database": "5.57.0",
     "@strapi/design-system": "2.2.4",
     "@strapi/plugin-color-picker": "5.52.2",
     "@strapi/plugin-sentry": "5.52.2",

@@ -529,6 +529,9 @@ importers:
       '@axe-core/playwright':
         specifier: ^4.12.1
         version: 4.12.1(playwright-core@1.61.0)
+      axe-core:
+        specifier: ~4.12.1
+        version: 4.12.1
       get-sitemap-links:
         specifier: ^1.1.0
         version: 1.1.0

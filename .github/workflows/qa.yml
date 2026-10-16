@@ -1,20 +1,30 @@
-name: QA (manual)
+name: QA
 
 run-name: >-
   [${{
+    github.event_name == 'schedule' && 'SCHEDULED' ||
     inputs.run_e2e && 'E2E' ||
     inputs.run_axe && 'AXE' ||
     inputs.run_seo && 'SEO' ||
-    inputs.run_lhci_perfo && 'Perfo'
+    inputs.run_lhci_perfo && 'Perfo' ||
+    inputs.run_visual && 'Visual'
   }}${{
-    inputs.run_e2e && inputs.run_axe && ', AXE' || ''
+    github.event_name != 'schedule' && inputs.run_e2e && inputs.run_axe && ', AXE' || ''
   }}${{
-    (inputs.run_e2e || inputs.run_axe) && inputs.run_seo && ', SEO' || ''
+    github.event_name != 'schedule' && (inputs.run_e2e || inputs.run_axe) && inputs.run_seo && ', SEO' || ''
   }}${{
-    (inputs.run_e2e || inputs.run_axe || inputs.run_seo) && inputs.run_lhci_perfo && ', Perfo' || ''
-  }}] QA – ${{ inputs.base_url }}
+    github.event_name != 'schedule' && (inputs.run_e2e || inputs.run_axe || inputs.run_seo) && inputs.run_lhci_perfo && ', Perfo' || ''
+  }}${{
+    github.event_name != 'schedule' && (inputs.run_e2e || inputs.run_axe || inputs.run_seo || inputs.run_lhci_perfo) && inputs.run_visual && ', Visual' || ''
+  }}] QA – ${{ inputs.base_url || vars.BASE_URL || 'https://strapi.io' }}
 
 on:
+  # Nightly run of E2E, Axe, SEO and Visual (Lighthouse stays manual-only).
+  # GitHub schedules use UTC and ignore daylight saving time: 00:00 UTC is
+  # 02:00 in Prague in summer (CEST), 01:00 in winter (CET).
+  # Schedules only run from the default branch (main).
+  schedule:
+    - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       run_e2e:
@@ -33,10 +43,15 @@ on:
         description: LHCI Performance tests
         type: boolean
         default: false
+      run_visual:
+        description: Visual tests
+        type: boolean
+        default: false
       base_url:
-        description: Base URL to test against (must include protocol)
+        description: "Base URL to test against, e.g. https://strapi.io (https:// is added when missing). Leave empty to use the default BASE_URL variable."
         type: string
-        required: true
+        required: false
+        default: ""
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -48,68 +63,81 @@ permissions:
 env:
   CI: true
   NPM_CONFIG_IGNORE_SCRIPTS: "true"
+  # Scheduled runs have no inputs - they use the BASE_URL repository variable,
+  # or prod when it isn't set
+  BASE_URL: ${{ inputs.base_url || vars.BASE_URL || 'https://strapi.io' }}
 
 jobs:
   e2e:
-    if: ${{ inputs.run_e2e }}
-    name: Playwright E2E tests
+    if: ${{ inputs.run_e2e || github.event_name == 'schedule' }}
+    name: Playwright E2E tests (${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # One job per browser: each job runs on its own runner with its own IP, so
+    # each stays under strapi.io's CDN bot protection limit (~70-80 page loads
+    # per IP, then HTTP 403).
+    # TODO: once the CDN bypass header for QA runs is in place (dev ticket),
+    # this can go back to a single job running all browser projects.
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
 
       - name: Setup pnpm with cache
         uses: ./.github/actions/setup-pnpm
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ matrix.project }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            ${{ runner.os }}-playwright-${{ matrix.project }}-
 
       - name: Install Playwright Browsers
-        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps
+        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps ${{ matrix.project }}
 
       - name: Run Playwright tests
         env:
-          BASE_URL: ${{ inputs.base_url }}
-        run: pnpm tests:playwright:e2e:test
+          BASE_URL: ${{ env.BASE_URL }}
+        run: pnpm -F @repo/tests-playwright exec playwright test e2e --project=${{ matrix.project }}
 
-      - uses: actions/upload-artifact@v4.6.2
+      - name: Publish Playwright report
+        uses: actions/upload-artifact@v7.0.1
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}
           path: qa/tests/playwright/playwright-report/**
           retention-days: 7
           if-no-files-found: warn
 
-      - uses: actions/upload-artifact@v4.6.2
+      - uses: actions/upload-artifact@v7.0.1
         if: failure()
         with:
-          name: playwright-traces
+          name: playwright-traces-${{ matrix.project }}
           path: qa/tests/playwright/test-results/**/trace.zip
           retention-days: 7
           if-no-files-found: warn
 
   axe:
-    if: ${{ inputs.run_axe }}
+    if: ${{ inputs.run_axe || github.event_name == 'schedule' }}
     name: Playwright AXE tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
 
       - name: Setup pnpm with cache
         uses: ./.github/actions/setup-pnpm
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
@@ -117,41 +145,51 @@ jobs:
             ${{ runner.os }}-playwright-
 
       - name: Install Playwright Browsers
-        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps
+        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps chromium
 
+      # Soft-fail: Axe findings are reported (annotations, job summary,
+      # report artifact) but don't fail the job or the workflow run
       - name: Run Axe tests
+        id: axe_tests
+        continue-on-error: true
         env:
-          BASE_URL: ${{ inputs.base_url }}
+          BASE_URL: ${{ env.BASE_URL }}
         run: pnpm tests:playwright:axe
 
-      - name: Pack Axe reports
-        if: failure()
+      - name: Report Axe findings
+        if: steps.axe_tests.outcome == 'failure'
         run: |
-          tar -czf axe-reports-${{ github.run_id }}.tgz -C qa/tests/playwright/axe/reports .
+          echo "::warning title=Axe findings::Axe checks found issues - see the annotations and the axe-report artifact"
+          {
+            echo "### ⚠️ Axe checks found issues"
+            echo ""
+            echo "The job is set to soft-fail, so this doesn't fail the run. Failing checks are listed as annotations above; the full HTML report is in the \`axe-report\` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4.6.2
-        if: failure()
+      - name: Publish Axe report
+        uses: actions/upload-artifact@v7.0.1
+        if: ${{ !cancelled() && (steps.axe_tests.outcome == 'success' || steps.axe_tests.outcome == 'failure') }}
         with:
           name: axe-report
-          path: axe-reports-${{ github.run_id }}.tgz
+          path: qa/tests/playwright/playwright-report/
           retention-days: 7
           if-no-files-found: warn
 
   seo:
-    if: ${{ inputs.run_seo }}
+    if: ${{ inputs.run_seo || github.event_name == 'schedule' }}
     name: Playwright SEO tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
 
       - name: Setup pnpm with cache
         uses: ./.github/actions/setup-pnpm
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v5.0.2
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
@@ -159,25 +197,108 @@ jobs:
             ${{ runner.os }}-playwright-
 
       - name: Install Playwright Browsers
-        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps
+        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps chromium
 
+      # Soft-fail: SEO findings are reported (annotations, job summary,
+      # report artifact) but don't fail the job or the workflow run
       - name: Run Playwright SEO tests
+        id: seo_tests
+        continue-on-error: true
         env:
-          BASE_URL: ${{ inputs.base_url }}
-        run: pnpm tests:playwright:seo --project=seo
+          BASE_URL: ${{ env.BASE_URL }}
+        run: pnpm tests:playwright:seo
 
-      - name: Pack SEO reports
-        if: always()
+      - name: Report SEO findings
+        if: steps.seo_tests.outcome == 'failure'
         run: |
-          tar -czf seo-reports-${{ github.run_id }}.tgz \
-            -C qa/tests/playwright \
-            playwright-report test-results
+          echo "::warning title=SEO findings::SEO checks found issues - see the annotations and the seo-report artifact"
+          {
+            echo "### ⚠️ SEO checks found issues"
+            echo ""
+            echo "The job is set to soft-fail, so this doesn't fail the run. Failing checks are listed as annotations above; the full HTML report is in the \`seo-report\` artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4.6.2
-        if: failure()
+      - name: Publish SEO report
+        uses: actions/upload-artifact@v7.0.1
+        if: ${{ !cancelled() && (steps.seo_tests.outcome == 'success' || steps.seo_tests.outcome == 'failure') }}
         with:
           name: seo-report
-          path: seo-reports-${{ github.run_id }}.tgz
+          path: qa/tests/playwright/playwright-report/
+          retention-days: 7
+          if-no-files-found: warn
+
+  visual:
+    if: ${{ inputs.run_visual || github.event_name == 'schedule' }}
+    name: Playwright Visual tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup pnpm with cache
+        uses: ./.github/actions/setup-pnpm
+
+      - name: Resolve Playwright version
+        id: playwright_version
+        run: |
+          VERSION="$(node -p "require('./qa/tests/playwright/node_modules/@playwright/test/package.json').version")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check for baseline snapshots
+        id: baseline_check
+        run: |
+          if find qa/tests/playwright/visual/visual.spec.ts-snapshots -type f -name '*.png' 2>/dev/null | grep -q .; then
+            echo "Baseline snapshots found."
+            echo "has_baselines=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No baseline snapshots found under qa/tests/playwright/visual/visual.spec.ts-snapshots - skipping visual regression run."
+            echo "has_baselines=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Cache Playwright Docker image
+        id: docker-cache
+        if: steps.baseline_check.outputs.has_baselines == 'true'
+        uses: actions/cache@v6.1.0
+        with:
+          path: /tmp/docker-playwright-cache
+          key: docker-playwright-v${{ steps.playwright_version.outputs.version }}-noble
+
+      - name: Load or pull Playwright Docker image
+        if: steps.baseline_check.outputs.has_baselines == 'true'
+        run: |
+          IMAGE="mcr.microsoft.com/playwright:v${{ steps.playwright_version.outputs.version }}-noble"
+          CACHE_FILE="/tmp/docker-playwright-cache/playwright.tar"
+          if [[ -f "$CACHE_FILE" ]]; then
+            echo "Loading Docker image from cache..."
+            docker load -i "$CACHE_FILE"
+          else
+            echo "Pulling Docker image..."
+            docker pull "$IMAGE"
+            mkdir -p /tmp/docker-playwright-cache
+            docker save "$IMAGE" -o "$CACHE_FILE"
+          fi
+
+      - name: Run Visual tests
+        if: steps.baseline_check.outputs.has_baselines == 'true'
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+        run: pnpm tests:playwright:visual:docker
+
+      - name: Pack Visual reports
+        if: failure()
+        run: |
+          tar -czf visual-reports-${{ github.run_id }}.tgz \
+            -C qa/tests/playwright \
+            playwright-report
+
+      - name: Publish Visual report
+        uses: actions/upload-artifact@v7.0.1
+        if: failure()
+        with:
+          name: visual-report
+          path: visual-reports-${{ github.run_id }}.tgz
           retention-days: 7
           if-no-files-found: warn
 
@@ -186,17 +307,35 @@ jobs:
     name: LHCI Performance tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
 
       - name: Setup pnpm with cache
         uses: ./.github/actions/setup-pnpm
 
       - name: Run LHCI Performance tests
         env:
-          BASE_URL: ${{ inputs.base_url }}
+          BASE_URL: ${{ env.BASE_URL }}
         run: pnpm tests:lhci:perfo
+
+      - name: Open PR with Lighthouse trend history
+        if: success()
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          add-paths: qa/tests/playwright/perfo/lighthouse-history.md
+          commit-message: "chore(tests-playwright): record Lighthouse trend results"
+          branch: qa/lighthouse-trend-update
+          delete-branch: true
+          title: "chore(qa): update Lighthouse trend history"
+          labels: QA, auto-generated
+          body: |
+            Automated update of the Lighthouse performance trend log (`qa/tests/playwright/perfo/lighthouse-history.md`) from a manual QA workflow run.
+
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: Pack LHCI reports
         if: always()
@@ -204,7 +343,8 @@ jobs:
           tar -czf lhci-perfo-reports-${{ github.run_id }}.tgz \
             -C qa/tests/playwright/perfo/.lighthouseci .
 
-      - uses: actions/upload-artifact@v4.6.2
+      - name: Publish LHCI report
+        uses: actions/upload-artifact@v7.0.1
         if: always()
         with:
           name: perfo-report

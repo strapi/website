@@ -66,9 +66,18 @@ env:
 jobs:
   e2e:
     if: ${{ inputs.run_e2e }}
-    name: Playwright E2E tests
+    name: Playwright E2E tests (${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # One job per browser: each job runs on its own runner with its own IP, so
+    # each stays under strapi.io's CDN bot protection limit (~70-80 page loads
+    # per IP, then HTTP 403).
+    # TODO: once the CDN bypass header for QA runs is in place (dev ticket),
+    # this can go back to a single job running all browser projects.
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
 
     steps:
       - name: Checkout code
@@ -81,23 +90,23 @@ jobs:
         uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-playwright-${{ matrix.project }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            ${{ runner.os }}-playwright-${{ matrix.project }}-
 
       - name: Install Playwright Browsers
-        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps
+        run: pnpm -F @repo/tests-playwright exec playwright install --with-deps ${{ matrix.project }}
 
       - name: Run Playwright tests
         env:
           BASE_URL: ${{ env.BASE_URL }}
-        run: pnpm tests:playwright:e2e:test
+        run: pnpm -F @repo/tests-playwright exec playwright test e2e --project=${{ matrix.project }}
 
       - name: Publish Playwright report
         uses: actions/upload-artifact@v7.0.1
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}
           path: qa/tests/playwright/playwright-report/**
           retention-days: 7
           if-no-files-found: warn
@@ -105,7 +114,7 @@ jobs:
       - uses: actions/upload-artifact@v7.0.1
         if: failure()
         with:
-          name: playwright-traces
+          name: playwright-traces-${{ matrix.project }}
           path: qa/tests/playwright/test-results/**/trace.zip
           retention-days: 7
           if-no-files-found: warn

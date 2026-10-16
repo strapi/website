@@ -217,6 +217,7 @@ Each run also appends its category scores (performance, accessibility, best prac
 `.github/workflows/qa.yml` is triggered manually: **Actions → QA → Run workflow**. Pick the branch, check the suites to run (E2E, AXE, SEO, LHCI Performance, Visual) and optionally set `base_url`. An empty `base_url` falls back to the `BASE_URL` repository variable.
 
 - Jobs run in parallel. E2E and visual reports and traces are uploaded as artifacts on failure. Axe, SEO and Lighthouse reports are uploaded on both passing and failing runs.
+- **E2E runs as one job per browser** (Chromium, Firefox, WebKit). Each job gets its own runner and IP, which keeps it under the CDN bot protection limit (~70-80 page loads per IP before HTTP 403). Reports are uploaded per browser (`playwright-report-chromium`, ...). Once the CDN bypass for QA runs exists, this can go back to a single job.
 - **Axe and SEO soft-fail:** their findings don't fail the job or the run. Failing checks show up as annotations on the run, the job summary gets a warning, and the HTML report is uploaded as the `axe-report` / `seo-report` artifact. Locally, the suites still fail normally.
 - The visual job runs in the Playwright Docker image and skips itself when no baseline snapshots are committed.
 - On success, the Lighthouse job opens (or updates) a PR with the updated `lighthouse-history.md`. This needs **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** enabled.

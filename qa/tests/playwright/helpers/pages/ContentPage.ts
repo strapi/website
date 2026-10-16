@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test"
 
-import { waitForHydration } from "../hydration"
+import { gotoAndWaitForHydration } from "../hydration"
 
 /**
  * Any page rendered by the catch-all page route (`[[...rest]]`) from a Strapi
@@ -19,11 +19,6 @@ export class ContentPage {
   }
 
   async goTo(path: string) {
-    const response = await this.page.goto(path, {
-      waitUntil: "domcontentloaded",
-    })
-    await waitForHydration(this.page)
-
-    return response
+    return gotoAndWaitForHydration(this.page, path)
   }
 }

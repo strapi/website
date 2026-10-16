@@ -150,7 +150,11 @@ pnpm tests:playwright:visual:docker:update  # Update Linux snapshots via Docker
 pnpm tests:lhci:perfo                       # Lighthouse CI performance checks
 ```
 
-Each suite runs as its own Playwright project: E2E specs on `chromium`, `firefox` and `webkit`; `axe` and `seo` on Chromium only; visual on `visual-chromium`, `visual-firefox` and `visual-webkit`.
+Each suite runs as its own Playwright project:
+
+- **E2E:** `chromium` runs every spec. `firefox`, `webkit` (and the optional mobile projects) only run `pages.spec.ts` and `homepage.spec.ts` - page loads and the main layout, where browser differences actually show up. Content checks, interactions and mocks behave the same in every browser. Set `E2E_ALL_BROWSERS=true` to run every E2E spec in every browser.
+- **Axe and SEO:** Chromium only.
+- **Visual:** `visual-chromium`, `visual-firefox` and `visual-webkit` (WebKit locally only).
 
 ---
 

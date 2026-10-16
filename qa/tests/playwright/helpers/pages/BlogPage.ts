@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test"
 
-import { waitForElementHydration, waitForHydration } from "../hydration"
+import { waitForElementHydration, gotoAndWaitForHydration } from "../hydration"
 
 export class BlogPage {
   private readonly page: Page
@@ -39,12 +39,7 @@ export class BlogPage {
   }
 
   async goTo() {
-    const response = await this.page.goto("/blog", {
-      waitUntil: "domcontentloaded",
-    })
-    await waitForHydration(this.page)
-
-    return response
+    return gotoAndWaitForHydration(this.page, "/blog")
   }
 
   getPostTitleLink(postRow: Locator) {

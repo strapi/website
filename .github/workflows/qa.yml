@@ -46,7 +46,7 @@ on:
         type: boolean
         default: false
       base_url:
-        description: "Base URL to test against (must include protocol). Leave empty to use the default BASE_URL variable."
+        description: "Base URL to test against, e.g. https://strapi.io (https:// is added when missing). Leave empty to use the default BASE_URL variable."
         type: string
         required: false
         default: ""

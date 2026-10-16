@@ -5,11 +5,12 @@ import { spawnSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
 
+import { normalizeBaseUrl } from "../helpers/base-url"
 import { flattenUrls } from "../helpers/flatten-urls"
 
 import urls from "../helpers/urls.json"
 
-const BASE_URL = process.env.BASE_URL
+const BASE_URL = normalizeBaseUrl(process.env.BASE_URL)
 
 if (!BASE_URL) {
   throw new Error("Missing BASE_URL environment variable")

@@ -1,4 +1,4 @@
-import type { Frame, Locator, Page } from "@playwright/test"
+import type { Frame, Locator, Page, Response } from "@playwright/test"
 
 /**
  * Waits until React has hydrated the page, so client-side handlers (dialogs,
@@ -30,4 +30,23 @@ export async function waitForElementHydration(locator: Locator) {
   while (!(await isHydrated())) {
     await locator.page().waitForTimeout(100)
   }
+}
+
+/**
+ * Navigates to `path` and waits for hydration - but only when the page loaded
+ * fine. A blocked (e.g. CDN 403) or broken response has no React app, so
+ * waiting would just time out and hide the real cause. The spec then fails on
+ * the response status instead.
+ */
+export async function gotoAndWaitForHydration(
+  page: Page,
+  path: string
+): Promise<Response | null> {
+  const response = await page.goto(path, { waitUntil: "domcontentloaded" })
+
+  if (response?.ok()) {
+    await waitForHydration(page)
+  }
+
+  return response
 }

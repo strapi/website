@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test"
 
-import { waitForHydration } from "../hydration"
+import { gotoAndWaitForHydration } from "../hydration"
 
 /**
  * Legal pages (terms, privacy, agreements, ...): long-form text split into
@@ -24,12 +24,7 @@ export class LegalPage {
   }
 
   async goTo(path: string) {
-    const response = await this.page.goto(path, {
-      waitUntil: "domcontentloaded",
-    })
-    await waitForHydration(this.page)
-
-    return response
+    return gotoAndWaitForHydration(this.page, path)
   }
 
   async getText() {

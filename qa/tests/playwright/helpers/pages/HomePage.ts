@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test"
 
-import { waitForHydration } from "../hydration"
+import { gotoAndWaitForHydration } from "../hydration"
 
 export class HomePage {
   private readonly page: Page
@@ -20,11 +20,6 @@ export class HomePage {
   }
 
   async goTo() {
-    const response = await this.page.goto("/", {
-      waitUntil: "domcontentloaded",
-    })
-    await waitForHydration(this.page)
-
-    return response
+    return gotoAndWaitForHydration(this.page, "/")
   }
 }

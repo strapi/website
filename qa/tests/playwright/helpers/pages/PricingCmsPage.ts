@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test"
 
-import { waitForElementHydration, waitForHydration } from "../hydration"
+import { waitForElementHydration, gotoAndWaitForHydration } from "../hydration"
 
 export class PricingCmsPage {
   private readonly page: Page
@@ -52,12 +52,7 @@ export class PricingCmsPage {
   }
 
   async goTo() {
-    const response = await this.page.goto("/pricing-cms", {
-      waitUntil: "domcontentloaded",
-    })
-    await waitForHydration(this.page)
-
-    return response
+    return gotoAndWaitForHydration(this.page, "/pricing-cms")
   }
 
   async openGrowthCheckout() {

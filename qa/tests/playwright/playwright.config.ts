@@ -146,8 +146,13 @@ export default defineConfig({
     "{snapshotDir}/{testFileDir}/{testFileName}-snapshots/{platform}/{arg}{-projectName}{ext}",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: 2,
+  // strapi.io's CDN bot protection blocks bursts of automated requests (HTTP
+  // 403), so CI runs gently: one worker, one retry (a blocked page retried
+  // twice just adds requests and deepens the block).
+  // TODO: once the CDN bypass header for QA runs is in place (dev ticket),
+  // switch CI back to `retries: 2` and `workers: 2` (or more).
+  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 1 : 2,
   // In CI, the github reporter also shows every failing test as an annotation
   // on the workflow run - visible without downloading the HTML report
   reporter: process.env.CI

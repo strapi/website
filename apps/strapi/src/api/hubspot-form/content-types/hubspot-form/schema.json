@@ -25,6 +25,14 @@
     "placeholderHeight": {
       "type": "integer",
       "default": 300
+    },
+    "thankYouImage": {
+      "type": "component",
+      "component": "utilities.basic-image",
+      "repeatable": false
+    },
+    "thankYouMessage": {
+      "type": "richtext"
     }
   }
 }

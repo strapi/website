@@ -1,5 +1,11 @@
+import basicImagePopulate from "../utilities/basic-image"
+
 export default {
   populate: {
-    form: true,
+    form: {
+      populate: {
+        thankYouImage: basicImagePopulate,
+      },
+    },
   },
 }

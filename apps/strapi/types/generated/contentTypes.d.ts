@@ -1157,6 +1157,8 @@ export interface ApiHubspotFormHubspotForm extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<300>
     portalId: Schema.Attribute.String & Schema.Attribute.Required
     publishedAt: Schema.Attribute.DateTime
+    thankYouImage: Schema.Attribute.Component<"utilities.basic-image", false>
+    thankYouMessage: Schema.Attribute.RichText
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private

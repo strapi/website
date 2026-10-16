@@ -16,13 +16,15 @@ run-name: >-
     github.event_name != 'schedule' && (inputs.run_e2e || inputs.run_axe || inputs.run_seo) && inputs.run_lhci_perfo && ', Perfo' || ''
   }}${{
     github.event_name != 'schedule' && (inputs.run_e2e || inputs.run_axe || inputs.run_seo || inputs.run_lhci_perfo) && inputs.run_visual && ', Visual' || ''
-  }}] QA – ${{ inputs.base_url || vars.BASE_URL || 'missing-base-url' }}
+  }}] QA – ${{ inputs.base_url || vars.BASE_URL || 'https://strapi.io' }}
 
 on:
-  # Uncomment the schedule trigger to run tests automatically on weekdays.
-  # schedule:
-    # Runs at 00:00 UTC on weekdays (02:00 CEST).
-    # - cron: "0 0 * * 1-5"
+  # Nightly run of E2E, Axe, SEO and Visual (Lighthouse stays manual-only).
+  # GitHub schedules use UTC and ignore daylight saving time: 00:00 UTC is
+  # 02:00 in Prague in summer (CEST), 01:00 in winter (CET).
+  # Schedules only run from the default branch (main).
+  schedule:
+    - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       run_e2e:
@@ -61,11 +63,13 @@ permissions:
 env:
   CI: true
   NPM_CONFIG_IGNORE_SCRIPTS: "true"
-  BASE_URL: ${{ inputs.base_url || vars.BASE_URL }}
+  # Scheduled runs have no inputs - they use the BASE_URL repository variable,
+  # or prod when it isn't set
+  BASE_URL: ${{ inputs.base_url || vars.BASE_URL || 'https://strapi.io' }}
 
 jobs:
   e2e:
-    if: ${{ inputs.run_e2e }}
+    if: ${{ inputs.run_e2e || github.event_name == 'schedule' }}
     name: Playwright E2E tests (${{ matrix.project }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -120,7 +124,7 @@ jobs:
           if-no-files-found: warn
 
   axe:
-    if: ${{ inputs.run_axe }}
+    if: ${{ inputs.run_axe || github.event_name == 'schedule' }}
     name: Playwright AXE tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -172,7 +176,7 @@ jobs:
           if-no-files-found: warn
 
   seo:
-    if: ${{ inputs.run_seo }}
+    if: ${{ inputs.run_seo || github.event_name == 'schedule' }}
     name: Playwright SEO tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -224,7 +228,7 @@ jobs:
           if-no-files-found: warn
 
   visual:
-    if: ${{ inputs.run_visual }}
+    if: ${{ inputs.run_visual || github.event_name == 'schedule' }}
     name: Playwright Visual tests
     runs-on: ubuntu-latest
     timeout-minutes: 15

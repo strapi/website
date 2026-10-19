@@ -112,6 +112,7 @@
     "title": "Blog",
     "description": "Tutorials, product updates, and engineering insights.",
     "loadMore": "Load More Articles",
+    "postsListAriaLabel": "Blog posts",
     "seeAllRelated": "See all {category} articles",
     "articles": "Articles",
     "relatedPosts": "Related Posts",

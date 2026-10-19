@@ -1,6 +1,6 @@
 "use client"
 
-import type { Locale } from "next-intl"
+import { type Locale, useTranslations } from "next-intl"
 import { useState, useTransition } from "react"
 
 import { type BlogPost, getBlogPostPublishDate } from "@/lib/blog-utils"
@@ -40,6 +40,7 @@ export function BlogPostsList({
   excludeCategorySlugs,
   excludeSlugs,
 }: BlogPostsListProps) {
+  const t = useTranslations("blog")
   const [posts, setPosts] = useState<readonly BlogPost[]>(initialPosts)
   const [offset, setOffset] = useState(initialOffset)
   const [hasMore, setHasMore] = useState(initialOffset < total)
@@ -66,19 +67,26 @@ export function BlogPostsList({
 
   return (
     <div className="flex flex-col gap-4">
-      {posts
-        .filter((post) => typeof post.slug === "string" && post.slug.length > 0)
-        .map((post) => (
-          <BlogPostRow
-            key={post.documentId}
-            title={post.title ?? ""}
-            slug={post.slug as string}
-            publishedAt={getBlogPostPublishDate(post)}
-            author={post.author}
-            coauthors={post.coauthors ?? undefined}
-            category={post.category}
-          />
-        ))}
+      <ul
+        aria-label={t("postsListAriaLabel")}
+        className="flex list-none flex-col gap-4 pl-0"
+      >
+        {posts
+          .filter(
+            (post) => typeof post.slug === "string" && post.slug.length > 0
+          )
+          .map((post) => (
+            <BlogPostRow
+              key={post.documentId}
+              title={post.title ?? ""}
+              slug={post.slug as string}
+              publishedAt={getBlogPostPublishDate(post)}
+              author={post.author}
+              coauthors={post.coauthors ?? undefined}
+              category={post.category}
+            />
+          ))}
+      </ul>
 
       {hasMore && (
         <div className="flex justify-center py-10">

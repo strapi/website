@@ -59,13 +59,17 @@ export function StrapiTopBanner({ component }: StrapiTopBannerProps) {
       */}
       <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
 
-      <div data-top-banner className="bg-strapi-purple-600 static z-50 h-13">
-        <div className="relative flex h-13 w-full items-center justify-center pr-12 pl-6 text-center text-sm text-white md:px-12 md:text-base [&_a]:text-amber-200 [&_a]:underline [&_a]:transition-colors [&_a]:hover:text-amber-100">
+      <aside
+        data-top-banner
+        className="bg-strapi-purple-600 static z-50 h-13"
+        aria-label="Announcement"
+      >
+        <div className="relative flex h-13 w-full items-center justify-center pr-12 pl-6 text-center text-sm text-white md:px-12 md:text-base [&_a]:text-yellow-200 [&_a]:underline [&_a]:transition-colors [&_a]:hover:text-amber-100">
           <InlineMarkdown className="truncate">{content}</InlineMarkdown>
 
           <TopBannerDismiss storageKey={storageKey} />
         </div>
-      </div>
+      </aside>
     </>
   )
 }

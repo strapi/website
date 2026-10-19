@@ -92,6 +92,44 @@ export async function fetchHubSpotFormSchema(
   return res.json()
 }
 
+export interface HubSpotSubmissionErrorDetail {
+  readonly message: string
+  readonly errorType: string
+}
+
+/**
+ * Thrown when HubSpot rejects a submission (4xx). Carries HubSpot's own
+ * error list so callers can surface a precise message (e.g. blocked email).
+ */
+export class HubSpotSubmissionError extends Error {
+  readonly status: number
+  readonly errors: readonly HubSpotSubmissionErrorDetail[]
+
+  constructor(status: number, errors: readonly HubSpotSubmissionErrorDetail[]) {
+    super(`HubSpot rejected the submission (status=${status})`)
+    this.name = "HubSpotSubmissionError"
+    this.status = status
+    this.errors = errors
+  }
+}
+
+function parseHubSpotErrors(text: string): HubSpotSubmissionErrorDetail[] {
+  try {
+    const parsed = JSON.parse(text) as {
+      errors?: { message?: unknown; errorType?: unknown }[]
+    }
+
+    return (parsed.errors ?? [])
+      .filter((e) => typeof e.errorType === "string")
+      .map((e) => ({
+        errorType: e.errorType as string,
+        message: typeof e.message === "string" ? e.message : "",
+      }))
+  } catch {
+    return []
+  }
+}
+
 /**
  * Submit a HubSpot form via the submissions API.
  * Server-only — requires HUBSPOT_API_TOKEN env var.
@@ -132,6 +170,13 @@ export async function submitHubSpotForm({
       `HubSpot form submission failed (status=${res.status}):`,
       text
     )
+
+    // 4xx = HubSpot validated and rejected the data (blocked email, missing
+    // field...). Surface the details so the UI can show a precise message.
+    if (res.status >= 400 && res.status < 500) {
+      throw new HubSpotSubmissionError(res.status, parseHubSpotErrors(text))
+    }
+
     throw new Error("Form submission failed")
   }
 

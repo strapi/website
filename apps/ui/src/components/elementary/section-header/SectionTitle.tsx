@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
+import { hasVisibleText } from "@/lib/has-visible-text"
 import { cn } from "@/lib/styles"
 
 export const sectionTitleVariants = cva("font-bold text-foreground", {
@@ -41,7 +42,7 @@ export function SectionTitle({
   children,
   ...props
 }: SectionHeadingProps) {
-  if (!children) {
+  if (!hasVisibleText(children)) {
     return null
   }
 

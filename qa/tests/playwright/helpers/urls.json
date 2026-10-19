@@ -1,1 +1,152 @@
-["/"]
+{
+  "smoke": {
+    "staging": [
+      "/",
+      "/pricing-cloud",
+      "/enterprise",
+      "/features",
+      "/solutions",
+      "/blog",
+      "/user-stories",
+      "/about-us",
+      "/contact-sales",
+      "/careers",
+      "/enterprise-terms",
+      "/terms",
+      "/privacy",
+      "/terms-of-use",
+      "/security"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cloud",
+      "/enterprise",
+      "/features",
+      "/solutions",
+      "/blog",
+      "/user-stories",
+      "/about-us",
+      "/contact-sales",
+      "/careers",
+      "/enterprise-terms",
+      "/terms",
+      "/privacy",
+      "/terms-of-use",
+      "/security"
+    ]
+  },
+  "templates": {
+    "blog-post": {
+      "staging": ["/blog/content-type-folders-new-media-library"],
+      "prod": ["/blog/content-type-folders-new-media-library"]
+    },
+    "blog-category": {
+      "staging": ["/blog/categories/tutorials"],
+      "prod": ["/blog/categories/tutorials"]
+    },
+    "user-story": {
+      "staging": ["/user-stories/airbus"],
+      "prod": ["/user-stories/airbus"]
+    },
+    "feature": {
+      "staging": ["/features/dynamic-zone"],
+      "prod": ["/features/dynamic-zone"]
+    },
+    "solution": {
+      "staging": ["/solutions/corporate-website-cms"],
+      "prod": ["/solutions/corporate-website-cms"]
+    }
+  },
+  "legal": {
+    "staging": [
+      "/terms-of-use",
+      "/privacy",
+      "/enterprise-terms",
+      "/ai-terms",
+      "/cloud-legal",
+      "/strapi-reseller-agreement"
+    ],
+    "prod": [
+      "/terms-of-use",
+      "/privacy",
+      "/enterprise-terms",
+      "/ai-terms",
+      "/cloud-legal",
+      "/strapi-reseller-agreement"
+    ]
+  },
+  "seo": {
+    "staging": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ]
+  },
+  "axe": {
+    "staging": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cloud",
+      "/pricing-cms",
+      "/blog",
+      "/enterprise",
+      "/cloud",
+      "/contact",
+      "/ai",
+      "/user-stories/societe-generale-e-training-platform",
+      "/terms-of-use"
+    ]
+  },
+  "visual": {
+    "staging": [
+      "/",
+      "/pricing-cms",
+      "/enterprise",
+      "/cloud",
+      "/ai",
+      "/terms-of-use"
+    ],
+    "prod": [
+      "/",
+      "/pricing-cms",
+      "/enterprise",
+      "/cloud",
+      "/ai",
+      "/terms-of-use"
+    ]
+  },
+  "perfo": {
+    "staging": ["/"],
+    "prod": ["/"]
+  }
+}

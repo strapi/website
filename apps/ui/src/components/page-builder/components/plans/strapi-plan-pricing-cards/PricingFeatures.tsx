@@ -3,6 +3,7 @@ import type { VariantProps } from "class-variance-authority"
 
 import { Tooltip } from "@/components/elementary/Tooltip"
 import { type badgeVariants, Badge } from "@/components/ui/badge"
+import { hasVisibleText } from "@/lib/has-visible-text"
 import { cn } from "@/lib/styles"
 
 export interface PricingFeatureProps extends React.ComponentProps<"div"> {
@@ -67,7 +68,7 @@ export function PricingFeatures({
 }: PricingFeaturesProps) {
   return (
     <div {...restProps}>
-      {title && (
+      {hasVisibleText(title) && (
         <h4 className="text-foreground mb-2 text-base font-medium">{title}</h4>
       )}
       <div className="flex flex-col gap-1.5">{children}</div>

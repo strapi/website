@@ -2,10 +2,35 @@ import {
   CONSENT_FIELD_PREFIX,
   CONSENT_TO_PROCESS_FIELD,
 } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/helpers"
-import { submitHubSpotForm } from "@/lib/hubspot"
+import { HubSpotSubmissionError, submitHubSpotForm } from "@/lib/hubspot"
 import { verifyRecaptcha } from "@/lib/recaptcha"
 
 export const dynamic = "force-dynamic"
+
+/** HubSpot error types that always concern the email field. */
+const EMAIL_ERROR_TYPES = new Set(["BLOCKED_EMAIL", "INVALID_EMAIL"])
+
+/**
+ * Best-effort mapping of a HubSpot error to the form field it concerns.
+ * HubSpot messages look like `fields.email.value: ...` or mention the field name.
+ */
+function fieldForHubSpotError(
+  errorType: string,
+  message: string,
+  fieldNames: string[]
+): string | undefined {
+  if (EMAIL_ERROR_TYPES.has(errorType)) {
+    return "email"
+  }
+
+  const fromPath = /fields\.(\w+)/.exec(message)?.[1]
+
+  if (fromPath && fieldNames.includes(fromPath)) {
+    return fromPath
+  }
+
+  return fieldNames.find((name) => message.includes(`'${name}'`))
+}
 
 /** Proxy for HubSpot form submissions — verifies reCAPTCHA (opt-in), strips consent fields, and forwards to HubSpot API. */
 async function handler(request: Request) {
@@ -60,6 +85,25 @@ async function handler(request: Request) {
     return Response.json(result)
   } catch (error) {
     console.error("Error submitting HubSpot form:", error)
+
+    // HubSpot rejected the data: pass the reasons through (with the field
+    // they concern) so the UI can show them inline instead of a generic error.
+    if (error instanceof HubSpotSubmissionError && error.errors.length > 0) {
+      const fieldNames = hubspotFields.map((f) => f.name)
+
+      return Response.json(
+        {
+          error:
+            "Form submission failed. Please review the highlighted fields.",
+          errors: error.errors.map((e) => ({
+            code: e.errorType,
+            message: e.message,
+            field: fieldForHubSpotError(e.errorType, e.message, fieldNames),
+          })),
+        },
+        { status: 400 }
+      )
+    }
 
     return Response.json(
       { error: "Form submission failed. Please try again." },

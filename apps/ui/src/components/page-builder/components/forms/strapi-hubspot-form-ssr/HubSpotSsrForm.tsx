@@ -50,6 +50,23 @@ interface SubmitResult {
   redirectUri?: string
 }
 
+interface SubmitFieldError {
+  code: string
+  message: string
+  field?: string
+}
+
+/** Error thrown by the submit call, carrying HubSpot's per-field reasons when available. */
+class SubmitError extends Error {
+  readonly fieldErrors: SubmitFieldError[]
+
+  constructor(message: string, fieldErrors: SubmitFieldError[] = []) {
+    super(message)
+    this.name = "SubmitError"
+    this.fieldErrors = fieldErrors
+  }
+}
+
 /** Returns the trimmed string, or undefined when empty or not a string. */
 function nonEmpty(value: unknown): string | undefined {
   if (typeof value !== "string") {
@@ -73,10 +90,13 @@ async function submitHubSpotForm(
     }),
   })
 
-  const data = await res.json()
+  const data = await res.json().catch(() => ({}))
 
   if (!res.ok) {
-    throw new Error(data.error || "Submission failed")
+    throw new SubmitError(
+      data.error || "Submission failed",
+      Array.isArray(data.errors) ? data.errors : []
+    )
   }
 
   return data
@@ -111,6 +131,20 @@ function HubSpotSsrFormInner({
   thankYouContent,
 }: HubSpotSsrFormProps) {
   const t = useTranslations("forms")
+
+  const messageForErrorCode = (code: string): string => {
+    switch (code) {
+      case "BLOCKED_EMAIL":
+        return t("errors.blockedEmail")
+      case "INVALID_EMAIL":
+        return t("errors.invalidEmail")
+      case "REQUIRED_FIELD":
+        return t("errors.requiredField")
+
+      default:
+        return t("errors.invalidValue")
+    }
+  }
 
   const zodSchema = useMemo(() => buildZodSchema(schema), [schema])
   const defaultValues = useMemo(() => buildDefaultValues(schema), [schema])
@@ -157,9 +191,38 @@ function HubSpotSsrFormInner({
       }
     },
     onError: (err) => {
-      form.setError("root", {
-        message: err instanceof Error ? err.message : t("submissionError"),
-      })
+      const fieldErrors = err instanceof SubmitError ? err.fieldErrors : []
+      let shownInline = false
+
+      // Attach HubSpot's reasons to the fields they concern, with a readable
+      // message per error code; anything unmapped falls back to the banner.
+      for (const fieldError of fieldErrors) {
+        const fieldName = fieldError.field
+
+        if (!fieldName || !visibleFields.some((f) => f.name === fieldName)) {
+          continue
+        }
+
+        form.setError(fieldName, {
+          type: "server",
+          message: messageForErrorCode(fieldError.code),
+        })
+        shownInline = true
+      }
+
+      if (shownInline) {
+        return
+      }
+
+      // No field to attach the error to: show the most useful message we have.
+      let rootMessage =
+        err instanceof Error ? err.message : t("submissionError")
+
+      if (fieldErrors[0]) {
+        rootMessage = messageForErrorCode(fieldErrors[0].code)
+      }
+
+      form.setError("root", { message: rootMessage })
     },
   })
 
@@ -254,7 +317,9 @@ function HubSpotSsrFormInner({
           />
 
           {form.formState.submitCount > 0 &&
-            Object.keys(form.formState.errors).length > 0 && (
+            Object.keys(form.formState.errors).some(
+              (key) => key !== "root"
+            ) && (
               <div
                 className="bg-destructive/10 text-destructive rounded-lg p-3 text-sm"
                 role="alert"

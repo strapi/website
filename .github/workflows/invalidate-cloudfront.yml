@@ -36,7 +36,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: steps.config.outputs.enabled == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
           role-to-assume: ${{ env.ROLE_ARN }}
           aws-region: us-east-1

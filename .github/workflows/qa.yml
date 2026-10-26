@@ -166,8 +166,9 @@ jobs:
             echo "The job is set to soft-fail, so this doesn't fail the run. Failing checks are listed as annotations above; the full HTML report is in the \`axe-report\` artifact."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v7.0.1
-        if: failure()
+      - name: Publish Axe report
+        uses: actions/upload-artifact@v7.0.1
+        if: ${{ !cancelled() && (steps.axe_tests.outcome == 'success' || steps.axe_tests.outcome == 'failure') }}
         with:
           name: axe-report
           path: qa/tests/playwright/playwright-report/
@@ -217,8 +218,9 @@ jobs:
             echo "The job is set to soft-fail, so this doesn't fail the run. Failing checks are listed as annotations above; the full HTML report is in the \`seo-report\` artifact."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v7.0.1
-        if: failure()
+      - name: Publish SEO report
+        uses: actions/upload-artifact@v7.0.1
+        if: ${{ !cancelled() && (steps.seo_tests.outcome == 'success' || steps.seo_tests.outcome == 'failure') }}
         with:
           name: seo-report
           path: qa/tests/playwright/playwright-report/

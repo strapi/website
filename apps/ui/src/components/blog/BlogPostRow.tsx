@@ -3,7 +3,11 @@ import {
   AuthorAvatars,
 } from "@/components/elementary/AuthorAvatars"
 import { HeroContainerBorder } from "@/components/elementary/HeroContainer"
-import { type BlogCategory, combineAuthors } from "@/lib/blog-utils"
+import {
+  BLOG_DATE_FORMAT,
+  type BlogCategory,
+  combineAuthors,
+} from "@/lib/blog-utils"
 import { formatDate } from "@/lib/dates"
 import { Link } from "@/lib/navigation"
 import { cn } from "@/lib/styles"
@@ -31,7 +35,7 @@ export function BlogPostRow({
 
   return (
     <HeroContainerBorder asChild>
-      <div
+      <li
         className={cn(
           "group/blog-post-row relative grid items-center gap-x-4 gap-y-3 px-5 py-4 transition-[border-color] duration-300 sm:px-8",
           "grid-cols-[auto_auto_auto_1fr] lg:grid-cols-[1fr_7rem_10rem_9rem]",
@@ -64,10 +68,15 @@ export function BlogPostRow({
           )}
         </div>
 
-        <span className="text-strapi-gray-400 col-span-4 text-left text-sm whitespace-nowrap sm:col-span-1 sm:text-right lg:text-base">
-          {publishedAt ? formatDate(publishedAt, "MMMM D, YYYY") : ""}
-        </span>
-      </div>
+        {publishedAt ? (
+          <time
+            dateTime={formatDate(publishedAt, "YYYY-MM-DD")}
+            className="text-strapi-gray-400 col-span-4 text-left text-sm whitespace-nowrap sm:col-span-1 sm:text-right lg:text-base"
+          >
+            {formatDate(publishedAt, BLOG_DATE_FORMAT)}
+          </time>
+        ) : null}
+      </li>
     </HeroContainerBorder>
   )
 }

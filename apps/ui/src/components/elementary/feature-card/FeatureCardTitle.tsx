@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import type React from "react"
 
+import { hasVisibleText } from "@/lib/has-visible-text"
 import { cn } from "@/lib/styles"
 
 const featureCardTitleVariants = cva("text-foreground font-bold", {
@@ -34,7 +35,7 @@ export function FeatureCardTitle({
   className,
   children,
 }: FeatureCardTitleProps) {
-  if (!children) {
+  if (!hasVisibleText(children)) {
     return null
   }
 

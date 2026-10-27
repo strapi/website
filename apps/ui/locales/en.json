@@ -51,6 +51,7 @@
       "addon": "Add-on"
     },
     "comparisonTable": {
+      "feature": "Feature",
       "included": "Included",
       "notIncluded": "Not included"
     },
@@ -90,6 +91,13 @@
   "sections": {
     "faq": {
       "title": "Frequently Asked Questions"
+    },
+    "meetTheTeam": {
+      "allTeams": "All teams",
+      "filterByTeam": "Filter by team"
+    },
+    "testimonies": {
+      "watchVideo": "Watch video"
     }
   },
   "caseStudies": {
@@ -249,6 +257,11 @@
     "vs": "vs",
     "disclaimerTitle": "Disclaimer",
     "disclaimer": "The data on this page is regularly updated, however don't hesitate to [contact us](mailto:marketing@strapi.io) if you notice a mistake."
+  },
+  "media": {
+    "embed": {
+      "fallbackTitle": "Interactive demo"
+    }
   },
   "newsletter": {
     "title": "Join our Newsletter",

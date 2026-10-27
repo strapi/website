@@ -33,6 +33,14 @@
     "moreInformation": "More information",
     "bestValue": "Best value"
   },
+  "landmarks": {
+    "main": "Main",
+    "blogCategories": "Blog categories",
+    "tableOfContents": "On this page",
+    "pageContents": "On this page",
+    "footerSection": "Footer: {title}",
+    "footerIndexed": "Footer {index}"
+  },
   "plans": {
     "planFeatureCategory": {
       "cloud": "Cloud",

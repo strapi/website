@@ -1,4 +1,5 @@
 import type { Data } from "@repo/strapi-types"
+import { useTranslations } from "next-intl"
 
 import { BlogPostHeader } from "@/components/blog/BlogPostHeader"
 import { AppLink } from "@/components/elementary/AppLink"
@@ -1130,11 +1131,13 @@ const newsListMockItems: readonly PopulatedNewsItem[] = [
 // ---------------------------------------------------------------------------
 
 export default function ComponentLibraryPage() {
+  const t = useTranslations("landmarks")
+
   return (
     <div className="space-y-16">
       <div>
         <h1 className="mb-4 text-3xl font-bold">Component Library</h1>
-        <nav className="flex flex-wrap gap-2">
+        <nav aria-label={t("pageContents")} className="flex flex-wrap gap-2">
           {TOC.map(({ id, label }) => (
             <a
               key={id}

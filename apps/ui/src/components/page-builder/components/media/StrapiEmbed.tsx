@@ -1,4 +1,5 @@
 import type { Data } from "@repo/strapi-types"
+import { useTranslations } from "next-intl"
 
 import { Container } from "@/components/elementary/Container"
 
@@ -7,6 +8,8 @@ export function StrapiEmbed({
 }: {
   readonly component: Data.Component<"media.embed">
 }) {
+  const t = useTranslations("media.embed")
+
   if (!component.url) {
     return null
   }
@@ -26,7 +29,7 @@ export function StrapiEmbed({
         >
           <iframe
             src={component.url}
-            title={component.title || undefined}
+            title={component.title?.trim() || t("fallbackTitle")}
             className="absolute inset-0 size-full overflow-hidden border-0"
             allow="clipboard-read; clipboard-write"
             allowFullScreen

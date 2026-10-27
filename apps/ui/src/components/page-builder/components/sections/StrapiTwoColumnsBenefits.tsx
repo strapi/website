@@ -48,7 +48,7 @@ export function StrapiTwoColumnsBenefits({
                   </div>
 
                   <p className="text-center text-sm lg:text-left lg:text-base">
-                    <InlineMarkdown>{item.description}</InlineMarkdown>
+                    <InlineMarkdown inline>{item.description}</InlineMarkdown>
                   </p>
                 </div>
               </div>

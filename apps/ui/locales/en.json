@@ -146,6 +146,12 @@
     "noFieldsTitle": "No form fields configured",
     "noFieldsDescription": "This form has no visible fields. Please check the HubSpot form configuration.",
     "reviewErrors": "Please review the highlighted fields above and correct the errors.",
+    "errors": {
+      "blockedEmail": "Please use your work email address. Free email providers are not accepted.",
+      "invalidEmail": "Please enter a valid email address.",
+      "requiredField": "This field is required.",
+      "invalidValue": "This value is not accepted. Please check and try again."
+    },
     "demo": {
       "settingUp": "Setting up your demo...",
       "readyTitle": "Your demo is ready!",

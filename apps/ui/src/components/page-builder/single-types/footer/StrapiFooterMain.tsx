@@ -1,5 +1,6 @@
 import type { Data } from "@repo/strapi-types"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 import { Fragment } from "react"
 
 import { Container } from "@/components/elementary/Container"
@@ -14,6 +15,7 @@ export function StrapiFooterMain({
 }: {
   readonly component: Data.Component<"footer.footer-main">
 }) {
+  const t = useTranslations("landmarks")
   const copyRight = component.copyRight?.replace?.(
     "{YEAR}",
     new Date().getFullYear().toString()
@@ -51,26 +53,36 @@ export function StrapiFooterMain({
             )}
           </div>
 
-          {component.sections?.map((section) => (
-            <div className="flex flex-col gap-6 sm:gap-8" key={section.id}>
-              <p className="text-base font-semibold uppercase">
-                {section.title}
-              </p>
+          {component.sections?.map((section, index) => {
+            const title = section.title?.trim()
 
-              <nav>
-                <ul className="flex list-none flex-col gap-3 leading-none">
-                  {section.links?.map((link) => (
-                    <li key={link.id}>
-                      <StrapiLinkText
-                        component={link}
-                        className="text-strapi-neutral-700 animate-spring-sm inline-block text-sm leading-[1.2]"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-          ))}
+            return (
+              <div className="flex flex-col gap-6 sm:gap-8" key={section.id}>
+                <p className="text-base font-semibold uppercase">
+                  {section.title}
+                </p>
+
+                <nav
+                  aria-label={
+                    title
+                      ? t("footerSection", { title })
+                      : t("footerIndexed", { index: index + 1 })
+                  }
+                >
+                  <ul className="flex list-none flex-col gap-3 leading-none">
+                    {section.links?.map((link) => (
+                      <li key={link.id}>
+                        <StrapiLinkText
+                          component={link}
+                          className="text-strapi-neutral-700 animate-spring-sm inline-block text-sm leading-[1.2]"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </div>
+            )
+          })}
         </div>
 
         <div className="border-border flex flex-col-reverse gap-4 border-t pt-8 text-sm md:flex-row md:items-center md:justify-between">

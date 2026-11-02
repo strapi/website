@@ -26,6 +26,16 @@
       "locale": null
     },
     {
+      "documentId": "legalpagefindauth0000000",
+      "action": "api::legal-page.legal-page.find",
+      "locale": null
+    },
+    {
+      "documentId": "legalpageoneauth00000000",
+      "action": "api::legal-page.legal-page.findOne",
+      "locale": null
+    },
+    {
       "documentId": "tuve7gz5cl4myckd9p473fjk",
       "action": "plugin::upload.content-api.upload",
       "locale": null

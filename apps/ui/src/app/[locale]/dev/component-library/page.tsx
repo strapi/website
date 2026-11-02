@@ -51,6 +51,7 @@ import { StrapiFaqSection } from "@/components/page-builder/components/sections/
 import { StrapiFeatureOverview } from "@/components/page-builder/components/sections/StrapiFeatureOverview"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiLegalPages } from "@/components/page-builder/components/sections/StrapiLegalPages"
 import {
   NewsListView,
   type PopulatedNewsItem,
@@ -228,6 +229,7 @@ const TOC = [
   { id: "callout", label: "Callout" },
   { id: "disclaimer", label: "Disclaimer" },
   { id: "richtext", label: "Richtext" },
+  { id: "legal-pages", label: "LegalPages" },
 ] as const
 
 const newsletterBannerDefaultExample = {
@@ -3032,6 +3034,83 @@ export function hello(name: string) {
 
 > Tip: use this when no dedicated section fits and you just need prose.`,
                 } as Data.Component<"sections.richtext">
+              }
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="legal-pages" title="Legal Pages">
+        <div className="space-y-10">
+          <Variant label="Host page">
+            <StrapiLegalPages
+              page={{ title: "Cloud legal", fullPath: "/cloud-legal" }}
+              sections={[
+                {
+                  id: 301,
+                  __component: "sections.richtext",
+                  content: `## Strapi Cloud Terms of Service
+
+Effective as of 1 January 2026.
+
+This sample stands in for the host page body. The side panel lists the host page first, then each related legal page.`,
+                },
+              ]}
+              component={
+                {
+                  id: 300,
+                  __component: "sections.legal-pages",
+                  legalPages: [
+                    {
+                      id: 1,
+                      documentId: "policies",
+                      title: "Strapi Cloud Policies",
+                      slug: "strapi-cloud-policies",
+                      content: "Policies sample.",
+                    },
+                    {
+                      id: 2,
+                      documentId: "service-levels",
+                      title: "Service Levels",
+                      slug: "service-levels",
+                      content: "Service levels sample.",
+                    },
+                  ],
+                } as Data.Component<"sections.legal-pages">
+              }
+            />
+          </Variant>
+          <Variant label="Linked legal page">
+            <StrapiLegalPages
+              page={{ title: "Cloud legal", fullPath: "/cloud-legal" }}
+              activeLegalPage={{
+                title: "Service Levels",
+                slug: "service-levels",
+                content: `## Service Levels
+
+This column shows the selected legal page instead of the host page body.`,
+              }}
+              component={
+                {
+                  id: 302,
+                  __component: "sections.legal-pages",
+                  legalPages: [
+                    {
+                      id: 1,
+                      documentId: "policies",
+                      title: "Strapi Cloud Policies",
+                      slug: "strapi-cloud-policies",
+                      content: "Policies sample.",
+                    },
+                    {
+                      id: 2,
+                      documentId: "service-levels",
+                      title: "Service Levels",
+                      slug: "service-levels",
+                      content: "Service levels sample.",
+                    },
+                  ],
+                } as Data.Component<"sections.legal-pages">
               }
             />
           </Variant>

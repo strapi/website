@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_sections_legal_pages",
+  "info": {
+    "displayName": "Legal Pages",
+    "icon": "file",
+    "description": "Side panel of related legal pages next to the host page content"
+  },
+  "options": {},
+  "attributes": {
+    "legalPages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::legal-page.legal-page"
+    }
+  }
+}

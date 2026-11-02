@@ -1248,6 +1248,21 @@ export interface SectionsHowItWorks extends Struct.ComponentSchema {
   }
 }
 
+export interface SectionsLegalPages extends Struct.ComponentSchema {
+  collectionName: "components_sections_legal_pages"
+  info: {
+    description: "Side panel of related legal pages next to the host page content"
+    displayName: "Legal Pages"
+    icon: "file"
+  }
+  attributes: {
+    legalPages: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::legal-page.legal-page"
+    >
+  }
+}
+
 export interface SectionsMeetTheTeam extends Struct.ComponentSchema {
   collectionName: "components_sections_meet_the_teams"
   info: {
@@ -1813,6 +1828,7 @@ declare module "@strapi/strapi" {
       "sections.hero": SectionsHero
       "sections.hero-home": SectionsHeroHome
       "sections.how-it-works": SectionsHowItWorks
+      "sections.legal-pages": SectionsLegalPages
       "sections.meet-the-team": SectionsMeetTheTeam
       "sections.news-list": SectionsNewsList
       "sections.reviews": SectionsReviews

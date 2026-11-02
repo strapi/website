@@ -9,8 +9,13 @@ import {
   withExportFallback,
 } from "@/lib/build"
 import { isDevelopment } from "@/lib/general-helpers"
+import { legalPagePath } from "@/lib/legal-page-path"
 import { getMetadataFromStrapi } from "@/lib/metadata"
-import { fetchAllPages } from "@/lib/strapi-api/content/server"
+import { getMetadataFromSeoEntry } from "@/lib/metadata/build-from-seo"
+import {
+  fetchAllPages,
+  resolvePageRoute,
+} from "@/lib/strapi-api/content/server"
 
 // Static/ISR page — no access to headers(), cookies(), or searchParams.
 // Use /[locale]/dynamic/[[...rest]] for pages that need runtime context.
@@ -63,6 +68,22 @@ export async function generateMetadata(
   const locale = params.locale as Locale
 
   const fullPath = ROOT_PAGE_PATH + (params.rest ?? []).join("/")
+  const resolved = await resolvePageRoute(fullPath, locale)
+  const activeLegalPage = resolved?.activeLegalPage
+  const parentPath = resolved?.response.data?.fullPath
+
+  if (activeLegalPage && parentPath && activeLegalPage.slug) {
+    return getMetadataFromSeoEntry({
+      locale,
+      fullPath: legalPagePath(parentPath, activeLegalPage.slug),
+      seo: activeLegalPage.seo,
+      fallbackMeta: {
+        title:
+          activeLegalPage.seo?.metaTitle ?? activeLegalPage.title ?? undefined,
+        description: activeLegalPage.seo?.metaDescription ?? undefined,
+      },
+    })
+  }
 
   return getMetadataFromStrapi({ fullPath, locale })
 }

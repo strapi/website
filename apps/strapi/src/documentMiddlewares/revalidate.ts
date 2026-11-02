@@ -69,9 +69,20 @@ export const registerAutoRevalidateMiddleware = ({
         return nextResult
       }
 
-      const fullPaths = resolveFullPaths(config, effectiveResult)
+      const document = await loadDocumentForPaths(
+        strapi,
+        uid,
+        effectiveResult,
+        locale,
+        status
+      )
+      const fullPaths = resolveFullPaths(config, document)
 
       if (fullPaths.length === 0) {
+        if (uid === "api::legal-page.legal-page" && config.tags?.length) {
+          await revalidateService.run({ uid, locale, tags: config.tags })
+        }
+
         return nextResult
       }
 
@@ -91,6 +102,51 @@ export const registerAutoRevalidateMiddleware = ({
 
     return nextResult
   })
+}
+
+/**
+ * Legal page URLs are `{parent.fullPath}/{slug}`. Publish results do not
+ * populate relations, so load the parent path before the path builder runs.
+ */
+async function loadDocumentForPaths(
+  strapi: Core.Strapi,
+  uid: string,
+  doc: Record<string, unknown> | undefined,
+  locale: string | undefined,
+  status: string | undefined
+): Promise<Record<string, unknown> | undefined> {
+  if (uid !== "api::legal-page.legal-page" || !doc) {
+    return doc
+  }
+
+  const documentId = getString(doc.documentId)
+
+  if (!documentId) {
+    return doc
+  }
+
+  try {
+    const populated = await strapi
+      .documents("api::legal-page.legal-page")
+      .findOne({
+        documentId,
+        locale,
+        status: status === "published" ? "published" : "draft",
+        populate: { parent: { fields: ["fullPath"] } },
+      })
+
+    if (populated && typeof populated === "object") {
+      return populated as Record<string, unknown>
+    }
+  } catch (error) {
+    strapi.log.warn(
+      `[auto-revalidate] Could not load legal page parent for "${documentId}": ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    )
+  }
+
+  return doc
 }
 
 function resolveFullPaths(

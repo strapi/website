@@ -40,7 +40,7 @@
     "@strapi/plugin-sentry": "5.52.2",
     "@strapi/plugin-users-permissions": "5.52.2",
     "@strapi/strapi": "catalog:",
-    "@strapi/utils": "5.52.2",
+    "@strapi/utils": "5.57.0",
     "jsonwebtoken": "9.0.3",
     "lodash": "catalog:",
     "passport-google-oauth2": "^0.2.0",

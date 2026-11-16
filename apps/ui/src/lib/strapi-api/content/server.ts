@@ -5,6 +5,7 @@ import { draftMode } from "next/headers"
 import type { Locale } from "next-intl"
 
 import type { BlogPost } from "@/lib/blog-utils"
+import type { LegalPagePanelEntry } from "@/lib/legal-page-path"
 import { logNonBlockingError } from "@/lib/logging"
 import { PublicStrapiClient } from "@/lib/strapi-api"
 import { logAndRethrow } from "@/lib/strapi-api/log-and-rethrow"
@@ -19,6 +20,7 @@ import type { CustomFetchOptions } from "@/types/general"
 
 export const STRAPI_TAGS = {
   page: ["strapi:api::page.page"] as const,
+  legalPage: ["strapi:api::legal-page.legal-page"] as const,
   newsItem: ["strapi:api::news-item.news-item"] as const,
   blogPost: ["strapi:api::blog-post.blog-post"] as const,
   postCategory: ["strapi:api::post-category.post-category"] as const,
@@ -145,6 +147,122 @@ export async function fetchPage(
     )
   } catch (e: unknown) {
     logAndRethrow(`Error fetching page '${fullPath}' for locale '${locale}'`, e)
+  }
+}
+
+type LegalPagesBlock = {
+  readonly __component?: string
+  readonly legalPages?: LegalPagePanelEntry[] | null
+}
+
+function readLegalPages(content: unknown): LegalPagePanelEntry[] {
+  if (!Array.isArray(content)) return []
+
+  const block = content.find((item): item is LegalPagesBlock => {
+    return (
+      !!item &&
+      typeof item === "object" &&
+      (item as LegalPagesBlock).__component === "sections.legal-pages"
+    )
+  })
+
+  return (block?.legalPages ?? []).filter(
+    (entry): entry is LegalPagePanelEntry =>
+      !!entry && typeof entry === "object"
+  )
+}
+
+export type ResolvedPageRoute = {
+  readonly response: Awaited<ReturnType<typeof fetchPage>>
+  readonly activeLegalPage: LegalPagePanelEntry | null
+}
+
+/**
+ * Resolves a public path to a Page. When the path is one segment under a page
+ * that has a Legal Pages block, the parent page is returned with the matching
+ * legal page selected.
+ */
+export async function resolvePageRoute(
+  fullPath: string,
+  locale: Locale
+): Promise<ResolvedPageRoute | null> {
+  const response = await fetchPage(fullPath, locale)
+
+  if (response?.data?.content != null) {
+    return { response, activeLegalPage: null }
+  }
+
+  const segments = fullPath.split("/").filter(Boolean)
+
+  if (segments.length < 2) {
+    return null
+  }
+
+  const slug = segments.at(-1)
+
+  if (!slug) {
+    return null
+  }
+
+  const parentPath = `/${segments.slice(0, -1).join("/")}`
+  const parent = await fetchPage(parentPath, locale)
+  const match = readLegalPages(parent?.data?.content).find(
+    (entry) => entry.slug === slug
+  )
+
+  if (!parent?.data?.content || !match) {
+    return null
+  }
+
+  return { response: parent, activeLegalPage: match }
+}
+
+type LegalPageListItem = {
+  slug?: string | null
+  locale?: string | null
+  updatedAt?: string | Date | null
+  createdAt?: string | Date | null
+  parent?: { fullPath?: string | null } | null
+}
+
+export async function fetchAllLegalPages(
+  locale: Locale
+): Promise<{ data: LegalPageListItem[] }> {
+  try {
+    const response = await PublicStrapiClient.fetchAll(
+      "api::legal-page.legal-page",
+      {
+        locale,
+        fields: ["slug", "title", "locale", "updatedAt", "createdAt"],
+        populate: {
+          parent: { fields: ["fullPath"] },
+        },
+        status: "published",
+      },
+      withCacheTags(false, STRAPI_TAGS.legalPage)
+    )
+
+    return {
+      data: response.data.map((entry) => ({
+        slug: entry.slug,
+        locale: entry.locale,
+        updatedAt: entry.updatedAt,
+        createdAt: entry.createdAt,
+        // `parent` is populated above. The generated Result type omits relations
+        // that are not part of the schema's default result.
+        parent: (entry as LegalPageListItem).parent ?? null,
+      })),
+    }
+  } catch (e: unknown) {
+    logNonBlockingError({
+      message: `Error fetching legal pages for locale '${locale}'`,
+      error: {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+      },
+    })
+
+    return { data: [] }
   }
 }
 

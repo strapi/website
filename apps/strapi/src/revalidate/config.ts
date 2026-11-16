@@ -186,6 +186,27 @@ export const REVALIDATE_COLLECTIONS: RevalidateCollectionConfig[] = [
       "strapi:api::blog.blog",
     ],
   },
+  // Nested under the host page: /{parentFullPath}/{slug}, plus the host page.
+  {
+    uid: "api::legal-page.legal-page",
+    mode: RevalidateModes.Path,
+    pathBuilder: (doc) => {
+      const slug = typeof doc.slug === "string" ? doc.slug : null
+      const parent =
+        doc.parent && typeof doc.parent === "object"
+          ? (doc.parent as { fullPath?: unknown })
+          : null
+      const parentFullPath =
+        typeof parent?.fullPath === "string" ? parent.fullPath : null
+
+      if (!slug || !parentFullPath) return null
+
+      const base = parentFullPath.replace(/\/$/, "")
+
+      return [`${base}/${slug}`, parentFullPath]
+    },
+    tags: ["strapi:api::page.page"],
+  },
   // Renders on case-study detail pages and the /user-stories listing.
   {
     uid: "api::case-study-category.case-study-category",

@@ -20,6 +20,7 @@ import { runFixMarkdownImages } from "./scripts/fix-markdown-images.ts"
 import { runFixPublishedAt } from "./scripts/fix-published-at.ts"
 import { runFixYoutubeIframes } from "./scripts/fix-youtube-iframes.ts"
 import { runResetRedirectPermanent } from "./scripts/reset-redirect-permanent.ts"
+import { runSplitCloudLegal } from "./scripts/split-cloud-legal.ts"
 import { runUnpublishWrongDrafts } from "./scripts/unpublish-wrong-drafts.ts"
 import { IdMap } from "./state/id-map.ts"
 import { MediaCache } from "./state/media-cache.ts"
@@ -515,6 +516,15 @@ program
       limit: opts.limit,
       verbose: opts.verbose ?? false,
     })
+  })
+
+program
+  .command("split-cloud-legal")
+  .description(
+    "Print how /cloud-legal would split into legal pages. Always a dry run: refuses a non-local TARGET_URL and never writes."
+  )
+  .action(async () => {
+    await runSplitCloudLegal()
   })
 
 program

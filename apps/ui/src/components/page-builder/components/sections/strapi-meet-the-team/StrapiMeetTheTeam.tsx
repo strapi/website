@@ -1,6 +1,7 @@
 "use client"
 
 import type { Data } from "@repo/strapi-types"
+import { useTranslations } from "next-intl"
 import { useMemo, useState } from "react"
 
 import { Container } from "@/components/elementary/Container"
@@ -35,6 +36,7 @@ export function StrapiMeetTheTeam({
 }: {
   readonly component: Data.Component<"sections.meet-the-team">
 }) {
+  const t = useTranslations("sections.meetTheTeam")
   const [selectedDepartment, setSelectedDepartment] = useState(ALL_TEAMS)
   const [selectedMember, setSelectedMember] =
     useState<Data.Component<"elements.team-member-item"> | null>(null)
@@ -83,11 +85,14 @@ export function StrapiMeetTheTeam({
               value={selectedDepartment}
               onValueChange={setSelectedDepartment}
             >
-              <SelectTrigger className="w-auto min-w-40">
-                <SelectValue placeholder="All teams" />
+              <SelectTrigger
+                className="w-auto min-w-40"
+                aria-label={t("filterByTeam")}
+              >
+                <SelectValue placeholder={t("allTeams")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={ALL_TEAMS}>All teams</SelectItem>
+                <SelectItem value={ALL_TEAMS}>{t("allTeams")}</SelectItem>
                 {departments.map((dept) => (
                   <SelectItem key={dept} value={dept}>
                     {dept}

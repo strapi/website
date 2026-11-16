@@ -173,7 +173,11 @@ export function StrapiPlanComparisonTable({
         <table className="w-full table-fixed border-collapse">
           <thead>
             <tr>
-              <th className="w-64 px-4 py-2 text-left" />
+              <th className="w-64 px-4 py-2 text-left">
+                <span className="sr-only">
+                  {t("plans.comparisonTable.feature")}
+                </span>
+              </th>
               {plans.map((plan) => (
                 <th
                   key={plan.id}

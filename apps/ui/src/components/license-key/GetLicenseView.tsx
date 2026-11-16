@@ -1,7 +1,7 @@
 "use client"
 
 import { CopySimpleIcon, DownloadSimpleIcon } from "@phosphor-icons/react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { TokenErrors } from "@/components/license-key/TokenErrors"
 import { Typography } from "@/components/typography"
@@ -13,6 +13,11 @@ import { cn } from "@/lib/styles"
 
 interface GetLicenseViewProps {
   readonly token: string | undefined
+  /**
+   * Skip the "Show license key" click and fetch on load. Only set when the
+   * person already clicked through /order-confirmation (Growth flow).
+   */
+  readonly revealOnLoad?: boolean
 }
 
 /**
@@ -41,19 +46,25 @@ const formatExpirationDate = (value: string | null) => {
 
 /**
  * One-time license reveal, ported from website-2020 `pages/get-license.js`.
- * Reached from /order-confirmation or straight from a license email.
+ * Reached from /order-confirmation (Growth) or straight from a license email
+ * (Enterprise).
  *
  * The registry invalidates the token on the first successful
- * `/api/get-license` call, so that call only happens when the person clicks
- * "Show license key". On load we only call `/api/validate-token`, which does
- * not use the token up. Email security scanners often open links in a
- * headless browser before the customer does: fetching on load let them burn
- * the token before the customer ever saw the key.
+ * `/api/get-license` call. Email security scanners often open links in a
+ * headless browser before the customer does, so fetching on load let them
+ * burn the token before the customer ever saw the key. By default, on load we
+ * only call `/api/validate-token` (does not use the token up) and fetch the
+ * license when the person clicks "Show license key".
+ *
+ * `revealOnLoad` keeps the old fetch-on-load behaviour for links coming from
+ * /order-confirmation, where the person already clicked once.
  *
  * Errors map to the states in {@link TokenErrors}.
  */
-export function GetLicenseView({ token }: GetLicenseViewProps) {
-  const [step, setStep] = useState<RevealStep>("checking")
+export function GetLicenseView({ token, revealOnLoad }: GetLicenseViewProps) {
+  const [step, setStep] = useState<RevealStep>(
+    revealOnLoad ? "revealed" : "checking"
+  )
   const [expirationDate, setExpirationDate] = useState<string | null>(null)
   const [isExpanded, setIsExpanded] = useState(false)
   const [licenseKey, setLicenseKey] = useState("")
@@ -61,7 +72,9 @@ export function GetLicenseView({ token }: GetLicenseViewProps) {
   const [error, setError] = useState<string | null>(
     token ? null : "ERR_TOKEN_NOT_FOUND"
   )
-  const [isLicenseLoading, setIsLicenseLoading] = useState(false)
+  const [isLicenseLoading, setIsLicenseLoading] = useState(
+    Boolean(revealOnLoad && token)
+  )
   const { copied: copySuccess, copy } = useClip()
 
   const checkToken = useCallback(async () => {
@@ -91,11 +104,6 @@ export function GetLicenseView({ token }: GetLicenseViewProps) {
     }
   }, [token])
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void checkToken()
-  }, [checkToken])
-
   const fetchLicenseKey = useCallback(async () => {
     if (!token) {
       return
@@ -123,14 +131,38 @@ export function GetLicenseView({ token }: GetLicenseViewProps) {
     }
   }, [token])
 
+  // React strict mode runs effects twice in development. A second
+  // `/api/get-license` call would hit an already used token and show an error,
+  // so only load once per mount.
+  const hasLoadedOnMount = useRef(false)
+
+  useEffect(() => {
+    if (hasLoadedOnMount.current) {
+      return
+    }
+
+    hasLoadedOnMount.current = true
+
+    const loadOnMount = revealOnLoad ? fetchLicenseKey : checkToken
+
+    void loadOnMount()
+  }, [revealOnLoad, checkToken, fetchLicenseKey])
+
   const revealLicenseKey = () => {
     setStep("revealed")
     setIsLicenseLoading(true)
     void fetchLicenseKey()
   }
 
-  const retryCheck = () => {
+  const retry = () => {
     setError(null)
+
+    if (revealOnLoad) {
+      revealLicenseKey()
+
+      return
+    }
+
     setStep("checking")
     void checkToken()
   }
@@ -148,7 +180,7 @@ export function GetLicenseView({ token }: GetLicenseViewProps) {
   }
 
   if (error) {
-    return <TokenErrors error={error} validateToken={retryCheck} />
+    return <TokenErrors error={error} validateToken={retry} />
   }
 
   if (step !== "revealed") {

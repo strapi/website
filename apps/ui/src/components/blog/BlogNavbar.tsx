@@ -1,4 +1,5 @@
 import type { Locale } from "next-intl"
+import { getTranslations } from "next-intl/server"
 
 import {
   getBlogNewsletterHubspot,
@@ -10,6 +11,7 @@ import { BlogNavbarTabs } from "./BlogNavbarTabs"
 import { BlogNewsletterPopover } from "./BlogNewsletterPopover"
 
 export async function BlogNavbar({ locale }: { readonly locale: Locale }) {
+  const t = await getTranslations("landmarks")
   const response = await fetchBlog(locale)
   const data = response?.data
 
@@ -22,7 +24,10 @@ export async function BlogNavbar({ locale }: { readonly locale: Locale }) {
   const hubspotForm = getBlogNewsletterHubspot(response)
 
   return (
-    <nav className="border-strapi-neutral-800 px-4 py-3 sm:px-6 sm:py-4 lg:border-b">
+    <nav
+      aria-label={t("blogCategories")}
+      className="border-strapi-neutral-800 px-4 py-3 sm:px-6 sm:py-4 lg:border-b"
+    >
       <div className="flex items-center justify-between gap-3">
         <BlogNavbarTabs categories={categories} />
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import type { TocHeading } from "@/lib/blog-utils"
@@ -30,6 +31,7 @@ export function BlogTableOfContents({
 }: {
   readonly headings: TocHeading[]
 }) {
+  const t = useTranslations("landmarks")
   const [activeId, setActiveId] = useState<string | null>(null)
   const [offset, setOffset] = useState(TOC_OFFSET_FALLBACK)
   const rafRef = useRef(0)
@@ -138,7 +140,11 @@ export function BlogTableOfContents({
   }
 
   return (
-    <nav className="sticky" style={{ top: offset }}>
+    <nav
+      aria-label={t("tableOfContents")}
+      className="sticky"
+      style={{ top: offset }}
+    >
       <ul className="flex list-none flex-col gap-2">
         {h2Headings.map((heading) => (
           <li key={heading.id}>

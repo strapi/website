@@ -1,4 +1,5 @@
 import type { Data } from "@repo/strapi-types"
+import { getTranslations } from "next-intl/server"
 
 import { Container } from "@/components/elementary/Container"
 import { fetchGithubStars } from "@/lib/github"
@@ -12,6 +13,7 @@ export async function StrapiNavbar({
 }: {
   readonly component: Data.Component<"navigation.navbar">
 }) {
+  const t = await getTranslations("landmarks")
   const githubUrl = component.githubUrl
   const githubStars =
     component.githubStars && githubUrl
@@ -20,6 +22,7 @@ export async function StrapiNavbar({
 
   return (
     <nav
+      aria-label={t("main")}
       data-navbar
       className={cn(
         "relative sticky top-0 z-40 flex h-16 w-full items-center",

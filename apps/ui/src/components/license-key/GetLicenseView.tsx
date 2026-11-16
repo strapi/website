@@ -27,23 +27,6 @@ interface GetLicenseViewProps {
  */
 type RevealStep = "checking" | "ready" | "revealed"
 
-const formatExpirationDate = (value: string | null) => {
-  if (!value) {
-    return null
-  }
-
-  const date = new Date(value)
-
-  if (Number.isNaN(date.getTime())) {
-    return null
-  }
-
-  return date.toLocaleString("en-US", {
-    dateStyle: "long",
-    timeStyle: "short",
-  })
-}
-
 /**
  * One-time license reveal, ported from website-2020 `pages/get-license.js`.
  * Reached from /order-confirmation (Growth) or straight from a license email
@@ -65,7 +48,6 @@ export function GetLicenseView({ token, revealOnLoad }: GetLicenseViewProps) {
   const [step, setStep] = useState<RevealStep>(
     revealOnLoad ? "revealed" : "checking"
   )
-  const [expirationDate, setExpirationDate] = useState<string | null>(null)
   const [isExpanded, setIsExpanded] = useState(false)
   const [licenseKey, setLicenseKey] = useState("")
   const [planDisplayName, setPlanDisplayName] = useState("")
@@ -90,11 +72,7 @@ export function GetLicenseView({ token, revealOnLoad }: GetLicenseViewProps) {
 
       if (response.status !== 200) {
         setError(result.error?.message ?? "DEFAULT")
-
-        return
       }
-
-      setExpirationDate(result.expirationDate ?? null)
     } catch (checkError) {
       // The check is only there to show errors early: if it fails, still let
       // the person try to reveal the key.
@@ -183,28 +161,28 @@ export function GetLicenseView({ token, revealOnLoad }: GetLicenseViewProps) {
     return <TokenErrors error={error} validateToken={retry} />
   }
 
+  // Copy reused from this page's header and from /order-confirmation, which
+  // was the click step for the Growth flow.
   if (step !== "revealed") {
-    const formattedExpirationDate = formatExpirationDate(expirationDate)
-
     return (
       <div className="flex flex-col items-start gap-8 py-8">
-        <div className="flex max-w-2xl flex-col gap-4">
-          <Typography tag="h1" variant="header2">
-            Your license key is ready
+        <div>
+          <Typography tag="h1" variant="header2" className="mb-4">
+            License access
           </Typography>
           <Typography tag="p" variant="subtitle1" textColor="muted">
-            For security reasons, your license key can only be shown once.
+            Your Strapi license is ready.
+          </Typography>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <Typography tag="p" variant="body2">
+            For security reasons, you can access your license from this page
+            only once.
           </Typography>
           <Typography tag="p" variant="body2">
-            Before you continue, make sure you&apos;re ready to copy it or
-            download it as a file. Once it&apos;s shown, leaving or refreshing
-            this page won&apos;t show it again.
+            Make sure you are ready to copy and save it in the next step.
           </Typography>
-          {formattedExpirationDate && (
-            <Typography tag="p" variant="body2" textColor="muted">
-              This link is valid until {formattedExpirationDate}.
-            </Typography>
-          )}
         </div>
 
         <Button
@@ -222,12 +200,12 @@ export function GetLicenseView({ token, revealOnLoad }: GetLicenseViewProps) {
     <div className="flex flex-col gap-8 py-8">
       <div>
         <Typography tag="h1" variant="header2" className="mb-4">
-          Your license key
+          License access
         </Typography>
         <Typography tag="p" variant="subtitle1" textColor="muted">
           {planDisplayName
-            ? `Here is your ${planDisplayName} license key. Copy it or download it now, it won't be shown again.`
-            : "Here is your Strapi license key. Copy it or download it now, it won't be shown again."}
+            ? `Your ${planDisplayName} license is ready.`
+            : "Your Strapi license is ready."}
         </Typography>
       </div>
 

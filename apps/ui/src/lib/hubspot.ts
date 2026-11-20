@@ -49,6 +49,14 @@ export interface HubSpotFormSchema {
   }
 }
 
+/** HubSpot submission `context`: links the submit to the page and the visitor. */
+export interface HubSpotSubmitContext {
+  /** The `hubspotutk` cookie. Send it only with marketing cookie consent. */
+  readonly hutk?: string
+  readonly pageUri?: string
+  readonly pageName?: string
+}
+
 export interface HubSpotSubmitPayload {
   readonly formId: string
   readonly portalId: string
@@ -139,11 +147,13 @@ export async function submitHubSpotForm({
   formId,
   fields,
   legalConsentOptions,
+  context,
 }: {
   portalId: string
   formId: string
   fields: { name: string; value: unknown; objectTypeId: string }[]
   legalConsentOptions?: HubSpotSubmitPayload["legalConsentOptions"]
+  context?: HubSpotSubmitContext
 }): Promise<Record<string, unknown>> {
   const token = getEnvVar("HUBSPOT_API_TOKEN", true)
 
@@ -159,6 +169,7 @@ export async function submitHubSpotForm({
         submittedAt: String(Date.now()),
         fields,
         legalConsentOptions,
+        ...(context && Object.keys(context).length > 0 && { context }),
         skipValidation: true,
       }),
     }

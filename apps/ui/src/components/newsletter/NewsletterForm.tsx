@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { getHubSpotContext } from "@/lib/hubspot-context"
 import { cn } from "@/lib/styles"
 
 export interface NewsletterHubspotRef {
@@ -52,6 +53,7 @@ export function NewsletterForm({
           portalId: hubspotForm!.portalId,
           formId: hubspotForm!.formId,
           fields: { email },
+          context: getHubSpotContext(),
         }),
       })
 

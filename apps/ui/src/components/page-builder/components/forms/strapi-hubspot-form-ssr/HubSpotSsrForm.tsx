@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { getEnvVar } from "@/lib/env-vars"
 import type { HubSpotFormSchema, HubSpotSubmitPayload } from "@/lib/hubspot"
+import { getHubSpotContext } from "@/lib/hubspot-context"
 
 import { DeferredReCaptchaProvider } from "./DeferredReCaptchaProvider"
 import {
@@ -86,6 +87,7 @@ async function submitHubSpotForm(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       ...payload.body,
+      context: getHubSpotContext(),
       ...(payload.recaptchaToken && { recaptchaToken: payload.recaptchaToken }),
     }),
   })

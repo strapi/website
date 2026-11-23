@@ -2,7 +2,11 @@ import {
   CONSENT_FIELD_PREFIX,
   CONSENT_TO_PROCESS_FIELD,
 } from "@/components/page-builder/components/forms/strapi-hubspot-form-ssr/helpers"
-import { HubSpotSubmissionError, submitHubSpotForm } from "@/lib/hubspot"
+import {
+  HubSpotSubmissionError,
+  type HubSpotSubmitContext,
+  submitHubSpotForm,
+} from "@/lib/hubspot"
 import { verifyRecaptcha } from "@/lib/recaptcha"
 
 export const dynamic = "force-dynamic"
@@ -32,6 +36,23 @@ function fieldForHubSpotError(
   return fieldNames.find((name) => message.includes(`'${name}'`))
 }
 
+/** Keeps only valid `context` values. `hutk` is the 32-char hex HubSpot visitor id. */
+function parseContext(raw: unknown): HubSpotSubmitContext | undefined {
+  if (!raw || typeof raw !== "object") {
+    return undefined
+  }
+
+  const { hutk, pageUri, pageName } = raw as Record<string, unknown>
+  const context = {
+    ...(typeof hutk === "string" && /^[a-f0-9]{32}$/i.test(hutk) && { hutk }),
+    ...(typeof pageUri === "string" &&
+      /^https?:\/\//.test(pageUri) && { pageUri: pageUri.slice(0, 1000) }),
+    ...(typeof pageName === "string" && { pageName: pageName.slice(0, 200) }),
+  }
+
+  return Object.keys(context).length > 0 ? context : undefined
+}
+
 /** Proxy for HubSpot form submissions — verifies reCAPTCHA (opt-in), strips consent fields, and forwards to HubSpot API. */
 async function handler(request: Request) {
   const body = await request.json().catch(() => null)
@@ -49,6 +70,7 @@ async function handler(request: Request) {
     fields = {},
     legalConsentOptions,
     recaptchaToken,
+    context,
   } = body
 
   // Verify reCAPTCHA when token is provided (score-based v3).
@@ -80,6 +102,7 @@ async function handler(request: Request) {
       formId,
       fields: hubspotFields,
       legalConsentOptions,
+      context: parseContext(context),
     })
 
     return Response.json(result)

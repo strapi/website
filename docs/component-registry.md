@@ -1,6 +1,6 @@
 # Component Registry
 
-> Auto-updated by skills. Last updated: 2026-05-24 (added sections.news-list — auto-fetched chronological list of all `api::news-item.news-item` entries; adapts BlogPostRow design with logo+title+date layout; news-item title comes from `link.label`)
+> Auto-updated by skills. Last updated: 2026-11-01 (added sections.legal-pages — host page content beside a side panel of `api::legal-page.legal-page` records; first link is the host page)
 
 ## Registry Freshness Policy
 
@@ -106,6 +106,7 @@ Utility-level categories (`utilities`, `elements`, `seo-utilities`, `navbar`) ar
 | `sections.news-list`                    | sections      | News List                   | (no attributes) — auto-fetches all `api::news-item.news-item` entries sorted by date desc; renders BlogPostRow-style rows with logo (thumbnail.image) + title (link.label) + date; row wraps to news-item link with newTab respected                                                                                                                                                                                          |
 | `sections.disclaimer`                   | sections      | Disclaimer                  | title:string (req), content:text (req) — inline markdown rendered on frontend via InlineMarkdown                                                                                                                                                                                                                                                                                                                              |
 | `sections.richtext`                     | sections      | Richtext                    | content:richtext (req) — freeform markdown block rendered via shared Markdown component                                                                                                                                                                                                                                                                                                                                       |
+| `sections.legal-pages`                  | sections      | Legal Pages                 | legalPages:relation oneToMany api::legal-page.legal-page — side panel (host page first, then related legal pages) beside the host page content or the active legal page richtext                                                                                                                                                                                                                                              |
 
 ## React Elementary Components
 
@@ -189,6 +190,7 @@ All dynamic zone components registered in `apps/ui/src/components/page-builder/i
 | `sections.news-list`               | StrapiNewsList              | `page-builder/components/sections/StrapiNewsList`                                | Page         |
 | `sections.disclaimer`              | StrapiDisclaimer            | `page-builder/components/sections/StrapiDisclaimer`                              | Page         |
 | `sections.richtext`                | StrapiRichtext              | `page-builder/components/sections/StrapiRichtext`                                | Page         |
+| `sections.legal-pages`             | StrapiLegalPages            | `page-builder/components/sections/StrapiLegalPages`                              | Page         |
 | `footer.footer-main`               | StrapiFooterMain            | `page-builder/single-types/footer/StrapiFooterMain`                              | Footer       |
 | `footer.footer-cta`                | StrapiFooterCta             | `page-builder/single-types/footer/StrapiFooterCta`                               | Footer       |
 | `navigation.top-banner`            | StrapiTopBanner             | `page-builder/components/navigation/top-banner/StrapiTopBanner`                  | Header       |

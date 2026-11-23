@@ -29,7 +29,8 @@ export const metadata: Metadata = {
  * website-2020 `pages/get-license.js`. Reached from /order-confirmation or
  * from the license link in the confirmation email; the actual fetch happens
  * client-side in {@link GetLicenseView} because the registry invalidates the
- * token on read.
+ * token on read. `?reveal=1` (set by /order-confirmation only) skips the
+ * "Show license key" click, since the person already clicked there.
  */
 export default function GetLicensePage(
   props: PageProps<"/[locale]/get-license">
@@ -39,6 +40,7 @@ export default function GetLicensePage(
 
   const query = use(props.searchParams)
   const token = Array.isArray(query.token) ? query.token[0] : query.token
+  const reveal = Array.isArray(query.reveal) ? query.reveal[0] : query.reveal
 
   return (
     <div className="flex w-full flex-col">
@@ -47,7 +49,7 @@ export default function GetLicensePage(
 
       <main>
         <Container>
-          <GetLicenseView token={token} />
+          <GetLicenseView token={token} revealOnLoad={reveal === "1"} />
         </Container>
       </main>
     </div>

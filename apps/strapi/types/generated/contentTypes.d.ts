@@ -1205,6 +1205,71 @@ export interface ApiInternalJobInternalJob extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiLegalPageLegalPage extends Struct.CollectionTypeSchema {
+  collectionName: "legal_pages"
+  info: {
+    description: "A legal document linked from a host page side panel."
+    displayName: "Legal Page"
+    pluralName: "legal-pages"
+    singularName: "legal-page"
+  }
+  options: {
+    draftAndPublish: true
+  }
+  pluginOptions: {
+    i18n: {
+      localized: true
+    }
+  }
+  attributes: {
+    content: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::legal-page.legal-page"
+    >
+    parent: Schema.Attribute.Relation<"manyToOne", "api::page.page"> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    publishedAt: Schema.Attribute.DateTime
+    seo: Schema.Attribute.Component<"shared.seo", false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true
+        }
+      }>
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiNewsItemNewsItem extends Struct.CollectionTypeSchema {
   collectionName: "news_items"
   info: {
@@ -1357,6 +1422,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         "sections.cookie-declaration",
         "sections.disclaimer",
         "sections.richtext",
+        "sections.legal-pages",
         "sections.dynamic-case-studies-grid",
         "sections.dynamic-features-grid",
         "sections.feature-overview",
@@ -2230,6 +2296,7 @@ declare module "@strapi/strapi" {
       "api::header.header": ApiHeaderHeader
       "api::hubspot-form.hubspot-form": ApiHubspotFormHubspotForm
       "api::internal-job.internal-job": ApiInternalJobInternalJob
+      "api::legal-page.legal-page": ApiLegalPageLegalPage
       "api::news-item.news-item": ApiNewsItemNewsItem
       "api::not-found.not-found": ApiNotFoundNotFound
       "api::page.page": ApiPagePage

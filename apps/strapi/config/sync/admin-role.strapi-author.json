@@ -209,6 +209,84 @@
     {
       "action": "plugin::content-manager.explorer.create",
       "actionParameters": {},
+      "subject": "api::legal-page.legal-page",
+      "properties": {
+        "fields": [
+          "title",
+          "slug",
+          "content",
+          "parent",
+          "seo",
+          "seo.metaTitle",
+          "seo.metaDescription",
+          "seo.metaImage",
+          "seo.keywords",
+          "seo.metaRobots",
+          "seo.metaSocial",
+          "seo.structuredData",
+          "seo.metaViewport",
+          "seo.canonicalURL"
+        ]
+      },
+      "conditions": ["admin::is-creator"],
+      "documentId": "legalpagecreateauthor0001",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "actionParameters": {},
+      "subject": "api::legal-page.legal-page",
+      "properties": {
+        "fields": [
+          "title",
+          "slug",
+          "content",
+          "parent",
+          "seo",
+          "seo.metaTitle",
+          "seo.metaDescription",
+          "seo.metaImage",
+          "seo.keywords",
+          "seo.metaRobots",
+          "seo.metaSocial",
+          "seo.structuredData",
+          "seo.metaViewport",
+          "seo.canonicalURL"
+        ]
+      },
+      "conditions": ["admin::is-creator"],
+      "documentId": "legalpagereadauthor000001",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "actionParameters": {},
+      "subject": "api::legal-page.legal-page",
+      "properties": {
+        "fields": [
+          "title",
+          "slug",
+          "content",
+          "parent",
+          "seo",
+          "seo.metaTitle",
+          "seo.metaDescription",
+          "seo.metaImage",
+          "seo.keywords",
+          "seo.metaRobots",
+          "seo.metaSocial",
+          "seo.structuredData",
+          "seo.metaViewport",
+          "seo.canonicalURL"
+        ]
+      },
+      "conditions": ["admin::is-creator"],
+      "documentId": "legalpageupdateauthor0001",
+      "locale": null
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "actionParameters": {},
       "subject": "api::page.page",
       "properties": {
         "fields": [

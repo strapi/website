@@ -45,7 +45,10 @@ const asString = (value: string | string[] | undefined) =>
  *   order summary and links to the one-time license reveal
  * - from the confirmation email, with `token`/`tokenLifetimeInHours`/`email`
  *
- * Either way the "Show license key" button forwards the token to /get-license.
+ * Either way the "Show license key" button forwards the token to /get-license
+ * with `reveal=1`, so the key shows straight away (the person already clicked
+ * here). Links that skip this page (Enterprise license emails) don't set it,
+ * and /get-license then waits for a click before using the token up.
  */
 export default function OrderConfirmationPage(
   props: PageProps<"/[locale]/order-confirmation">
@@ -137,7 +140,7 @@ export default function OrderConfirmationPage(
                     </Typography>
                   </div>
 
-                  <AppLink href={`/get-license?token=${token}`}>
+                  <AppLink href={`/get-license?token=${token}&reveal=1`}>
                     Show license key
                   </AppLink>
                 </div>

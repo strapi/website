@@ -3,11 +3,13 @@ import type { Locale } from "next-intl"
 
 import { getEnvVar } from "@/lib/env-vars"
 import { isDevelopment, isProduction } from "@/lib/general-helpers"
+import { legalPagePath } from "@/lib/legal-page-path"
 import { createPublicFullPath, routing } from "@/lib/navigation"
 import {
   fetchAllBlogAuthorSlugs,
   fetchAllBlogPosts,
   fetchAllCaseStudies,
+  fetchAllLegalPages,
   fetchAllPages,
   fetchAllPostCategories,
   fetchAllPostTags,
@@ -87,14 +89,21 @@ async function generateLocalizedSitemap(
     [] as MetadataRoute.Sitemap
   )
 
-  const [caseStudiesRes, blogPostsRes, categoriesRes, tagsRes, authorSlugs] =
-    await Promise.all([
-      fetchAllCaseStudies(locale),
-      fetchAllBlogPosts(locale),
-      fetchAllPostCategories(locale),
-      fetchAllPostTags(locale),
-      fetchAllBlogAuthorSlugs(locale),
-    ])
+  const [
+    caseStudiesRes,
+    blogPostsRes,
+    categoriesRes,
+    tagsRes,
+    authorSlugs,
+    legalPagesRes,
+  ] = await Promise.all([
+    fetchAllCaseStudies(locale),
+    fetchAllBlogPosts(locale),
+    fetchAllPostCategories(locale),
+    fetchAllPostTags(locale),
+    fetchAllBlogAuthorSlugs(locale),
+    fetchAllLegalPages(locale),
+  ])
 
   const caseStudyEntries: MetadataRoute.Sitemap = caseStudiesRes.data.map(
     (cs) => ({
@@ -134,6 +143,24 @@ async function generateLocalizedSitemap(
 
   // Author slugs are derived from posts, so there is no per-author
   // `updatedAt` available without an extra /users round-trip.
+  const legalPageEntries: MetadataRoute.Sitemap = legalPagesRes.data.flatMap(
+    (legalPage) => {
+      const parentPath = legalPage.parent?.fullPath
+      if (!legalPage.slug || !parentPath) return []
+
+      return [
+        {
+          url: createPublicFullPath(
+            legalPagePath(parentPath, legalPage.slug),
+            legalPage.locale ?? locale
+          ),
+          lastModified: legalPage.updatedAt ?? legalPage.createdAt ?? undefined,
+          changeFrequency: "monthly" as const,
+        },
+      ]
+    }
+  )
+
   const authorEntries: MetadataRoute.Sitemap = authorSlugs.map((slug) => ({
     url: createPublicFullPath(`/user/${slug}`, locale),
     changeFrequency: "weekly",
@@ -146,6 +173,7 @@ async function generateLocalizedSitemap(
     ...categoryEntries,
     ...tagEntries,
     ...authorEntries,
+    ...legalPageEntries,
   ]
 }
 

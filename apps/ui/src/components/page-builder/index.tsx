@@ -38,6 +38,7 @@ import { StrapiFeatureCardGrid } from "@/components/page-builder/components/sect
 import { StrapiFeatureOverview } from "@/components/page-builder/components/sections/StrapiFeatureOverview"
 import { StrapiHero } from "@/components/page-builder/components/sections/StrapiHero"
 import { StrapiHowItWorks } from "@/components/page-builder/components/sections/StrapiHowItWorks"
+import { StrapiLegalPages } from "@/components/page-builder/components/sections/StrapiLegalPages"
 import { StrapiNewsList } from "@/components/page-builder/components/sections/StrapiNewsList"
 import { StrapiRichtext } from "@/components/page-builder/components/sections/StrapiRichtext"
 import { StrapiSectionHeader } from "@/components/page-builder/components/sections/StrapiSectionHeader"
@@ -111,6 +112,7 @@ export const ContentComponents: Partial<
   "sections.cookie-declaration": StrapiCookieDeclaration,
   "sections.disclaimer": StrapiDisclaimer,
   "sections.richtext": StrapiRichtext,
+  "sections.legal-pages": StrapiLegalPages,
   "sections.news-list": StrapiNewsList,
 
   // Testimonials

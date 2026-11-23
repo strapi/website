@@ -7,14 +7,16 @@ import { use } from "react"
 import { Breadcrumbs } from "@/components/elementary/Breadcrumbs"
 import { Container } from "@/components/elementary/Container"
 import { MinimalHeader } from "@/components/layouts/MinimalHeader"
+import { StrapiLegalPages } from "@/components/page-builder/components/sections/StrapiLegalPages"
 import { StrapiSeoStructuredDataFromSeo } from "@/components/page-builder/components/seo-utilities/StrapiSeoStructuredData"
 import { StrapiStructuredData } from "@/components/page-builder/components/seo-utilities/StrapiStructuredData"
 import { DynamicZoneRenderer } from "@/components/page-builder/DynamicZoneRenderer"
 import { FirstTouchScript } from "@/components/providers/TrackingScripts"
 import { getEnvVar } from "@/lib/env-vars"
+import { legalPagePath } from "@/lib/legal-page-path"
 import { createPublicFullPath } from "@/lib/navigation"
 import { SECTION_SPACING } from "@/lib/section-spacing"
-import { fetchPage } from "@/lib/strapi-api/content/server"
+import { resolvePageRoute } from "@/lib/strapi-api/content/server"
 import { buildWebPageJsonLd } from "@/lib/structured-data/site-graph"
 import { cn } from "@/lib/styles"
 
@@ -53,22 +55,55 @@ export function StrapiPageView({ params, searchParams }: Props) {
   setRequestLocale(locale)
 
   const fullPath = ROOT_PAGE_PATH + (params.rest ?? []).join("/")
-  const response = use(fetchPage(fullPath, locale))
+  const resolved = use(resolvePageRoute(fullPath, locale))
 
-  const data = response?.data
-  if (data?.content == null) {
+  if (resolved?.response.data?.content == null) {
     notFound()
   }
 
-  const { content, minimalLayout, ...restPageData } = data
+  const data = resolved.response.data
+  const content = data.content
+
+  if (content == null) {
+    notFound()
+  }
+
+  const activeLegalPage = resolved.activeLegalPage
+  const { minimalLayout, ...restPageData } = data
+  const blocks = content.filter(
+    (block): block is NonNullable<(typeof content)[number]> => block != null
+  )
+  const legalBlock = blocks.find(
+    (block) => block.__component === "sections.legal-pages"
+  )
+  const pageSections = blocks.filter(
+    (block) => block.__component !== "sections.legal-pages"
+  )
+  const breadcrumbs =
+    activeLegalPage?.title && activeLegalPage.slug && data.fullPath
+      ? [
+          ...(resolved.response.meta?.breadcrumbs ?? []),
+          {
+            title: activeLegalPage.title,
+            fullPath: legalPagePath(data.fullPath, activeLegalPage.slug),
+          },
+        ]
+      : resolved.response.meta?.breadcrumbs
 
   const siteUrl = getEnvVar("APP_PUBLIC_URL")
   const webPageJsonLd = siteUrl
     ? buildWebPageJsonLd({
         siteUrl,
         url: createPublicFullPath(fullPath, locale),
-        name: data.seo?.metaTitle ?? undefined,
-        description: data.seo?.metaDescription ?? undefined,
+        name:
+          activeLegalPage?.seo?.metaTitle ??
+          activeLegalPage?.title ??
+          data.seo?.metaTitle ??
+          undefined,
+        description:
+          activeLegalPage?.seo?.metaDescription ??
+          data.seo?.metaDescription ??
+          undefined,
         locale,
       })
     : null
@@ -87,22 +122,33 @@ export function StrapiPageView({ params, searchParams }: Props) {
       )}
       <main className={cn("flex w-full flex-col")}>
         <Container>
-          <Breadcrumbs
-            breadcrumbs={response?.meta?.breadcrumbs}
-            locale={locale}
-          />
+          <Breadcrumbs breadcrumbs={breadcrumbs} locale={locale} />
         </Container>
 
-        <DynamicZoneRenderer
-          content={content}
-          itemClassName={SECTION_SPACING}
-          surface="page"
-          extraProps={{
-            pageParams: params,
-            page: restPageData,
-            searchParams,
-          }}
-        />
+        {legalBlock ? (
+          <StrapiLegalPages
+            component={legalBlock}
+            page={restPageData}
+            sections={activeLegalPage ? [] : pageSections}
+            activeLegalPage={activeLegalPage}
+            extraProps={{
+              pageParams: params,
+              page: restPageData,
+              searchParams,
+            }}
+          />
+        ) : (
+          <DynamicZoneRenderer
+            content={blocks}
+            itemClassName={SECTION_SPACING}
+            surface="page"
+            extraProps={{
+              pageParams: params,
+              page: restPageData,
+              searchParams,
+            }}
+          />
+        )}
       </main>
     </div>
   )

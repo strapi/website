@@ -71,7 +71,10 @@ jobs:
   e2e:
     if: ${{ inputs.run_e2e || github.event_name == 'schedule' }}
     name: Playwright E2E tests (${{ matrix.project }})
-    runs-on: ubuntu-latest
+    # Pinned: Playwright's WebKit build links against Ubuntu 24.04 system libs
+    # (libicudata.so.74) and fails to launch on newer ubuntu-latest images.
+    # Revisit when bumping @playwright/test.
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     # One job per browser: each job runs on its own runner with its own IP, so
     # each stays under strapi.io's CDN bot protection limit (~70-80 page loads
@@ -94,9 +97,11 @@ jobs:
         uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ matrix.project }}-${{ hashFiles('pnpm-lock.yaml') }}
+          # ImageOS (e.g. ubuntu24) keeps browsers cached on one runner image
+          # from being restored on another
+          key: ${{ runner.os }}-${{ env.ImageOS }}-playwright-${{ matrix.project }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-${{ matrix.project }}-
+            ${{ runner.os }}-${{ env.ImageOS }}-playwright-${{ matrix.project }}-
 
       - name: Install Playwright Browsers
         run: pnpm -F @repo/tests-playwright exec playwright install --with-deps ${{ matrix.project }}

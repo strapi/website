@@ -25,13 +25,9 @@ export class BlogPage {
       .getByRole("heading", { level: 2 })
       .getByRole("link")
       .first()
-    // Rows have no role or test id - a row is the element whose direct child
-    // is the post title link (/blog/<slug>). The featured post's link sits in
-    // a heading, and category/author links go to /blog/categories/ and /user/.
-    this.postRows = main.locator(
-      'div:has(> a[href^="/blog/"]:not([href^="/blog/categories/"]))'
-    )
-    this.postList = this.postRows.first().locator("xpath=..")
+    // The post list is a labelled <ul>, each post is an <li>
+    this.postList = main.getByRole("list", { name: "Blog posts", exact: true })
+    this.postRows = this.postList.getByRole("listitem")
     this.loadMoreButton = main.getByRole("button", {
       name: "Load More Articles",
       exact: true,
@@ -47,7 +43,7 @@ export class BlogPage {
   }
 
   getPostPublishDate(postRow: Locator) {
-    return postRow.locator(":scope > span")
+    return postRow.locator(":scope > time")
   }
 
   async loadMorePosts() {
